@@ -23,6 +23,27 @@
 7. Build and test
 8. Set up Codemagic for iOS builds if needed
 
+## 2026-03-08 — iOS TestFlight deployment complete
+
+### What was done
+- Bundle ID changed from `com.example.hbot` → `com.mb.hbot`
+- Fixed 198 compile errors: `withValues()` → `withOpacity()` for Flutter 3.24 compat (but kept `CardThemeData` for Codemagic's Flutter 3.29)
+- Regenerated `.g.dart` model files (null-aware-elements fix)
+- Removed deprecated `activeThumbColor`/`inactiveThumbColor` from Switch widgets
+- Added `ITSAppUsesNonExemptEncryption: false` to Info.plist
+- Added `--no-tree-shake-icons` to build command (non-constant IconData)
+- Created `codemagic.yaml` with Flutter 3.29.2 pinned
+- GitHub repo: `tamermsol/h-bot` (public)
+- Codemagic app ID: `69ad603d52d162b6aa47d28f`
+- Successful build ID: `69ad63451ccf6d759ea5bd06`
+- Auto-publishes to TestFlight on build
+
+### Credentials stored in Codemagic `appstore_credentials` group
+- `APP_STORE_CONNECT_PRIVATE_KEY` — .p8 key contents
+- `CERTIFICATE_PRIVATE_KEY` — generated RSA key for distribution cert
+- `APP_STORE_CONNECT_KEY_IDENTIFIER`: BQW2TW5473
+- `APP_STORE_CONNECT_ISSUER_ID`: 69a6de8f-0bee-47e3-e053-5b8c7c11a4d1
+
 ### Workspace mapping
 - Flutter agent workspace: `/root/.openclaw/workspace-flutter/`
 - hbot workspace: `/root/.openclaw/workspace-hbot/`
