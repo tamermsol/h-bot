@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Database Migration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        .error-box {
+            background: #ff4444;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .info-box {
+            background: #2196F3;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .success-box {
+            background: #4CAF50;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: none;
+        }
+        .sql-box {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            white-space: pre;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .secondary-btn {
+            background: #2196F3;
+        }
+        .secondary-btn:hover {
+            background: #0b7dda;
+        }
+        ol {
+            line-height: 1.8;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            background: #333;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Fix Background Image Error</h1>
+        
+        <div class="error-box">
+            <strong>Current Error:</strong><br>
+            "Failed to update background: Could not find the 'background_image_url' column"
+        </div>
+
+        <div class="info-box">
+            <strong>Solution:</strong> Run a SQL migration to add the missing database column.
+        </div>
+
+        <h2>Step-by-Step Instructions</h2>
+
+        <div class="step">
+            <h3>Step 1: Open Supabase SQL Editor</h3>
+            <p>Click this button to open your Supabase SQL Editor:</p>
+            <button onclick="openSupabase()">Open Supabase SQL Editor</button>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Copy the SQL</h3>
+            <p>Click this button to copy the SQL migration code:</p>
+            <button class="secondary-btn" onclick="copySQL()">Copy SQL to Clipboard</button>
+            <p id="copy-status" style="color: #4CAF50; display: none;">✅ SQL copied to clipboard!</p>
+            
+            <p>The SQL code that will be copied:</p>
+            <div class="sql-box" id="sql-code">-- Add background_image_url to rooms table
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'rooms' 
+    AND column_name = 'background_image_url'
+  ) THEN
+    ALTER TABLE public.rooms ADD COLUMN background_image_url TEXT;
+    RAISE NOTICE 'Added background_image_url column to rooms table';
+  ELSE
+    RAISE NOTICE 'Column background_image_url already exists in rooms table';
+  END IF;
+END$$;
+
+-- Add background_image_url to homes table
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema = 'public' 
+    AND table_name = 'homes' 
+    AND column_name = 'background_image_url'
+  ) THEN
+    ALTER TABLE public.homes ADD COLUMN background_image_url TEXT;
+    RAISE NOTICE 'Added background_image_url column to homes table';
+  ELSE
+    RAISE NOTICE 'Column background_image_url already exists in homes table';
+  END IF;
+END$$;
+
+-- Verify the columns were added
+SELECT 
+  'rooms' as table_name,
+  column_name,
+  data_type
+FROM information_schema.columns 
+WHERE table_name = 'rooms' 
+AND column_name = 'background_image_url'
+
+UNION ALL
+
+SELECT 
+  'homes' as table_name,
+  column_name,
+  data_type
+FROM information_schema.columns 
+WHERE table_name = 'homes' 
+AND column_name = 'background_image_url';</div>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Paste and Run</h3>
+            <ol>
+                <li>In the SQL Editor, click "New Query"</li>
+                <li>Paste the SQL code (Ctrl+V)</li>
+                <li>Click "Run" or press Ctrl+Enter</li>
+                <li>Wait for "Success" message</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Verify Success</h3>
+            <p>You should see output with 2 rows:</p>
+            <div class="sql-box">table_name | column_name           | data_type
+-----------|-----------------------|----------
+rooms      | background_image_url  | text
+homes      | background_image_url  | text</div>
+            <p>If you see 2 rows, it worked! ✅</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 5: Test in App</h3>
+            <ol>
+                <li>Close and restart your app</li>
+                <li>Go to any room</li>
+                <li>Tap settings → Background Image</li>
+                <li>Try selecting a background</li>
+                <li>Error should be gone! ✅</li>
+            </ol>
+        </div>
+
+        <div class="success-box" id="success-box">
+            <strong>✅ Migration Complete!</strong><br>
+            Now restart your app and test the background image feature.
+        </div>
+
+        <h2>Next Steps</h2>
+        <ol>
+            <li>Run: <code>setup_backgrounds.bat</code> (downloads default images)</li>
+            <li>Run: <code>flutter pub get</code></li>
+            <li>Hot restart your app</li>
+            <li>Test background selection</li>
+        </ol>
+
+        <h2>Need Help?</h2>
+        <p>Check these files:</p>
+        <ul>
+            <li><code>RUN_MIGRATION_STEP_BY_STEP.md</code> - Detailed instructions</li>
+            <li><code>START_HERE_FIX.md</code> - Quick fix guide</li>
+            <li><code>ERRORS_EXPLAINED.md</code> - Error explanations</li>
+        </ul>
+    </div>
+
+    <script>
+        function openSupabase() {
+            window.open('https://supabase.com/dashboard/project/mvmvqycvorstsftcldzs/sql', '_blank');
+            document.getElementById('success-box').style.display = 'none';
+        }
+
+        function copySQL() {
+            const sqlCode = document.getElementById('sql-code').textContent;
+            navigator.clipboard.writeText(sqlCode).then(() => {
+                const status = document.getElementById('copy-status');
+                status.style.display = 'block';
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 3000);
+            }).catch(err => {
+                alert('Failed to copy. Please copy manually from the box below.');
+            });
+        }
+    </script>
+</body>
+</html>

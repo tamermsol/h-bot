@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figma API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background-color: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background-color: #d4edda;
+        }
+        pre {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #333;
+        }
+        .info-value {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Figma Dev File Details Fetcher</h1>
+        <p>This tool will fetch dev file details from the provided Figma URL using your personal token.</p>
+        
+        <div>
+            <label for="figmaUrl">Figma URL:</label><br>
+            <input type="text" id="figmaUrl" style="width: 100%; padding: 8px; margin: 5px 0;" 
+                   value="https://www.figma.com/design/tUUu8oFzoDWuRX1Fxvnf1e/Smart-Home--Community-?node-id=0-6244&m=dev&t=D0G82uCgy6ojZkXy-1">
+        </div>
+        
+        <button class="button" onclick="fetchFigmaDetails()">Fetch Dev File Details</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const FIGMA_TOKEN = 'YOUR_FIGMA_PERSONAL_ACCESS_TOKEN'; // Replace with your actual token
+        const BASE_URL = 'https://api.figma.com/v1';
+
+        function parseFileUrl(url) {
+            try {
+                const urlObj = new URL(url);
+                const pathSegments = urlObj.pathname.split('/');
+                
+                let fileId = '';
+                let nodeId = '';
+                
+                // Extract file ID from path
+                if (pathSegments.length >= 3 && pathSegments[1] === 'design') {
+                    fileId = pathSegments[2];
+                }
+                
+                // Extract node ID from query parameters
+                const nodeIdParam = urlObj.searchParams.get('node-id');
+                if (nodeIdParam) {
+                    nodeId = nodeIdParam.replace('-', ':');
+                }
+                
+                return { fileId, nodeId };
+            } catch (e) {
+                console.error('Error parsing URL:', e);
+                return { fileId: '', nodeId: '' };
+            }
+        }
+
+        async function fetchFigmaFile(fileId) {
+            try {
+                const response = await fetch(`${BASE_URL}/files/${fileId}`, {
+                    headers: {
+                        'X-Figma-Token': FIGMA_TOKEN,
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching file:', error);
+                throw error;
+            }
+        }
+
+        async function fetchFigmaNode(fileId, nodeId) {
+            try {
+                const response = await fetch(`${BASE_URL}/files/${fileId}/nodes?ids=${nodeId}`, {
+                    headers: {
+                        'X-Figma-Token': FIGMA_TOKEN,
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching node:', error);
+                throw error;
+            }
+        }
+
+        function displayResult(data, isError = false) {
+            const resultDiv = document.getElementById('result');
+            const className = isError ? 'result error' : 'result success';
+            
+            if (isError) {
+                resultDiv.innerHTML = `<div class="${className}"><strong>Error:</strong> ${data}</div>`;
+            } else {
+                let html = `<div class="${className}">`;
+                html += '<h3>✅ Successfully fetched Figma dev file details!</h3>';
+                
+                // File Information
+                if (data.fileInfo) {
+                    html += '<h4>📄 File Information</h4>';
+                    html += '<div class="info-grid">';
+                    
+                    const doc = data.fileInfo.document;
+                    if (doc) {
+                        html += `<div class="info-label">Name:</div><div class="info-value">${doc.name || 'Unknown'}</div>`;
+                        html += `<div class="info-label">Type:</div><div class="info-value">${doc.type || 'Unknown'}</div>`;
+                    }
+                    
+                    html += `<div class="info-label">File ID:</div><div class="info-value">${data.fileId}</div>`;
+                    if (data.nodeId) {
+                        html += `<div class="info-label">Node ID:</div><div class="info-value">${data.nodeId}</div>`;
+                    }
+                    if (data.fileInfo.lastModified) {
+                        html += `<div class="info-label">Last Modified:</div><div class="info-value">${data.fileInfo.lastModified}</div>`;
+                    }
+                    if (data.fileInfo.version) {
+                        html += `<div class="info-label">Version:</div><div class="info-value">${data.fileInfo.version}</div>`;
+                    }
+                    
+                    html += '</div>';
+                }
+                
+                // Node Information
+                if (data.nodeInfo && data.nodeInfo.nodes) {
+                    html += '<h4>📐 Node Information</h4>';
+                    Object.entries(data.nodeInfo.nodes).forEach(([nodeId, nodeData]) => {
+                        const doc = nodeData.document;
+                        if (doc) {
+                            html += `<h5>Node: ${nodeId}</h5>`;
+                            html += '<div class="info-grid">';
+                            html += `<div class="info-label">Name:</div><div class="info-value">${doc.name || 'Unknown'}</div>`;
+                            html += `<div class="info-label">Type:</div><div class="info-value">${doc.type || 'Unknown'}</div>`;
+                            
+                            if (doc.absoluteBoundingBox) {
+                                const bbox = doc.absoluteBoundingBox;
+                                html += `<div class="info-label">Width:</div><div class="info-value">${bbox.width}</div>`;
+                                html += `<div class="info-label">Height:</div><div class="info-value">${bbox.height}</div>`;
+                                html += `<div class="info-label">X:</div><div class="info-value">${bbox.x}</div>`;
+                                html += `<div class="info-label">Y:</div><div class="info-value">${bbox.y}</div>`;
+                            }
+                            html += '</div>';
+                        }
+                    });
+                }
+                
+                // Raw JSON Data
+                html += '<h4>🔍 Raw JSON Data</h4>';
+                html += '<button onclick="copyToClipboard()" style="margin-bottom: 10px;">Copy JSON to Clipboard</button>';
+                html += `<pre id="jsonData">${JSON.stringify(data, null, 2)}</pre>`;
+                
+                html += '</div>';
+                resultDiv.innerHTML = html;
+            }
+        }
+
+        function copyToClipboard() {
+            const jsonData = document.getElementById('jsonData').textContent;
+            navigator.clipboard.writeText(jsonData).then(() => {
+                alert('JSON data copied to clipboard!');
+            });
+        }
+
+        async function fetchFigmaDetails() {
+            const url = document.getElementById('figmaUrl').value.trim();
+            
+            if (!url) {
+                displayResult('Please enter a Figma URL', true);
+                return;
+            }
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="result">🔄 Fetching Figma dev file details...</div>';
+            
+            try {
+                const { fileId, nodeId } = parseFileUrl(url);
+                
+                if (!fileId) {
+                    throw new Error('Could not extract file ID from URL');
+                }
+                
+                console.log('Fetching details for File ID:', fileId, 'Node ID:', nodeId);
+                
+                // Fetch file information
+                const fileInfo = await fetchFigmaFile(fileId);
+                
+                const result = {
+                    fileId,
+                    nodeId,
+                    fileInfo
+                };
+                
+                // Fetch node information if node ID is available
+                if (nodeId) {
+                    try {
+                        const nodeInfo = await fetchFigmaNode(fileId, nodeId);
+                        result.nodeInfo = nodeInfo;
+                    } catch (nodeError) {
+                        console.warn('Could not fetch node info:', nodeError);
+                    }
+                }
+                
+                displayResult(result);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                displayResult(error.message, true);
+            }
+        }
+
+        // Auto-fetch on page load
+        window.onload = function() {
+            fetchFigmaDetails();
+        };
+    </script>
+</body>
+</html>
