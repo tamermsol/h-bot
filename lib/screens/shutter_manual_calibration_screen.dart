@@ -354,7 +354,7 @@ class _ShutterManualCalibrationScreenState
         padding: const EdgeInsets.all(AppTheme.paddingMedium),
         decoration: BoxDecoration(
           color: isSelected
-              ? color.withValues(alpha: 0.2)
+              ? color.withOpacity(0.2)
               : AppTheme.backgroundColor,
           border: Border.all(
             color: isSelected ? color : AppTheme.textHint,

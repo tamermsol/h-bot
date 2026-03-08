@@ -197,7 +197,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 border: Border.all(
                   color: AppTheme.getTextSecondary(
                     context,
-                  ).withValues(alpha: 0.3),
+                  ).withOpacity(0.3),
                   width: 1,
                 ),
               ),
@@ -276,10 +276,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             Container(
               padding: const EdgeInsets.all(AppTheme.paddingMedium),
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                color: AppTheme.primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 border: Border.all(
-                  color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                  color: AppTheme.primaryColor.withOpacity(0.3),
                   width: 1,
                 ),
               ),

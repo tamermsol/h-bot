@@ -174,7 +174,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                     '(Note: "All Channels" timers use $maxChannels slots)',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textSecondary.withValues(alpha: 0.8),
+                      color: AppTheme.textSecondary.withOpacity(0.8),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -655,7 +655,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
           Icon(
             Icons.timer_off_outlined,
             size: 80,
-            color: AppTheme.textSecondary.withValues(alpha: 0.5),
+            color: AppTheme.textSecondary.withOpacity(0.5),
           ),
           const SizedBox(height: 16),
           Text(
@@ -663,7 +663,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textSecondary.withValues(alpha: 0.7),
+              color: AppTheme.textSecondary.withOpacity(0.7),
             ),
           ),
           const SizedBox(height: 8),
@@ -671,7 +671,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             'Tap + to create your first timer',
             style: TextStyle(
               fontSize: 14,
-              color: AppTheme.textSecondary.withValues(alpha: 0.5),
+              color: AppTheme.textSecondary.withOpacity(0.5),
             ),
           ),
           const SizedBox(height: 4),
@@ -679,7 +679,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             'Up to 16 local timers supported',
             style: TextStyle(
               fontSize: 12,
-              color: AppTheme.textSecondary.withValues(alpha: 0.4),
+              color: AppTheme.textSecondary.withOpacity(0.4),
             ),
           ),
         ],
@@ -721,10 +721,10 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                 height: 48,
                 decoration: BoxDecoration(
                   color: timer.enabled
-                      ? AppTheme.primaryColor.withValues(alpha: 0.2)
+                      ? AppTheme.primaryColor.withOpacity(0.2)
                       : AppTheme.getTextSecondary(
                           context,
-                        ).withValues(alpha: 0.1),
+                        ).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -767,10 +767,10 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                           ),
                           decoration: BoxDecoration(
                             color: timer.action == TimerAction.on
-                                ? Colors.green.withValues(alpha: 0.2)
+                                ? Colors.green.withOpacity(0.2)
                                 : timer.action == TimerAction.off
-                                ? Colors.red.withValues(alpha: 0.2)
-                                : Colors.orange.withValues(alpha: 0.2),
+                                ? Colors.red.withOpacity(0.2)
+                                : Colors.orange.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(
@@ -795,7 +795,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                         fontSize: 13,
                         color: AppTheme.getTextSecondary(
                           context,
-                        ).withValues(alpha: 0.8),
+                        ).withOpacity(0.8),
                       ),
                     ),
                     Row(
@@ -807,7 +807,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                               fontSize: 12,
                               color: AppTheme.getTextSecondary(
                                 context,
-                              ).withValues(alpha: 0.6),
+                              ).withOpacity(0.6),
                               fontStyle: FontStyle.italic,
                             ),
                           ),
@@ -817,7 +817,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                             fontSize: 11,
                             color: AppTheme.getTextSecondary(
                               context,
-                            ).withValues(alpha: 0.5),
+                            ).withOpacity(0.5),
                             fontFamily: 'monospace',
                           ),
                         ),

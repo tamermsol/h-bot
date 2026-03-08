@@ -101,7 +101,7 @@ class RoomIconPicker extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppTheme.primaryColor.withValues(alpha: 0.2)
+                    ? AppTheme.primaryColor.withOpacity(0.2)
                     : AppTheme.getCardColor(context),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(

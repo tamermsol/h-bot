@@ -27,15 +27,15 @@ class SceneCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           border: Border.all(
             color: isActive
-                ? sceneColor.withValues(alpha: 0.5)
+                ? sceneColor.withOpacity(0.5)
                 : Colors.transparent,
             width: 2,
           ),
           boxShadow: [
             BoxShadow(
               color: isActive
-                  ? sceneColor.withValues(alpha: 0.2)
-                  : Colors.black.withValues(alpha: 0.1),
+                  ? sceneColor.withOpacity(0.2)
+                  : Colors.black.withOpacity(0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -53,8 +53,8 @@ class SceneCard extends StatelessWidget {
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: isActive
-                        ? sceneColor.withValues(alpha: 0.2)
-                        : AppTheme.textHint.withValues(alpha: 0.1),
+                        ? sceneColor.withOpacity(0.2)
+                        : AppTheme.textHint.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                   ),
                   child: Icon(
@@ -68,11 +68,7 @@ class SceneCard extends StatelessWidget {
                   child: Switch(
                     value: isActive,
                     onChanged: onToggle,
-                    activeThumbColor: sceneColor,
-                    inactiveThumbColor: AppTheme.textHint,
-                    inactiveTrackColor: AppTheme.textHint.withValues(
-                      alpha: 0.3,
-                    ),
+                    inactiveTrackColor: AppTheme.textHint.withOpacity(0.3),
                   ),
                 ),
               ],

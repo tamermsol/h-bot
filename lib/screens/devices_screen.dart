@@ -377,9 +377,9 @@ class _DevicesScreenState extends State<DevicesScreen> {
                           (deviceState ||
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
-                      ? AppTheme.primaryColor.withValues(alpha: 0.2)
+                      ? AppTheme.primaryColor.withOpacity(0.2)
                       : (isDark
-                            ? AppTheme.textHint.withValues(alpha: 0.1)
+                            ? AppTheme.textHint.withOpacity(0.1)
                             : Colors.white),
                   borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 ),
@@ -465,7 +465,6 @@ class _DevicesScreenState extends State<DevicesScreen> {
                       onChanged: isControllable && _mqttConnected && isOnline
                           ? (value) => _toggleDevice(device, value)
                           : null,
-                      activeThumbColor: AppTheme.primaryColor,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   ),
@@ -513,7 +512,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 color: isControllable && _mqttConnected && isOnline
                     ? (position > 0
                           ? textPrimary
-                          : textPrimary.withValues(alpha: 0.3))
+                          : textPrimary.withOpacity(0.3))
                     : textHint,
                 padding: EdgeInsets.zero,
                 tooltip: 'Close',
@@ -555,7 +554,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 color: isControllable && _mqttConnected && isOnline
                     ? (position < 100
                           ? textPrimary
-                          : textPrimary.withValues(alpha: 0.3))
+                          : textPrimary.withOpacity(0.3))
                     : textHint,
                 padding: EdgeInsets.zero,
                 tooltip: 'Open',
@@ -591,7 +590,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 });
               },
               backgroundColor: AppTheme.getCardColor(context),
-              selectedColor: AppTheme.primaryColor.withValues(alpha: 0.2),
+              selectedColor: AppTheme.primaryColor.withOpacity(0.2),
               labelStyle: TextStyle(
                 color: isSelected
                     ? AppTheme.primaryColor
@@ -618,7 +617,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         margin: const EdgeInsets.all(AppTheme.paddingLarge),
         padding: const EdgeInsets.all(AppTheme.paddingLarge),
         decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.6),
+          color: Colors.black.withOpacity(0.6),
           borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         ),
         child: Column(
@@ -639,7 +638,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
               'Try adjusting your search or filter',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.white.withValues(alpha: 0.9),
+                color: Colors.white.withOpacity(0.9),
               ),
             ),
           ],

@@ -197,7 +197,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
-                    color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                    color: AppTheme.primaryColor.withOpacity(0.1),
                     child: Row(
                       children: [
                         Expanded(

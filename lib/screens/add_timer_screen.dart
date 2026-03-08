@@ -199,7 +199,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                       ? BorderSide(
                           color: AppTheme.getTextSecondary(
                             context,
-                          ).withValues(alpha: 0.1),
+                          ).withOpacity(0.1),
                         )
                       : BorderSide.none,
                 ),
@@ -295,7 +295,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
               decoration: BoxDecoration(
                 color: _output == 0
                     ? AppTheme.primaryColor
-                    : AppTheme.getTextSecondary(context).withValues(alpha: 0.1),
+                    : AppTheme.getTextSecondary(context).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -347,7 +347,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                           ? AppTheme.primaryColor
                           : AppTheme.getTextSecondary(
                               context,
-                            ).withValues(alpha: 0.1),
+                            ).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -390,7 +390,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                       ? BorderSide(
                           color: AppTheme.getTextSecondary(
                             context,
-                          ).withValues(alpha: 0.1),
+                          ).withOpacity(0.1),
                         )
                       : BorderSide.none,
                 ),
@@ -472,7 +472,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                         ? AppTheme.primaryColor
                         : AppTheme.getTextSecondary(
                             context,
-                          ).withValues(alpha: 0.1),
+                          ).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -494,10 +494,10 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                         style: TextStyle(
                           fontSize: 9,
                           color: isSelected
-                              ? Colors.white.withValues(alpha: 0.8)
+                              ? Colors.white.withOpacity(0.8)
                               : AppTheme.getTextSecondary(
                                   context,
-                                ).withValues(alpha: 0.6),
+                                ).withOpacity(0.6),
                         ),
                       ),
                     ],
@@ -550,7 +550,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
           color: AppTheme.getCardColor(context),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: AppTheme.getTextSecondary(context).withValues(alpha: 0.2),
+            color: AppTheme.getTextSecondary(context).withOpacity(0.2),
           ),
         ),
         child: Column(
@@ -563,7 +563,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                 fontSize: 11,
                 color: AppTheme.getTextSecondary(
                   context,
-                ).withValues(alpha: 0.8),
+                ).withOpacity(0.8),
               ),
             ),
           ],
@@ -655,7 +655,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                   fontSize: 12,
                   color: AppTheme.getTextSecondary(
                     context,
-                  ).withValues(alpha: 0.7),
+                  ).withOpacity(0.7),
                 ),
               ),
               Slider(

@@ -7,13 +7,13 @@ part of 'scene_trigger.dart';
 // **************************************************************************
 
 SceneTrigger _$SceneTriggerFromJson(Map<String, dynamic> json) => SceneTrigger(
-  id: json['id'] as String,
-  sceneId: json['scene_id'] as String,
-  kind: $enumDecode(_$TriggerKindEnumMap, json['kind']),
-  configJson: json['config_json'] as Map<String, dynamic>,
-  isEnabled: json['is_enabled'] as bool,
-  createdAt: DateTime.parse(json['created_at'] as String),
-);
+      id: json['id'] as String,
+      sceneId: json['scene_id'] as String,
+      kind: $enumDecode(_$TriggerKindEnumMap, json['kind']),
+      configJson: json['config_json'] as Map<String, dynamic>,
+      isEnabled: json['is_enabled'] as bool,
+      createdAt: DateTime.parse(json['created_at'] as String),
+    );
 
 Map<String, dynamic> _$SceneTriggerToJson(SceneTrigger instance) =>
     <String, dynamic>{

@@ -257,7 +257,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                       _selectedCategory = category;
                     });
                   },
-                  selectedColor: widget.accentColor.withValues(alpha: 0.2),
+                  selectedColor: widget.accentColor.withOpacity(0.2),
                   checkmarkColor: widget.accentColor,
                   labelStyle: TextStyle(
                     color: isSelected
@@ -268,8 +268,8 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                   backgroundColor: AppTheme.getCardColor(context),
                   side: BorderSide(
                     color: isSelected
-                        ? widget.accentColor.withValues(alpha: 0.5)
-                        : AppTheme.textHint.withValues(alpha: 0.3),
+                        ? widget.accentColor.withOpacity(0.5)
+                        : AppTheme.textHint.withOpacity(0.3),
                   ),
                 ),
               );
@@ -283,10 +283,10 @@ class _DeviceSelectorState extends State<DeviceSelector> {
           Container(
             padding: const EdgeInsets.all(AppTheme.paddingMedium),
             decoration: BoxDecoration(
-              color: widget.accentColor.withValues(alpha: 0.1),
+              color: widget.accentColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
               border: Border.all(
-                color: widget.accentColor.withValues(alpha: 0.3),
+                color: widget.accentColor.withOpacity(0.3),
               ),
             ),
             child: Row(
@@ -324,7 +324,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? widget.accentColor.withValues(alpha: 0.2)
+                        ? widget.accentColor.withOpacity(0.2)
                         : AppTheme.getCardColor(context),
                     borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                   ),
@@ -360,13 +360,13 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                   _toggleDevice(device);
                 },
                 tileColor: isSelected
-                    ? widget.accentColor.withValues(alpha: 0.1)
+                    ? widget.accentColor.withOpacity(0.1)
                     : AppTheme.getCardColor(context),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                   side: BorderSide(
                     color: isSelected
-                        ? widget.accentColor.withValues(alpha: 0.5)
+                        ? widget.accentColor.withOpacity(0.5)
                         : Colors.transparent,
                   ),
                 ),

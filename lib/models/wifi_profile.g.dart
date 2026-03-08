@@ -7,14 +7,14 @@ part of 'wifi_profile.dart';
 // **************************************************************************
 
 WiFiProfile _$WiFiProfileFromJson(Map<String, dynamic> json) => WiFiProfile(
-  id: json['id'] as String,
-  userId: json['user_id'] as String,
-  ssid: json['ssid'] as String,
-  password: json['password'] as String,
-  isDefault: json['is_default'] as bool,
-  createdAt: DateTime.parse(json['created_at'] as String),
-  updatedAt: DateTime.parse(json['updated_at'] as String),
-);
+      id: json['id'] as String,
+      userId: json['user_id'] as String,
+      ssid: json['ssid'] as String,
+      password: json['password'] as String,
+      isDefault: json['is_default'] as bool,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+    );
 
 Map<String, dynamic> _$WiFiProfileToJson(WiFiProfile instance) =>
     <String, dynamic>{

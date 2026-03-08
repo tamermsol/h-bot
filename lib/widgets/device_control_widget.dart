@@ -284,7 +284,6 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
       title: const Text('Power'),
       value: isOn,
       onChanged: _isConnected ? (value) => _toggleChannel(1) : null,
-      activeThumbColor: AppTheme.primaryColor,
     );
   }
 
@@ -308,7 +307,6 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
                 Switch(
                   value: _channelStates[i] ?? false,
                   onChanged: _isConnected ? (value) => _toggleChannel(i) : null,
-                  activeThumbColor: AppTheme.primaryColor,
                 ),
               ],
             ),

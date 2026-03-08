@@ -48,14 +48,14 @@ class _SmartInputFieldState extends State<SmartInputField> {
         borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
         border: Border.all(
           color: _isFocused
-              ? AppTheme.primaryColor.withValues(alpha: 0.5)
+              ? AppTheme.primaryColor.withOpacity(0.5)
               : (isDark ? Colors.transparent : AppTheme.lightCardBorder),
           width: _isFocused ? 2 : 1,
         ),
         boxShadow: _isFocused
             ? [
                 BoxShadow(
-                  color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                  color: AppTheme.primaryColor.withOpacity(0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),

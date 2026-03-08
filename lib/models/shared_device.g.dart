@@ -7,16 +7,14 @@ part of 'shared_device.dart';
 // **************************************************************************
 
 SharedDevice _$SharedDeviceFromJson(Map<String, dynamic> json) => SharedDevice(
-  id: json['id'] as String,
-  deviceId: json['device_id'] as String,
-  ownerId: json['owner_id'] as String,
-  sharedWithId: json['shared_with_id'] as String,
-  permissionLevel: $enumDecode(
-    _$PermissionLevelEnumMap,
-    json['permission_level'],
-  ),
-  sharedAt: DateTime.parse(json['shared_at'] as String),
-);
+      id: json['id'] as String,
+      deviceId: json['device_id'] as String,
+      ownerId: json['owner_id'] as String,
+      sharedWithId: json['shared_with_id'] as String,
+      permissionLevel:
+          $enumDecode(_$PermissionLevelEnumMap, json['permission_level']),
+      sharedAt: DateTime.parse(json['shared_at'] as String),
+    );
 
 Map<String, dynamic> _$SharedDeviceToJson(SharedDevice instance) =>
     <String, dynamic>{

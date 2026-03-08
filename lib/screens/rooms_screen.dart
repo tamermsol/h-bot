@@ -586,7 +586,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryColor.withValues(alpha: 0.2),
+                          color: AppTheme.primaryColor.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(
                             AppTheme.radiusMedium,
                           ),

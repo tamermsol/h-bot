@@ -7,11 +7,11 @@ part of 'device_state.dart';
 // **************************************************************************
 
 DeviceState _$DeviceStateFromJson(Map<String, dynamic> json) => DeviceState(
-  deviceId: json['device_id'] as String,
-  reportedAt: DateTime.parse(json['reported_at'] as String),
-  online: json['online'] as bool,
-  stateJson: json['state_json'] as Map<String, dynamic>,
-);
+      deviceId: json['device_id'] as String,
+      reportedAt: DateTime.parse(json['reported_at'] as String),
+      online: json['online'] as bool,
+      stateJson: json['state_json'] as Map<String, dynamic>,
+    );
 
 Map<String, dynamic> _$DeviceStateToJson(DeviceState instance) =>
     <String, dynamic>{

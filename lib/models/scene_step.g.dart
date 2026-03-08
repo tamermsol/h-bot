@@ -7,17 +7,17 @@ part of 'scene_step.dart';
 // **************************************************************************
 
 SceneStep _$SceneStepFromJson(Map<String, dynamic> json) => SceneStep(
-  id: json['id'] as String,
-  sceneId: json['scene_id'] as String,
-  stepOrder: (json['step_order'] as num).toInt(),
-  actionJson: json['action_json'] as Map<String, dynamic>,
-  createdAt: DateTime.parse(json['created_at'] as String),
-);
+      id: json['id'] as String,
+      sceneId: json['scene_id'] as String,
+      stepOrder: (json['step_order'] as num).toInt(),
+      actionJson: json['action_json'] as Map<String, dynamic>,
+      createdAt: DateTime.parse(json['created_at'] as String),
+    );
 
 Map<String, dynamic> _$SceneStepToJson(SceneStep instance) => <String, dynamic>{
-  'id': instance.id,
-  'scene_id': instance.sceneId,
-  'step_order': instance.stepOrder,
-  'action_json': instance.actionJson,
-  'created_at': instance.createdAt.toIso8601String(),
-};
+      'id': instance.id,
+      'scene_id': instance.sceneId,
+      'step_order': instance.stepOrder,
+      'action_json': instance.actionJson,
+      'created_at': instance.createdAt.toIso8601String(),
+    };

@@ -256,8 +256,8 @@ class _ScenesScreenState extends State<ScenesScreen>
                   height: 48,
                   decoration: BoxDecoration(
                     color: scene.isEnabled
-                        ? sceneColor.withValues(alpha: 0.2)
-                        : AppTheme.textHint.withValues(alpha: 0.1),
+                        ? sceneColor.withOpacity(0.2)
+                        : AppTheme.textHint.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                   ),
                   child: Icon(
@@ -366,7 +366,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: sceneColor.withValues(alpha: 0.2),
+                      color: sceneColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                     ),
                     child: Icon(iconData, color: sceneColor, size: 28),

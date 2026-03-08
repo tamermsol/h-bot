@@ -72,7 +72,7 @@ class AvatarPickerDialog extends StatelessWidget {
             ),
 
             const SizedBox(height: 20),
-            Divider(color: AppTheme.textSecondary.withValues(alpha: 0.2)),
+            Divider(color: AppTheme.textSecondary.withOpacity(0.2)),
             const SizedBox(height: 12),
 
             // Custom options

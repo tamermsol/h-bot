@@ -1,0 +1,46 @@
+workflows:
+  ios-release:
+    name: iOS Release
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    environment:
+      groups:
+        - appstore_credentials
+      vars:
+        BUNDLE_ID: "com.mb.hbot"
+        APP_STORE_CONNECT_KEY_IDENTIFIER: "BQW2TW5473"
+        APP_STORE_CONNECT_ISSUER_ID: "69a6de8f-0bee-47e3-e053-5b8c7c11a4d1"
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up keychain
+        script: |
+          keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create \
+            --certificate-key=@env:CERTIFICATE_PRIVATE_KEY
+      - name: Set up signing
+        script: |
+          keychain add-certificates
+          xcode-project use-profiles
+      - name: Flutter packages
+        script: |
+          flutter pub get
+      - name: Build IPA
+        script: |
+          flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
+      - name: Collect IPA
+        script: |
+          cp build/ios/ipa/*.ipa $CM_BUILD_DIR/hbot.ipa
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true

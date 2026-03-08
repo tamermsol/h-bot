@@ -29,20 +29,20 @@ Map<String, dynamic> _$DeviceChannelToJson(DeviceChannel instance) =>
     };
 
 DeviceChannelRequest _$DeviceChannelRequestFromJson(
-  Map<String, dynamic> json,
-) => DeviceChannelRequest(
-  deviceId: json['device_id'] as String,
-  channelNo: (json['channel_no'] as num).toInt(),
-  label: json['label'] as String,
-);
+        Map<String, dynamic> json) =>
+    DeviceChannelRequest(
+      deviceId: json['device_id'] as String,
+      channelNo: (json['channel_no'] as num).toInt(),
+      label: json['label'] as String,
+    );
 
 Map<String, dynamic> _$DeviceChannelRequestToJson(
-  DeviceChannelRequest instance,
-) => <String, dynamic>{
-  'device_id': instance.deviceId,
-  'channel_no': instance.channelNo,
-  'label': instance.label,
-};
+        DeviceChannelRequest instance) =>
+    <String, dynamic>{
+      'device_id': instance.deviceId,
+      'channel_no': instance.channelNo,
+      'label': instance.label,
+    };
 
 DeviceWithChannels _$DeviceWithChannelsFromJson(Map<String, dynamic> json) =>
     DeviceWithChannels(

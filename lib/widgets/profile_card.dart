@@ -37,13 +37,13 @@ class ProfileCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           border: Border.all(
             color: isDark
-                ? color.withValues(alpha: 0.3)
+                ? color.withOpacity(0.3)
                 : AppTheme.lightBorderColor,
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.1 : 0.03),
+              color: Colors.black.withOpacity(isDark ? 0.1 : 0.03),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -56,7 +56,7 @@ class ProfileCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.2),
+                color: color.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
               ),
               child: Icon(icon, color: color, size: 24),

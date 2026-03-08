@@ -419,7 +419,6 @@ class _EnhancedDeviceControlWidgetState
       title: const Text('Power'),
       value: isOn,
       onChanged: isConnected ? (value) => _setChannelState(1, value) : null,
-      activeThumbColor: AppTheme.primaryColor,
     );
   }
 
@@ -457,7 +456,6 @@ class _EnhancedDeviceControlWidgetState
                   onChanged: isConnected
                       ? (value) => _setChannelState(i, value)
                       : null,
-                  activeThumbColor: AppTheme.primaryColor,
                 ),
               ],
             ),

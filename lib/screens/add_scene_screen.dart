@@ -358,7 +358,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               decoration: BoxDecoration(
                 color: isActive
                     ? AppTheme.primaryColor
-                    : AppTheme.textHint.withValues(alpha: 0.3),
+                    : AppTheme.textHint.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -410,7 +410,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   color: AppTheme.getCardColor(context),
                   borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                   border: Border.all(
-                    color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                    color: AppTheme.primaryColor.withOpacity(0.3),
                   ),
                 ),
                 child: Row(
@@ -418,7 +418,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryColor.withValues(alpha: 0.2),
+                        color: AppTheme.primaryColor.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(
                           AppTheme.radiusSmall,
                         ),
@@ -523,7 +523,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: color.withValues(alpha: 0.5),
+                              color: color.withOpacity(0.5),
                               blurRadius: 8,
                               spreadRadius: 2,
                             ),
@@ -546,14 +546,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             decoration: BoxDecoration(
               color: AppTheme.getCardColor(context),
               borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-              border: Border.all(color: _selectedColor.withValues(alpha: 0.3)),
+              border: Border.all(color: _selectedColor.withOpacity(0.3)),
             ),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: _selectedColor.withValues(alpha: 0.2),
+                    color: _selectedColor.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                   ),
                   child: Icon(_selectedIcon, color: _selectedColor, size: 24),
@@ -612,7 +612,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? _selectedColor.withValues(alpha: 0.2)
+                        ? _selectedColor.withOpacity(0.2)
                         : AppTheme.getCardColor(context),
                     borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                   ),
@@ -671,13 +671,13 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   });
                 },
                 tileColor: isSelected
-                    ? _selectedColor.withValues(alpha: 0.1)
+                    ? _selectedColor.withOpacity(0.1)
                     : AppTheme.getCardColor(context),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                   side: BorderSide(
                     color: isSelected
-                        ? _selectedColor.withValues(alpha: 0.5)
+                        ? _selectedColor.withOpacity(0.5)
                         : Colors.transparent,
                   ),
                 ),
@@ -694,7 +694,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 color: AppTheme.getCardColor(context),
                 borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 border: Border.all(
-                  color: _selectedColor.withValues(alpha: 0.3),
+                  color: _selectedColor.withOpacity(0.3),
                 ),
               ),
               child: Row(
@@ -733,7 +733,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 color: AppTheme.getCardColor(context),
                 borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 border: Border.all(
-                  color: _selectedColor.withValues(alpha: 0.3),
+                  color: _selectedColor.withOpacity(0.3),
                 ),
               ),
               child: Row(
@@ -763,7 +763,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   color: AppTheme.getCardColor(context),
                   borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                   border: Border.all(
-                    color: _selectedColor.withValues(alpha: 0.3),
+                    color: _selectedColor.withOpacity(0.3),
                   ),
                 ),
                 child: Column(
@@ -804,7 +804,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 color: AppTheme.getCardColor(context),
                 borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 border: Border.all(
-                  color: _selectedColor.withValues(alpha: 0.3),
+                  color: _selectedColor.withOpacity(0.3),
                 ),
               ),
               child: Column(
@@ -847,7 +847,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 color: AppTheme.getCardColor(context),
                 borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 border: Border.all(
-                  color: _selectedColor.withValues(alpha: 0.3),
+                  color: _selectedColor.withOpacity(0.3),
                 ),
               ),
               child: Column(
@@ -864,7 +864,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     Container(
                       padding: const EdgeInsets.all(AppTheme.paddingSmall),
                       decoration: BoxDecoration(
-                        color: _selectedColor.withValues(alpha: 0.1),
+                        color: _selectedColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(
                           AppTheme.radiusSmall,
                         ),
@@ -944,7 +944,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 color: AppTheme.getCardColor(context),
                 borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 border: Border.all(
-                  color: _selectedColor.withValues(alpha: 0.3),
+                  color: _selectedColor.withOpacity(0.3),
                 ),
               ),
               child: Column(
@@ -1141,7 +1141,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       decoration: BoxDecoration(
         color: AppTheme.getCardColor(context),
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-        border: Border.all(color: _selectedColor.withValues(alpha: 0.3)),
+        border: Border.all(color: _selectedColor.withOpacity(0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1152,7 +1152,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: _selectedColor.withValues(alpha: 0.2),
+                  color: _selectedColor.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                 ),
                 child: Icon(
@@ -1243,7 +1243,6 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   });
                 },
                 activeTrackColor: _selectedColor,
-                activeThumbColor: Colors.white,
               ),
             ],
           ),
@@ -1279,7 +1278,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     }
                   });
                 },
-                selectedColor: _selectedColor.withValues(alpha: 0.2),
+                selectedColor: _selectedColor.withOpacity(0.2),
                 checkmarkColor: _selectedColor,
                 labelStyle: TextStyle(
                   color: selectedChannels.length == channels
@@ -1313,7 +1312,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       _deviceActions[device.id]!['channels'] = currentChannels;
                     });
                   },
-                  selectedColor: _selectedColor.withValues(alpha: 0.2),
+                  selectedColor: _selectedColor.withOpacity(0.2),
                   checkmarkColor: _selectedColor,
                   labelStyle: TextStyle(
                     color: isSelected
@@ -1390,7 +1389,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   side: BorderSide(
                     color: position == 0
                         ? _selectedColor
-                        : AppTheme.textHint.withValues(alpha: 0.3),
+                        : AppTheme.textHint.withOpacity(0.3),
                   ),
                 ),
                 child: const Text('0%'),
@@ -1411,7 +1410,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   side: BorderSide(
                     color: position == 50
                         ? _selectedColor
-                        : AppTheme.textHint.withValues(alpha: 0.3),
+                        : AppTheme.textHint.withOpacity(0.3),
                   ),
                 ),
                 child: const Text('50%'),
@@ -1432,7 +1431,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   side: BorderSide(
                     color: position == 100
                         ? _selectedColor
-                        : AppTheme.textHint.withValues(alpha: 0.3),
+                        : AppTheme.textHint.withOpacity(0.3),
                   ),
                 ),
                 child: const Text('100%'),
@@ -1510,7 +1509,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        _selectedColor.withValues(alpha: 0.2),
+                        _selectedColor.withOpacity(0.2),
                         AppTheme.cardColor,
                       ],
                     )
@@ -1527,7 +1526,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: _selectedColor.withValues(alpha: 0.2),
+                        color: _selectedColor.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(
                           AppTheme.radiusSmall,
                         ),
@@ -1666,14 +1665,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         border: Border(
           top: BorderSide(
             color: isDark
-                ? AppTheme.textHint.withValues(alpha: 0.2)
+                ? AppTheme.textHint.withOpacity(0.2)
                 : AppTheme.lightCardBorder,
             width: 1,
           ),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.1),
+            color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -1720,9 +1719,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                   ),
-                  disabledBackgroundColor: _selectedColor.withValues(
-                    alpha: 0.5,
-                  ),
+                  disabledBackgroundColor: _selectedColor.withOpacity(0.5),
                 ),
                 child: _isCreating
                     ? const SizedBox(
@@ -2106,7 +2103,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           }
         });
       },
-      selectedColor: _selectedColor.withValues(alpha: 0.3),
+      selectedColor: _selectedColor.withOpacity(0.3),
       checkmarkColor: _selectedColor,
       labelStyle: TextStyle(
         color: isSelected ? _selectedColor : AppTheme.getTextSecondary(context),
@@ -2181,14 +2178,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         ),
         decoration: BoxDecoration(
           color: isSelected
-              ? _selectedColor.withValues(alpha: 0.2)
+              ? _selectedColor.withOpacity(0.2)
               : (isDark ? AppTheme.surfaceColor : Colors.white),
           borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
           border: Border.all(
             color: isSelected
                 ? _selectedColor
                 : (isDark
-                      ? Colors.grey.withValues(alpha: 0.3)
+                      ? Colors.grey.withOpacity(0.3)
                       : AppTheme.lightCardBorder),
             width: 2,
           ),

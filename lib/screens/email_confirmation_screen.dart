@@ -81,7 +81,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
               'We sent a confirmation link to:',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.white.withValues(alpha: 0.7),
+                color: Colors.white.withOpacity(0.7),
               ),
               textAlign: TextAlign.center,
             ),
@@ -103,7 +103,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.1),
+                color: Colors.white.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -121,7 +121,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                     'If the email link doesn\'t work, you can still use the app! Email confirmation is optional for testing.',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white.withValues(alpha: 0.8),
+                      color: Colors.white.withOpacity(0.8),
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -193,7 +193,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
               'You can always confirm your email later in settings.',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.6),
+                color: Colors.white.withOpacity(0.6),
               ),
               textAlign: TextAlign.center,
             ),

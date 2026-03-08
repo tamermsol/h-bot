@@ -149,10 +149,10 @@ class HelpCenterScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(AppTheme.paddingMedium),
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                color: AppTheme.primaryColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 border: Border.all(
-                  color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                  color: AppTheme.primaryColor.withOpacity(0.3),
                   width: 1,
                 ),
               ),
@@ -203,7 +203,7 @@ class HelpCenterScreen extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(AppTheme.paddingSmall),
         decoration: BoxDecoration(
-          color: AppTheme.primaryColor.withValues(alpha: 0.1),
+          color: AppTheme.primaryColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
         ),
         child: Icon(icon, color: AppTheme.primaryColor, size: 24),

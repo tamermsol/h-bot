@@ -726,7 +726,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                   color: Colors.grey[400],
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
+                      color: Colors.black.withOpacity(0.3),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -854,7 +854,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
             boxShadow: isHighlighted
                 ? [
                     BoxShadow(
-                      color: AppTheme.primaryColor.withValues(alpha: 0.5),
+                      color: AppTheme.primaryColor.withOpacity(0.5),
                       blurRadius: 12,
                       spreadRadius: 2,
                       offset: const Offset(0, 0),
@@ -929,7 +929,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 divisions: 100,
                 label: '${safeSliderValue.round()}%',
                 activeColor: AppTheme.primaryColor,
-                inactiveColor: AppTheme.textSecondary.withValues(alpha: 0.3),
+                inactiveColor: AppTheme.textSecondary.withOpacity(0.3),
                 // Use debounced handler for onChanged to send commands while dragging
                 // This provides fast feedback (300ms) instead of waiting for onChangeEnd
                 onChanged: _isConnected ? _onSliderChanged : null,
@@ -1003,12 +1003,12 @@ class _CurtainFoldsPainter extends CustomPainter {
       final x = i * 20.0;
 
       // Darker fold line
-      paint.color = Colors.black.withValues(alpha: 0.3);
+      paint.color = Colors.black.withOpacity(0.3);
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
 
       // Lighter highlight next to fold
       if (x + 10 < size.width) {
-        paint.color = Colors.white.withValues(alpha: 0.1);
+        paint.color = Colors.white.withOpacity(0.1);
         canvas.drawLine(Offset(x + 10, 0), Offset(x + 10, size.height), paint);
       }
     }

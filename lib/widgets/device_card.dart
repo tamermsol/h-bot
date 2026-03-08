@@ -39,13 +39,13 @@ class DeviceCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
           border: Border.all(
             color: isOn
-                ? AppTheme.primaryColor.withValues(alpha: 0.3)
+                ? AppTheme.primaryColor.withOpacity(0.3)
                 : Colors.transparent,
             width: 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withOpacity(0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -62,8 +62,8 @@ class DeviceCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isOn
-                        ? AppTheme.primaryColor.withValues(alpha: 0.2)
-                        : AppTheme.textHint.withValues(alpha: 0.1),
+                        ? AppTheme.primaryColor.withOpacity(0.2)
+                        : AppTheme.textHint.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                   ),
                   child: Icon(
@@ -75,9 +75,7 @@ class DeviceCard extends StatelessWidget {
                 Switch(
                   value: isOn,
                   onChanged: onToggle,
-                  activeThumbColor: AppTheme.primaryColor,
-                  inactiveThumbColor: AppTheme.textHint,
-                  inactiveTrackColor: AppTheme.textHint.withValues(alpha: 0.3),
+                  inactiveTrackColor: AppTheme.textHint.withOpacity(0.3),
                 ),
               ],
             ),

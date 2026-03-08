@@ -68,7 +68,7 @@ class SceneIconSelector extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppTheme.primaryColor.withValues(alpha: 0.2)
+                    ? AppTheme.primaryColor.withOpacity(0.2)
                     : (isDark ? AppTheme.surfaceColor : Colors.white),
                 borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                 border: Border.all(

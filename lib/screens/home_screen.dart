@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor
-            ?.withValues(alpha: 0.7), // Semi-transparent
+            ?.withOpacity(0.7), // Semi-transparent
         elevation: 0,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(0),
@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       decoration: BoxDecoration(
         color: isDark
-            ? AppTheme.surfaceColor.withValues(alpha: 0.7)
+            ? AppTheme.surfaceColor.withOpacity(0.7)
             : AppTheme.lightNavBarBackground,
         border: isDark
             ? null
@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
         boxShadow: isDark
             ? [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  color: Colors.black.withOpacity(0.1),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),

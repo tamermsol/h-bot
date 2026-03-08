@@ -225,7 +225,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 'Enter the 6-digit code sent to:',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: Colors.white.withOpacity(0.7),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -268,7 +268,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       decoration: InputDecoration(
                         counterText: '',
                         filled: true,
-                        fillColor: Colors.white.withValues(alpha: 0.15),
+                        fillColor: Colors.white.withOpacity(0.15),
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 16,
                         ),
@@ -317,7 +317,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   labelText: 'New Password',
                   labelStyle: const TextStyle(color: Colors.white70),
                   filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.1),
+                  fillColor: Colors.white.withOpacity(0.1),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: Colors.white24),
@@ -360,7 +360,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   labelText: 'Confirm Password',
                   labelStyle: const TextStyle(color: Colors.white70),
                   filled: true,
-                  fillColor: Colors.white.withValues(alpha: 0.1),
+                  fillColor: Colors.white.withOpacity(0.1),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: Colors.white24),
@@ -398,7 +398,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 'Password must be at least 6 characters',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: Colors.white.withOpacity(0.6),
                 ),
               ),
 
@@ -446,7 +446,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   Text(
                     "Didn't receive the code? ",
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: Colors.white.withOpacity(0.7),
                       fontSize: 14,
                     ),
                   ),
@@ -454,7 +454,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     Text(
                       'Resend in ${_resendCountdown}s',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: Colors.white.withOpacity(0.5),
                         fontSize: 14,
                       ),
                     )

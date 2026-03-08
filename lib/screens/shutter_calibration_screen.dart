@@ -488,7 +488,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
     final canStart = !_isCalibrating;
 
     return Card(
-      color: isActive ? color.withValues(alpha: 0.1) : AppTheme.cardColor,
+      color: isActive ? color.withOpacity(0.1) : AppTheme.cardColor,
       child: Padding(
         padding: const EdgeInsets.all(AppTheme.paddingLarge),
         child: Column(
@@ -515,7 +515,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.green.withValues(alpha: 0.2),
+                      color: Colors.green.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -571,7 +571,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
   Widget _buildTimerDisplay() {
     return Card(
-      color: AppTheme.primaryColor.withValues(alpha: 0.1),
+      color: AppTheme.primaryColor.withOpacity(0.1),
       child: Padding(
         padding: const EdgeInsets.all(AppTheme.paddingLarge),
         child: Column(

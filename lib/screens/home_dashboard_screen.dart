@@ -938,7 +938,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 ),
                 decoration: BoxDecoration(
                   color: isDark
-                      ? cardColor.withValues(alpha: 0.7)
+                      ? cardColor.withOpacity(0.7)
                       : cardColor, // Solid color in light mode
                   borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                   border: isDark
@@ -985,8 +985,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: _mqttConnected
-                    ? Colors.green.withValues(alpha: 0.2)
-                    : Colors.red.withValues(alpha: 0.2),
+                    ? Colors.green.withOpacity(0.2)
+                    : Colors.red.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 border: Border.all(
                   color: _mqttConnected ? Colors.green : Colors.red,
@@ -1076,7 +1076,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? cardColor.withValues(alpha: 0.7) : cardColor,
+                color: isDark ? cardColor.withOpacity(0.7) : cardColor,
                 borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 border: isDark
                     ? null
@@ -1118,7 +1118,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           // Options menu button
           Container(
             decoration: BoxDecoration(
-              color: isDark ? cardColor.withValues(alpha: 0.7) : cardColor,
+              color: isDark ? cardColor.withOpacity(0.7) : cardColor,
               borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
               border: isDark
                   ? null
@@ -1539,7 +1539,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                                           ? (value) =>
                                                 _toggleDevice(device, value)
                                           : null,
-                                      activeThumbColor: AppTheme.primaryColor,
                                     ),
                                 ],
                               ),
@@ -1587,9 +1586,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                           (deviceState ||
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
-                      ? AppTheme.primaryColor.withValues(alpha: 0.2)
+                      ? AppTheme.primaryColor.withOpacity(0.2)
                       : (isDark
-                            ? AppTheme.textHint.withValues(alpha: 0.1)
+                            ? AppTheme.textHint.withOpacity(0.1)
                             : Colors
                                   .white), // White background for better contrast in Light Mode
                   borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
@@ -1684,7 +1683,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       color: isControllable && _mqttConnected && isOnline
                           ? (shutterPosition > 0
                                 ? textPrimary
-                                : textPrimary.withValues(alpha: 0.3))
+                                : textPrimary.withOpacity(0.3))
                           : textHint,
                       padding: EdgeInsets.zero,
                       tooltip: 'Close',
@@ -1726,7 +1725,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       color: isControllable && _mqttConnected && isOnline
                           ? (shutterPosition < 100
                                 ? textPrimary
-                                : textPrimary.withValues(alpha: 0.3))
+                                : textPrimary.withOpacity(0.3))
                           : textHint,
                       padding: EdgeInsets.zero,
                       tooltip: 'Open',
@@ -1758,7 +1757,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       onChanged: isControllable && _mqttConnected && isOnline
                           ? (value) => _toggleDevice(device, value)
                           : null,
-                      activeThumbColor: AppTheme.primaryColor,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   ),
@@ -1857,7 +1855,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               color: canControl
                   ? (position > 0
                         ? textPrimary
-                        : textPrimary.withValues(alpha: 0.3))
+                        : textPrimary.withOpacity(0.3))
                   : textHint,
               tooltip: 'Close',
               padding: const EdgeInsets.all(4),
@@ -1887,7 +1885,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               color: canControl
                   ? (position < 100
                         ? textPrimary
-                        : textPrimary.withValues(alpha: 0.3))
+                        : textPrimary.withOpacity(0.3))
                   : textHint,
               tooltip: 'Open',
               padding: const EdgeInsets.all(4),
@@ -2053,7 +2051,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     leading: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                        color: AppTheme.primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Icon(
@@ -2352,7 +2350,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 leading: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                    color: AppTheme.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -2388,10 +2386,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   padding: const EdgeInsets.all(12),
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: Colors.orange.withValues(alpha: 0.1),
+                    color: Colors.orange.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: Colors.orange.withValues(alpha: 0.3),
+                      color: Colors.orange.withOpacity(0.3),
                     ),
                   ),
                   child: Row(
@@ -2413,7 +2411,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 leading: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.secondaryColor.withValues(alpha: 0.1),
+                    color: AppTheme.secondaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -2438,7 +2436,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 leading: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                    color: AppTheme.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -2816,7 +2814,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   height: 150,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.3),
+                    color: Colors.black.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: SingleChildScrollView(

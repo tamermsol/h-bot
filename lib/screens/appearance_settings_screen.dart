@@ -64,8 +64,8 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: isDark
-                      ? AppTheme.primaryColor.withValues(alpha: 0.2)
-                      : AppTheme.primaryColor.withValues(alpha: 0.1),
+                      ? AppTheme.primaryColor.withOpacity(0.2)
+                      : AppTheme.primaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                 ),
                 child: Icon(
@@ -107,10 +107,10 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
           Container(
             padding: const EdgeInsets.all(AppTheme.paddingMedium),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withValues(alpha: 0.1),
+              color: AppTheme.primaryColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
               border: Border.all(
-                color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                color: AppTheme.primaryColor.withOpacity(0.3),
               ),
             ),
             child: Row(

@@ -31,7 +31,7 @@ class BackgroundContainer extends StatelessWidget {
         if (overlayColor != null)
           Positioned.fill(
             child: Container(
-              color: overlayColor!.withValues(alpha: overlayOpacity),
+              color: overlayColor!.withOpacity(overlayOpacity),
             ),
           ),
         // Content

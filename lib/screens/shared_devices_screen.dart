@@ -89,7 +89,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                       leading: Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryColor.withValues(alpha: 0.2),
+                          color: AppTheme.primaryColor.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(

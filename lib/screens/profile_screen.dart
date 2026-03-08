@@ -337,7 +337,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: isDark
-              ? [AppTheme.primaryColor.withValues(alpha: 0.1), cardColor]
+              ? [AppTheme.primaryColor.withOpacity(0.1), cardColor]
               : [AppTheme.lightGradientStart, AppTheme.lightGradientEnd],
         ),
       ),

@@ -184,7 +184,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 'We sent a 6-digit code to:',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: Colors.white.withOpacity(0.7),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -227,7 +227,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       decoration: InputDecoration(
                         counterText: '',
                         filled: true,
-                        fillColor: Colors.white.withValues(alpha: 0.15),
+                        fillColor: Colors.white.withOpacity(0.15),
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 16,
                         ),
@@ -314,7 +314,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   Text(
                     "Didn't receive the code? ",
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: Colors.white.withOpacity(0.7),
                       fontSize: 14,
                     ),
                   ),
@@ -322,7 +322,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     Text(
                       'Resend in ${_resendCountdown}s',
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: Colors.white.withOpacity(0.5),
                         fontSize: 14,
                       ),
                     )
@@ -365,7 +365,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 child: Text(
                   'Skip for now',
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.6),
+                    color: Colors.white.withOpacity(0.6),
                     fontSize: 14,
                   ),
                 ),

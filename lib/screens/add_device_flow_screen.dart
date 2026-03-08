@@ -562,8 +562,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  AppTheme.primaryColor.withValues(alpha: 0.3),
-                  AppTheme.primaryColor.withValues(alpha: 0.1),
+                  AppTheme.primaryColor.withOpacity(0.3),
+                  AppTheme.primaryColor.withOpacity(0.1),
                   Colors.transparent,
                 ],
               ),
@@ -574,7 +574,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppTheme.primaryColor.withValues(alpha: 0.2),
+                  color: AppTheme.primaryColor.withOpacity(0.2),
                 ),
                 child: const Icon(
                   Icons.wifi_find,

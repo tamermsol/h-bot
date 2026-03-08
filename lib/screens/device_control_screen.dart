@@ -1351,9 +1351,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                               style: TextStyle(color: AppTheme.textSecondary),
                             ),
                             selected: _currentDevice.roomId == null,
-                            selectedTileColor: AppTheme.primaryColor.withValues(
-                              alpha: 0.1,
-                            ),
+                            selectedTileColor: AppTheme.primaryColor.withOpacity(0.1),
                             onTap: () {
                               Navigator.pop(context);
                               _moveDeviceToRoom(null);
@@ -1377,7 +1375,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                                 ),
                                 selected: _currentDevice.roomId == room.id,
                                 selectedTileColor: AppTheme.primaryColor
-                                    .withValues(alpha: 0.1),
+                                    .withOpacity(0.1),
                                 onTap: () {
                                   Navigator.pop(context);
                                   _moveDeviceToRoom(room.id);

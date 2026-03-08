@@ -72,7 +72,7 @@ class SettingsTile extends StatelessWidget {
         ),
         if (showDivider)
           Divider(
-            color: dividerColor.withValues(alpha: 0.5),
+            color: dividerColor.withOpacity(0.5),
             height: 1,
             indent: AppTheme.paddingMedium,
             endIndent: AppTheme.paddingMedium,

@@ -232,15 +232,14 @@ class _NotificationsSettingsScreenState
                           color: AppTheme.getTextSecondary(context),
                         ),
                       ),
-                      activeThumbColor: AppTheme.primaryColor,
                       secondary: Container(
                         padding: const EdgeInsets.all(AppTheme.paddingSmall),
                         decoration: BoxDecoration(
                           color: _notificationsEnabled
-                              ? AppTheme.primaryColor.withValues(alpha: 0.1)
+                              ? AppTheme.primaryColor.withOpacity(0.1)
                               : AppTheme.getTextSecondary(
                                   context,
-                                ).withValues(alpha: 0.1),
+                                ).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(
                             AppTheme.radiusSmall,
                           ),
@@ -263,12 +262,12 @@ class _NotificationsSettingsScreenState
                     Container(
                       padding: const EdgeInsets.all(AppTheme.paddingMedium),
                       decoration: BoxDecoration(
-                        color: AppTheme.warningColor.withValues(alpha: 0.1),
+                        color: AppTheme.warningColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(
                           AppTheme.radiusMedium,
                         ),
                         border: Border.all(
-                          color: AppTheme.warningColor.withValues(alpha: 0.3),
+                          color: AppTheme.warningColor.withOpacity(0.3),
                           width: 1,
                         ),
                       ),
@@ -368,7 +367,7 @@ class _NotificationsSettingsScreenState
       leading: Container(
         padding: const EdgeInsets.all(AppTheme.paddingSmall),
         decoration: BoxDecoration(
-          color: AppTheme.primaryColor.withValues(alpha: 0.1),
+          color: AppTheme.primaryColor.withOpacity(0.1),
           borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
         ),
         child: Icon(icon, color: AppTheme.primaryColor, size: 24),
