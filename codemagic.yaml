@@ -32,7 +32,7 @@ workflows:
           flutter pub get
       - name: Build IPA
         script: |
-          flutter build ipa --release --export-options-plist=/Users/builder/export_options.plist
+          flutter build ipa --release --no-tree-shake-icons --export-options-plist=/Users/builder/export_options.plist
       - name: Collect IPA
         script: |
           cp build/ios/ipa/*.ipa $CM_BUILD_DIR/hbot.ipa
