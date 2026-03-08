@@ -119,7 +119,7 @@ class AppTheme {
           letterSpacing: -0.5,
         ),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         color: lightCardColor,
         elevation: 0,
         shadowColor: Colors.transparent,
@@ -268,7 +268,7 @@ class AppTheme {
           color: textPrimary, // White icons in Dark Mode
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: cardColor,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
