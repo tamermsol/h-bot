@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import '../services/platform_helper.dart';
 import '../services/ios_hotspot_service.dart';
 import 'dart:async';
@@ -110,7 +112,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
   }
 
   Future<void> _initializePairing() async {
-    _addDebugLog('Initializing device pairing flow');
+    _addDebugLog('Initializing device pairing flow (platform: ${isIOS ? "iOS" : "Android"})');
 
     // Set initial loading state
     _safeSetState(() {
@@ -182,6 +184,72 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     debugPrint('[DevicePairing] $message');
   }
 
+  /// Show debug log in a bottom sheet with copy/share buttons
+  void _showDebugLog() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.3,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (context, scrollController) => Column(
+          children: [
+            // Header with actions
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.bug_report, size: 20),
+                  const SizedBox(width: 8),
+                  const Text('Debug Log', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.copy, size: 20),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: _debugLog));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Log copied to clipboard'), duration: Duration(seconds: 1)),
+                      );
+                    },
+                    tooltip: 'Copy',
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.share, size: 20),
+                    onPressed: () {
+                      Share.share('H-Bot Device Pairing Log:\n\n$_debugLog');
+                    },
+                    tooltip: 'Share',
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+            // Log content
+            Expanded(
+              child: SingleChildScrollView(
+                controller: scrollController,
+                padding: const EdgeInsets.all(12),
+                child: SelectableText(
+                  _debugLog.isEmpty ? 'No log entries yet.' : _debugLog,
+                  style: const TextStyle(fontSize: 12, fontFamily: 'monospace', height: 1.5),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   /// Load available rooms for the current home
   Future<void> _loadAvailableRooms() async {
     try {
@@ -214,6 +282,13 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               : AppTheme.lightBackgroundColor,
           title: const Text('Add Device'),
           elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.bug_report, size: 20),
+              onPressed: _showDebugLog,
+              tooltip: 'Debug Log',
+            ),
+          ],
         ),
         body: _buildCurrentStep(),
       );
@@ -242,6 +317,13 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               : AppTheme.lightBackgroundColor,
           title: const Text('Add Device'),
           elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.bug_report, size: 20),
+              onPressed: _showDebugLog,
+              tooltip: 'Debug Log',
+            ),
+          ],
         ),
         body: _buildCurrentStep(),
       ),
@@ -1123,11 +1205,16 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
       _isLoading = true;
       _statusMessage = 'Checking connection to device...';
     });
+    _addDebugLog('iOS: Starting device connection check');
 
     try {
       // Check if connected to hbot network
       final ssid = await _wifiService.getCurrentSSID();
-      _addDebugLog('Current SSID: $ssid');
+      _addDebugLog('iOS: getCurrentSSID returned: ${ssid ?? "null"}');
+      
+      // Also check via HTTP probe
+      final probeOk = await _wifiService.isConnectedToHbotAP();
+      _addDebugLog('iOS: isConnectedToHbotAP (with probe): $probeOk');
 
       // If we can read SSID and it's not hbot, show warning
       if (ssid != null && !ssid.toLowerCase().startsWith('hbot')) {
@@ -1178,10 +1265,11 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
       _safeSetState(() {
         _statusMessage = 'Connecting to device at 192.168.4.1...';
       });
+      _addDebugLog('iOS: Attempting fetchDeviceInfo at 192.168.4.1...');
 
       // Try to fetch device info (this will trigger local network permission if not granted)
       final deviceInfo = await _wifiService.fetchDeviceInfo().timeout(
-        const Duration(seconds: 15),
+        const Duration(seconds: 20),
         onTimeout: () {
           throw 'Timeout connecting to device.\n\nPossible issues:\n• Device not in pairing mode\n• Not connected to device network\n• Local Network permission denied';
         },
