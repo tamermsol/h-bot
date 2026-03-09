@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/platform_helper.dart';
+import '../services/ios_hotspot_service.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 
@@ -538,13 +539,14 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
   // Step 2: Device Discovery (like competitor's 4.jpeg - "Searching for devices...")
   Widget _buildDeviceDiscoveryStep() {
-    // iOS requires manual WiFi connection
-    if (isIOS) {
-      // Start auto-detection timer when showing iOS guide
+    // iOS: Show scanning UI with instructions to put device in pairing mode
+    // We'll auto-connect using NEHotspotConfigurationManager when device AP is detected
+    if (isIOS && !_isConnectedToDevice && _availableDeviceAPs.isEmpty) {
+      // Start auto-detection timer
       if (_apDetectionTimer == null || !_apDetectionTimer!.isActive) {
         _startApDetectionTimer();
       }
-      return _buildIOSManualConnectionGuide();
+      return _buildIOSAutoDiscoveryView();
     }
 
     // Android can scan and connect automatically
@@ -656,8 +658,176 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     );
   }
 
-  // iOS-specific manual connection guide
-  // iOS-specific manual connection guide with auto-detection
+  /// iOS auto-discovery view - scans for device AP and connects automatically
+  Widget _buildIOSAutoDiscoveryView() {
+    return Padding(
+      padding: const EdgeInsets.all(AppTheme.paddingLarge),
+      child: Column(
+        children: [
+          const SizedBox(height: AppTheme.paddingLarge * 2),
+
+          // Searching animation
+          Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: RadialGradient(
+                colors: [
+                  AppTheme.primaryColor.withOpacity(0.3),
+                  AppTheme.primaryColor.withOpacity(0.1),
+                  Colors.transparent,
+                ],
+              ),
+            ),
+            child: Center(
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppTheme.primaryColor.withOpacity(0.2),
+                ),
+                child: const Icon(
+                  Icons.wifi_find,
+                  size: 50,
+                  color: AppTheme.primaryColor,
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: AppTheme.paddingLarge),
+
+          const Text(
+            'Searching for device...',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: AppTheme.textPrimary,
+            ),
+          ),
+
+          const SizedBox(height: AppTheme.paddingMedium),
+
+          Text(
+            _statusMessage.isNotEmpty
+                ? _statusMessage
+                : 'Make sure your device is in pairing mode.\nPress and hold the button until LED blinks rapidly.',
+            style: const TextStyle(fontSize: 16, color: AppTheme.textSecondary),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: AppTheme.paddingLarge),
+
+          if (_isLoading)
+            const CircularProgressIndicator()
+          else
+            Column(
+              children: [
+                // Manual SSID entry for iOS (since we can't scan)
+                const Text(
+                  'Or enter device network name:',
+                  style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
+                ),
+                const SizedBox(height: AppTheme.paddingSmall),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _ssidController,
+                        decoration: InputDecoration(
+                          hintText: 'e.g. hbot-8857CC-6092',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          prefixIcon: const Icon(Icons.wifi),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        final ssid = _ssidController.text.trim();
+                        if (ssid.isNotEmpty) {
+                          _connectToDeviceAPiOS(ssid);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryColor,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                      ),
+                      child: const Text('Connect'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
+          const Spacer(),
+
+          // Fallback manual connection option
+          TextButton.icon(
+            onPressed: () {
+              // Show the old manual guide as fallback
+              _safeSetState(() {
+                _availableDeviceAPs = ['manual']; // Trigger manual guide display
+              });
+            },
+            icon: const Icon(Icons.settings, size: 18),
+            label: const Text('Connect manually via Settings'),
+            style: TextButton.styleFrom(foregroundColor: AppTheme.textSecondary),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Connect to device AP on iOS using NEHotspotConfigurationManager
+  Future<void> _connectToDeviceAPiOS(String ssid) async {
+    _addDebugLog('iOS: Connecting to device AP $ssid via NEHotspotConfiguration');
+    _safeSetState(() {
+      _isLoading = true;
+      _statusMessage = 'Connecting to $ssid...';
+    });
+
+    try {
+      // Use NEHotspotConfigurationManager - no password for device APs
+      final result = await IOSHotspotService.joinNetwork(ssid);
+
+      if (result.success) {
+        _addDebugLog('✅ iOS: Connected to $ssid');
+        
+        // Wait for connection to stabilize
+        await Future.delayed(const Duration(seconds: 2));
+        
+        _safeSetState(() {
+          _isConnectedToDevice = true;
+          _selectedDeviceAP = ssid;
+          _statusMessage = 'Connected! Fetching device info...';
+        });
+
+        // Proceed to fetch device info and provision
+        _handleDeviceConnectionWithTimeout();
+      } else {
+        _addDebugLog('❌ iOS: Failed to connect: ${result.message}');
+        _safeSetState(() {
+          _isLoading = false;
+          _statusMessage = 'Could not connect to $ssid.\n${result.message}\n\nMake sure the device is in pairing mode.';
+        });
+      }
+    } catch (e) {
+      _addDebugLog('Error connecting to device AP: $e');
+      _safeSetState(() {
+        _isLoading = false;
+        _statusMessage = 'Error: $e';
+      });
+    }
+  }
+
+  // iOS-specific manual connection guide (fallback)
   Widget _buildIOSManualConnectionGuide() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppTheme.paddingLarge),
@@ -1397,11 +1567,12 @@ Troubleshooting:
           timer.cancel();
 
           if (isIOS) {
-            // iOS: Automatically proceed without button tap
+            // iOS: Device AP detected, proceed to fetch device info
             _safeSetState(() {
-              _statusMessage = 'Device detected! Connecting...';
+              _isConnectedToDevice = true;
+              _statusMessage = 'Device detected! Fetching info...';
             });
-            await _checkIOSDeviceConnection();
+            _handleDeviceConnectionWithTimeout();
           } else {
             // Android: Use existing flow
             _handleDeviceConnectionWithTimeout();

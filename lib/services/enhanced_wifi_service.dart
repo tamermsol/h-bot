@@ -7,6 +7,7 @@ import 'package:network_info_plus/network_info_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'wifi_permission_service.dart';
+import 'ios_hotspot_service.dart';
 import '../models/tasmota_device_info.dart';
 import '../utils/channel_detection_utils.dart';
 
@@ -62,18 +63,22 @@ class EnhancedWiFiService {
         }
 
         return ssid;
-      } else {
-        // iOS: Use network_info_plus
+      } else if (isIOS) {
+        // iOS: Try native NEHotspot API first (more reliable), fallback to network_info_plus
+        final nativeSSID = await IOSHotspotService.getCurrentSSID();
+        if (nativeSSID != null && nativeSSID.isNotEmpty) {
+          return nativeSSID;
+        }
+        
+        // Fallback to network_info_plus
         final ssid = await _networkInfo.getWifiName();
-
-        // Handle common null/unknown cases
         if (ssid == null || ssid == '<unknown ssid>' || ssid.isEmpty) {
           debugPrint('Wi-Fi SSID not available on iOS');
           return null;
         }
-
-        // Remove quotes if present
         return ssid.replaceAll('"', '');
+      } else {
+        return null;
       }
     } catch (e) {
       // Return null instead of throwing - allow manual entry
@@ -205,13 +210,27 @@ class EnhancedWiFiService {
     }
 
     if (isIOS) {
-      // iOS: Cannot programmatically connect to Wi-Fi
-      // Guide user to manually connect through Settings
-      return WiFiConnectionResult(
-        success: false,
-        message: 'Please manually connect to $ssid in iOS Settings > Wi-Fi',
-        requiresManualConnection: true,
-      );
+      // iOS: Use NEHotspotConfigurationManager to join device AP programmatically
+      // This bypasses captive portal detection
+      debugPrint('🍎 iOS: Using NEHotspotConfigurationManager to join $ssid');
+      final hotspotResult = await IOSHotspotService.joinNetwork(ssid);
+      
+      if (hotspotResult.success) {
+        debugPrint('✅ iOS: Successfully joined $ssid');
+        // Wait for connection to stabilize
+        await Future.delayed(const Duration(seconds: 2));
+        return WiFiConnectionResult(
+          success: true,
+          message: 'Connected to $ssid',
+        );
+      } else {
+        debugPrint('❌ iOS: Failed to join $ssid: ${hotspotResult.message}');
+        return WiFiConnectionResult(
+          success: false,
+          message: hotspotResult.message,
+          requiresManualConnection: hotspotResult.message.contains('cancelled'),
+        );
+      }
     }
 
     if (!isAndroid) {
@@ -267,15 +286,27 @@ class EnhancedWiFiService {
               : 'Failed to restore internet connection after multiple attempts. Please manually check your Wi-Fi settings.',
         );
       } else if (isIOS) {
-        // iOS: User must manually disconnect through Settings
-        // Just verify if we have internet connectivity
+        // iOS: Use NEHotspotConfigurationManager to remove the device AP config
+        // This causes iOS to automatically return to the previous (home) network
+        debugPrint('🍎 iOS: Removing device AP configuration to return to home network');
+        
+        // Get current SSID to know what device network to remove
+        final currentSSID = await getCurrentSSID();
+        if (currentSSID != null && currentSSID.toLowerCase().startsWith('hbot')) {
+          await IOSHotspotService.leaveNetwork(currentSSID);
+          debugPrint('✅ iOS: Removed $currentSSID configuration');
+        }
+        
+        // Wait for iOS to reconnect to home network
+        await Future.delayed(const Duration(seconds: 3));
+        
         final hasInternet = await _verifyInternetConnectivityWithRetry();
 
         return WiFiConnectionResult(
           success: hasInternet,
           message: hasInternet
-              ? 'Please ensure you are connected to your home Wi-Fi network'
-              : 'Please manually reconnect to your home Wi-Fi in Settings',
+              ? 'Successfully returned to home network'
+              : 'Reconnecting to home network...',
           requiresManualConnection: !hasInternet,
         );
       } else {
@@ -300,12 +331,24 @@ class EnhancedWiFiService {
   }) async {
     try {
       if (isIOS) {
-        // iOS: Cannot programmatically connect to Wi-Fi
-        // Guide user to manually reconnect
+        // iOS: Remove device AP config (if any), then iOS auto-reconnects to home WiFi
+        // We don't need to explicitly join the home network - just leave the device AP
+        debugPrint('🍎 iOS: Ensuring return to home network $ssid');
+        
+        final currentSSID = await getCurrentSSID();
+        if (currentSSID != null && currentSSID.toLowerCase().startsWith('hbot')) {
+          await IOSHotspotService.leaveNetwork(currentSSID);
+          debugPrint('✅ iOS: Removed device AP, waiting for home WiFi reconnection...');
+          await Future.delayed(const Duration(seconds: 3));
+        }
+        
+        // Verify we're back on the home network
+        final hasInternet = await _verifyInternetConnectivityWithRetry();
         return WiFiConnectionResult(
-          success: false,
-          message: 'Please manually reconnect to $ssid in iOS Settings > Wi-Fi',
-          requiresManualConnection: true,
+          success: hasInternet,
+          message: hasInternet
+              ? 'Reconnected to $ssid'
+              : 'Waiting for WiFi reconnection...',
         );
       }
 
