@@ -794,12 +794,15 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
           const SizedBox(height: AppTheme.paddingMedium),
 
-          Text(
-            _statusMessage.isNotEmpty
-                ? _statusMessage
-                : 'Make sure your device is in pairing mode.\nPress and hold the button until LED blinks rapidly.',
-            style: const TextStyle(fontSize: 16, color: AppTheme.textSecondary),
-            textAlign: TextAlign.center,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              _statusMessage.isNotEmpty
+                  ? _statusMessage
+                  : 'Make sure your device is in pairing mode.\nPress and hold the button until LED blinks rapidly.',
+              style: const TextStyle(fontSize: 15, color: AppTheme.textSecondary),
+              textAlign: TextAlign.center,
+            ),
           ),
 
           const SizedBox(height: AppTheme.paddingLarge),
@@ -899,11 +902,24 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
         }
         
         if (!reachable) {
-          _addDebugLog('⚠️ Device not reachable after joining network');
+          _addDebugLog('⚠️ Device not reachable after NEHotspot join — falling back to manual');
+          _addDebugLog('iOS may not route traffic through device AP while home WiFi is active');
+          
+          // Remove the failed NEHotspot config so it doesn't interfere
+          await IOSHotspotService.leaveNetwork(ssid);
+          
           _safeSetState(() {
             _isLoading = false;
-            _statusMessage = 'Connected to $ssid but device not responding.\nMake sure the device is powered on and in pairing mode.';
+            _statusMessage = 'iOS could not connect to the device network.\n\n'
+                'Please connect manually:\n'
+                '1. Go to Settings → Wi-Fi\n'
+                '2. Tap "$ssid"\n'
+                '3. If prompted about no internet, tap "Use Without Internet"\n'
+                '4. Return to this app — it will detect automatically';
           });
+          
+          // Start auto-detection timer to detect when user comes back
+          _startApDetectionTimer();
           return;
         }
         

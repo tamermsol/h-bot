@@ -43,43 +43,58 @@ public class HotspotPlugin: NSObject, FlutterPlugin {
     /// Join a WiFi network programmatically using NEHotspotConfigurationManager
     /// This bypasses iOS captive portal detection
     private func joinNetwork(ssid: String, password: String?, isWEP: Bool, result: @escaping FlutterResult) {
-        let configuration: NEHotspotConfiguration
+        // Step 1: Remove any stale configuration first to force a fresh join
+        // This prevents false "alreadyAssociated" results from previous attempts
+        NEHotspotConfigurationManager.shared.removeConfiguration(forSSID: ssid)
         
-        if let password = password, !password.isEmpty {
-            configuration = NEHotspotConfiguration(ssid: ssid, passphrase: password, isWEP: isWEP)
-        } else {
-            // Open network (no password) - typical for device APs like hbot-XXXX
-            configuration = NEHotspotConfiguration(ssid: ssid)
-        }
-        
-        // Don't persist this network - we only need it temporarily for provisioning
-        configuration.joinOnce = true
-        
-        // Disable captive portal detection for this network
-        // The device AP has no internet, so we don't want iOS to show captive portal
-        
-        NEHotspotConfigurationManager.shared.apply(configuration) { error in
-            if let error = error as NSError? {
-                // Error code 13 = "already associated" - this is actually success
-                if error.domain == NEHotspotConfigurationErrorDomain &&
-                   error.code == NEHotspotConfigurationError.alreadyAssociated.rawValue {
-                    result(["success": true, "message": "Already connected to \(ssid)"])
-                    return
-                }
-                
-                // User cancelled the system dialog
-                if error.domain == NEHotspotConfigurationErrorDomain &&
-                   error.code == NEHotspotConfigurationError.userDenied.rawValue {
-                    result(["success": false, "message": "Connection cancelled by user"])
-                    return
-                }
-                
-                result(["success": false, "message": "Failed to join \(ssid): \(error.localizedDescription)"])
-                return
+        // Small delay after removal to let iOS clean up
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            let configuration: NEHotspotConfiguration
+            
+            if let password = password, !password.isEmpty {
+                configuration = NEHotspotConfiguration(ssid: ssid, passphrase: password, isWEP: isWEP)
+            } else {
+                // Open network (no password) - typical for device APs like hbot-XXXX
+                configuration = NEHotspotConfiguration(ssid: ssid)
             }
             
-            // Success - connected to the network
-            result(["success": true, "message": "Connected to \(ssid)"])
+            // joinOnce = true means iOS won't persist the config after disconnect
+            configuration.joinOnce = true
+            
+            NEHotspotConfigurationManager.shared.apply(configuration) { error in
+                if let error = error as NSError? {
+                    // Error code 13 = "already associated"
+                    // After removing config above, if we still get this, the device is genuinely connected
+                    if error.domain == NEHotspotConfigurationErrorDomain &&
+                       error.code == NEHotspotConfigurationError.alreadyAssociated.rawValue {
+                        result(["success": true, "message": "Already connected to \(ssid)"])
+                        return
+                    }
+                    
+                    // User cancelled the system dialog
+                    if error.domain == NEHotspotConfigurationErrorDomain &&
+                       error.code == NEHotspotConfigurationError.userDenied.rawValue {
+                        result(["success": false, "message": "Connection cancelled by user. Please tap Join when prompted."])
+                        return
+                    }
+                    
+                    // Internal error - often means the network couldn't be found or associated
+                    if error.domain == NEHotspotConfigurationErrorDomain &&
+                       error.code == NEHotspotConfigurationError.internal.rawValue {
+                        result(["success": false, "message": "iOS could not join \(ssid). The device may not be in pairing mode or is out of range. Try connecting manually via Settings > Wi-Fi."])
+                        return
+                    }
+                    
+                    result(["success": false, "message": "Failed to join \(ssid): \(error.localizedDescription) (code: \(error.code))"])
+                    return
+                }
+                
+                // Success - connected to the network
+                // Note: Even with nil error, iOS may not route traffic through this network
+                // if another network with internet is available. The caller should verify
+                // reachability to 192.168.4.1 after a delay.
+                result(["success": true, "message": "Connected to \(ssid)"])
+            }
         }
     }
     
