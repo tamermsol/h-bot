@@ -55,6 +55,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
   final TextEditingController _wifiPasswordController = TextEditingController();
   final TextEditingController _deviceNameController = TextEditingController();
+  final TextEditingController _deviceAPController = TextEditingController(); // Separate controller for device AP name
 
   PairingStep _currentStep = PairingStep.wifiSetup;
   bool _isLoading = false;
@@ -100,6 +101,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     _wifiPasswordController.dispose();
     _deviceNameController.dispose();
     _ssidController.dispose();
+    _deviceAPController.dispose();
     _mqttService.dispose();
     _apDetectionTimer?.cancel();
     super.dispose();
@@ -817,7 +819,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   children: [
                     Expanded(
                       child: TextField(
-                        controller: _ssidController,
+                        controller: _deviceAPController,
                         decoration: InputDecoration(
                           hintText: 'e.g. hbot-8857CC-6092',
                           border: OutlineInputBorder(
@@ -831,7 +833,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () {
-                        final ssid = _ssidController.text.trim();
+                        final ssid = _deviceAPController.text.trim();
                         if (ssid.isNotEmpty) {
                           _connectToDeviceAPiOS(ssid);
                         }
