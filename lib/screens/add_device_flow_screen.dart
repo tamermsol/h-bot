@@ -1960,6 +1960,8 @@ Troubleshooting:
       _statusMessage = 'Sending Wi-Fi credentials to device...';
     });
 
+    _addDebugLog('Sending WiFi creds to device: SSID=$_currentSSID');
+    
     final response = await _wifiService
         .provisionWiFi(ssid: _currentSSID!, password: _wifiPassword!)
         .timeout(
@@ -1970,19 +1972,23 @@ Troubleshooting:
           ),
         );
 
+    _addDebugLog('Provision response: success=${response.success}, msg=${response.message}');
+    
     if (!response.success) {
       throw 'Device provisioning failed: ${response.message}';
     }
 
-    _addDebugLog('Device provisioned successfully');
+    _addDebugLog('✅ Device provisioned successfully — device will restart');
 
-    // Step 2: Wait for device to restart and connect to network
+    // Wait for device to restart and connect to the user's network
+    // Tasmota restart takes ~5-10 seconds, then it tries to connect to WiFi
     _safeSetState(() {
       _statusMessage =
-          'Waiting for device to restart and connect to network...';
+          'Device is restarting and connecting to your network...\nThis may take 15-20 seconds.';
     });
+    _addDebugLog('Waiting 15s for device to restart and join home WiFi...');
 
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 15));
 
     // Step 3: Disconnect from device and return to home network
     await _disconnectFromDeviceAndReturnHome();

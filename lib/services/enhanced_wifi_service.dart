@@ -510,19 +510,45 @@ class EnhancedWiFiService {
     required String password,
     String? hostname,
   }) async {
-    // Use proper URL encoding (not custom encoding)
+    debugPrint('🔧 Provisioning WiFi to SSID: $ssid');
+
+    // Strategy 1: Use Tasmota Backlog commands (most reliable)
+    // This explicitly sets SSID, password, wifi config mode, and restarts
+    debugPrint('📡 Trying Tasmota Backlog command method...');
+    try {
+      final backlogCmd = 'Backlog SSID1 $ssid; Password1 $password; WifiConfig 4; Restart 1';
+      final backlogResponse = await http
+          .get(Uri.parse('http://192.168.4.1/cm?cmnd=${Uri.encodeQueryComponent(backlogCmd)}'))
+          .timeout(const Duration(seconds: 15));
+
+      debugPrint('📡 Backlog response: ${backlogResponse.statusCode}');
+
+      if (backlogResponse.statusCode == 200) {
+        debugPrint('✅ WiFi credentials sent via Backlog command');
+        debugPrint('📄 Response: ${backlogResponse.body.substring(0, backlogResponse.body.length > 200 ? 200 : backlogResponse.body.length)}');
+
+        // Device will restart - wait for it
+        await Future.delayed(const Duration(seconds: 3));
+
+        return WiFiProvisioningResponse(
+          success: true,
+          message: 'Wi-Fi credentials sent successfully. Device is restarting.',
+          deviceIp: '192.168.4.1',
+        );
+      }
+      debugPrint('⚠️ Backlog method returned ${backlogResponse.statusCode}, trying web UI method...');
+    } catch (e) {
+      debugPrint('⚠️ Backlog method failed: $e, trying web UI method...');
+    }
+
+    // Strategy 2: Use web UI form POST (fallback)
     final encodedSSID = Uri.encodeQueryComponent(ssid);
     final encodedPassword = Uri.encodeQueryComponent(password);
-
-    // Build form body for POST request
     final body = 's1=$encodedSSID&p1=$encodedPassword&save=';
-
-    debugPrint('🔧 Provisioning WiFi to SSID: $ssid');
-    debugPrint('📡 POST body: $body');
-
     final uri = Uri.parse('http://192.168.4.1/wi');
 
-    // Retry logic: Some devices need a moment after binding
+    debugPrint('📡 Trying web UI POST method...');
+
     for (int attempt = 1; attempt <= 3; attempt++) {
       try {
         if (attempt > 1) {
@@ -530,7 +556,6 @@ class EnhancedWiFiService {
           await Future.delayed(Duration(milliseconds: 300 * attempt));
         }
 
-        // Use POST with proper form encoding (more reliable than GET)
         final response = await http
             .post(
               uri,
@@ -539,26 +564,17 @@ class EnhancedWiFiService {
             )
             .timeout(const Duration(seconds: 10));
 
-        debugPrint(
-          '📡 Provisioning response (attempt $attempt): ${response.statusCode}',
-        );
+        debugPrint('📡 Web UI response (attempt $attempt): ${response.statusCode}');
 
-        // Accept 200 or 302 (redirect) as success
         if (response.statusCode == 200 || response.statusCode == 302) {
-          debugPrint(
-            '✅ WiFi credentials sent successfully on attempt $attempt',
-          );
-          debugPrint(
-            '📄 Response body: ${response.body.substring(0, response.body.length > 200 ? 200 : response.body.length)}',
-          );
+          debugPrint('✅ WiFi credentials sent via web UI on attempt $attempt');
+          debugPrint('📄 Response body: ${response.body.substring(0, response.body.length > 200 ? 200 : response.body.length)}');
 
-          // Give the device a moment to save and start rebooting
           await Future.delayed(const Duration(seconds: 2));
 
           return WiFiProvisioningResponse(
             success: true,
-            message:
-                'Wi-Fi credentials sent successfully. Device will restart and connect to your network.',
+            message: 'Wi-Fi credentials sent successfully. Device will restart and connect to your network.',
             deviceIp: '192.168.4.1',
           );
         } else if (attempt < 3) {
@@ -573,7 +589,7 @@ class EnhancedWiFiService {
       } catch (e) {
         debugPrint('❌ Provisioning attempt $attempt failed: $e');
         if (attempt < 3) {
-          continue; // Retry
+          continue;
         } else {
           return WiFiProvisioningResponse(
             success: false,
@@ -583,7 +599,6 @@ class EnhancedWiFiService {
       }
     }
 
-    // Should never reach here, but just in case
     return WiFiProvisioningResponse(
       success: false,
       message: 'Provisioning failed unexpectedly',
