@@ -798,10 +798,30 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
       final result = await IOSHotspotService.joinNetwork(ssid);
 
       if (result.success) {
-        _addDebugLog('✅ iOS: Connected to $ssid');
+        _addDebugLog('✅ iOS: NEHotspot joined $ssid, waiting for network...');
         
-        // Wait for connection to stabilize
-        await Future.delayed(const Duration(seconds: 2));
+        // Wait for iOS to fully establish the connection
+        // NEHotspotConfigurationManager returns before the network is fully ready
+        await Future.delayed(const Duration(seconds: 4));
+        
+        // Verify we can actually reach the device
+        _addDebugLog('Verifying device reachability...');
+        bool reachable = false;
+        for (int i = 0; i < 3; i++) {
+          reachable = await _wifiService.isConnectedToHbotAP();
+          if (reachable) break;
+          _addDebugLog('Device not reachable yet, retrying... (${i + 1}/3)');
+          await Future.delayed(const Duration(seconds: 2));
+        }
+        
+        if (!reachable) {
+          _addDebugLog('⚠️ Device not reachable after joining network');
+          _safeSetState(() {
+            _isLoading = false;
+            _statusMessage = 'Connected to $ssid but device not responding.\nMake sure the device is powered on and in pairing mode.';
+          });
+          return;
+        }
         
         _safeSetState(() {
           _isConnectedToDevice = true;
@@ -1549,10 +1569,9 @@ Troubleshooting:
   void _startApDetectionTimer() {
     _apDetectionTimer?.cancel();
 
-    // More frequent polling for iOS (every 3 seconds)
-    final pollInterval = isIOS
-        ? const Duration(seconds: 3)
-        : const Duration(seconds: 5);
+    // iOS: poll every 5s (HTTP probe is heavier than SSID check)
+    // Android: poll every 5s using SSID check
+    final pollInterval = const Duration(seconds: 5);
 
     _apDetectionTimer = Timer.periodic(pollInterval, (timer) async {
       if (_currentStep != PairingStep.deviceDiscovery || _isConnectedToDevice) {

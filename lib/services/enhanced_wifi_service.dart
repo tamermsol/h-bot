@@ -154,10 +154,43 @@ class EnhancedWiFiService {
   }
 
   /// Check if currently connected to an hbot device AP
+  /// On iOS, falls back to direct HTTP probe if SSID reading fails (location permission)
   Future<bool> isConnectedToHbotAP() async {
     try {
+      // First try SSID-based detection
       final ssid = await getCurrentSSID();
-      return ssid?.toLowerCase().startsWith('hbot') ?? false;
+      if (ssid != null && ssid.toLowerCase().startsWith('hbot')) {
+        return true;
+      }
+      
+      // iOS fallback: Try direct HTTP probe to device AP gateway
+      // This works even without location permission
+      if (isIOS) {
+        return await _probeDeviceAP();
+      }
+      
+      return false;
+    } catch (e) {
+      // iOS fallback on any error
+      if (isIOS) {
+        try {
+          return await _probeDeviceAP();
+        } catch (_) {
+          return false;
+        }
+      }
+      return false;
+    }
+  }
+
+  /// Directly probe 192.168.4.1 to check if we're on a Tasmota device AP
+  /// Works without any permissions - just a simple HTTP request
+  Future<bool> _probeDeviceAP() async {
+    try {
+      final response = await http
+          .get(Uri.parse('http://192.168.4.1/cm?cmnd=Status'))
+          .timeout(const Duration(seconds: 3));
+      return response.statusCode == 200;
     } catch (e) {
       return false;
     }
@@ -602,15 +635,37 @@ class EnhancedWiFiService {
   }
 
   /// Fetch device information from connected hbot device
+  /// Includes retry logic for iOS where network transition may take time
   Future<TasmotaDeviceInfo> fetchDeviceInfo() async {
+    // iOS: retry up to 3 times with delays (network transition can be slow)
+    final maxAttempts = isIOS ? 3 : 1;
+    
+    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        return await _fetchDeviceInfoOnce();
+      } catch (e) {
+        debugPrint('fetchDeviceInfo attempt $attempt/$maxAttempts failed: $e');
+        if (attempt < maxAttempts) {
+          await Future.delayed(Duration(seconds: 2 * attempt));
+          continue;
+        }
+        rethrow;
+      }
+    }
+    throw WiFiException('Failed to fetch device info', type: WiFiExceptionType.deviceInfoFailed);
+  }
+
+  Future<TasmotaDeviceInfo> _fetchDeviceInfoOnce() async {
     try {
       // Use Status 0 to get comprehensive device information including StatusSTS
+      // Longer timeout for iOS (network transition may delay first request)
+      final timeout = isIOS ? const Duration(seconds: 15) : const Duration(seconds: 10);
       final response = await http
           .get(
             Uri.parse('http://192.168.4.1/cm?cmnd=Status%200'),
             headers: {'Content-Type': 'application/json'},
           )
-          .timeout(const Duration(seconds: 10));
+          .timeout(timeout);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
