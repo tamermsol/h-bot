@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+## Current Status Note
+
+- Connection successful without auto Wi-Fi detect.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
