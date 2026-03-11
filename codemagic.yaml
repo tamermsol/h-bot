@@ -36,6 +36,13 @@ workflows:
       - name: Collect IPA
         script: |
           cp build/ios/ipa/*.ipa $CM_BUILD_DIR/hbot.ipa
+      - name: Upload to App Store Connect
+        script: |
+          app-store-connect publish \
+            --path build/ios/ipa/*.ipa \
+            --key-id "$APP_STORE_CONNECT_KEY_IDENTIFIER" \
+            --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
+            --private-key=@env:APP_STORE_CONNECT_PRIVATE_KEY
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
