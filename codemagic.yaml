@@ -33,21 +33,9 @@ workflows:
       - name: Build IPA
         script: |
           flutter build ipa --release --no-tree-shake-icons --export-options-plist=/Users/builder/export_options.plist
-      - name: Collect IPA
-        script: |
-          cp build/ios/ipa/*.ipa $CM_BUILD_DIR/hbot.ipa
-      - name: Upload to App Store Connect
+      - name: Upload to TestFlight
         script: |
           app-store-connect publish \
-            --path build/ios/ipa/*.ipa \
-            --key-id "$APP_STORE_CONNECT_KEY_IDENTIFIER" \
-            --issuer-id "$APP_STORE_CONNECT_ISSUER_ID" \
-            --private-key=@env:APP_STORE_CONNECT_PRIVATE_KEY
+            --path build/ios/ipa/*.ipa
     artifacts:
       - build/ios/ipa/*.ipa
-    publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
