@@ -220,7 +220,7 @@ class WiFiProvisioningService {
     try {
       // Step 1: Send Wi-Fi configuration
       final configCommand =
-          'Backlog SSID1 $ssid;Password1 $password;WifiConfig 1';
+          'Backlog SSID1 $ssid;Password1 $password;WifiConfig 2';
       final configResponse = await http
           .get(
             Uri.http('$_provisioningIp:$_provisioningPort', '/cm', {

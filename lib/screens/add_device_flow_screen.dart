@@ -1963,7 +1963,7 @@ Troubleshooting:
     _addDebugLog('Sending WiFi creds to device: SSID=$_currentSSID');
     
     final response = await _wifiService
-        .provisionWiFi(ssid: _currentSSID!, password: _wifiPassword!)
+        .provisionWiFiTasmota(ssid: _currentSSID!, password: _wifiPassword!)
         .timeout(
           const Duration(seconds: 60),
           onTimeout: () => throw TimeoutException(
