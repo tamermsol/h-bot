@@ -128,24 +128,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     });
 
     try {
-      // Load saved Wi-Fi profile FIRST (so we have fallback SSID)
-      final profile = await _smartHomeService.getDefaultWiFiProfile();
-      if (profile != null && mounted) {
-        _safeSetState(() {
-          _wifiPassword = profile.password;
-          _wifiPasswordController.text = profile.password;
-          // Pre-fill saved SSID as fallback
-          if (profile.ssid.isNotEmpty) {
-            _currentSSID = profile.ssid;
-            _ssidController.text = profile.ssid;
-            _addDebugLog('Pre-filled saved SSID: ${profile.ssid}');
-          }
-        });
-        _addDebugLog('Loaded saved Wi-Fi profile');
-      }
-
-      // Then try auto-detect (overwrites saved SSID if successful)
-      await _refreshCurrentSSID();
+      // Fields start empty — user presses auto-detect or types manually
+      _addDebugLog('WiFi fields start empty. Press auto-detect or enter manually.');
     } catch (e) {
       _addDebugLog('Error initializing: $e');
     }
@@ -242,6 +226,19 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
       if (ssid != null) {
         _addDebugLog('✅ Current SSID detected: $ssid');
+        // Try to load saved password for this SSID from DB
+        try {
+          final profile = await _smartHomeService.getDefaultWiFiProfile();
+          if (profile != null && profile.ssid == ssid && profile.password.isNotEmpty) {
+            _safeSetState(() {
+              _wifiPassword = profile.password;
+              _wifiPasswordController.text = profile.password;
+            });
+            _addDebugLog('✅ Auto-filled password from saved profile');
+          }
+        } catch (e) {
+          _addDebugLog('Could not load saved password: $e');
+        }
       } else {
         _addDebugLog(
           '⚠️ SSID not available - please enter manually. On iOS, ensure Precise Location is enabled in Settings > Privacy > Location Services.',
@@ -556,14 +553,15 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     ],
                   ),
                 ),
-                if (_currentSSID == null) ...[
-                  const SizedBox(height: AppTheme.paddingSmall),
-                  TextButton.icon(
-                    onPressed: _refreshCurrentSSID,
-                    icon: const Icon(Icons.refresh, size: 16),
-                    label: const Text('Try auto-detect again'),
+                const SizedBox(height: AppTheme.paddingSmall),
+                ElevatedButton.icon(
+                  onPressed: _refreshCurrentSSID,
+                  icon: const Icon(Icons.wifi_find, size: 18),
+                  label: Text(_currentSSID == null ? 'Auto-detect WiFi' : 'Re-detect WiFi'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 44),
                   ),
-                ],
+                ),
               ],
             ),
           const SizedBox(height: AppTheme.paddingMedium),
