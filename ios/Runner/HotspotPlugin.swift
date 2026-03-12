@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import NetworkExtension
+import SystemConfiguration.CaptiveNetwork
 
 /// Native iOS plugin for WiFi hotspot management using NEHotspotConfigurationManager
 /// This bypasses captive portal detection and allows programmatic WiFi switching
@@ -104,19 +105,31 @@ public class HotspotPlugin: NSObject, FlutterPlugin {
         result(["success": true, "message": "Disconnected from \(ssid)"])
     }
     
-    /// Get current SSID using NEHotspot API (iOS 14+)
+    /// Get current SSID using NEHotspot API (iOS 14+) with CNCopyCurrentNetworkInfo fallback
     private func getCurrentSSID(result: @escaping FlutterResult) {
         if #available(iOS 14.0, *) {
             NEHotspotNetwork.fetchCurrent { network in
-                if let network = network {
-                    result(network.ssid)
-                } else {
-                    result(nil)
+                if let ssid = network?.ssid, !ssid.isEmpty {
+                    result(ssid)
+                    return
                 }
+                // Fallback to CNCopyCurrentNetworkInfo
+                result(self.getSSIDViaCNC())
             }
         } else {
-            // Fallback for older iOS - return nil, let Flutter side handle
-            result(nil)
+            result(self.getSSIDViaCNC())
         }
+    }
+    
+    /// Fallback SSID detection using legacy CNCopyCurrentNetworkInfo API
+    private func getSSIDViaCNC() -> String? {
+        guard let interfaces = CNCopySupportedInterfaces() as? [String] else { return nil }
+        for interface in interfaces {
+            guard let info = CNCopyCurrentNetworkInfo(interface as CFString) as? [String: Any],
+                  let ssid = info[kCNNetworkInfoKeySSID as String] as? String,
+                  !ssid.isEmpty else { continue }
+            return ssid
+        }
+        return nil
     }
 }

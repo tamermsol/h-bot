@@ -171,12 +171,20 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
       String? ssid;
       if (isIOS) {
-        // iOS: bypass EnhancedWiFiService.getCurrentSSID() which re-checks
-        // permissions and may fail due to race condition. Call native APIs directly.
-        _addDebugLog('iOS: Reading SSID directly via IOSHotspotService...');
+        // iOS: Use native plugin first (has NEHotspot + CNC fallback)
+        _addDebugLog('iOS: Reading SSID via IOSHotspotService (NEHotspot + CNC fallback)...');
         ssid = await IOSHotspotService.getCurrentSSID();
+
+        // Retry after 1 second if null (iOS sometimes needs time after permission grant)
         if (ssid == null || ssid.isEmpty) {
-          _addDebugLog('iOS: NEHotspot returned null, trying NetworkInfo fallback...');
+          _addDebugLog('iOS: First attempt returned null, retrying in 1s...');
+          await Future.delayed(const Duration(seconds: 1));
+          ssid = await IOSHotspotService.getCurrentSSID();
+        }
+
+        // Final fallback: try network_info_plus
+        if (ssid == null || ssid.isEmpty) {
+          _addDebugLog('iOS: Retry returned null, trying NetworkInfo fallback...');
           final networkInfo = NetworkInfo();
           ssid = await networkInfo.getWifiName();
           ssid = ssid?.replaceAll('"', '');
@@ -191,18 +199,21 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
       _safeSetState(() {
         _currentSSID = ssid;
+        // Auto-fill the SSID text field when detected
+        if (ssid != null && ssid.isNotEmpty) {
+          _ssidController.text = ssid;
+        }
       });
 
       if (ssid != null) {
         _addDebugLog('✅ Current SSID detected: $ssid');
       } else {
         _addDebugLog(
-          '⚠️ SSID not available - please enter manually. This can happen on Android 13+ if the app is not in foreground or if Wi-Fi info is not accessible.',
+          '⚠️ SSID not available - please enter manually. On iOS, ensure Precise Location is enabled in Settings > Privacy > Location Services.',
         );
       }
 
       // If null, that's OK - we'll show manual entry UI
-      // No retry needed - just let user enter SSID manually
     } catch (e) {
       _addDebugLog('❌ Error refreshing SSID: $e');
       _safeSetState(() {
@@ -388,7 +399,10 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
         bottom:
             AppTheme.paddingLarge + MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: Column(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
@@ -559,31 +573,36 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           const SizedBox(height: AppTheme.paddingLarge),
 
           // Next button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _canProceedFromWiFiSetup()
-                  ? _proceedToDeviceDiscovery
-                  : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  vertical: AppTheme.paddingMedium,
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _canProceedFromWiFiSetup()
+                      ? _proceedToDeviceDiscovery
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppTheme.paddingMedium,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    'Next',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                'Next',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
             ),
           ),
         ],
       ),
-    );
+    ),),);
   }
 
   bool _canProceedFromWiFiSetup() {
@@ -669,7 +688,10 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     // Android can scan and connect automatically
     return Padding(
       padding: const EdgeInsets.all(AppTheme.paddingLarge),
-      child: Column(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
         children: [
           const SizedBox(height: AppTheme.paddingLarge * 2),
 
@@ -772,14 +794,14 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           ),
         ],
       ),
-    );
+    ),),);
   }
 
   /// iOS auto-discovery view - scans for device AP and connects automatically
   Widget _buildIOSAutoDiscoveryView() {
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 500),
+        constraints: const BoxConstraints(maxWidth: 600),
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.paddingLarge),
           child: Column(
@@ -1105,7 +1127,10 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
   Widget _buildIOSManualConnectionGuide() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppTheme.paddingLarge),
-      child: Column(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: AppTheme.paddingMedium),
@@ -1270,31 +1295,41 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           const SizedBox(height: AppTheme.paddingLarge),
 
           // Manual check button (optional, if auto-detection not working)
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton.icon(
-              onPressed: _isLoading ? null : _checkIOSDeviceConnection,
-              icon: const Icon(Icons.refresh, size: 20),
-              label: const Text('Check Connection Now'),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  vertical: AppTheme.paddingMedium,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: _isLoading ? null : _checkIOSDeviceConnection,
+                  icon: const Icon(Icons.refresh, size: 20),
+                  label: const Text('Check Connection Now'),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppTheme.paddingMedium,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
           const SizedBox(height: AppTheme.paddingSmall),
-          SizedBox(
-            width: double.infinity,
-            child: TextButton.icon(
-              onPressed: () async {
-                await WiFiPermissionService.openAppSettings();
-              },
-              icon: const Icon(Icons.open_in_new, size: 18),
-              label: const Text('Open WiFi Settings'),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: SizedBox(
+                width: double.infinity,
+                child: TextButton.icon(
+                  onPressed: () async {
+                    await WiFiPermissionService.openAppSettings();
+                  },
+                  icon: const Icon(Icons.open_in_new, size: 18),
+                  label: const Text('Open WiFi Settings'),
+                ),
+              ),
             ),
           ),
 
@@ -1304,7 +1339,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           ],
         ],
       ),
-    );
+    ),),);
   }
 
   Widget _buildIOSStep(
@@ -1501,7 +1536,10 @@ Troubleshooting:
   Widget _buildProvisioningStep() {
     return Padding(
       padding: const EdgeInsets.all(AppTheme.paddingLarge),
-      child: Column(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
         children: [
           const SizedBox(height: AppTheme.paddingLarge * 2),
 
@@ -1595,14 +1633,17 @@ Troubleshooting:
           ],
         ],
       ),
-    );
+    ),),);
   }
 
   // Step 4: Success (like competitor's 6.jpeg and 7.jpeg)
   Widget _buildSuccessStep() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppTheme.paddingLarge),
-      child: Column(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
         children: [
           const SizedBox(height: AppTheme.paddingLarge),
 
@@ -1720,7 +1761,7 @@ Troubleshooting:
           ),
         ],
       ),
-    );
+    ),),);
   }
 
   // Device discovery and connection methods
