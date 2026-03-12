@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../services/platform_helper.dart';
 import '../services/ios_hotspot_service.dart';
 import 'dart:async';
@@ -144,11 +145,20 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
       _addDebugLog('Refreshing current SSID...');
 
       // Check permissions first
-      final permissionStatus = await WiFiPermissionService.checkPermissions();
+      var permissionStatus = await WiFiPermissionService.checkPermissions();
       _addDebugLog('Permission status: ${permissionStatus.message}');
 
       if (!permissionStatus.isGranted) {
-        _addDebugLog('⚠️ Permissions not granted, cannot auto-detect SSID');
+        _addDebugLog('Permissions not granted, requesting...');
+        permissionStatus = await WiFiPermissionService.requestPermissions();
+        _addDebugLog('After request: ${permissionStatus.message}');
+      }
+
+      if (!permissionStatus.isGranted) {
+        _addDebugLog('⚠️ Permissions still not granted after request');
+        if (permissionStatus == WiFiPermissionStatus.permanentlyDenied) {
+          _addDebugLog('Permissions permanently denied - user needs to enable in Settings');
+        }
         _safeSetState(() {
           _currentSSID = null;
         });
@@ -812,9 +822,9 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           else
             Column(
               children: [
-                // Manual SSID entry for iOS (since we can't scan)
+                // Improved device AP entry for iOS
                 const Text(
-                  'Or enter device network name:',
+                  'Enter the numbers shown on your device:',
                   style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
                 ),
                 const SizedBox(height: AppTheme.paddingSmall),
@@ -823,8 +833,14 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     Expanded(
                       child: TextField(
                         controller: _deviceAPController,
+                        textCapitalization: TextCapitalization.characters,
                         decoration: InputDecoration(
-                          hintText: 'e.g. hbot-8857CC-6092',
+                          prefixText: 'hbot-',
+                          prefixStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.textPrimary,
+                          ),
+                          hintText: '8857CC-6092',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -836,8 +852,9 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     const SizedBox(width: 8),
                     ElevatedButton(
                       onPressed: () {
-                        final ssid = _deviceAPController.text.trim();
-                        if (ssid.isNotEmpty) {
+                        final suffix = _deviceAPController.text.trim();
+                        if (suffix.isNotEmpty) {
+                          final ssid = suffix.startsWith('hbot-') ? suffix : 'hbot-$suffix';
                           _connectToDeviceAPiOS(ssid);
                         }
                       },
@@ -849,6 +866,34 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       child: const Text('Connect'),
                     ),
                   ],
+                ),
+                const SizedBox(height: AppTheme.paddingMedium),
+                // Open WiFi Settings button for manual connection
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    _addDebugLog('Opening iOS WiFi Settings...');
+                    // Start auto-detection timer to detect when user returns
+                    _startApDetectionTimer();
+                    final uri = Uri.parse('App-Prefs:WIFI');
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri);
+                    } else {
+                      // Fallback to general settings
+                      await launchUrl(Uri.parse('app-settings:'));
+                    }
+                  },
+                  icon: const Icon(Icons.settings, size: 18),
+                  label: const Text('Open WiFi Settings'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppTheme.primaryColor,
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Connect to the hbot-XXXX network in Settings,\nthen come back here.',
+                  style: TextStyle(fontSize: 12, color: AppTheme.textSecondary),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
