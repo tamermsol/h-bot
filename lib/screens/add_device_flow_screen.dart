@@ -71,6 +71,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
   bool _passwordVisible = false;
   bool _rememberPassword = true;
   bool _manualSSIDEntry = false; // Show manual SSID input field
+  bool _ssidFromLiveDetection = false; // true = live WiFi detection, false = saved profile
   final TextEditingController _ssidController = TextEditingController();
   final TextEditingController _apSuffixController = TextEditingController();
 
@@ -235,6 +236,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
         if (ssid != null && ssid.isNotEmpty) {
           _currentSSID = ssid;
           _ssidController.text = ssid;
+          _ssidFromLiveDetection = true;
         }
       });
 
@@ -468,8 +470,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           const SizedBox(height: AppTheme.paddingLarge),
 
           // Wi-Fi SSID input - auto-detected or manual
-          if (_currentSSID != null && !_manualSSIDEntry)
-            // Auto-detected SSID
+          if (_currentSSID != null && !_manualSSIDEntry && _ssidFromLiveDetection)
+            // Auto-detected SSID (live from WiFi)
             Container(
               padding: const EdgeInsets.all(AppTheme.paddingMedium),
               decoration: BoxDecoration(
