@@ -2,10 +2,14 @@ import Flutter
 import UIKit
 import NetworkExtension
 import SystemConfiguration.CaptiveNetwork
+import CoreLocation
 
 /// Native iOS plugin for WiFi hotspot management using NEHotspotConfigurationManager
 /// This bypasses captive portal detection and allows programmatic WiFi switching
-public class HotspotPlugin: NSObject, FlutterPlugin {
+public class HotspotPlugin: NSObject, FlutterPlugin, CLLocationManagerDelegate {
+    
+    private var locationManager: CLLocationManager?
+    private var preciseLocationResult: FlutterResult?
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "com.mb.hbot/hotspot", binaryMessenger: registrar.messenger())
@@ -35,6 +39,9 @@ public class HotspotPlugin: NSObject, FlutterPlugin {
             
         case "getCurrentSSID":
             getCurrentSSID(result: result)
+            
+        case "requestPreciseLocation":
+            requestPreciseLocation(result: result)
             
         default:
             result(FlutterMethodNotImplemented)
@@ -131,5 +138,38 @@ public class HotspotPlugin: NSObject, FlutterPlugin {
             return ssid
         }
         return nil
+    }
+    
+    /// Request temporary full (precise) location accuracy — required for SSID reading on iOS 14+
+    private func requestPreciseLocation(result: @escaping FlutterResult) {
+        if #available(iOS 14.0, *) {
+            let manager = CLLocationManager()
+            self.locationManager = manager
+            manager.delegate = self
+            
+            switch manager.accuracyAuthorization {
+            case .fullAccuracy:
+                // Already have precise location
+                result(true)
+                return
+            case .reducedAccuracy:
+                // Request temporary full accuracy
+                self.preciseLocationResult = result
+                manager.requestTemporaryFullAccuracyAuthorization(purposeKey: "WifiSSIDRead") { error in
+                    if let error = error {
+                        self.preciseLocationResult?(false)
+                        self.preciseLocationResult = nil
+                        return
+                    }
+                    let granted = manager.accuracyAuthorization == .fullAccuracy
+                    self.preciseLocationResult?(granted)
+                    self.preciseLocationResult = nil
+                }
+            @unknown default:
+                result(false)
+            }
+        } else {
+            result(true) // Pre-iOS 14, no reduced accuracy concept
+        }
     }
 }

@@ -54,6 +54,17 @@ class IOSHotspotService {
     }
   }
 
+  /// Request precise (full accuracy) location — required for SSID reading on iOS 14+
+  static Future<bool> requestPreciseLocation() async {
+    try {
+      final result = await _channel.invokeMethod<bool>('requestPreciseLocation');
+      return result ?? false;
+    } catch (e) {
+      debugPrint('HotspotService requestPreciseLocation error: $e');
+      return false;
+    }
+  }
+
   /// Get current SSID using NEHotspot API
   static Future<String?> getCurrentSSID() async {
     try {

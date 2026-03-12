@@ -171,26 +171,49 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
       String? ssid;
       if (isIOS) {
-        // iOS: Use native plugin first (has NEHotspot + CNC fallback)
-        _addDebugLog('iOS: Reading SSID via IOSHotspotService (NEHotspot + CNC fallback)...');
-        ssid = await IOSHotspotService.getCurrentSSID();
-
-        // Retry after 1 second if null (iOS sometimes needs time after permission grant)
-        if (ssid == null || ssid.isEmpty) {
-          _addDebugLog('iOS: First attempt returned null, retrying in 1s...');
-          await Future.delayed(const Duration(seconds: 1));
-          ssid = await IOSHotspotService.getCurrentSSID();
+        // iOS 14+: SSID reading requires PRECISE location, not just "When In Use"
+        // Request temporary full accuracy via native plugin
+        _addDebugLog('iOS: Requesting precise location (required for SSID)...');
+        try {
+          final hasPrecise = await IOSHotspotService.requestPreciseLocation();
+          _addDebugLog('iOS: Precise location granted: $hasPrecise');
+          if (!hasPrecise) {
+            // Also try Geolocator as fallback to trigger the prompt
+            await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high,
+              timeLimit: const Duration(seconds: 5),
+            );
+          }
+        } catch (e) {
+          _addDebugLog('iOS: Precise location request failed: $e (continuing anyway)');
         }
 
-        // Final fallback: try network_info_plus
+        // Wait for iOS to register the precise location grant
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        // Try native plugin first (NEHotspot + CNC fallback)
+        _addDebugLog('iOS: Reading SSID via IOSHotspotService (NEHotspot + CNC fallback)...');
+        ssid = await IOSHotspotService.getCurrentSSID();
+        _addDebugLog('iOS: First attempt returned: ${ssid ?? "null"}');
+
+        // Retry after 1 second if null
         if (ssid == null || ssid.isEmpty) {
-          _addDebugLog('iOS: Retry returned null, trying NetworkInfo fallback...');
+          _addDebugLog('iOS: Retrying in 1s...');
+          await Future.delayed(const Duration(seconds: 1));
+          ssid = await IOSHotspotService.getCurrentSSID();
+          _addDebugLog('iOS: Retry returned: ${ssid ?? "null"}');
+        }
+
+        // Final fallback: network_info_plus
+        if (ssid == null || ssid.isEmpty) {
+          _addDebugLog('iOS: Trying NetworkInfo fallback...');
           final networkInfo = NetworkInfo();
           ssid = await networkInfo.getWifiName();
           ssid = ssid?.replaceAll('"', '');
           if (ssid == '<unknown ssid>' || (ssid != null && ssid.isEmpty)) {
             ssid = null;
           }
+          _addDebugLog('iOS: NetworkInfo returned: ${ssid ?? "null"}');
         }
       } else {
         // Android: permissions work fine, use service normally
