@@ -125,18 +125,24 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     });
 
     try {
-      // Load current Wi-Fi SSID with retry logic
-      await _refreshCurrentSSID();
-
-      // Load saved Wi-Fi profile
+      // Load saved Wi-Fi profile FIRST (so we have fallback SSID)
       final profile = await _smartHomeService.getDefaultWiFiProfile();
       if (profile != null && mounted) {
         _safeSetState(() {
           _wifiPassword = profile.password;
           _wifiPasswordController.text = profile.password;
+          // Pre-fill saved SSID as fallback
+          if (profile.ssid.isNotEmpty) {
+            _currentSSID = profile.ssid;
+            _ssidController.text = profile.ssid;
+            _addDebugLog('Pre-filled saved SSID: ${profile.ssid}');
+          }
         });
         _addDebugLog('Loaded saved Wi-Fi profile');
       }
+
+      // Then try auto-detect (overwrites saved SSID if successful)
+      await _refreshCurrentSSID();
     } catch (e) {
       _addDebugLog('Error initializing: $e');
     }
