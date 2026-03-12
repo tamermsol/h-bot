@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 import '../services/platform_helper.dart';
 import '../services/ios_hotspot_service.dart';
 import 'dart:async';
@@ -165,7 +166,29 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
         return;
       }
 
-      final ssid = await _wifiService.getCurrentSSID();
+      // Small delay after permission grant — iOS needs a moment to propagate
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      String? ssid;
+      if (isIOS) {
+        // iOS: bypass EnhancedWiFiService.getCurrentSSID() which re-checks
+        // permissions and may fail due to race condition. Call native APIs directly.
+        _addDebugLog('iOS: Reading SSID directly via IOSHotspotService...');
+        ssid = await IOSHotspotService.getCurrentSSID();
+        if (ssid == null || ssid.isEmpty) {
+          _addDebugLog('iOS: NEHotspot returned null, trying NetworkInfo fallback...');
+          final networkInfo = NetworkInfo();
+          ssid = await networkInfo.getWifiName();
+          ssid = ssid?.replaceAll('"', '');
+          if (ssid == '<unknown ssid>' || (ssid != null && ssid.isEmpty)) {
+            ssid = null;
+          }
+        }
+      } else {
+        // Android: permissions work fine, use service normally
+        ssid = await _wifiService.getCurrentSSID();
+      }
+
       _safeSetState(() {
         _currentSSID = ssid;
       });
@@ -754,190 +777,196 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
   /// iOS auto-discovery view - scans for device AP and connects automatically
   Widget _buildIOSAutoDiscoveryView() {
-    return Padding(
-      padding: const EdgeInsets.all(AppTheme.paddingLarge),
-      child: Column(
-        children: [
-          const SizedBox(height: AppTheme.paddingLarge),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: Padding(
+          padding: const EdgeInsets.all(AppTheme.paddingLarge),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: AppTheme.paddingMedium),
 
-          // Step indicator
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Text(
-              'Connect to Device',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.primaryColor,
+              // Step indicator pill
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  'Connect to Device',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.primaryColor,
+                  ),
+                ),
               ),
-            ),
-          ),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: 16),
 
-          // Animated WiFi icon with pulse effect
-          Container(
-            width: 140,
-            height: 140,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                colors: [
-                  AppTheme.primaryColor.withOpacity(0.2),
-                  AppTheme.primaryColor.withOpacity(0.05),
-                  Colors.transparent,
-                ],
-              ),
-            ),
-            child: Center(
-              child: Container(
-                width: 80,
-                height: 80,
+              // WiFi icon with pulse effect
+              Container(
+                width: 100,
+                height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppTheme.primaryColor.withOpacity(0.15),
-                ),
-                child: Icon(
-                  _isLoading ? Icons.wifi : Icons.wifi_find,
-                  size: 40,
-                  color: AppTheme.primaryColor,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: AppTheme.paddingLarge),
-
-          // Status text
-          Text(
-            _isLoading
-                ? 'Waiting for device connection...'
-                : 'Connect to your device\'s WiFi',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: AppTheme.textPrimary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: AppTheme.paddingMedium),
-
-          // Instructions
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              children: [
-                _buildInstructionStep(
-                  number: '1',
-                  text: 'Make sure your device is in pairing mode',
-                  subtitle: 'LED should be blinking rapidly',
-                ),
-                const SizedBox(height: 12),
-                _buildInstructionStep(
-                  number: '2',
-                  text: 'Tap the button below to open WiFi Settings',
-                ),
-                const SizedBox(height: 12),
-                _buildInstructionStep(
-                  number: '3',
-                  text: 'Choose the network starting with hbot-',
-                  subtitle: 'e.g. hbot-8857CC-6092',
-                ),
-                const SizedBox(height: 12),
-                _buildInstructionStep(
-                  number: '4',
-                  text: 'Come back here — we\'ll detect it automatically',
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: AppTheme.paddingLarge),
-
-          // Main action button — Open WiFi Settings
-          SizedBox(
-            width: double.infinity,
-            height: 52,
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                _addDebugLog('Opening iOS WiFi Settings...');
-                _startApDetectionTimer();
-                _safeSetState(() {
-                  _isLoading = true;
-                  _statusMessage = 'Waiting for device connection...';
-                });
-                final uri = Uri.parse('App-Prefs:WIFI');
-                if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri);
-                } else {
-                  await launchUrl(Uri.parse('app-settings:'));
-                }
-              },
-              icon: const Icon(Icons.wifi, size: 22),
-              label: const Text(
-                'Open WiFi Settings',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 2,
-              ),
-            ),
-          ),
-
-          if (_isLoading) ...[
-            const SizedBox(height: AppTheme.paddingMedium),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppTheme.primaryColor.withOpacity(0.6),
+                  gradient: RadialGradient(
+                    colors: [
+                      AppTheme.primaryColor.withOpacity(0.2),
+                      AppTheme.primaryColor.withOpacity(0.05),
+                      Colors.transparent,
+                    ],
                   ),
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  'Listening for device...',
+                child: Center(
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppTheme.primaryColor.withOpacity(0.15),
+                    ),
+                    child: Icon(
+                      _isLoading ? Icons.wifi : Icons.wifi_find,
+                      size: 32,
+                      color: AppTheme.primaryColor,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Status text
+              Text(
+                _isLoading
+                    ? 'Waiting for device connection...'
+                    : 'Connect to your device\'s WiFi',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF333333),
+                ),
+                textAlign: TextAlign.center,
+              ),
+
+              const SizedBox(height: AppTheme.paddingMedium),
+
+              // Instructions
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  children: [
+                    _buildInstructionStep(
+                      number: '1',
+                      text: 'Make sure your device is in pairing mode',
+                      subtitle: 'LED should be blinking rapidly',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInstructionStep(
+                      number: '2',
+                      text: 'Tap the button below to open WiFi Settings',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInstructionStep(
+                      number: '3',
+                      text: 'Choose the network starting with hbot-',
+                      subtitle: 'e.g. hbot-8857CC-6092',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInstructionStep(
+                      number: '4',
+                      text: 'Come back here — we\'ll detect it automatically',
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: AppTheme.paddingLarge),
+
+              // Main action button — Open WiFi Settings
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    _addDebugLog('Opening iOS WiFi Settings...');
+                    _startApDetectionTimer();
+                    _safeSetState(() {
+                      _isLoading = true;
+                      _statusMessage = 'Waiting for device connection...';
+                    });
+                    final uri = Uri.parse('App-Prefs:WIFI');
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri);
+                    } else {
+                      await launchUrl(Uri.parse('app-settings:'));
+                    }
+                  },
+                  icon: const Icon(Icons.wifi, size: 22),
+                  label: const Text(
+                    'Open WiFi Settings',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                  ),
+                ),
+              ),
+
+              if (_isLoading) ...[
+                const SizedBox(height: AppTheme.paddingMedium),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppTheme.primaryColor.withOpacity(0.6),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Listening for device...',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: const Color(0xFF888888).withOpacity(0.8),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+
+              const Spacer(),
+
+              // Fallback: manual entry (collapsed by default)
+              TextButton(
+                onPressed: () {
+                  _safeSetState(() {
+                    _availableDeviceAPs = ['manual'];
+                  });
+                },
+                child: const Text(
+                  'Enter device name manually instead',
                   style: TextStyle(
                     fontSize: 13,
-                    color: AppTheme.textSecondary.withOpacity(0.8),
+                    color: Color(0xFF888888),
+                    decoration: TextDecoration.underline,
                   ),
                 ),
-              ],
-            ),
-          ],
-
-          const Spacer(),
-
-          // Fallback: manual entry (collapsed by default)
-          TextButton(
-            onPressed: () {
-              _safeSetState(() {
-                _availableDeviceAPs = ['manual'];
-              });
-            },
-            child: const Text(
-              'Enter device name manually instead',
-              style: TextStyle(
-                fontSize: 13,
-                color: AppTheme.textSecondary,
-                decoration: TextDecoration.underline,
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -956,7 +985,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           height: 28,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppTheme.primaryColor.withOpacity(0.1),
+            color: AppTheme.primaryColor.withOpacity(0.15),
           ),
           child: Center(
             child: Text(
@@ -979,15 +1008,15 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: AppTheme.textPrimary,
+                  color: Color(0xFF333333),
                 ),
               ),
               if (subtitle != null)
                 Text(
                   subtitle,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 13,
-                    color: AppTheme.textSecondary.withOpacity(0.8),
+                    color: Color(0xFF888888),
                   ),
                 ),
             ],
