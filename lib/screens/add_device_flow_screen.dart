@@ -962,13 +962,19 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     const SizedBox(height: 12),
                     _buildInstructionStep(
                       number: '2',
-                      text: 'Enter your device AP name below',
-                      subtitle: 'e.g. F243FC-1020 (the part after hbot-)',
+                      text: 'Tap "Open WiFi Settings" below',
                     ),
                     const SizedBox(height: 12),
                     _buildInstructionStep(
                       number: '3',
-                      text: 'Tap "Connect to Device" to join automatically',
+                      text: 'Connect to the network starting with "hbot-"',
+                      subtitle: 'If asked about no internet, tap "Use Without Internet"',
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInstructionStep(
+                      number: '4',
+                      text: 'Return to this app',
+                      subtitle: 'It will detect the connection automatically',
                     ),
                   ],
                 ),
@@ -976,53 +982,32 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
               const SizedBox(height: AppTheme.paddingLarge),
 
-              // Device AP suffix input field
-              TextField(
-                controller: _apSuffixController,
-                decoration: InputDecoration(
-                  labelText: 'Device AP suffix',
-                  hintText: 'e.g. F243FC-1020',
-                  prefixText: 'hbot-',
-                  prefixStyle: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.primaryColor,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: AppTheme.primaryColor, width: 2),
-                  ),
-                ),
-                textCapitalization: TextCapitalization.characters,
-              ),
-
-              const SizedBox(height: AppTheme.paddingMedium),
-
-              // Main action button — Connect to Device AP programmatically
+              // Main action button — Open WiFi Settings
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton.icon(
                   onPressed: _isLoading ? null : () async {
-                    final suffix = _apSuffixController.text.trim();
-                    if (suffix.isEmpty) {
-                      _addDebugLog('⚠️ Please enter the device AP suffix');
-                      return;
-                    }
-                    final fullApName = 'hbot-$suffix';
-                    _addDebugLog('Connecting to device AP: $fullApName ...');
+                    _addDebugLog('Opening WiFi settings for manual device AP connection');
                     _safeSetState(() {
                       _isLoading = true;
-                      _statusMessage = 'Connecting to $fullApName...';
+                      _statusMessage = 'Waiting for you to connect...';
                     });
-                    await _connectToDeviceAPiOS(fullApName);
+                    // Start detection timer before opening settings
+                    _startApDetectionTimer();
+                    // Open iOS WiFi settings
+                    final url = Uri.parse('App-Prefs:root=WIFI');
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url);
+                    } else {
+                      // Fallback to general settings
+                      await launchUrl(Uri.parse('app-settings:'));
+                    }
                   },
-                  icon: const Icon(Icons.wifi, size: 22),
-                  label: Text(
-                    _isLoading ? 'Connecting...' : 'Connect to Device',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  icon: const Icon(Icons.settings, size: 22),
+                  label: const Text(
+                    'Open WiFi Settings',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryColor,
@@ -1037,26 +1022,36 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
               if (_isLoading) ...[
                 const SizedBox(height: AppTheme.paddingMedium),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppTheme.primaryColor.withOpacity(0.6),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppTheme.primaryColor.withOpacity(0.6),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Listening for device...',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: const Color(0xFF888888).withOpacity(0.8),
+                      const SizedBox(width: 10),
+                      const Flexible(
+                        child: Text(
+                          'Waiting for device connection...\nReturn here after connecting to hbot-xxx',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFF555555),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
 
@@ -1070,7 +1065,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   });
                 },
                 child: const Text(
-                  'Enter device name manually instead',
+                  'Having trouble? Enter device name manually',
                   style: TextStyle(
                     fontSize: 13,
                     color: Color(0xFF888888),
@@ -1991,9 +1986,9 @@ Troubleshooting:
           }
         } else {
           // Update status to show we're still looking
-          if (isIOS && mounted) {
+          if (mounted) {
             _safeSetState(() {
-              _statusMessage = 'Waiting for device connection...';
+              _statusMessage = 'Listening for device connection...\nConnect to the hbot-xxx network in WiFi Settings';
             });
           }
         }
