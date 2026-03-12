@@ -982,19 +982,21 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
               const SizedBox(height: AppTheme.paddingLarge),
 
-              // Main action button — Open WiFi Settings
+              // Main action button — Open WiFi Settings (always tappable)
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton.icon(
-                  onPressed: _isLoading ? null : () async {
+                  onPressed: () async {
                     _addDebugLog('Opening WiFi settings for manual device AP connection');
+                    // Start detection timer if not already running
+                    if (_apDetectionTimer == null || !_apDetectionTimer!.isActive) {
+                      _startApDetectionTimer();
+                    }
                     _safeSetState(() {
                       _isLoading = true;
                       _statusMessage = 'Waiting for you to connect...';
                     });
-                    // Start detection timer before opening settings
-                    _startApDetectionTimer();
                     // Open iOS WiFi settings
                     final url = Uri.parse('App-Prefs:root=WIFI');
                     if (await canLaunchUrl(url)) {
