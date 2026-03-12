@@ -145,28 +145,24 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     try {
       _addDebugLog('Refreshing current SSID...');
 
-      // Check permissions first
-      var permissionStatus = await WiFiPermissionService.checkPermissions();
-      _addDebugLog('Permission status: ${permissionStatus.message}');
-
-      if (!permissionStatus.isGranted) {
-        _addDebugLog('Permissions not granted, requesting...');
-        permissionStatus = await WiFiPermissionService.requestPermissions();
-        _addDebugLog('After request: ${permissionStatus.message}');
-      }
-
-      if (!permissionStatus.isGranted) {
-        _addDebugLog('⚠️ Permissions still not granted after request');
-        if (permissionStatus == WiFiPermissionStatus.permanentlyDenied) {
-          _addDebugLog('Permissions permanently denied - user needs to enable in Settings');
+      // Try to request permissions but don't block on failure —
+      // the iOS APIs themselves will return null if permissions aren't right
+      try {
+        var permissionStatus = await WiFiPermissionService.checkPermissions();
+        _addDebugLog('Permission status: ${permissionStatus.message}');
+        if (!permissionStatus.isGranted) {
+          _addDebugLog('Requesting permissions...');
+          permissionStatus = await WiFiPermissionService.requestPermissions();
+          _addDebugLog('After request: ${permissionStatus.message}');
+          if (permissionStatus == WiFiPermissionStatus.permanentlyDenied) {
+            _addDebugLog('Permissions marked as permanently denied by Geolocator — trying SSID read anyway');
+          }
         }
-        _safeSetState(() {
-          _currentSSID = null;
-        });
-        return;
+      } catch (e) {
+        _addDebugLog('Permission check error (proceeding anyway): $e');
       }
 
-      // Small delay after permission grant — iOS needs a moment to propagate
+      // Small delay to let permission state propagate
       await Future.delayed(const Duration(milliseconds: 500));
 
       String? ssid;
@@ -255,7 +251,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           '⚠️ SSID not available - please enter manually. On iOS, ensure Precise Location is enabled in Settings > Privacy > Location Services.',
         );
         _safeSetState(() {
-          _detectMessage = '⚠️ Could not detect WiFi. Check:\n• WiFi is connected\n• Location → Precise Location is ON\n• Then try again';
+          _detectMessage = '⚠️ Could not detect WiFi. Check:\n• WiFi is connected (not cellular)\n• Settings → MB Hbot → Location → "While Using"\n• Settings → MB Hbot → Location → Precise Location ON\n• Then try again';
           _isDetectingSSID = false;
         });
       }
@@ -579,7 +575,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     minimumSize: const Size(double.infinity, 44),
                   ),
                 ),
-                if (_detectMessage != null)
+                if (_detectMessage != null) ...[
                   Padding(
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
@@ -592,6 +588,19 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       ),
                     ),
                   ),
+                  if (!_detectMessage!.startsWith('✅'))
+                    TextButton.icon(
+                      onPressed: () async {
+                        try {
+                          await Geolocator.openAppSettings();
+                        } catch (_) {
+                          await Geolocator.openLocationSettings();
+                        }
+                      },
+                      icon: const Icon(Icons.settings, size: 16),
+                      label: const Text('Open App Settings'),
+                    ),
+                ],
               ],
             ),
           const SizedBox(height: AppTheme.paddingMedium),
