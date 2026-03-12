@@ -153,14 +153,11 @@ public class HotspotPlugin: NSObject, FlutterPlugin, CLLocationManagerDelegate {
                 result(true)
                 return
             case .reducedAccuracy:
-                // Request temporary full accuracy
+                // Request temporary full accuracy — triggers system prompt
                 self.preciseLocationResult = result
-                manager.requestTemporaryFullAccuracyAuthorization(purposeKey: "WifiSSIDRead") { error in
-                    if let error = error {
-                        self.preciseLocationResult?(false)
-                        self.preciseLocationResult = nil
-                        return
-                    }
+                manager.requestTemporaryFullAccuracyAuthorization(purposeKey: "WifiSSIDRead")
+                // Check after a delay to give user time to respond to the prompt
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     let granted = manager.accuracyAuthorization == .fullAccuracy
                     self.preciseLocationResult?(granted)
                     self.preciseLocationResult = nil
