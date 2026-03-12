@@ -72,6 +72,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
   bool _rememberPassword = true;
   bool _manualSSIDEntry = false; // Show manual SSID input field
   bool _ssidFromLiveDetection = false; // true = live WiFi detection, false = saved profile
+  bool _isDetectingSSID = false; // Loading state for auto-detect button
+  String? _detectMessage; // Feedback message for auto-detect
   final TextEditingController _ssidController = TextEditingController();
   final TextEditingController _apSuffixController = TextEditingController();
 
@@ -136,6 +138,10 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
   }
 
   Future<void> _refreshCurrentSSID() async {
+    _safeSetState(() {
+      _isDetectingSSID = true;
+      _detectMessage = 'Detecting WiFi network...';
+    });
     try {
       _addDebugLog('Refreshing current SSID...');
 
@@ -226,6 +232,10 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
       if (ssid != null) {
         _addDebugLog('✅ Current SSID detected: $ssid');
+        _safeSetState(() {
+          _detectMessage = '✅ Connected to: $ssid';
+          _isDetectingSSID = false;
+        });
         // Try to load saved password for this SSID from DB
         try {
           final profile = await _smartHomeService.getDefaultWiFiProfile();
@@ -233,6 +243,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             _safeSetState(() {
               _wifiPassword = profile.password;
               _wifiPasswordController.text = profile.password;
+              _detectMessage = '✅ Connected to: $ssid (password filled)';
             });
             _addDebugLog('✅ Auto-filled password from saved profile');
           }
@@ -243,14 +254,18 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
         _addDebugLog(
           '⚠️ SSID not available - please enter manually. On iOS, ensure Precise Location is enabled in Settings > Privacy > Location Services.',
         );
+        _safeSetState(() {
+          _detectMessage = '⚠️ Could not detect WiFi. Check:\n• WiFi is connected\n• Location → Precise Location is ON\n• Then try again';
+          _isDetectingSSID = false;
+        });
       }
 
       // If null, that's OK - we'll show manual entry UI
     } catch (e) {
       _addDebugLog('❌ Error refreshing SSID: $e');
       _safeSetState(() {
-        // Don't clear a saved profile SSID on detection error
-        // Only leave null if it was already null (show manual entry)
+        _isDetectingSSID = false;
+        _detectMessage = '❌ Error: $e\nPlease enter WiFi details manually.';
       });
     }
   }
@@ -555,13 +570,28 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 ),
                 const SizedBox(height: AppTheme.paddingSmall),
                 ElevatedButton.icon(
-                  onPressed: _refreshCurrentSSID,
-                  icon: const Icon(Icons.wifi_find, size: 18),
-                  label: Text(_currentSSID == null ? 'Auto-detect WiFi' : 'Re-detect WiFi'),
+                  onPressed: _isDetectingSSID ? null : _refreshCurrentSSID,
+                  icon: _isDetectingSSID 
+                    ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    : const Icon(Icons.wifi_find, size: 18),
+                  label: Text(_isDetectingSSID ? 'Detecting...' : (_currentSSID == null ? 'Auto-detect WiFi' : 'Re-detect WiFi')),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 44),
                   ),
                 ),
+                if (_detectMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(
+                      _detectMessage!,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: _detectMessage!.startsWith('✅') ? Colors.green[700] : 
+                               _detectMessage!.startsWith('⚠️') ? Colors.orange[700] : 
+                               _detectMessage!.startsWith('❌') ? Colors.red[700] : Colors.grey[600],
+                      ),
+                    ),
+                  ),
               ],
             ),
           const SizedBox(height: AppTheme.paddingMedium),
