@@ -201,7 +201,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                           SmartInputField(
                             controller: _searchController,
                             hintText: 'Search devices...',
-                            prefixIcon: Icons.search,
+                            prefixIcon: const Icon(Icons.search, size: 20),
                             onChanged: (value) {
                               setState(() {});
                             },
