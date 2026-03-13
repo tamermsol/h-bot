@@ -351,18 +351,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: _avatarPath == null
-                        ? const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              AppTheme.primaryColor,
-                              AppTheme.secondaryColor,
-                            ],
-                          )
+                        ? HBotColors.primaryGradient
                         : null,
                   ),
                   child: _avatarPath == null
-                      ? const Icon(Icons.person, size: 40, color: Colors.white)
+                      ? const Icon(Icons.person, size: 40, color: HBotColors.textOnPrimary)
                       : ClipOval(
                           child: _avatarService.isCustomAvatar(_avatarPath)
                               ? Image.file(
@@ -385,20 +378,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(4),
                     decoration: const BoxDecoration(
-                      color: AppTheme.primaryColor,
+                      color: HBotColors.primary,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.edit,
                       size: 16,
-                      color: Colors.white,
+                      color: HBotColors.textOnPrimary,
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: AppTheme.paddingMedium),
+          const SizedBox(width: HBotSpacing.space4),
 
           // Profile Info
           Expanded(
@@ -407,23 +400,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Text(
                   _userName ?? 'Loading...',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: HBotColors.textPrimaryLight,
+                  ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: HBotSpacing.space1),
                 Text(
                   _userEmail ?? 'Loading...',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.textSecondary,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 14,
+                    color: HBotColors.textSecondaryLight,
                   ),
                 ),
                 if (_userPhone != null) ...[
                   const SizedBox(height: 2),
                   Text(
                     _userPhone!,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.textSecondary,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      color: HBotColors.textSecondaryLight,
                     ),
                   ),
                 ],
@@ -440,12 +440,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Home Information',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+          'HOME INFORMATION',
+          style: hbotSectionHeader(),
         ),
-        const SizedBox(height: AppTheme.paddingMedium),
+        const SizedBox(height: HBotSpacing.space4),
         Row(
           children: [
             Expanded(
@@ -453,21 +451,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'Devices',
                 value: _isLoadingStats ? '...' : '$_totalDevices',
                 icon: Icons.devices_outlined,
-                color: AppTheme.primaryColor,
+                color: HBotColors.primary,
               ),
             ),
-            const SizedBox(width: AppTheme.paddingMedium),
+            const SizedBox(width: HBotSpacing.space3),
             Expanded(
               child: ProfileCard(
                 title: 'Rooms',
                 value: _isLoadingStats ? '...' : '$_totalRooms',
                 icon: Icons.home_outlined,
-                color: AppTheme.secondaryColor,
+                color: HBotColors.primaryLight,
               ),
             ),
           ],
         ),
-        const SizedBox(height: AppTheme.paddingMedium),
+        const SizedBox(height: HBotSpacing.space3),
         Row(
           children: [
             Expanded(
@@ -475,16 +473,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'Homes',
                 value: _isLoadingStats ? '...' : '$_totalHomes',
                 icon: Icons.home_work_outlined,
-                color: AppTheme.accentColor,
+                color: HBotColors.deviceShutter,
               ),
             ),
-            const SizedBox(width: AppTheme.paddingMedium),
+            const SizedBox(width: HBotSpacing.space3),
             Expanded(
               child: ProfileCard(
                 title: 'Scenes',
                 value: _isLoadingStats ? '...' : '$_totalScenes',
                 icon: Icons.auto_awesome_outlined,
-                color: AppTheme.warningColor,
+                color: HBotColors.warning,
               ),
             ),
           ],
@@ -494,23 +492,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildSettingsSection() {
-    final cardColor = AppTheme.getCardColor(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Settings',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+          'SETTINGS',
+          style: hbotSectionHeader(),
         ),
-        const SizedBox(height: AppTheme.paddingMedium),
+        const SizedBox(height: HBotSpacing.space4),
         Container(
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          ),
+          decoration: hbotSettingsTileDecoration(),
           child: Column(
             children: [
               SettingsTile(
@@ -563,23 +554,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildAccountSection() {
     // Check if user can change password (email auth only)
     final canChangePassword = _authService.canChangePassword();
-    final cardColor = AppTheme.getCardColor(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Account',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+          'ACCOUNT',
+          style: hbotSectionHeader(),
         ),
-        const SizedBox(height: AppTheme.paddingMedium),
+        const SizedBox(height: HBotSpacing.space4),
         Container(
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          ),
+          decoration: hbotSettingsTileDecoration(),
           child: Column(
             children: [
               SettingsTile(
@@ -611,7 +596,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Please create a home first'),
-                          backgroundColor: Colors.orange,
+                          backgroundColor: HBotColors.warning,
                         ),
                       );
                     }
@@ -659,23 +644,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildSupportSection() {
-    final cardColor = AppTheme.getCardColor(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Support',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+          'SUPPORT',
+          style: hbotSectionHeader(),
         ),
-        const SizedBox(height: AppTheme.paddingMedium),
+        const SizedBox(height: HBotSpacing.space4),
         Container(
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          ),
+          decoration: hbotSettingsTileDecoration(),
           child: Column(
             children: [
               SettingsTile(
@@ -708,7 +686,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: Icons.logout,
                 title: 'Sign Out',
                 subtitle: 'Sign out of your account',
-                titleColor: AppTheme.errorColor,
+                titleColor: HBotColors.error,
                 trailing: const SizedBox.shrink(), // No arrow for action items
                 onTap: () {
                   _showSignOutDialog();
@@ -756,7 +734,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: AppTheme.getCardColor(context),
+              backgroundColor: HBotColors.cardLight,
               title: const Text('Change Password'),
               content: SingleChildScrollView(
                 child: Column(
@@ -782,12 +760,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
-                            AppTheme.radiusSmall,
+                            HBotRadius.small,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppTheme.paddingMedium),
+                    const SizedBox(height: HBotSpacing.space4),
                     TextField(
                       controller: newPasswordController,
                       obscureText: obscureNewPassword,
@@ -808,12 +786,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
-                            AppTheme.radiusSmall,
+                            HBotRadius.small,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppTheme.paddingMedium),
+                    const SizedBox(height: HBotSpacing.space4),
                     TextField(
                       controller: confirmPasswordController,
                       obscureText: obscureConfirmPassword,
@@ -834,17 +812,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
-                            AppTheme.radiusSmall,
+                            HBotRadius.small,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppTheme.paddingSmall),
+                    const SizedBox(height: HBotSpacing.space2),
                     const Text(
                       'Password must be at least 6 characters',
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppTheme.textSecondary,
+                        color: HBotColors.textSecondaryLight,
                       ),
                     ),
                   ],
@@ -867,7 +845,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                   style: TextButton.styleFrom(
-                    foregroundColor: AppTheme.primaryColor,
+                    foregroundColor: HBotColors.primary,
                   ),
                   child: const Text('Change Password'),
                 ),
@@ -892,7 +870,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill in all fields'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -902,7 +880,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Password must be at least 6 characters'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -912,7 +890,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('New passwords do not match'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -939,7 +917,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text('Changing password...'),
             ],
           ),
-          backgroundColor: AppTheme.primaryColor,
+          backgroundColor: HBotColors.primary,
           duration: const Duration(seconds: 3),
         ),
       );
@@ -964,7 +942,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Password changed successfully'),
-            backgroundColor: Colors.green,
+            backgroundColor: HBotColors.success,
           ),
         );
       }
@@ -974,7 +952,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to change password: $e'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 4),
           ),
         );
@@ -987,7 +965,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Sign Out'),
           content: const Text('Are you sure you want to sign out?'),
           actions: [
@@ -1002,7 +980,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.of(context).pop(); // Close dialog first
                 await _handleSignOut();
               },
-              style: TextButton.styleFrom(foregroundColor: AppTheme.errorColor),
+              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
               child: const Text('Sign Out'),
             ),
           ],
@@ -1031,7 +1009,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text('Signing out...'),
               ],
             ),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
             duration: const Duration(seconds: 2),
           ),
         );
@@ -1053,7 +1031,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error signing out: $e'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 4),
           ),
         );

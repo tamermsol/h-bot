@@ -76,7 +76,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter the complete 6-digit code'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -86,7 +86,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a new password'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -96,7 +96,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Password must be at least 6 characters'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -106,7 +106,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Passwords do not match'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -126,7 +126,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Password reset successfully!'),
-            backgroundColor: Colors.green,
+            backgroundColor: HBotColors.success,
           ),
         );
 
@@ -141,7 +141,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to reset password: ${e.toString()}'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -159,7 +159,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Reset code sent! Please check your email.'),
-            backgroundColor: Colors.green,
+            backgroundColor: HBotColors.success,
           ),
         );
         _startCountdown();
@@ -169,7 +169,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to resend code: ${e.toString()}'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -202,7 +202,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               const Icon(
                 Icons.lock_reset,
                 size: 80,
-                color: AppTheme.primaryColor,
+                color: HBotColors.primary,
               ),
 
               const SizedBox(height: 32),
@@ -237,7 +237,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryColor,
+                  color: HBotColors.primary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -289,7 +289,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: AppTheme.primaryColor,
+                            color: HBotColors.primary,
                             width: 2.5,
                           ),
                         ),
@@ -329,7 +329,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(
-                      color: AppTheme.primaryColor,
+                      color: HBotColors.primary,
                       width: 2,
                     ),
                   ),
@@ -372,7 +372,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(
-                      color: AppTheme.primaryColor,
+                      color: HBotColors.primary,
                       width: 2,
                     ),
                   ),
@@ -410,7 +410,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 child: ElevatedButton(
                   onPressed: _isResetting ? null : _resetPassword,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: HBotColors.primary,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -468,14 +468,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppTheme.primaryColor,
+                                  HBotColors.primary,
                                 ),
                               ),
                             )
                           : const Text(
                               'Resend',
                               style: TextStyle(
-                                color: AppTheme.primaryColor,
+                                color: HBotColors.primary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                               ),

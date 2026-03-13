@@ -13,14 +13,34 @@ class HBotColors {
   static const Color primary = Color(0xFF0883FD);
   static const Color primaryLight = Color(0xFF8CD1FB);
   static const Color primaryDark = Color(0xFF0668CA);
+  static const Color primaryHover = Color(0xFF0773E0);
   static const Color primarySurface = Color(0xFFEBF5FF);
   static const Color primarySurfaceStrong = Color(0xFFD6EBFF);
 
-  // ─── Brand Gradient ───
+  // ─── Blue Primitives (from design tokens) ───
+  static const Color blue50 = Color(0xFFF0F7FF);
+  static const Color blue100 = Color(0xFFD6ECFE);
+  static const Color blue200 = Color(0xFF8CD1FB);
+  static const Color blue300 = Color(0xFF5BBDF7);
+  static const Color blue400 = Color(0xFF2FB8EC);
+  static const Color blue500 = Color(0xFF0883FD);
+  static const Color blue600 = Color(0xFF1070AD);
+  static const Color blue700 = Color(0xFF094972);
+  static const Color blue800 = Color(0xFF006080);
+  static const Color blue900 = Color(0xFF0A1628);
+  static const Color blue950 = Color(0xFF010510);
+
+  // ─── Brand Gradient (left to right per design spec) ───
   static const LinearGradient primaryGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
     colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+  );
+
+  static const LinearGradient primaryGradientReversed = LinearGradient(
+    begin: Alignment.centerRight,
+    end: Alignment.centerLeft,
+    colors: [Color(0xFF8CD1FB), Color(0xFF0883FD)],
   );
 
   static const LinearGradient primaryGradientVertical = LinearGradient(
@@ -30,8 +50,8 @@ class HBotColors {
   );
 
   static const LinearGradient successGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
     colors: [Color(0xFF22C55E), Color(0xFF86EFAC)],
   );
 
@@ -41,30 +61,53 @@ class HBotColors {
     colors: [Color(0xFF1070AD), Color(0xFFCBD9DE)],
   );
 
-  // ─── Semantic Colors ───
+  // ─── Semantic Colors (updated to match design tokens) ───
   static const Color success = Color(0xFF22C55E);
-  static const Color successLight = Color(0xFFF0FDF4);
+  static const Color successLight = Color(0xFFDCFCE7);
   static const Color successDark = Color(0xFF16A34A);
   static const Color warning = Color(0xFFF59E0B);
-  static const Color warningLight = Color(0xFFFFFBEB);
+  static const Color warningLight = Color(0xFFFEF3C7);
   static const Color warningDark = Color(0xFFD97706);
   static const Color error = Color(0xFFEF4444);
-  static const Color errorLight = Color(0xFFFEF2F2);
+  static const Color errorLight = Color(0xFFFEE2E2);
   static const Color errorDark = Color(0xFFDC2626);
   static const Color info = Color(0xFF0883FD);
   static const Color infoLight = Color(0xFFEBF5FF);
 
-  // ─── Neutral Palette (Slate-based) ───
+  // ─── Neutral Palette (blue-tinted per design tokens) ───
+  static const Color neutral0 = Color(0xFFFFFFFF);
   static const Color neutral50 = Color(0xFFF8F9FB);
-  static const Color neutral100 = Color(0xFFF1F3F5);
+  static const Color neutral100 = Color(0xFFF0F2F5);
   static const Color neutral200 = Color(0xFFE8ECF1);
-  static const Color neutral300 = Color(0xFFD1D5DB);
-  static const Color neutral400 = Color(0xFF9CA3AF);
-  static const Color neutral500 = Color(0xFF6B7280);
+  static const Color neutral300 = Color(0xFFD1D7E0);
+  static const Color neutral400 = Color(0xFFA0AAB8);
+  static const Color neutral500 = Color(0xFF7A8494);
   static const Color neutral600 = Color(0xFF5A6577);
-  static const Color neutral700 = Color(0xFF374151);
-  static const Color neutral800 = Color(0xFF1F2937);
+  static const Color neutral700 = Color(0xFF3D4A5C);
+  static const Color neutral800 = Color(0xFF1A202B);
   static const Color neutral900 = Color(0xFF0A1628);
+  static const Color neutral950 = Color(0xFF010510);
+
+  // ─── Decorative Neutrals ───
+  static const Color silver = Color(0xFFCBD9DE);
+  static const Color darkBorder = Color(0xFF181B1F);
+
+  // ─── Semantic Surface Tokens — Light Mode ───
+  static const Color surfacePrimarySubtle = Color(0xFFF0F7FF);
+  static const Color surfaceDestructiveSubtle = Color(0xFFFEE2E2);
+  static const Color surfaceCardHover = Color(0xFFF0F2F5);
+
+  // ─── Semantic Border Tokens ───
+  static const Color borderFocused = Color(0xFF0883FD);
+  static const Color borderError = Color(0xFFEF4444);
+  static const Color borderSuccess = Color(0xFF22C55E);
+
+  // ─── Toggle Tokens ───
+  static const Color toggleTrackOff = Color(0xFFD1D7E0);
+  static const Color toggleThumb = Color(0xFFFFFFFF);
+
+  // ─── Primary Disabled ───
+  static const Color primaryDisabled = Color(0xFFD1D7E0);
 
   // ─── Device Type Colors ───
   static const Color deviceSwitch = Color(0xFF0883FD);
@@ -86,17 +129,21 @@ class HBotColors {
   static const Color textTertiaryLight = Color(0xFF9CA3AF);
   static const Color textOnPrimary = Color(0xFFFFFFFF);
 
-  // ─── Dark Mode Surfaces (from h-bot.tech website) ───
+  // ─── Dark Mode Surfaces (from h-bot.tech website / design tokens) ───
   static const Color backgroundDark = Color(0xFF010510);
   static const Color surfaceDark = Color(0xFF0F1729);
   static const Color cardDark = Color(0xFF1A202B);
+  static const Color cardHoverDark = Color(0xFF222835);
+  static const Color surfaceElevatedDark = Color(0xFF1E2433);
+  static const Color surfaceInputDark = Color(0xFF141A26);
   static const Color borderDark = Color(0xFF181B1F);
+  static const Color borderSubtleDark = Color(0xFF111520);
   static const Color dividerDark = Color(0xFF1E293B);
 
   // ─── Dark Mode Text ───
   static const Color textPrimaryDark = Color(0xFFFFFFFF);
   static const Color textSecondaryDark = Color(0xFFC7C9CC);
-  static const Color textTertiaryDark = Color(0xFF94A3B8);
+  static const Color textTertiaryDark = Color(0xFFB4B4B4);
 
   // ─── Icon Colors ───
   static const Color iconDefault = Color(0xFF5A6577);
@@ -314,23 +361,24 @@ class AppTheme {
       // ─── Scaffold ───
       scaffoldBackgroundColor: HBotColors.backgroundLight,
 
-      // ─── AppBar ───
+      // ─── AppBar (blends with page background per design spec) ───
       appBarTheme: const AppBarTheme(
-        backgroundColor: HBotColors.surfaceLight,
+        backgroundColor: HBotColors.backgroundLight,
         foregroundColor: HBotColors.textPrimaryLight,
         elevation: 0,
-        scrolledUnderElevation: 0.5,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         centerTitle: false,
         titleTextStyle: TextStyle(
           fontFamily: 'Inter',
-          fontSize: 20,
+          fontSize: 22,
           fontWeight: FontWeight.w600,
           color: HBotColors.textPrimaryLight,
-          letterSpacing: -0.2,
-          height: 1.3,
+          letterSpacing: -0.3,
+          height: 1.27,
         ),
         iconTheme: IconThemeData(
-          color: HBotColors.textPrimaryLight,
+          color: HBotColors.iconDefault,
           size: 24,
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -340,7 +388,7 @@ class AppTheme {
         ),
       ),
 
-      // ─── Bottom Navigation ───
+      // ─── Bottom Navigation (64px + safe area, 1px top border) ───
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: HBotColors.surfaceLight,
         selectedItemColor: HBotColors.primary,
@@ -378,8 +426,8 @@ class AppTheme {
           backgroundColor: HBotColors.primary,
           foregroundColor: HBotColors.textOnPrimary,
           elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-          minimumSize: const Size(0, 48),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          minimumSize: const Size(120, 52),
           shape: RoundedRectangleBorder(
             borderRadius: HBotRadius.mediumRadius,
           ),
@@ -451,23 +499,23 @@ class AppTheme {
         fillColor: HBotColors.surfaceLight,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: HBotRadius.smallRadius,
-          borderSide: const BorderSide(color: HBotColors.borderLight),
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.borderLight, width: 1.5),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.smallRadius,
-          borderSide: const BorderSide(color: HBotColors.borderLight),
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.borderLight, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.smallRadius,
+          borderRadius: HBotRadius.mediumRadius,
           borderSide: const BorderSide(color: HBotColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.smallRadius,
-          borderSide: const BorderSide(color: HBotColors.error),
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.error, width: 1.5),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.smallRadius,
+          borderRadius: HBotRadius.mediumRadius,
           borderSide: const BorderSide(color: HBotColors.error, width: 2),
         ),
         labelStyle: const TextStyle(
@@ -565,7 +613,7 @@ class AppTheme {
         ),
         showDragHandle: true,
         dragHandleColor: HBotColors.neutral300,
-        dragHandleSize: Size(40, 4),
+        dragHandleSize: Size(36, 4),
       ),
 
       // ─── Snackbar ───
@@ -761,22 +809,23 @@ class AppTheme {
 BoxDecoration hbotPrimaryButtonDecoration({bool enabled = true}) {
   return BoxDecoration(
     gradient: enabled ? HBotColors.primaryGradient : null,
-    color: enabled ? null : HBotColors.neutral200,
+    color: enabled ? null : HBotColors.primaryDisabled,
     borderRadius: HBotRadius.mediumRadius,
-    boxShadow: enabled ? HBotShadows.small : null,
+    boxShadow: enabled ? HBotShadows.medium : null,
   );
 }
 
 /// Device card decoration (active/inactive)
+/// Per design spec: white bg, 1px border #E8ECF1, 16px radius
+/// ON state has a 3px left blue accent border
 BoxDecoration hbotDeviceCardDecoration({bool isOn = false}) {
   return BoxDecoration(
-    color: isOn ? HBotColors.deviceOnBackground : HBotColors.deviceOffBackground,
+    color: HBotColors.cardLight,
     borderRadius: HBotRadius.largeRadius,
     border: Border.all(
-      color: isOn ? HBotColors.primary.withOpacity(0.2) : HBotColors.borderLight,
+      color: HBotColors.borderLight,
       width: 1,
     ),
-    boxShadow: isOn ? HBotShadows.small : HBotShadows.none,
   );
 }
 

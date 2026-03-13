@@ -22,14 +22,14 @@ class PriceDisplay extends StatelessWidget {
         children: [
           TextSpan(
             text: currency,
-            style: (textStyle ?? AppTheme.priceTextStyle).copyWith(
+            style: (textStyle ?? const TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight)).copyWith(
               fontSize: (textStyle?.fontSize ?? 17) * 0.8,
-              color: AppTheme.textSecondary,
+              color: HBotColors.textSecondaryLight,
             ),
           ),
           TextSpan(
             text: _formatAmount(amount),
-            style: textStyle ?? AppTheme.priceTextStyle,
+            style: textStyle ?? const TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
           ),
         ],
       ),

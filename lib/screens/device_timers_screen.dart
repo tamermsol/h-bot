@@ -139,10 +139,10 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            backgroundColor: AppTheme.getCardColor(context),
+            backgroundColor: HBotColors.cardLight,
             title: const Row(
               children: [
-                Icon(Icons.warning, color: Colors.orange, size: 24),
+                Icon(Icons.warning, color: HBotColors.warning, size: 24),
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -174,7 +174,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                     '(Note: "All Channels" timers use $maxChannels slots)',
                     style: TextStyle(
                       fontSize: 12,
-                      color: AppTheme.textSecondary.withOpacity(0.8),
+                      color: HBotColors.textSecondaryLight.withOpacity(0.8),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -226,10 +226,10 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              backgroundColor: AppTheme.cardColor,
+              backgroundColor: HBotColors.cardLight,
               title: const Row(
                 children: [
-                  Icon(Icons.warning, color: Colors.orange, size: 24),
+                  Icon(Icons.warning, color: HBotColors.warning, size: 24),
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -356,7 +356,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: const Text('Delete Timer'),
         content: Text(
           'Are you sure you want to delete this timer?\n\n'
@@ -369,7 +369,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: AppTheme.errorColor),
+            style: TextButton.styleFrom(foregroundColor: HBotColors.error),
             child: const Text('Delete'),
           ),
         ],
@@ -395,7 +395,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
               'Timer deleted and disabled on device\n'
               'Freed $slotsFreed slot${slotsFreed > 1 ? 's' : ''} (${_occupiedIndices.length}/16 used)',
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: HBotColors.success,
             duration: const Duration(seconds: 3),
           ),
         );
@@ -436,7 +436,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                   ? 'Timer ${timer.index} set for all channels'
                   : 'Timer ${timer.index} ${timer.enabled ? "enabled" : "disabled"}',
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: HBotColors.success,
             duration: const Duration(seconds: 2),
           ),
         );
@@ -447,7 +447,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to update timer: $e'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 3),
           ),
         );
@@ -526,7 +526,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
               content: Text(
                 'Disabled ${conflictingTimers.length} conflicting timer(s)',
               ),
-              backgroundColor: Colors.orange,
+              backgroundColor: HBotColors.warning,
               duration: const Duration(seconds: 2),
             ),
           );
@@ -588,8 +588,8 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -601,7 +601,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                 fontSize: 12,
                 color: _occupiedIndices.length >= 16
                     ? Colors.orange
-                    : AppTheme.getTextSecondary(context),
+                    : HBotColors.textSecondaryLight,
                 fontWeight: _occupiedIndices.length >= 16
                     ? FontWeight.w600
                     : FontWeight.normal,
@@ -610,8 +610,8 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
           ],
         ),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         actions: [
           if (_isSyncingTime)
             const Padding(
@@ -640,7 +640,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
       floatingActionButton: hasSpace && !_isSyncingTime
           ? FloatingActionButton(
               onPressed: _addTimer,
-              backgroundColor: AppTheme.primaryColor,
+              backgroundColor: HBotColors.primary,
               child: const Icon(Icons.add),
             )
           : null,
@@ -655,7 +655,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
           Icon(
             Icons.timer_off_outlined,
             size: 80,
-            color: AppTheme.textSecondary.withOpacity(0.5),
+            color: HBotColors.textSecondaryLight.withOpacity(0.5),
           ),
           const SizedBox(height: 16),
           Text(
@@ -663,7 +663,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: AppTheme.textSecondary.withOpacity(0.7),
+              color: HBotColors.textSecondaryLight.withOpacity(0.7),
             ),
           ),
           const SizedBox(height: 8),
@@ -671,7 +671,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             'Tap + to create your first timer',
             style: TextStyle(
               fontSize: 14,
-              color: AppTheme.textSecondary.withOpacity(0.5),
+              color: HBotColors.textSecondaryLight.withOpacity(0.5),
             ),
           ),
           const SizedBox(height: 4),
@@ -679,7 +679,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             'Up to 16 local timers supported',
             style: TextStyle(
               fontSize: 12,
-              color: AppTheme.textSecondary.withOpacity(0.4),
+              color: HBotColors.textSecondaryLight.withOpacity(0.4),
             ),
           ),
         ],
@@ -703,14 +703,14 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
     final slotsUsed = timer.output == 0 ? maxChannels : 1;
 
     return Card(
-      color: AppTheme.getCardColor(context),
+      color: HBotColors.cardLight,
       margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        borderRadius: BorderRadius.circular(HBotRadius.medium),
       ),
       child: InkWell(
         onTap: () => _editTimer(timer),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        borderRadius: BorderRadius.circular(HBotRadius.medium),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
@@ -721,10 +721,8 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                 height: 48,
                 decoration: BoxDecoration(
                   color: timer.enabled
-                      ? AppTheme.primaryColor.withOpacity(0.2)
-                      : AppTheme.getTextSecondary(
-                          context,
-                        ).withOpacity(0.1),
+                      ? HBotColors.primary.withOpacity(0.2)
+                      : HBotColors.textSecondaryLight.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -734,8 +732,8 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                       ? Icons.nights_stay
                       : Icons.schedule,
                   color: timer.enabled
-                      ? AppTheme.primaryColor
-                      : AppTheme.getTextSecondary(context),
+                      ? HBotColors.primary
+                      : HBotColors.textSecondaryLight,
                 ),
               ),
               const SizedBox(width: 16),
@@ -755,8 +753,8 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: timer.enabled
-                                ? AppTheme.getTextPrimary(context)
-                                : AppTheme.getTextSecondary(context),
+                                ? HBotColors.textPrimaryLight
+                                : HBotColors.textSecondaryLight,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -793,9 +791,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                       '${timer.output == 0 ? "All Channels" : "Channel ${timer.output}"} • ${timer.getActiveDaysString()}',
                       style: TextStyle(
                         fontSize: 13,
-                        color: AppTheme.getTextSecondary(
-                          context,
-                        ).withOpacity(0.8),
+                        color: HBotColors.textSecondaryLight.withOpacity(0.8),
                       ),
                     ),
                     Row(
@@ -805,9 +801,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                             'Once only • ',
                             style: TextStyle(
                               fontSize: 12,
-                              color: AppTheme.getTextSecondary(
-                                context,
-                              ).withOpacity(0.6),
+                              color: HBotColors.textSecondaryLight.withOpacity(0.6),
                               fontStyle: FontStyle.italic,
                             ),
                           ),
@@ -815,9 +809,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                           'Slots ${timer.index}-${timer.index + slotsUsed - 1}',
                           style: TextStyle(
                             fontSize: 11,
-                            color: AppTheme.getTextSecondary(
-                              context,
-                            ).withOpacity(0.5),
+                            color: HBotColors.textSecondaryLight.withOpacity(0.5),
                             fontFamily: 'monospace',
                           ),
                         ),
@@ -831,13 +823,13 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
               Switch(
                 value: timer.enabled,
                 onChanged: (_) => _toggleTimer(timer),
-                activeColor: AppTheme.primaryColor,
+                activeColor: HBotColors.primary,
               ),
 
               // Delete Button
               IconButton(
                 icon: const Icon(Icons.delete_outline),
-                color: AppTheme.errorColor,
+                color: HBotColors.error,
                 onPressed: () => _deleteTimer(timer),
               ),
             ],

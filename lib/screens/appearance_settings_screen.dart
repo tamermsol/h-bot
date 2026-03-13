@@ -37,47 +37,47 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text(
           'Appearance',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         elevation: 0,
       ),
       body: ListView(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         children: [
           // Theme Mode Section
           Container(
             decoration: BoxDecoration(
-              color: AppTheme.getCardColor(context),
-              borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+              color: HBotColors.cardLight,
+              borderRadius: BorderRadius.circular(HBotRadius.medium),
             ),
             child: ListTile(
-              contentPadding: const EdgeInsets.all(AppTheme.paddingMedium),
+              contentPadding: const EdgeInsets.all(HBotSpacing.space4),
               leading: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: isDark
-                      ? AppTheme.primaryColor.withOpacity(0.2)
-                      : AppTheme.primaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                      ? HBotColors.primary.withOpacity(0.2)
+                      : HBotColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(HBotRadius.small),
                 ),
                 child: Icon(
                   isDark ? Icons.dark_mode : Icons.light_mode,
-                  color: AppTheme.primaryColor,
+                  color: HBotColors.primary,
                   size: 24,
                 ),
               ),
               title: Text(
                 'Dark Mode',
                 style: TextStyle(
-                  color: AppTheme.getTextPrimary(context),
+                  color: HBotColors.textPrimaryLight,
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
                 ),
@@ -87,7 +87,7 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
                     ? 'Dark colors for comfortable viewing'
                     : 'Switch to dark theme for nighttime use',
                 style: TextStyle(
-                  color: AppTheme.getTextSecondary(context),
+                  color: HBotColors.textSecondaryLight,
                   fontSize: 13,
                 ),
               ),
@@ -98,26 +98,26 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
                     value ? ThemeMode.dark : ThemeMode.light,
                   );
                 },
-                activeColor: AppTheme.primaryColor,
+                activeColor: HBotColors.primary,
               ),
             ),
           ),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
           // Info Card
           Container(
-            padding: const EdgeInsets.all(AppTheme.paddingMedium),
+            padding: const EdgeInsets.all(HBotSpacing.space4),
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+              color: HBotColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(HBotRadius.medium),
               border: Border.all(
-                color: AppTheme.primaryColor.withOpacity(0.3),
+                color: HBotColors.primary.withOpacity(0.3),
               ),
             ),
             child: Row(
               children: [
                 Icon(
                   Icons.info_outline,
-                  color: AppTheme.primaryColor,
+                  color: HBotColors.primary,
                   size: 20,
                 ),
                 const SizedBox(width: 12),
@@ -125,7 +125,7 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
                   child: Text(
                     'Theme changes apply immediately across the entire app',
                     style: TextStyle(
-                      color: AppTheme.getTextPrimary(context),
+                      color: HBotColors.textPrimaryLight,
                       fontSize: 13,
                     ),
                   ),

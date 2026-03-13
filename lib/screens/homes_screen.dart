@@ -45,7 +45,7 @@ class _HomesScreenState extends State<HomesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to load homes: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -60,7 +60,7 @@ class _HomesScreenState extends State<HomesScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a home name'),
-          backgroundColor: Colors.red,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -81,7 +81,7 @@ class _HomesScreenState extends State<HomesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Home "${home.name}" created successfully!'),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
           ),
         );
       }
@@ -94,7 +94,7 @@ class _HomesScreenState extends State<HomesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to create home: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -106,7 +106,7 @@ class _HomesScreenState extends State<HomesScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a home name'),
-          backgroundColor: Colors.red,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -136,7 +136,7 @@ class _HomesScreenState extends State<HomesScreen> {
             content: Text(
               'Home "${_nameController.text.trim()}" updated successfully!',
             ),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
           ),
         );
       }
@@ -148,7 +148,7 @@ class _HomesScreenState extends State<HomesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to update home: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -169,7 +169,7 @@ class _HomesScreenState extends State<HomesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Home "${home.name}" deleted successfully!'),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
           ),
         );
       }
@@ -182,7 +182,7 @@ class _HomesScreenState extends State<HomesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to delete home: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -197,7 +197,7 @@ class _HomesScreenState extends State<HomesScreen> {
       builder: (context) {
         debugPrint('🔘 Dialog builder called');
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Create New Home'),
           content: TextField(
             controller: _nameController,
@@ -221,7 +221,7 @@ class _HomesScreenState extends State<HomesScreen> {
                 _createHome();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
+                backgroundColor: HBotColors.primary,
               ),
               child: const Text('Create'),
             ),
@@ -237,7 +237,7 @@ class _HomesScreenState extends State<HomesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Edit Home'),
           content: TextField(
             controller: _nameController,
@@ -255,7 +255,7 @@ class _HomesScreenState extends State<HomesScreen> {
             ElevatedButton(
               onPressed: () => _editHome(home),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
+                backgroundColor: HBotColors.primary,
               ),
               child: const Text('Save'),
             ),
@@ -270,7 +270,7 @@ class _HomesScreenState extends State<HomesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Delete Home'),
           content: Text(
             'Are you sure you want to delete "${home.name}"? This action cannot be undone and will delete all rooms and devices in this home.',
@@ -282,7 +282,7 @@ class _HomesScreenState extends State<HomesScreen> {
             ),
             ElevatedButton(
               onPressed: () => _deleteHome(home),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              style: ElevatedButton.styleFrom(backgroundColor: HBotColors.error),
               child: const Text('Delete'),
             ),
           ],
@@ -297,16 +297,16 @@ class _HomesScreenState extends State<HomesScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text(
           'My Homes',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         elevation: 0,
         actions: [
           IconButton(
@@ -329,28 +329,28 @@ class _HomesScreenState extends State<HomesScreen> {
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.home_outlined, size: 80, color: AppTheme.textHint),
-            const SizedBox(height: AppTheme.paddingLarge),
+            Icon(Icons.home_outlined, size: 80, color: HBotColors.textTertiaryLight),
+            const SizedBox(height: HBotSpacing.space6),
             Text(
               'No Homes Yet',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: AppTheme.getTextPrimary(context),
+                color: HBotColors.textPrimaryLight,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Text(
               'Create your first home to start managing your smart devices',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: AppTheme.getTextSecondary(context),
+                color: HBotColors.textSecondaryLight,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
             ElevatedButton.icon(
               onPressed: () {
                 debugPrint('🏠 Create Your First Home button pressed');
@@ -359,11 +359,11 @@ class _HomesScreenState extends State<HomesScreen> {
               icon: const Icon(Icons.add),
               label: const Text('Create Your First Home'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
+                backgroundColor: HBotColors.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.paddingLarge,
-                  vertical: AppTheme.paddingMedium,
+                  horizontal: HBotSpacing.space6,
+                  vertical: HBotSpacing.space4,
                 ),
               ),
             ),
@@ -377,43 +377,43 @@ class _HomesScreenState extends State<HomesScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return ListView.builder(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       itemCount: _homes.length,
       itemBuilder: (context, index) {
         final home = _homes[index];
         return Card(
-          color: isDark ? AppTheme.cardColor : AppTheme.lightCardColor,
-          margin: const EdgeInsets.only(bottom: AppTheme.paddingMedium),
+          color: isDark ? HBotColors.cardLight : HBotColors.cardLight,
+          margin: const EdgeInsets.only(bottom: HBotSpacing.space4),
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+            borderRadius: BorderRadius.circular(HBotRadius.medium),
             side: isDark
                 ? BorderSide.none
-                : const BorderSide(color: AppTheme.lightCardBorder),
+                : const BorderSide(color: HBotColors.borderLight),
           ),
           child: ListTile(
             leading: Container(
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                color: HBotColors.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(HBotRadius.medium),
               ),
-              child: Icon(Icons.home, color: AppTheme.primaryColor),
+              child: Icon(Icons.home, color: HBotColors.primary),
             ),
             title: Text(
               home.name,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: AppTheme.getTextPrimary(context),
+                color: HBotColors.textPrimaryLight,
               ),
             ),
             subtitle: Text(
               'Created ${_formatDate(home.createdAt)}',
-              style: const TextStyle(color: AppTheme.textSecondary),
+              style: const TextStyle(color: HBotColors.textSecondaryLight),
             ),
             trailing: PopupMenuButton<String>(
-              icon: const Icon(Icons.more_vert, color: AppTheme.textHint),
+              icon: const Icon(Icons.more_vert, color: HBotColors.textTertiaryLight),
               onSelected: (value) async {
                 switch (value) {
                   case 'edit':
@@ -462,10 +462,10 @@ class _HomesScreenState extends State<HomesScreen> {
                 const PopupMenuItem(
                   value: 'delete',
                   child: ListTile(
-                    leading: Icon(Icons.delete_outline, color: Colors.red),
+                    leading: Icon(Icons.delete_outline, color: HBotColors.error),
                     title: Text(
                       'Delete Home',
-                      style: TextStyle(color: Colors.red),
+                      style: TextStyle(color: HBotColors.error),
                     ),
                     contentPadding: EdgeInsets.zero,
                   ),

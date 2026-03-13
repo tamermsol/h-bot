@@ -307,9 +307,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
                           const SizedBox(height: HBotSpacing.space5),
 
-                          // Sign In Button (gradient)
+                          // Sign In Button (gradient, 52px height per design spec)
                           Container(
-                            height: 48,
+                            height: 52,
                             decoration: hbotPrimaryButtonDecoration(enabled: !_isLoading),
                             child: ElevatedButton(
                               onPressed: _isLoading ? null : _signInWithEmail,
@@ -378,9 +378,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
                           const SizedBox(height: HBotSpacing.space5),
 
-                          // Google Sign In Button
+                          // Google Sign In Button (52px height per design spec)
                           SizedBox(
-                            height: 48,
+                            height: 52,
                             child: OutlinedButton.icon(
                               onPressed: _isLoading ? null : _signInWithGoogle,
                               style: OutlinedButton.styleFrom(

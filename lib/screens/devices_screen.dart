@@ -92,7 +92,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to load devices: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -152,13 +152,13 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: Text(title),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         elevation: 0,
         actions: [
           if (widget.home != null)
@@ -195,7 +195,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                   children: [
                     // Search and filter section
                     Padding(
-                      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                      padding: const EdgeInsets.all(HBotSpacing.space4),
                       child: Column(
                         children: [
                           SmartInputField(
@@ -206,7 +206,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                               setState(() {});
                             },
                           ),
-                          const SizedBox(height: AppTheme.paddingMedium),
+                          const SizedBox(height: HBotSpacing.space4),
                           _buildCategoryFilter(),
                         ],
                       ),
@@ -218,13 +218,13 @@ class _DevicesScreenState extends State<DevicesScreen> {
                           ? _buildEmptyState()
                           : GridView.builder(
                               padding: const EdgeInsets.all(
-                                AppTheme.paddingMedium,
+                                HBotSpacing.space4,
                               ),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
-                                    crossAxisSpacing: AppTheme.paddingSmall,
-                                    mainAxisSpacing: AppTheme.paddingSmall,
+                                    crossAxisSpacing: HBotSpacing.space2,
+                                    mainAxisSpacing: HBotSpacing.space2,
                                     childAspectRatio:
                                         1.25, // Match dashboard exactly
                                   ),
@@ -325,11 +325,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
     }
 
     return Card(
-      color: AppTheme.getCardColor(context),
+      color: HBotColors.cardLight,
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () => _navigateToDeviceControl(device),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        borderRadius: BorderRadius.circular(HBotRadius.medium),
         child: Padding(
           padding: const EdgeInsets.all(6),
           child: _buildGridCardContent(
@@ -356,7 +356,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     bool waitingForInitialState,
   ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textPrimary = AppTheme.getTextPrimary(context);
+    final textPrimary = HBotColors.textPrimaryLight;
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -377,11 +377,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
                           (deviceState ||
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
-                      ? AppTheme.primaryColor.withOpacity(0.2)
+                      ? HBotColors.primary.withOpacity(0.2)
                       : (isDark
-                            ? AppTheme.textHint.withOpacity(0.1)
+                            ? HBotColors.textTertiaryLight.withOpacity(0.1)
                             : Colors.white),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                  borderRadius: BorderRadius.circular(HBotRadius.medium),
                 ),
                 child: Icon(
                   _getDeviceIcon(device.deviceType),
@@ -391,10 +391,10 @@ class _DevicesScreenState extends State<DevicesScreen> {
                           (deviceState ||
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
-                      ? AppTheme.primaryColor
+                      ? HBotColors.primary
                       : (isDark
-                            ? AppTheme.textHint
-                            : AppTheme.lightTextSecondary),
+                            ? HBotColors.textTertiaryLight
+                            : HBotColors.textSecondaryLight),
                   size: 32,
                 ),
               ),
@@ -409,7 +409,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                     color: isOnline ? Colors.green : Colors.red.shade400,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isDark ? AppTheme.surfaceColor : Colors.white,
+                      color: isDark ? HBotColors.surfaceLight : Colors.white,
                       width: 2,
                     ),
                   ),
@@ -454,7 +454,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        AppTheme.primaryColor,
+                        HBotColors.primary,
                       ),
                     ),
                   )
@@ -480,8 +480,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
     bool isControllable,
     bool isOnline,
   ) {
-    final textPrimary = AppTheme.getTextPrimary(context);
-    final textHint = AppTheme.getTextHint(context);
+    final textPrimary = HBotColors.textPrimaryLight;
+    final textHint = HBotColors.textTertiaryLight;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -490,7 +490,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         Text(
           '$position%',
           style: const TextStyle(
-            color: AppTheme.primaryColor,
+            color: HBotColors.primary,
             fontSize: 10,
             fontWeight: FontWeight.w600,
           ),
@@ -579,7 +579,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
           return Padding(
             padding: EdgeInsets.only(
-              right: index < _categories.length - 1 ? AppTheme.paddingSmall : 0,
+              right: index < _categories.length - 1 ? HBotSpacing.space2 : 0,
             ),
             child: FilterChip(
               label: Text(category),
@@ -589,20 +589,20 @@ class _DevicesScreenState extends State<DevicesScreen> {
                   _selectedCategory = category;
                 });
               },
-              backgroundColor: AppTheme.getCardColor(context),
-              selectedColor: AppTheme.primaryColor.withOpacity(0.2),
+              backgroundColor: HBotColors.cardLight,
+              selectedColor: HBotColors.primary.withOpacity(0.2),
               labelStyle: TextStyle(
                 color: isSelected
-                    ? AppTheme.primaryColor
-                    : AppTheme.getTextSecondary(context),
+                    ? HBotColors.primary
+                    : HBotColors.textSecondaryLight,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
               side: BorderSide(
                 color: isSelected
-                    ? AppTheme.primaryColor
+                    ? HBotColors.primary
                     : (Theme.of(context).brightness == Brightness.dark
                           ? Colors.transparent
-                          : AppTheme.lightCardBorder),
+                          : HBotColors.borderLight),
               ),
             ),
           );
@@ -614,17 +614,17 @@ class _DevicesScreenState extends State<DevicesScreen> {
   Widget _buildEmptyState() {
     return Center(
       child: Container(
-        margin: const EdgeInsets.all(AppTheme.paddingLarge),
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        margin: const EdgeInsets.all(HBotSpacing.space6),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.6),
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          borderRadius: BorderRadius.circular(HBotRadius.medium),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(Icons.devices_outlined, size: 64, color: Colors.white),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             const Text(
               'No devices found',
               style: TextStyle(
@@ -633,7 +633,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             Text(
               'Try adjusting your search or filter',
               style: TextStyle(
@@ -681,7 +681,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 Text('Connection lost. Please check your network.'),
               ],
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
         return;
@@ -710,7 +710,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to control shutter: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -726,7 +726,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
             content: Text(
               'Device ${device.deviceName} is not configured for control',
             ),
-            backgroundColor: Colors.orange,
+            backgroundColor: HBotColors.warning,
           ),
         );
         return;
@@ -743,7 +743,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 Text('Connection lost. Please check your network.'),
               ],
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
         return;
@@ -761,7 +761,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to control device: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -771,25 +771,25 @@ class _DevicesScreenState extends State<DevicesScreen> {
   Widget _buildNoHomeSelected() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.home_outlined, size: 80, color: AppTheme.textHint),
-            const SizedBox(height: AppTheme.paddingLarge),
+            Icon(Icons.home_outlined, size: 80, color: HBotColors.textTertiaryLight),
+            const SizedBox(height: HBotSpacing.space6),
             Text(
               'No Home Selected',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: AppTheme.textPrimary,
+                color: HBotColors.textPrimaryLight,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Text(
               'Please select a home first to view and manage devices',
               style: Theme.of(
                 context,
-              ).textTheme.bodyLarge?.copyWith(color: AppTheme.textSecondary),
+              ).textTheme.bodyLarge?.copyWith(color: HBotColors.textSecondaryLight),
               textAlign: TextAlign.center,
             ),
           ],
@@ -803,13 +803,13 @@ class _DevicesScreenState extends State<DevicesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Add Device'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.wifi, color: AppTheme.primaryColor),
+                leading: const Icon(Icons.wifi, color: HBotColors.primary),
                 title: const Text('HBOT Device'),
                 subtitle: const Text('Add HBOT device via Wi-Fi'),
                 onTap: () {
@@ -852,10 +852,10 @@ class _DevicesScreenState extends State<DevicesScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: const Row(
           children: [
-            Icon(Icons.warning, color: Colors.red),
+            Icon(Icons.warning, color: HBotColors.error),
             SizedBox(width: 8),
             Text('Delete Device'),
           ],
@@ -866,12 +866,12 @@ class _DevicesScreenState extends State<DevicesScreen> {
           children: [
             Text(
               'Are you sure you want to delete "${device.deviceName}"?',
-              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16),
+              style: const TextStyle(color: HBotColors.textPrimaryLight, fontSize: 16),
             ),
             const SizedBox(height: 12),
             const Text(
               'This action cannot be undone. All device data, settings, and channel configurations will be permanently removed.',
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
+              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 14),
             ),
           ],
         ),
@@ -880,7 +880,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
             onPressed: () => Navigator.pop(context),
             child: const Text(
               'Cancel',
-              style: TextStyle(color: AppTheme.textSecondary),
+              style: TextStyle(color: HBotColors.textSecondaryLight),
             ),
           ),
           TextButton(
@@ -904,15 +904,15 @@ class _DevicesScreenState extends State<DevicesScreen> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           content: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircularProgressIndicator(color: AppTheme.primaryColor),
+              CircularProgressIndicator(color: HBotColors.primary),
               SizedBox(width: 16),
               Text(
                 'Deleting device...',
-                style: TextStyle(color: AppTheme.textPrimary),
+                style: TextStyle(color: HBotColors.textPrimaryLight),
               ),
             ],
           ),
@@ -938,7 +938,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Device "${device.deviceName}" deleted successfully'),
-            backgroundColor: Colors.green,
+            backgroundColor: HBotColors.success,
             duration: const Duration(seconds: 3),
           ),
         );
@@ -974,17 +974,17 @@ class _DevicesScreenState extends State<DevicesScreen> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            backgroundColor: AppTheme.cardColor,
+            backgroundColor: HBotColors.cardLight,
             title: Row(
               children: [
-                Icon(errorIcon, color: Colors.red),
+                Icon(errorIcon, color: HBotColors.error),
                 const SizedBox(width: 8),
                 const Text('Delete Failed'),
               ],
             ),
             content: Text(
               errorMessage,
-              style: const TextStyle(color: AppTheme.textPrimary),
+              style: const TextStyle(color: HBotColors.textPrimaryLight),
             ),
             actions: [
               TextButton(

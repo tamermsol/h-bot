@@ -1,0 +1,131 @@
+import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
+import 'auth_wrapper.dart';
+
+/// Splash / Launch screen per design spec (04-SCREEN-DESIGNS.md Section 1)
+/// Background: $surfaceBackground (#F8F9FB)
+/// Centered logo placeholder (gradient "H" in rounded square 80x80)
+/// "H-Bot" gradient text ($displayLarge 32/700)
+/// "Smart Home, Simplified" in $textSecondary
+/// Auto-navigates after 2s to AuthWrapper
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _fadeController = AnimationController(
+      duration: HBotDurations.slow,
+      vsync: this,
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: HBotCurves.decelerate,
+    );
+
+    _fadeController.forward();
+
+    // Auto-navigate after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const AuthWrapper(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            transitionDuration: HBotDurations.slow,
+          ),
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: HBotColors.backgroundLight,
+      body: Center(
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Logo placeholder: gradient-filled rounded square 80x80 with "H"
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  gradient: HBotColors.primaryGradient,
+                  borderRadius: BorderRadius.circular(HBotRadius.large),
+                ),
+                alignment: Alignment.center,
+                child: const Text(
+                  'H',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 40,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    height: 1,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: HBotSpacing.space6),
+
+              // "H-Bot" in gradient text ($displayLarge 32/700)
+              ShaderMask(
+                shaderCallback: (bounds) =>
+                    HBotColors.primaryGradient.createShader(bounds),
+                child: const Text(
+                  'H-Bot',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    letterSpacing: -0.5,
+                    height: 1.25,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: HBotSpacing.space2),
+
+              // "Smart Home, Simplified" in $textSecondary
+              const Text(
+                'Smart Home, Simplified',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: HBotColors.textSecondaryLight,
+                  letterSpacing: -0.2,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

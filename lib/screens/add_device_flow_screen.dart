@@ -355,23 +355,86 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     }
   }
 
+  /// Step indicator widget
+  Widget _buildStepIndicator() {
+    final steps = ['WiFi', 'Find', 'Connect', 'Done'];
+    final currentIndex = _currentStep.index;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: HBotSpacing.space6,
+        vertical: HBotSpacing.space3,
+      ),
+      child: Row(
+        children: List.generate(steps.length * 2 - 1, (i) {
+          if (i.isOdd) {
+            // Connector line
+            final stepIndex = i ~/ 2;
+            final isCompleted = stepIndex < currentIndex;
+            return Expanded(
+              child: Container(
+                height: 2,
+                color: isCompleted ? HBotColors.primary : HBotColors.neutral200,
+              ),
+            );
+          }
+          // Dot
+          final stepIndex = i ~/ 2;
+          final isActive = stepIndex == currentIndex;
+          final isCompleted = stepIndex < currentIndex;
+          return Container(
+            width: isActive ? 32 : 24,
+            height: isActive ? 32 : 24,
+            decoration: BoxDecoration(
+              gradient: (isActive || isCompleted) ? HBotColors.primaryGradient : null,
+              color: (isActive || isCompleted) ? null : HBotColors.neutral200,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: isCompleted
+                  ? const Icon(Icons.check, size: 14, color: HBotColors.textOnPrimary)
+                  : Text(
+                      '${stepIndex + 1}',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: isActive ? 14 : 12,
+                        fontWeight: FontWeight.w600,
+                        color: (isActive || isCompleted)
+                            ? HBotColors.textOnPrimary
+                            : HBotColors.textTertiaryLight,
+                      ),
+                    ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    Widget body = Column(
+      children: [
+        _buildStepIndicator(),
+        Expanded(child: _buildCurrentStep()),
+      ],
+    );
 
-    // iOS: Skip permission gate - location permission only needed for auto-detect SSID
-    // Local Network permission will be requested automatically when accessing 192.168.4.1
+    // iOS: Skip permission gate
     if (isIOS) {
       return Scaffold(
-        backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+        backgroundColor: HBotColors.backgroundLight,
         appBar: AppBar(
-          backgroundColor: isDark
-              ? AppTheme.backgroundColor
-              : AppTheme.lightBackgroundColor,
-          title: const Text('Add Device'),
+          backgroundColor: HBotColors.backgroundLight,
+          title: const Text(
+            'Add Device',
+            style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
+          ),
           elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.pop(context),
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.bug_report, size: 20),
@@ -380,33 +443,34 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             ),
           ],
         ),
-        body: _buildCurrentStep(),
+        body: body,
       );
     }
 
-    // Android: Keep permission gate for location and nearby WiFi devices permissions
+    // Android: Keep permission gate
     return WiFiPermissionGate(
       title: 'Add Device',
       description:
           'Wi-Fi and location permissions are required to connect to devices and read network information.',
       onPermissionsGranted: () {
-        // Refresh SSID when permissions are granted
         _refreshCurrentSSID();
-        // Also refresh device discovery
         if (_currentStep == PairingStep.deviceDiscovery) {
           _startDeviceDiscovery();
         }
       },
       child: Scaffold(
-        backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+        backgroundColor: HBotColors.backgroundLight,
         appBar: AppBar(
-          backgroundColor: isDark
-              ? AppTheme.backgroundColor
-              : AppTheme.lightBackgroundColor,
-          title: const Text('Add Device'),
+          backgroundColor: HBotColors.backgroundLight,
+          title: const Text(
+            'Add Device',
+            style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w600),
+          ),
           elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.pop(context),
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.bug_report, size: 20),
@@ -415,7 +479,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             ),
           ],
         ),
-        body: _buildCurrentStep(),
+        body: body,
       ),
     );
   }
@@ -437,11 +501,11 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
   Widget _buildWiFiSetupStep() {
     return SingleChildScrollView(
       padding: EdgeInsets.only(
-        left: AppTheme.paddingLarge,
-        right: AppTheme.paddingLarge,
-        top: AppTheme.paddingLarge,
+        left: HBotSpacing.space6,
+        right: HBotSpacing.space6,
+        top: HBotSpacing.space6,
         bottom:
-            AppTheme.paddingLarge + MediaQuery.of(context).viewInsets.bottom,
+            HBotSpacing.space6 + MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Center(
         child: ConstrainedBox(
@@ -451,46 +515,46 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
         children: [
           const Text(
             'Choose a 2.4GHz WiFi for device pairing and enter the right password',
-            style: TextStyle(fontSize: 16, color: AppTheme.textSecondary),
+            style: TextStyle(fontSize: 16, color: HBotColors.textSecondaryLight),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           const Text(
             'If your 2.4GHz WiFi and 5GHz WiFi share the same WiFi SSID, you\'re recommended to change your router settings or try compatible pairing mode.',
-            style: TextStyle(fontSize: 14, color: AppTheme.textSecondary),
+            style: TextStyle(fontSize: 14, color: HBotColors.textSecondaryLight),
           ),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // 2.4GHz indicator
           Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.green, size: 20),
-              const SizedBox(width: AppTheme.paddingSmall),
+              Icon(Icons.check_circle, color: HBotColors.success, size: 20),
+              const SizedBox(width: HBotSpacing.space2),
               const Text(
                 'WiFi-2.4GHz',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: Colors.green,
+                  color: HBotColors.success,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Wi-Fi SSID input - auto-detected or manual
           if (_currentSSID != null && !_manualSSIDEntry && _ssidFromLiveDetection)
             // Auto-detected SSID (live from WiFi)
             Container(
-              padding: const EdgeInsets.all(AppTheme.paddingMedium),
+              padding: const EdgeInsets.all(HBotSpacing.space4),
               decoration: BoxDecoration(
-                color: Colors.green.shade50,
-                border: Border.all(color: Colors.green.shade300),
+                color: HBotColors.success.shade50,
+                border: Border.all(color: HBotColors.success.shade300),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.wifi, color: Colors.green),
-                  const SizedBox(width: AppTheme.paddingMedium),
+                  const Icon(Icons.wifi, color: HBotColors.success),
+                  const SizedBox(width: HBotSpacing.space4),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -504,7 +568,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                         ),
                         const Text(
                           'Auto-detected',
-                          style: TextStyle(fontSize: 12, color: Colors.green),
+                          style: TextStyle(fontSize: 12, color: HBotColors.success),
                         ),
                       ],
                     ),
@@ -537,11 +601,11 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     prefixIcon: const Icon(Icons.wifi),
                   ),
                 ),
-                const SizedBox(height: AppTheme.paddingSmall),
+                const SizedBox(height: HBotSpacing.space2),
                 Container(
-                  padding: const EdgeInsets.all(AppTheme.paddingSmall),
+                  padding: const EdgeInsets.all(HBotSpacing.space2),
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
+                    color: HBotColors.primary.shade50,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Row(
@@ -549,22 +613,22 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       Icon(
                         Icons.info_outline,
                         size: 16,
-                        color: Colors.blue.shade700,
+                        color: HBotColors.primary.shade700,
                       ),
-                      const SizedBox(width: AppTheme.paddingSmall),
+                      const SizedBox(width: HBotSpacing.space2),
                       Expanded(
                         child: Text(
                           'If your router uses the same name for 2.4GHz and 5GHz, make sure you\'re connected to the 2.4GHz band.',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.blue.shade700,
+                            color: HBotColors.primary.shade700,
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: AppTheme.paddingSmall),
+                const SizedBox(height: HBotSpacing.space2),
                 ElevatedButton.icon(
                   onPressed: _isDetectingSSID ? null : _refreshCurrentSSID,
                   icon: _isDetectingSSID 
@@ -603,7 +667,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 ],
               ],
             ),
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           // Password field
           TextField(
@@ -626,7 +690,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               ),
             ),
           ),
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           // Remember password checkbox
           Row(
@@ -643,7 +707,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             ],
           ),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Next button
           Center(
@@ -656,10 +720,10 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       ? _proceedToDeviceDiscovery
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: HBotColors.primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
-                      vertical: AppTheme.paddingMedium,
+                      vertical: HBotSpacing.space4,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -760,13 +824,13 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
     // Android can scan and connect automatically
     return Padding(
-      padding: const EdgeInsets.all(AppTheme.paddingLarge),
+      padding: const EdgeInsets.all(HBotSpacing.space6),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
         children: [
-          const SizedBox(height: AppTheme.paddingLarge * 2),
+          const SizedBox(height: HBotSpacing.space6 * 2),
 
           // Searching animation
           Container(
@@ -776,8 +840,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  AppTheme.primaryColor.withOpacity(0.3),
-                  AppTheme.primaryColor.withOpacity(0.1),
+                  HBotColors.primary.withOpacity(0.3),
+                  HBotColors.primary.withOpacity(0.1),
                   Colors.transparent,
                 ],
               ),
@@ -788,18 +852,18 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppTheme.primaryColor.withOpacity(0.2),
+                  color: HBotColors.primary.withOpacity(0.2),
                 ),
                 child: const Icon(
                   Icons.wifi_find,
                   size: 50,
-                  color: AppTheme.primaryColor,
+                  color: HBotColors.primary,
                 ),
               ),
             ),
           ),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           Text(
             _isConnectedToDevice
@@ -808,38 +872,38 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: AppTheme.textPrimary,
+              color: HBotColors.textPrimaryLight,
             ),
           ),
 
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           Text(
             _statusMessage.isNotEmpty
                 ? _statusMessage
                 : 'Please set the device in pairing mode based on the user manual.',
-            style: const TextStyle(fontSize: 16, color: AppTheme.textSecondary),
+            style: const TextStyle(fontSize: 16, color: HBotColors.textSecondaryLight),
             textAlign: TextAlign.center,
           ),
 
           if (_availableDeviceAPs.isNotEmpty) ...[
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
             Text(
               'Found ${_availableDeviceAPs.length} device${_availableDeviceAPs.length == 1 ? '' : 's'}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppTheme.textPrimary,
+                color: HBotColors.textPrimaryLight,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             ...(_availableDeviceAPs.map(
               (ap) => Card(
                 child: ListTile(
                   leading: const Icon(Icons.wifi),
                   title: Text(ap),
                   trailing: _selectedDeviceAP == ap
-                      ? const Icon(Icons.check_circle, color: Colors.green)
+                      ? const Icon(Icons.check_circle, color: HBotColors.success)
                       : null,
                   onTap: () => _connectToDeviceAP(ap),
                 ),
@@ -851,7 +915,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
           if (_isLoading) ...[
             const CircularProgressIndicator(),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
           ],
 
           // Refresh button only
@@ -861,7 +925,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               icon: const Icon(Icons.refresh),
               label: const Text('Refresh'),
               style: TextButton.styleFrom(
-                foregroundColor: AppTheme.primaryColor,
+                foregroundColor: HBotColors.primary,
               ),
             ),
           ),
@@ -876,17 +940,17 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 600),
         child: Padding(
-          padding: const EdgeInsets.all(AppTheme.paddingLarge),
+          padding: const EdgeInsets.all(HBotSpacing.space6),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
 
               // Step indicator pill
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  color: HBotColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text(
@@ -894,7 +958,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.primaryColor,
+                    color: HBotColors.primary,
                   ),
                 ),
               ),
@@ -909,8 +973,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      AppTheme.primaryColor.withOpacity(0.2),
-                      AppTheme.primaryColor.withOpacity(0.05),
+                      HBotColors.primary.withOpacity(0.2),
+                      HBotColors.primary.withOpacity(0.05),
                       Colors.transparent,
                     ],
                   ),
@@ -921,12 +985,12 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     height: 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppTheme.primaryColor.withOpacity(0.15),
+                      color: HBotColors.primary.withOpacity(0.15),
                     ),
                     child: Icon(
                       _isLoading ? Icons.wifi : Icons.wifi_find,
                       size: 32,
-                      color: AppTheme.primaryColor,
+                      color: HBotColors.primary,
                     ),
                   ),
                 ),
@@ -947,7 +1011,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
 
               // Instructions
               Padding(
@@ -980,7 +1044,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 ),
               ),
 
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
 
               // Main action button — Open WiFi Settings (always tappable)
               SizedBox(
@@ -1012,7 +1076,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: HBotColors.primary,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -1023,11 +1087,11 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               ),
 
               if (_isLoading) ...[
-                const SizedBox(height: AppTheme.paddingMedium),
+                const SizedBox(height: HBotSpacing.space4),
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withOpacity(0.08),
+                    color: HBotColors.primary.withOpacity(0.08),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -1038,7 +1102,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                         height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          color: AppTheme.primaryColor.withOpacity(0.6),
+                          color: HBotColors.primary.withOpacity(0.6),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -1096,7 +1160,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           height: 28,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppTheme.primaryColor.withOpacity(0.15),
+            color: HBotColors.primary.withOpacity(0.15),
           ),
           child: Center(
             child: Text(
@@ -1104,7 +1168,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: AppTheme.primaryColor,
+                color: HBotColors.primary,
               ),
             ),
           ),
@@ -1215,49 +1279,49 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
   // iOS-specific manual connection guide (fallback)
   Widget _buildIOSManualConnectionGuide() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.paddingLarge),
+      padding: const EdgeInsets.all(HBotSpacing.space6),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           // Header
           Center(
             child: Column(
               children: [
-                Icon(Icons.wifi_find, size: 80, color: AppTheme.primaryColor),
-                const SizedBox(height: AppTheme.paddingMedium),
+                Icon(Icons.wifi_find, size: 80, color: HBotColors.primary),
+                const SizedBox(height: HBotSpacing.space4),
                 const Text(
                   'Connect to Your Device',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.textPrimary,
+                    color: HBotColors.textPrimaryLight,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: AppTheme.paddingSmall),
+                const SizedBox(height: HBotSpacing.space2),
                 const Text(
                   'We\'ll automatically detect when you connect',
-                  style: TextStyle(fontSize: 16, color: AppTheme.textSecondary),
+                  style: TextStyle(fontSize: 16, color: HBotColors.textSecondaryLight),
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Auto-detection status
           Container(
-            padding: const EdgeInsets.all(AppTheme.paddingMedium),
+            padding: const EdgeInsets.all(HBotSpacing.space4),
             decoration: BoxDecoration(
-              color: Colors.blue.shade50,
+              color: HBotColors.primary.shade50,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.blue.shade200, width: 2),
+              border: Border.all(color: HBotColors.primary.shade200, width: 2),
             ),
             child: Row(
               children: [
@@ -1271,7 +1335,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: AppTheme.paddingMedium),
+                const SizedBox(width: HBotSpacing.space4),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1281,7 +1345,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
-                          color: Colors.blue.shade700,
+                          color: HBotColors.primary.shade700,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -1291,7 +1355,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                             : 'Connect to your device and we\'ll detect it automatically',
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.blue.shade700,
+                          color: HBotColors.primary.shade700,
                         ),
                       ),
                     ],
@@ -1301,14 +1365,14 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             ),
           ),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Simplified steps
           const Text(
             'Quick Steps:',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           _buildIOSStep(
             1,
@@ -1335,25 +1399,25 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             Icons.check_circle,
           ),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Important notes
           Container(
-            padding: const EdgeInsets.all(AppTheme.paddingMedium),
+            padding: const EdgeInsets.all(HBotSpacing.space4),
             decoration: BoxDecoration(
-              color: Colors.orange.shade50,
+              color: HBotColors.warning.shade50,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.orange.shade200),
+              border: Border.all(color: HBotColors.warning.shade200),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
                   Icons.info_outline,
-                  color: Colors.orange.shade700,
+                  color: HBotColors.warning.shade700,
                   size: 20,
                 ),
-                const SizedBox(width: AppTheme.paddingSmall),
+                const SizedBox(width: HBotSpacing.space2),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1363,7 +1427,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
-                          color: Colors.orange.shade700,
+                          color: HBotColors.warning.shade700,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -1371,7 +1435,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                         'Please tap "OK" when prompted to allow device communication',
                         style: TextStyle(
                           fontSize: 13,
-                          color: Colors.orange.shade700,
+                          color: HBotColors.warning.shade700,
                         ),
                       ),
                     ],
@@ -1381,7 +1445,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             ),
           ),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Manual check button (optional, if auto-detection not working)
           Center(
@@ -1395,7 +1459,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   label: const Text('Check Connection Now'),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
-                      vertical: AppTheme.paddingMedium,
+                      vertical: HBotSpacing.space4,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -1405,7 +1469,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               ),
             ),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 400),
@@ -1423,7 +1487,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           ),
 
           if (_isLoading) ...[
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             const Center(child: CircularProgressIndicator()),
           ],
         ],
@@ -1438,7 +1502,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     IconData icon,
   ) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: AppTheme.paddingMedium),
+      padding: const EdgeInsets.only(bottom: HBotSpacing.space4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1447,7 +1511,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             height: 40,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppTheme.primaryColor,
+              color: HBotColors.primary,
             ),
             child: Center(
               child: Text(
@@ -1460,14 +1524,14 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               ),
             ),
           ),
-          const SizedBox(width: AppTheme.paddingMedium),
+          const SizedBox(width: HBotSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Icon(icon, size: 20, color: AppTheme.primaryColor),
+                    Icon(icon, size: 20, color: HBotColors.primary),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -1485,7 +1549,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   description,
                   style: const TextStyle(
                     fontSize: 14,
-                    color: AppTheme.textSecondary,
+                    color: HBotColors.textSecondaryLight,
                   ),
                 ),
               ],
@@ -1534,7 +1598,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               ElevatedButton(
                 onPressed: () => Navigator.pop(context, true),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor,
+                  backgroundColor: HBotColors.primary,
                 ),
                 child: const Text('Continue Anyway'),
               ),
@@ -1624,41 +1688,41 @@ Troubleshooting:
   // Step 3: Provisioning
   Widget _buildProvisioningStep() {
     return Padding(
-      padding: const EdgeInsets.all(AppTheme.paddingLarge),
+      padding: const EdgeInsets.all(HBotSpacing.space6),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
         children: [
-          const SizedBox(height: AppTheme.paddingLarge * 2),
+          const SizedBox(height: HBotSpacing.space6 * 2),
 
           const CircularProgressIndicator(),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           const Text(
             'Configuring Device...',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              color: AppTheme.textPrimary,
+              color: HBotColors.textPrimaryLight,
             ),
           ),
 
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           Text(
             _statusMessage.isNotEmpty
                 ? _statusMessage
                 : 'Sending Wi-Fi credentials to your device.',
-            style: const TextStyle(fontSize: 16, color: AppTheme.textSecondary),
+            style: const TextStyle(fontSize: 16, color: HBotColors.textSecondaryLight),
             textAlign: TextAlign.center,
           ),
 
           if (_discoveredDevice != null) ...[
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                padding: const EdgeInsets.all(HBotSpacing.space4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1669,7 +1733,7 @@ Troubleshooting:
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(height: AppTheme.paddingSmall),
+                    const SizedBox(height: HBotSpacing.space2),
                     Text('Name: ${_discoveredDevice!.module}'),
                     Text('Channels: ${_discoveredDevice!.channels}'),
                   ],
@@ -1695,19 +1759,19 @@ Troubleshooting:
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
+                backgroundColor: HBotColors.primary,
                 minimumSize: const Size(double.infinity, 50),
               ),
               child: const Text('Retry', style: TextStyle(color: Colors.white)),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
           ],
 
           // Debug log (for development)
           if (_debugLog.isNotEmpty) ...[
             Container(
               height: 100,
-              padding: const EdgeInsets.all(AppTheme.paddingSmall),
+              padding: const EdgeInsets.all(HBotSpacing.space2),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(8),
@@ -1728,37 +1792,37 @@ Troubleshooting:
   // Step 4: Success (like competitor's 6.jpeg and 7.jpeg)
   Widget _buildSuccessStep() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.paddingLarge),
+      padding: const EdgeInsets.all(HBotSpacing.space6),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
         children: [
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
-          const Icon(Icons.check_circle, size: 80, color: Colors.green),
+          const Icon(Icons.check_circle, size: 80, color: HBotColors.success),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           const Text(
             'Device Added Successfully!',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: AppTheme.textPrimary,
+              color: HBotColors.textPrimaryLight,
             ),
             textAlign: TextAlign.center,
           ),
 
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           const Text(
             'Your device is now connected and ready to use. You can control it below or from the home screen.',
-            style: TextStyle(fontSize: 16, color: AppTheme.textSecondary),
+            style: TextStyle(fontSize: 16, color: HBotColors.textSecondaryLight),
             textAlign: TextAlign.center,
           ),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Device control widget
           if (_createdDevice != null) ...[
@@ -1768,12 +1832,12 @@ Troubleshooting:
               showBulkControls: false,
             ),
 
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Device rename option
             Card(
               child: ListTile(
-                leading: const Icon(Icons.edit, color: AppTheme.primaryColor),
+                leading: const Icon(Icons.edit, color: HBotColors.primary),
                 title: const Text('Rename Device'),
                 subtitle: Text('Current name: ${_createdDevice!.deviceName}'),
                 trailing: const Icon(Icons.chevron_right),
@@ -1781,12 +1845,12 @@ Troubleshooting:
               ),
             ),
 
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Room selection
             Card(
               child: ListTile(
-                leading: const Icon(Icons.room, color: AppTheme.primaryColor),
+                leading: const Icon(Icons.room, color: HBotColors.primary),
                 title: const Text('Choose Room'),
                 subtitle: Text(_selectedRoom?.name ?? 'No room selected'),
                 trailing: const Icon(Icons.chevron_right),
@@ -1795,7 +1859,7 @@ Troubleshooting:
             ),
           ],
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Action buttons
           Column(
@@ -1805,10 +1869,10 @@ Troubleshooting:
                 child: ElevatedButton(
                   onPressed: _finishPairing,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: HBotColors.primary,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
-                      vertical: AppTheme.paddingMedium,
+                      vertical: HBotSpacing.space4,
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -1820,7 +1884,7 @@ Troubleshooting:
                   ),
                 ),
               ),
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
@@ -1841,7 +1905,7 @@ Troubleshooting:
                     'Add Another Device',
                     style: TextStyle(
                       fontSize: 16,
-                      color: AppTheme.primaryColor,
+                      color: HBotColors.primary,
                     ),
                   ),
                 ),
@@ -2681,7 +2745,7 @@ Troubleshooting:
                   ? 'Device moved to ${room.name}'
                   : 'Device moved to main area',
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: HBotColors.success,
           ),
         );
       }
@@ -2691,7 +2755,7 @@ Troubleshooting:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Unable to move device. Please try again.'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -2709,7 +2773,7 @@ Troubleshooting:
         return AlertDialog(
           title: const Row(
             children: [
-              Icon(Icons.wifi_off, color: Colors.orange),
+              Icon(Icons.wifi_off, color: HBotColors.warning),
               SizedBox(width: 8),
               Text('Network Issue'),
             ],
@@ -2723,9 +2787,9 @@ Troubleshooting:
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: HBotColors.primary.shade50,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.blue.shade200),
+                  border: Border.all(color: HBotColors.primary.shade200),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -2789,7 +2853,7 @@ Troubleshooting:
         return AlertDialog(
           title: const Row(
             children: [
-              Icon(Icons.error_outline, color: Colors.red),
+              Icon(Icons.error_outline, color: HBotColors.error),
               SizedBox(width: 8),
               Text('Device Setup Error'),
             ],
@@ -2803,9 +2867,9 @@ Troubleshooting:
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.red.shade50,
+                  color: HBotColors.error.shade50,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.red.shade200),
+                  border: Border.all(color: HBotColors.error.shade200),
                 ),
                 child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

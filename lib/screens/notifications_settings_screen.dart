@@ -108,7 +108,7 @@ class _NotificationsSettingsScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
-          backgroundColor: AppTheme.accentColor,
+          backgroundColor: HBotColors.primaryLight,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -119,7 +119,7 @@ class _NotificationsSettingsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: const Text('Permission Denied'),
         content: const Text(
           'Notification permission was denied. You can enable it later from your device settings or try again.',
@@ -145,7 +145,7 @@ class _NotificationsSettingsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: const Text('Permission Required'),
         content: const Text(
           'Notification permission is permanently denied. Please enable it from your device settings to receive notifications.',
@@ -173,19 +173,19 @@ class _NotificationsSettingsScreenState
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Notifications'),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         elevation: 0,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(AppTheme.paddingLarge),
+              padding: const EdgeInsets.all(HBotSpacing.space6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -194,24 +194,24 @@ class _NotificationsSettingsScreenState
                     'Notification Preferences',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.getTextPrimary(context),
+                      color: HBotColors.textPrimaryLight,
                     ),
                   ),
-                  const SizedBox(height: AppTheme.paddingSmall),
+                  const SizedBox(height: HBotSpacing.space2),
                   Text(
                     'Manage how you receive notifications from HBOT',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: AppTheme.getTextSecondary(context),
+                      color: HBotColors.textSecondaryLight,
                     ),
                   ),
-                  const SizedBox(height: AppTheme.paddingLarge),
+                  const SizedBox(height: HBotSpacing.space6),
 
                   // Enable/Disable Notifications
                   Container(
                     decoration: BoxDecoration(
-                      color: AppTheme.getCardColor(context),
+                      color: HBotColors.cardLight,
                       borderRadius: BorderRadius.circular(
-                        AppTheme.radiusMedium,
+                        HBotRadius.medium,
                       ),
                     ),
                     child: SwitchListTile(
@@ -221,7 +221,7 @@ class _NotificationsSettingsScreenState
                         'Enable Notifications',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w500,
-                          color: AppTheme.getTextPrimary(context),
+                          color: HBotColors.textPrimaryLight,
                         ),
                       ),
                       subtitle: Text(
@@ -229,19 +229,17 @@ class _NotificationsSettingsScreenState
                             ? 'You will receive notifications about device status, automations, and updates'
                             : 'Turn on to receive notifications',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.getTextSecondary(context),
+                          color: HBotColors.textSecondaryLight,
                         ),
                       ),
                       secondary: Container(
-                        padding: const EdgeInsets.all(AppTheme.paddingSmall),
+                        padding: const EdgeInsets.all(HBotSpacing.space2),
                         decoration: BoxDecoration(
                           color: _notificationsEnabled
-                              ? AppTheme.primaryColor.withOpacity(0.1)
-                              : AppTheme.getTextSecondary(
-                                  context,
-                                ).withOpacity(0.1),
+                              ? HBotColors.primary.withOpacity(0.1)
+                              : HBotColors.textSecondaryLight.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(
-                            AppTheme.radiusSmall,
+                            HBotRadius.small,
                           ),
                         ),
                         child: Icon(
@@ -249,25 +247,25 @@ class _NotificationsSettingsScreenState
                               ? Icons.notifications_active
                               : Icons.notifications_off_outlined,
                           color: _notificationsEnabled
-                              ? AppTheme.primaryColor
-                              : AppTheme.getTextSecondary(context),
+                              ? HBotColors.primary
+                              : HBotColors.textSecondaryLight,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: AppTheme.paddingLarge),
+                  const SizedBox(height: HBotSpacing.space6),
 
                   // Permission Status Info
                   if (_permissionStatus != PermissionStatus.granted)
                     Container(
-                      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                      padding: const EdgeInsets.all(HBotSpacing.space4),
                       decoration: BoxDecoration(
-                        color: AppTheme.warningColor.withOpacity(0.1),
+                        color: HBotColors.warning.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(
-                          AppTheme.radiusMedium,
+                          HBotRadius.medium,
                         ),
                         border: Border.all(
-                          color: AppTheme.warningColor.withOpacity(0.3),
+                          color: HBotColors.warning.withOpacity(0.3),
                           width: 1,
                         ),
                       ),
@@ -275,10 +273,10 @@ class _NotificationsSettingsScreenState
                         children: [
                           Icon(
                             Icons.info_outline,
-                            color: AppTheme.warningColor,
+                            color: HBotColors.warning,
                             size: 24,
                           ),
-                          const SizedBox(width: AppTheme.paddingMedium),
+                          const SizedBox(width: HBotSpacing.space4),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -288,7 +286,7 @@ class _NotificationsSettingsScreenState
                                   style: Theme.of(context).textTheme.bodyMedium
                                       ?.copyWith(
                                         fontWeight: FontWeight.w600,
-                                        color: AppTheme.getTextPrimary(context),
+                                        color: HBotColors.textPrimaryLight,
                                       ),
                                 ),
                                 const SizedBox(height: 4),
@@ -296,9 +294,7 @@ class _NotificationsSettingsScreenState
                                   'Notification permission is required to receive alerts. Enable notifications above to grant permission.',
                                   style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
-                                        color: AppTheme.getTextSecondary(
-                                          context,
-                                        ),
+                                        color: HBotColors.textSecondaryLight,
                                       ),
                                 ),
                               ],
@@ -308,22 +304,22 @@ class _NotificationsSettingsScreenState
                       ),
                     ),
 
-                  const SizedBox(height: AppTheme.paddingLarge),
+                  const SizedBox(height: HBotSpacing.space6),
 
                   // What you'll receive section
                   Text(
                     'What you\'ll receive',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.getTextPrimary(context),
+                      color: HBotColors.textPrimaryLight,
                     ),
                   ),
-                  const SizedBox(height: AppTheme.paddingMedium),
+                  const SizedBox(height: HBotSpacing.space4),
                   Container(
                     decoration: BoxDecoration(
-                      color: AppTheme.getCardColor(context),
+                      color: HBotColors.cardLight,
                       borderRadius: BorderRadius.circular(
-                        AppTheme.radiusMedium,
+                        HBotRadius.medium,
                       ),
                     ),
                     child: Column(
@@ -365,24 +361,24 @@ class _NotificationsSettingsScreenState
   }) {
     return ListTile(
       leading: Container(
-        padding: const EdgeInsets.all(AppTheme.paddingSmall),
+        padding: const EdgeInsets.all(HBotSpacing.space2),
         decoration: BoxDecoration(
-          color: AppTheme.primaryColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+          color: HBotColors.primary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(HBotRadius.small),
         ),
-        child: Icon(icon, color: AppTheme.primaryColor, size: 24),
+        child: Icon(icon, color: HBotColors.primary, size: 24),
       ),
       title: Text(
         title,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontWeight: FontWeight.w500,
-          color: AppTheme.getTextPrimary(context),
+          color: HBotColors.textPrimaryLight,
         ),
       ),
       subtitle: Text(
         description,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: AppTheme.getTextSecondary(context),
+          color: HBotColors.textSecondaryLight,
         ),
       ),
     );

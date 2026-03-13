@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
+/// Settings Tile per design spec (03-COMPONENT-LIBRARY.md Section 2.3)
+/// 56px height, icon + label + chevron
+/// Grouped in card wrapper with 16px radius and 1px border
 class SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -23,60 +26,123 @@ class SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final surfaceColor = isDark
-        ? AppTheme.surfaceColor
-        : AppTheme.lightSurfaceColor;
-    final textPrimary = isDark
-        ? AppTheme.textPrimary
-        : AppTheme.lightTextPrimary;
-    final textSecondary = isDark
-        ? AppTheme.textSecondary
-        : AppTheme.lightTextSecondary;
-    final textHint = isDark ? AppTheme.textHint : AppTheme.lightTextHint;
-    final dividerColor = isDark
-        ? AppTheme.textHint
-        : AppTheme.lightDividerColor;
-
     return Column(
       children: [
-        ListTile(
-          leading: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-            ),
-            child: Icon(icon, color: titleColor ?? textPrimary, size: 20),
-          ),
-          title: Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: titleColor ?? textPrimary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          subtitle: Text(
-            subtitle,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: textSecondary),
-          ),
-          trailing:
-              trailing ?? Icon(Icons.chevron_right, color: textHint, size: 20),
+        InkWell(
           onTap: onTap,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: AppTheme.paddingMedium,
-            vertical: 4,
+          child: Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(
+              horizontal: HBotSpacing.space4,
+            ),
+            child: Row(
+              children: [
+                // Icon
+                Icon(
+                  icon,
+                  color: titleColor ?? HBotColors.iconDefault,
+                  size: 24,
+                ),
+                const SizedBox(width: HBotSpacing.space3),
+                // Label
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: titleColor ?? HBotColors.textPrimaryLight,
+                    ),
+                  ),
+                ),
+                // Value/trailing
+                if (subtitle.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(right: HBotSpacing.space2),
+                    child: Text(
+                      subtitle,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: HBotColors.textSecondaryLight,
+                      ),
+                    ),
+                  ),
+                trailing ??
+                    const Icon(
+                      Icons.chevron_right,
+                      color: HBotColors.neutral400,
+                      size: 16,
+                    ),
+              ],
+            ),
           ),
         ),
         if (showDivider)
-          Divider(
-            color: dividerColor.withOpacity(0.5),
-            height: 1,
-            indent: AppTheme.paddingMedium,
-            endIndent: AppTheme.paddingMedium,
+          Padding(
+            padding: const EdgeInsets.only(left: 56),
+            child: Container(
+              height: 1,
+              color: HBotColors.neutral100,
+            ),
           ),
+      ],
+    );
+  }
+}
+
+/// Group wrapper for settings tiles
+/// Per design spec: 16px radius, 1px border, white bg, 24px margin between groups
+class SettingsTileGroup extends StatelessWidget {
+  final List<Widget> children;
+  final String? title;
+
+  const SettingsTileGroup({
+    super.key,
+    required this.children,
+    this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (title != null) ...[
+          Padding(
+            padding: const EdgeInsets.only(
+              left: HBotSpacing.space1,
+              bottom: HBotSpacing.space2,
+            ),
+            child: Text(
+              title!.toUpperCase(),
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.0,
+                color: HBotColors.textTertiaryLight,
+              ),
+            ),
+          ),
+        ],
+        Container(
+          decoration: BoxDecoration(
+            color: HBotColors.cardLight,
+            borderRadius: HBotRadius.largeRadius,
+            border: Border.all(
+              color: HBotColors.borderLight,
+              width: 1,
+            ),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: children,
+          ),
+        ),
+        const SizedBox(height: HBotSpacing.space6),
       ],
     );
   }

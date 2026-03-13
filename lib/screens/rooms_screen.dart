@@ -54,7 +54,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to load rooms: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -66,7 +66,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a room name'),
-          backgroundColor: Colors.red,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -87,7 +87,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Room "${room.name}" created successfully!'),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
           ),
         );
       }
@@ -102,7 +102,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to create room: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -113,7 +113,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: const Text('Create New Room'),
         content: TextField(
           controller: _nameController,
@@ -131,7 +131,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
           ElevatedButton(
             onPressed: _createRoom,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primaryColor,
+              backgroundColor: HBotColors.primary,
             ),
             child: const Text('Create'),
           ),
@@ -145,7 +145,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter a room name'),
-          backgroundColor: Colors.red,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -170,7 +170,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Room "${updatedRoom.name}" updated successfully!'),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
           ),
         );
       }
@@ -185,7 +185,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to update room: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -206,7 +206,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Room "${room.name}" deleted successfully!'),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
           ),
         );
       }
@@ -222,7 +222,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to delete room: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -235,7 +235,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Edit Room'),
           content: TextField(
             controller: _nameController,
@@ -253,7 +253,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
             ElevatedButton(
               onPressed: () => _editRoom(room),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
+                backgroundColor: HBotColors.primary,
               ),
               child: const Text('Save'),
             ),
@@ -268,7 +268,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Delete Room'),
           content: Text(
             'Are you sure you want to delete "${room.name}"? This action cannot be undone and will remove all devices in this room.',
@@ -280,7 +280,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
             ),
             ElevatedButton(
               onPressed: () => _deleteRoom(room),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              style: ElevatedButton.styleFrom(backgroundColor: HBotColors.error),
               child: const Text('Delete'),
             ),
           ],
@@ -297,7 +297,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Room Background Image'),
           content: SingleChildScrollView(
             child: BackgroundImagePicker(
@@ -328,7 +328,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Failed to update background: $e'),
-                        backgroundColor: Colors.red,
+                        backgroundColor: HBotColors.error,
                       ),
                     );
                   }
@@ -356,7 +356,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: AppTheme.getCardColor(context),
+              backgroundColor: HBotColors.cardLight,
               title: const Text('Change Room Icon'),
               content: SizedBox(
                 width: double.maxFinite,
@@ -397,7 +397,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Room icon updated successfully!'),
-                            backgroundColor: AppTheme.primaryColor,
+                            backgroundColor: HBotColors.primary,
                           ),
                         );
                       }
@@ -406,14 +406,14 @@ class _RoomsScreenState extends State<RoomsScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('Failed to update icon: $e'),
-                            backgroundColor: Colors.red,
+                            backgroundColor: HBotColors.error,
                           ),
                         );
                       }
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: HBotColors.primary,
                   ),
                   child: const Text('Save'),
                 ),
@@ -456,12 +456,12 @@ class _RoomsScreenState extends State<RoomsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         title: Text(
           widget.home.name,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
@@ -485,38 +485,38 @@ class _RoomsScreenState extends State<RoomsScreen> {
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.room_outlined, size: 80, color: AppTheme.textHint),
-            const SizedBox(height: AppTheme.paddingLarge),
+            Icon(Icons.room_outlined, size: 80, color: HBotColors.textTertiaryLight),
+            const SizedBox(height: HBotSpacing.space6),
             Text(
               'No Rooms Yet',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: AppTheme.getTextPrimary(context),
+                color: HBotColors.textPrimaryLight,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Text(
               'Add rooms to organize your smart devices by location',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: AppTheme.getTextSecondary(context),
+                color: HBotColors.textSecondaryLight,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
             ElevatedButton.icon(
               onPressed: _showCreateRoomDialog,
               icon: const Icon(Icons.add),
               label: const Text('Add Your First Room'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
+                backgroundColor: HBotColors.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.paddingLarge,
-                  vertical: AppTheme.paddingMedium,
+                  horizontal: HBotSpacing.space6,
+                  vertical: HBotSpacing.space4,
                 ),
               ),
             ),
@@ -528,16 +528,16 @@ class _RoomsScreenState extends State<RoomsScreen> {
 
   Widget _buildRoomsList() {
     return ListView.builder(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       itemCount: _rooms.length,
       itemBuilder: (context, index) {
         final room = _rooms[index];
         // Use EXACT same Card structure as Dashboard
         return Card(
-          color: AppTheme.getCardColor(context),
+          color: HBotColors.cardLight,
           margin: const EdgeInsets.symmetric(
             horizontal: 0,
-            vertical: AppTheme.paddingSmall,
+            vertical: HBotSpacing.space2,
           ),
           child: Stack(
             children: [
@@ -546,7 +546,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                   room.backgroundImageUrl!.isNotEmpty)
                 Positioned.fill(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                    borderRadius: BorderRadius.circular(HBotRadius.medium),
                     child: BackgroundContainer(
                       backgroundImageUrl: room.backgroundImageUrl,
                       overlayColor:
@@ -577,27 +577,27 @@ class _RoomsScreenState extends State<RoomsScreen> {
                     ),
                   );
                 },
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                borderRadius: BorderRadius.circular(HBotRadius.medium),
                 child: Padding(
-                  padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                  padding: const EdgeInsets.all(HBotSpacing.space4),
                   child: Row(
                     children: [
                       // Icon container
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryColor.withOpacity(0.2),
+                          color: HBotColors.primary.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(
-                            AppTheme.radiusMedium,
+                            HBotRadius.medium,
                           ),
                         ),
                         child: Icon(
                           _getRoomIcon(room),
-                          color: AppTheme.primaryColor,
+                          color: HBotColors.primary,
                           size: 28,
                         ),
                       ),
-                      const SizedBox(width: AppTheme.paddingMedium),
+                      const SizedBox(width: HBotSpacing.space4),
                       // Room info
                       Expanded(
                         child: Column(
@@ -612,7 +612,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                                     room.backgroundImageUrl != null &&
                                         room.backgroundImageUrl!.isNotEmpty
                                     ? Colors.white
-                                    : AppTheme.getTextPrimary(context),
+                                    : HBotColors.textPrimaryLight,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -624,7 +624,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                                     room.backgroundImageUrl != null &&
                                         room.backgroundImageUrl!.isNotEmpty
                                     ? Colors.white70
-                                    : AppTheme.getTextSecondary(context),
+                                    : HBotColors.textSecondaryLight,
                               ),
                             ),
                           ],
@@ -644,7 +644,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                         room.backgroundImageUrl != null &&
                             room.backgroundImageUrl!.isNotEmpty
                         ? Colors.white
-                        : AppTheme.getTextHint(context),
+                        : HBotColors.textTertiaryLight,
                     size: 20,
                   ),
                   onSelected: (value) {
@@ -691,10 +691,10 @@ class _RoomsScreenState extends State<RoomsScreen> {
                     const PopupMenuItem(
                       value: 'delete',
                       child: ListTile(
-                        leading: Icon(Icons.delete_outline, color: Colors.red),
+                        leading: Icon(Icons.delete_outline, color: HBotColors.error),
                         title: Text(
                           'Delete Room',
-                          style: TextStyle(color: Colors.red),
+                          style: TextStyle(color: HBotColors.error),
                         ),
                         contentPadding: EdgeInsets.zero,
                       ),

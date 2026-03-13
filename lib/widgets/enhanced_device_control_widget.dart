@@ -307,7 +307,7 @@ class _EnhancedDeviceControlWidgetState
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to control channel $channel: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -324,7 +324,7 @@ class _EnhancedDeviceControlWidgetState
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Failed to turn all channels on'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -341,7 +341,7 @@ class _EnhancedDeviceControlWidgetState
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Failed to turn all channels off'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -360,31 +360,31 @@ class _EnhancedDeviceControlWidgetState
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(AppTheme.paddingMedium),
+      margin: const EdgeInsets.all(HBotSpacing.space4),
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Device header - status indicators removed
             Row(
               children: [
-                Icon(_getDeviceIcon(), size: 24, color: AppTheme.primaryColor),
-                const SizedBox(width: AppTheme.paddingSmall),
+                Icon(_getDeviceIcon(), size: 24, color: HBotColors.primary),
+                const SizedBox(width: HBotSpacing.space2),
                 Expanded(
                   child: Text(
                     widget.device.deviceName,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
+                      color: HBotColors.textPrimaryLight,
                     ),
                   ),
                 ),
               ],
             ),
 
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Channel controls - different UI for shutter devices
             if (widget.device.deviceType == DeviceType.shutter)
@@ -402,7 +402,7 @@ class _EnhancedDeviceControlWidgetState
             if (widget.showBulkControls &&
                 widget.device.deviceType != DeviceType.shutter &&
                 widget.device.effectiveChannels > 1) ...[
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
               _buildBulkControls(),
             ],
           ],
@@ -438,8 +438,8 @@ class _EnhancedDeviceControlWidgetState
                       : Icons.power_settings_new,
                   size: 20,
                   color: (_channelStates[i] ?? false)
-                      ? AppTheme.primaryColor
-                      : AppTheme.textSecondary,
+                      ? HBotColors.primary
+                      : HBotColors.textSecondaryLight,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -447,7 +447,7 @@ class _EnhancedDeviceControlWidgetState
                     _getChannelName(i),
                     style: const TextStyle(
                       fontSize: 14,
-                      color: AppTheme.textPrimary,
+                      color: HBotColors.textPrimaryLight,
                     ),
                   ),
                 ),
@@ -468,10 +468,10 @@ class _EnhancedDeviceControlWidgetState
     final isConnected = _connectionState == MqttConnectionState.connected;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: AppTheme.paddingMedium),
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      margin: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
+        color: HBotColors.surfaceLight,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey[800]!),
       ),
@@ -481,12 +481,12 @@ class _EnhancedDeviceControlWidgetState
           const Text(
             'Bulk Controls',
             style: TextStyle(
-              color: AppTheme.textPrimary,
+              color: HBotColors.textPrimaryLight,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           Row(
             children: [
               Expanded(
@@ -495,7 +495,7 @@ class _EnhancedDeviceControlWidgetState
                   icon: const Icon(Icons.power_settings_new, size: 18),
                   label: const Text('All ON'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[700],
+                    backgroundColor: HBotColors.success[700],
                     foregroundColor: Colors.white,
                     disabledBackgroundColor: Colors.grey[800],
                     disabledForegroundColor: Colors.grey[600],
@@ -506,14 +506,14 @@ class _EnhancedDeviceControlWidgetState
                   ),
                 ),
               ),
-              const SizedBox(width: AppTheme.paddingSmall),
+              const SizedBox(width: HBotSpacing.space2),
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: isConnected ? _turnAllOff : null,
                   icon: const Icon(Icons.power_off, size: 18),
                   label: const Text('All OFF'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red[700],
+                    backgroundColor: HBotColors.error[700],
                     foregroundColor: Colors.white,
                     disabledBackgroundColor: Colors.grey[800],
                     disabledForegroundColor: Colors.grey[600],

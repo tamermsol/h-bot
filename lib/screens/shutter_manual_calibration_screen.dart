@@ -43,7 +43,7 @@ class _ShutterManualCalibrationScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please select current shutter position'),
-          backgroundColor: Colors.orange,
+          backgroundColor: HBotColors.warning,
         ),
       );
       return;
@@ -103,7 +103,7 @@ class _ShutterManualCalibrationScreenState
             content: Text(
               'Calibration applied successfully!\nOpen: ${openTime}s, Close: ${closeTime}s\nDevice is restarting...',
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: HBotColors.success,
             duration: const Duration(seconds: 4),
           ),
         );
@@ -121,7 +121,7 @@ class _ShutterManualCalibrationScreenState
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to apply calibration: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -147,28 +147,28 @@ class _ShutterManualCalibrationScreenState
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: isDark
-            ? AppTheme.surfaceColor
-            : AppTheme.lightCardColor,
+            ? HBotColors.surfaceLight
+            : HBotColors.cardLight,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
+          icon: const Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
           'Manual Calibration',
           style: TextStyle(
-            color: AppTheme.textPrimary,
+            color: HBotColors.textPrimaryLight,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Form(
           key: _formKey,
           child: Column(
@@ -178,21 +178,21 @@ class _ShutterManualCalibrationScreenState
               Text(
                 widget.device.deviceName,
                 style: const TextStyle(
-                  color: AppTheme.textPrimary,
+                  color: HBotColors.textPrimaryLight,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
 
               // Instructions card
               _buildInstructionsCard(),
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
 
               // Current position selection
               _buildPositionSelector(),
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
 
               // Open time input
               _buildTimeInput(
@@ -200,9 +200,9 @@ class _ShutterManualCalibrationScreenState
                 label: 'Open Duration (seconds)',
                 hint: 'Enter time to fully open',
                 icon: Icons.arrow_upward,
-                color: Colors.green,
+                color: HBotColors.success,
               ),
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
 
               // Close time input
               _buildTimeInput(
@@ -210,9 +210,9 @@ class _ShutterManualCalibrationScreenState
                 label: 'Close Duration (seconds)',
                 hint: 'Enter time to fully close',
                 icon: Icons.arrow_downward,
-                color: Colors.red,
+                color: HBotColors.error,
               ),
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
 
               // Apply button
               ElevatedButton.icon(
@@ -223,11 +223,11 @@ class _ShutterManualCalibrationScreenState
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor,
+                  backgroundColor: HBotColors.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                    borderRadius: BorderRadius.circular(HBotRadius.medium),
                   ),
                 ),
               ),
@@ -240,9 +240,9 @@ class _ShutterManualCalibrationScreenState
 
   Widget _buildInstructionsCard() {
     return Card(
-      color: AppTheme.cardColor,
+      color: HBotColors.cardLight,
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -250,21 +250,21 @@ class _ShutterManualCalibrationScreenState
               children: [
                 Icon(
                   Icons.info_outline,
-                  color: AppTheme.primaryColor,
+                  color: HBotColors.primary,
                   size: 24,
                 ),
                 const SizedBox(width: 8),
                 const Text(
                   'Manual Calibration',
                   style: TextStyle(
-                    color: AppTheme.textPrimary,
+                    color: HBotColors.textPrimaryLight,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             const Text(
               '1. Move your shutter to either fully open (100%) or fully closed (0%)\n'
               '2. Select the current position below\n'
@@ -273,7 +273,7 @@ class _ShutterManualCalibrationScreenState
               '   • Fully close from open position\n'
               '4. Click "Apply Calibration" to save',
               style: TextStyle(
-                color: AppTheme.textSecondary,
+                color: HBotColors.textSecondaryLight,
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -286,26 +286,26 @@ class _ShutterManualCalibrationScreenState
 
   Widget _buildPositionSelector() {
     return Card(
-      color: AppTheme.cardColor,
+      color: HBotColors.cardLight,
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               'Current Shutter Position',
               style: TextStyle(
-                color: AppTheme.textPrimary,
+                color: HBotColors.textPrimaryLight,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             const Text(
               'Select where your shutter is right now:',
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
+              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 14),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Row(
               children: [
                 Expanded(
@@ -314,17 +314,17 @@ class _ShutterManualCalibrationScreenState
                     label: 'Fully Closed',
                     subtitle: '0%',
                     icon: Icons.arrow_downward,
-                    color: Colors.red,
+                    color: HBotColors.error,
                   ),
                 ),
-                const SizedBox(width: AppTheme.paddingMedium),
+                const SizedBox(width: HBotSpacing.space4),
                 Expanded(
                   child: _buildPositionButton(
                     position: ShutterPosition.fullyOpen,
                     label: 'Fully Open',
                     subtitle: '100%',
                     icon: Icons.arrow_upward,
-                    color: Colors.green,
+                    color: HBotColors.success,
                   ),
                 ),
               ],
@@ -351,25 +351,25 @@ class _ShutterManualCalibrationScreenState
         });
       },
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
           color: isSelected
               ? color.withOpacity(0.2)
-              : AppTheme.backgroundColor,
+              : HBotColors.backgroundLight,
           border: Border.all(
-            color: isSelected ? color : AppTheme.textHint,
+            color: isSelected ? color : HBotColors.textTertiaryLight,
             width: 2,
           ),
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          borderRadius: BorderRadius.circular(HBotRadius.medium),
         ),
         child: Column(
           children: [
-            Icon(icon, color: isSelected ? color : AppTheme.textHint, size: 32),
+            Icon(icon, color: isSelected ? color : HBotColors.textTertiaryLight, size: 32),
             const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? color : AppTheme.textSecondary,
+                color: isSelected ? color : HBotColors.textSecondaryLight,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
@@ -378,7 +378,7 @@ class _ShutterManualCalibrationScreenState
             Text(
               subtitle,
               style: TextStyle(
-                color: isSelected ? color : AppTheme.textHint,
+                color: isSelected ? color : HBotColors.textTertiaryLight,
                 fontSize: 12,
               ),
             ),
@@ -396,9 +396,9 @@ class _ShutterManualCalibrationScreenState
     required Color color,
   }) {
     return Card(
-      color: AppTheme.cardColor,
+      color: HBotColors.cardLight,
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -409,33 +409,33 @@ class _ShutterManualCalibrationScreenState
                 Text(
                   label,
                   style: const TextStyle(
-                    color: AppTheme.textPrimary,
+                    color: HBotColors.textPrimaryLight,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             TextFormField(
               controller: controller,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18),
+              style: const TextStyle(color: HBotColors.textPrimaryLight, fontSize: 18),
               decoration: InputDecoration(
                 hintText: hint,
-                hintStyle: const TextStyle(color: AppTheme.textHint),
+                hintStyle: const TextStyle(color: HBotColors.textTertiaryLight),
                 suffixText: 'seconds',
-                suffixStyle: const TextStyle(color: AppTheme.textSecondary),
+                suffixStyle: const TextStyle(color: HBotColors.textSecondaryLight),
                 filled: true,
-                fillColor: AppTheme.backgroundColor,
+                fillColor: HBotColors.backgroundLight,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                  borderRadius: BorderRadius.circular(HBotRadius.small),
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.paddingMedium,
-                  vertical: AppTheme.paddingMedium,
+                  horizontal: HBotSpacing.space4,
+                  vertical: HBotSpacing.space4,
                 ),
               ),
               validator: (value) {

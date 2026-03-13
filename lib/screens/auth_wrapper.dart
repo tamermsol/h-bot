@@ -17,10 +17,10 @@ class AuthWrapper extends StatelessWidget {
         // Show loading indicator while checking auth state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            backgroundColor: Color(0xFF1C1C1E),
+            backgroundColor: Color(0xFFF8F9FB),
             body: Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF9500)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0883FD)),
               ),
             ),
           );

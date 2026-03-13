@@ -200,7 +200,7 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to control channel $channel: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -210,24 +210,24 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(AppTheme.paddingMedium),
+      margin: const EdgeInsets.all(HBotSpacing.space4),
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Device header
             Row(
               children: [
-                Icon(_getDeviceIcon(), size: 24, color: AppTheme.primaryColor),
-                const SizedBox(width: AppTheme.paddingSmall),
+                Icon(_getDeviceIcon(), size: 24, color: HBotColors.primary),
+                const SizedBox(width: HBotSpacing.space2),
                 Expanded(
                   child: Text(
                     widget.device.deviceName,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: AppTheme.textPrimary,
+                      color: HBotColors.textPrimaryLight,
                     ),
                   ),
                 ),
@@ -243,7 +243,7 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
               ],
             ),
 
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Channel controls (only enabled when realtime MQTT is available)
             if (widget.device.channels == 1)
@@ -253,22 +253,22 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
 
             if (!_hasRealtime)
               Padding(
-                padding: const EdgeInsets.only(top: AppTheme.paddingSmall),
+                padding: const EdgeInsets.only(top: HBotSpacing.space2),
                 child: Text(
                   'No realtime data (MQTT not available)',
                   style: Theme.of(
                     context,
-                  ).textTheme.bodySmall?.copyWith(color: Colors.orange),
+                  ).textTheme.bodySmall?.copyWith(color: HBotColors.warning),
                 ),
               ),
 
             // Device info
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             Text(
               '${ChannelDetectionUtils.getChannelCountDisplayName(widget.device.effectiveChannels)} • ${widget.device.deviceType.name}',
               style: const TextStyle(
                 fontSize: 12,
-                color: AppTheme.textSecondary,
+                color: HBotColors.textSecondaryLight,
               ),
             ),
           ],
@@ -300,7 +300,7 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
                     _getChannelName(i),
                     style: const TextStyle(
                       fontSize: 14,
-                      color: AppTheme.textPrimary,
+                      color: HBotColors.textPrimaryLight,
                     ),
                   ),
                 ),

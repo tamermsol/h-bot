@@ -19,68 +19,56 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = isDark ? AppTheme.cardColor : AppTheme.lightCardColor;
-    final textPrimary = isDark
-        ? AppTheme.textPrimary
-        : AppTheme.lightTextPrimary;
-    final textSecondary = isDark
-        ? AppTheme.textSecondary
-        : AppTheme.lightTextSecondary;
-
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          color: HBotColors.cardLight,
+          borderRadius: HBotRadius.largeRadius,
           border: Border.all(
-            color: isDark
-                ? color.withOpacity(0.3)
-                : AppTheme.lightBorderColor,
+            color: HBotColors.borderLight,
             width: 1,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(isDark ? 0.1 : 0.03),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          boxShadow: HBotShadows.small,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Icon container
             Container(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(HBotSpacing.space2),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                color: color.withOpacity(0.1),
+                borderRadius: HBotRadius.smallRadius,
               ),
               child: Icon(icon, color: color, size: 24),
             ),
 
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Value
             Text(
               value,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: textPrimary,
-                fontWeight: FontWeight.bold,
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: HBotColors.textPrimaryLight,
               ),
             ),
 
-            const SizedBox(height: 4),
+            const SizedBox(height: HBotSpacing.space1),
 
             // Title
             Text(
               title,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: textSecondary),
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: HBotColors.textSecondaryLight,
+              ),
             ),
           ],
         ),

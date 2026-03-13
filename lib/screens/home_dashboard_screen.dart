@@ -159,7 +159,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         if (mounted) {
           for (final error in _errorQueue) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(error), backgroundColor: Colors.red),
+              SnackBar(content: Text(error), backgroundColor: HBotColors.error),
             );
           }
           _errorQueue.clear();
@@ -177,7 +177,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Retrying MQTT connection...'),
-            backgroundColor: Colors.blue,
+            backgroundColor: HBotColors.primary,
             duration: Duration(seconds: 2),
           ),
         );
@@ -224,7 +224,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   ),
                 ],
               ),
-              backgroundColor: Colors.green,
+              backgroundColor: HBotColors.success,
               duration: const Duration(seconds: 3),
             ),
           );
@@ -263,7 +263,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     ),
                 ],
               ),
-              backgroundColor: Colors.red,
+              backgroundColor: HBotColors.error,
               duration: const Duration(seconds: 5),
               action: SnackBarAction(
                 label: 'Diagnose',
@@ -301,7 +301,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 ),
               ],
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 5),
             action: SnackBarAction(
               label: 'Details',
@@ -596,7 +596,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: const Text('Error connecting to devices'),
-                backgroundColor: Colors.red,
+                backgroundColor: HBotColors.error,
                 action: SnackBarAction(
                   label: 'Retry',
                   textColor: Colors.white,
@@ -713,7 +713,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           content: Text(
             'Unable to refresh devices. Please check your connection.',
           ),
-          backgroundColor: Colors.orange,
+          backgroundColor: HBotColors.warning,
         ),
       );
       return;
@@ -732,7 +732,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Refreshed ${controllableDevices.length} devices'),
-              backgroundColor: Colors.green,
+              backgroundColor: HBotColors.success,
               duration: const Duration(seconds: 1),
             ),
           );
@@ -744,7 +744,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Unable to refresh devices. Please try again.'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -868,8 +868,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
     return Stack(
       children: [
-        // Background layer - only show in dark mode or when there's a custom background
-        // Background image for both light and dark modes
+        // Background layer
         Positioned.fill(
           child: BackgroundContainer(
             backgroundImageUrl: _selectedHome?.backgroundImageUrl,
@@ -913,15 +912,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   Widget _buildHeader() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = AppTheme.getCardColor(context);
-
     return Container(
       padding: const EdgeInsets.fromLTRB(
-        AppTheme.paddingMedium,
-        0, // Remove top padding completely
-        AppTheme.paddingMedium,
-        4, // Minimal bottom padding
+        HBotSpacing.screenPadding,
+        0,
+        HBotSpacing.screenPadding,
+        HBotSpacing.space1,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -932,70 +928,72 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               onTap: _showHomeSelector,
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.paddingMedium,
-                  vertical:
-                      8, // Reduced from paddingSmall for more compact look
+                  horizontal: HBotSpacing.space4,
+                  vertical: HBotSpacing.space2,
                 ),
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? cardColor.withOpacity(0.7)
-                      : cardColor, // Solid color in light mode
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-                  border: isDark
-                      ? null
-                      : Border.all(color: AppTheme.lightCardBorder, width: 1),
+                  color: HBotColors.cardLight,
+                  borderRadius: HBotRadius.mediumRadius,
+                  border: Border.all(color: HBotColors.borderLight, width: 1),
                 ),
                 child: Row(
                   children: [
                     Expanded(
                       child: Text(
                         _selectedHome?.name ?? 'Select Home',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: HBotColors.textPrimaryLight,
+                        ),
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.keyboard_arrow_down,
-                      color: AppTheme.getTextPrimary(context),
+                      color: HBotColors.textSecondaryLight,
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          const SizedBox(width: AppTheme.paddingSmall),
-          // Add button
+          const SizedBox(width: HBotSpacing.space2),
+          // Add button - gradient
           Container(
             decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+              gradient: HBotColors.primaryGradient,
+              borderRadius: HBotRadius.mediumRadius,
+              boxShadow: HBotShadows.small,
             ),
             child: IconButton(
-              icon: const Icon(Icons.add, color: Colors.white),
+              icon: const Icon(Icons.add, color: HBotColors.textOnPrimary),
               onPressed: _showAddMenu,
-              padding: const EdgeInsets.all(8), // Compact padding
-              constraints: const BoxConstraints(), // Remove default constraints
+              padding: const EdgeInsets.all(HBotSpacing.space2),
+              constraints: const BoxConstraints(),
             ),
           ),
-          const SizedBox(width: AppTheme.paddingSmall),
-          // MQTT status indicator (non-interactive)
+          const SizedBox(width: HBotSpacing.space2),
+          // MQTT status indicator
           Tooltip(
             message: _mqttConnected ? 'MQTT Connected' : 'MQTT Disconnected',
             child: Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(HBotSpacing.space3),
               decoration: BoxDecoration(
                 color: _mqttConnected
-                    ? Colors.green.withOpacity(0.2)
-                    : Colors.red.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                    ? HBotColors.successLight
+                    : HBotColors.errorLight,
+                borderRadius: HBotRadius.mediumRadius,
                 border: Border.all(
-                  color: _mqttConnected ? Colors.green : Colors.red,
+                  color: _mqttConnected
+                      ? HBotColors.success.withOpacity(0.3)
+                      : HBotColors.error.withOpacity(0.3),
                   width: 1,
                 ),
               ),
               child: Icon(
                 _mqttConnected ? Icons.wifi : Icons.wifi_off,
-                color: _mqttConnected ? Colors.green : Colors.red,
+                color: _mqttConnected ? HBotColors.success : HBotColors.error,
                 size: 20,
               ),
             ),
@@ -1015,7 +1013,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Dashboard Background Image'),
           content: SingleChildScrollView(
             child: BackgroundImagePicker(
@@ -1041,7 +1039,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Failed to update background: $e'),
-                        backgroundColor: Colors.red,
+                        backgroundColor: HBotColors.error,
                       ),
                     );
                   }
@@ -1061,37 +1059,41 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   Widget _buildSearchBar() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = AppTheme.getCardColor(context);
-    final textPrimary = AppTheme.getTextPrimary(context);
-    final textHint = AppTheme.getTextHint(context);
-
     return Container(
       margin: const EdgeInsets.symmetric(
-        horizontal: AppTheme.paddingMedium,
-        vertical: 0, // Remove vertical margin completely
+        horizontal: HBotSpacing.screenPadding,
       ),
       child: Row(
         children: [
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? cardColor.withOpacity(0.7) : cardColor,
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-                border: isDark
-                    ? null
-                    : Border.all(color: AppTheme.lightCardBorder, width: 1),
+                color: HBotColors.cardLight,
+                borderRadius: HBotRadius.mediumRadius,
+                border: Border.all(color: HBotColors.borderLight, width: 1),
               ),
               child: TextField(
                 controller: _searchController,
-                style: TextStyle(color: textPrimary),
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  color: HBotColors.textPrimaryLight,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Search devices...',
-                  hintStyle: TextStyle(color: textHint),
-                  prefixIcon: Icon(Icons.search, color: textHint),
+                  hintStyle: const TextStyle(
+                    fontFamily: 'Inter',
+                    color: HBotColors.textTertiaryLight,
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: HBotColors.textTertiaryLight,
+                  ),
                   suffixIcon: _searchQuery.isNotEmpty
                       ? IconButton(
-                          icon: Icon(Icons.clear, color: textHint),
+                          icon: const Icon(
+                            Icons.clear,
+                            color: HBotColors.textTertiaryLight,
+                          ),
                           onPressed: () {
                             setState(() {
                               _searchController.clear();
@@ -1102,8 +1104,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       : null,
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.paddingMedium,
-                    vertical: 8, // Reduced from paddingSmall for compact look
+                    horizontal: HBotSpacing.space4,
+                    vertical: HBotSpacing.space2,
                   ),
                 ),
                 onChanged: (value) {
@@ -1114,22 +1116,20 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
             ),
           ),
-          const SizedBox(width: AppTheme.paddingSmall),
+          const SizedBox(width: HBotSpacing.space2),
           // Options menu button
           Container(
             decoration: BoxDecoration(
-              color: isDark ? cardColor.withOpacity(0.7) : cardColor,
-              borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-              border: isDark
-                  ? null
-                  : Border.all(color: AppTheme.lightCardBorder, width: 1),
+              color: HBotColors.cardLight,
+              borderRadius: HBotRadius.mediumRadius,
+              border: Border.all(color: HBotColors.borderLight, width: 1),
             ),
             child: IconButton(
-              icon: Icon(Icons.tune, color: textPrimary),
+              icon: const Icon(Icons.tune, color: HBotColors.textPrimaryLight),
               onPressed: _showOptionsMenu,
               tooltip: 'Filter and sort options',
-              padding: const EdgeInsets.all(8), // Compact padding
-              constraints: const BoxConstraints(), // Remove default constraints
+              padding: const EdgeInsets.all(HBotSpacing.space2),
+              constraints: const BoxConstraints(),
             ),
           ),
         ],
@@ -1140,25 +1140,53 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   Widget _buildTabBar() {
     if (_tabController == null) return const SizedBox.shrink();
 
-    return TabBar(
-      key: ValueKey(
-        _rooms.map((r) => r.name).join(','),
-      ), // Force rebuild when room names change
-      controller: _tabController,
-      isScrollable: true,
-      labelColor: AppTheme.primaryColor,
-      unselectedLabelColor: AppTheme.textSecondary,
-      indicatorColor: AppTheme.primaryColor,
-      indicatorWeight: 3,
-      labelStyle: const TextStyle(fontWeight: FontWeight.w600),
-      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-      padding: EdgeInsets.zero,
-      labelPadding: const EdgeInsets.symmetric(horizontal: 16),
-      tabAlignment: TabAlignment.start,
-      tabs: [
-        const Tab(text: 'All'),
-        ..._rooms.map((room) => Tab(text: room.name)),
-      ],
+    final tabs = ['All', ..._rooms.map((room) => room.name)];
+
+    return Container(
+      key: ValueKey(_rooms.map((r) => r.name).join(',')),
+      height: 40,
+      margin: const EdgeInsets.symmetric(horizontal: HBotSpacing.screenPadding),
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: tabs.length,
+        separatorBuilder: (_, __) => const SizedBox(width: HBotSpacing.space2),
+        itemBuilder: (context, index) {
+          final isSelected = _tabController!.index == index;
+          return GestureDetector(
+            onTap: () {
+              _tabController!.animateTo(index);
+              setState(() {
+                _selectedRoomFilter = index == 0 ? 'All' : _rooms[index - 1].name;
+              });
+            },
+            child: AnimatedContainer(
+              duration: HBotDurations.fast,
+              curve: HBotCurves.standard,
+              padding: const EdgeInsets.symmetric(
+                horizontal: HBotSpacing.space4,
+                vertical: HBotSpacing.space2,
+              ),
+              decoration: BoxDecoration(
+                gradient: isSelected ? HBotColors.primaryGradient : null,
+                color: isSelected ? null : HBotColors.neutral100,
+                borderRadius: HBotRadius.fullRadius,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                tabs[index],
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  color: isSelected
+                      ? HBotColors.textOnPrimary
+                      : HBotColors.textSecondaryLight,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -1210,7 +1238,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
   Widget _buildDeviceList() {
     return ListView.builder(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       itemCount: _filteredDevices.length,
       itemBuilder: (context, index) {
         final device = _filteredDevices[index];
@@ -1221,11 +1249,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
   Widget _buildDeviceGrid() {
     return GridView.builder(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: AppTheme.paddingSmall,
-        mainAxisSpacing: AppTheme.paddingSmall,
+        crossAxisSpacing: HBotSpacing.space2,
+        mainAxisSpacing: HBotSpacing.space2,
         childAspectRatio: 1.25, // Increased to 1.25 for maximum compactness
       ),
       itemCount: _filteredDevices.length,
@@ -1277,38 +1305,60 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 80, color: AppTheme.textHint),
-            const SizedBox(height: AppTheme.paddingMedium),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: AppTheme.textSecondary,
+            // Icon in neutral circle
+            Container(
+              width: 80,
+              height: 80,
+              decoration: const BoxDecoration(
+                color: HBotColors.neutral100,
+                shape: BoxShape.circle,
               ),
+              child: Icon(icon, size: 40, color: HBotColors.neutral400),
             ),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space5),
+            // Gradient text title
+            hbotGradientText(title, fontSize: 20, fontWeight: FontWeight.w600),
+            const SizedBox(height: HBotSpacing.space2),
             Text(
               subtitle,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: AppTheme.textHint),
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: HBotColors.textTertiaryLight,
+              ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
-            ElevatedButton(
-              onPressed: onAction,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.paddingLarge,
-                  vertical: AppTheme.paddingMedium,
+            const SizedBox(height: HBotSpacing.space6),
+            // Gradient primary button
+            Container(
+              decoration: hbotPrimaryButtonDecoration(),
+              child: ElevatedButton(
+                onPressed: onAction,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: HBotColors.textOnPrimary,
+                  shadowColor: Colors.transparent,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: HBotSpacing.space6,
+                    vertical: HBotSpacing.space4,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: HBotRadius.mediumRadius,
+                  ),
+                ),
+                child: Text(
+                  actionText,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-              child: Text(actionText),
             ),
           ],
         ),
@@ -1452,21 +1502,19 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           }
         }
 
-        return Card(
-          color: AppTheme.getCardColor(context),
+        return Container(
           margin: isGridView
               ? EdgeInsets.zero
               : const EdgeInsets.symmetric(
-                  horizontal: AppTheme.paddingMedium,
-                  vertical: AppTheme.paddingSmall,
+                  horizontal: HBotSpacing.screenPadding,
+                  vertical: HBotSpacing.space1,
                 ),
+          decoration: hbotDeviceCardDecoration(isOn: deviceState || (device.deviceType == DeviceType.shutter && shutterPosition > 0)),
           child: InkWell(
             onTap: () => _navigateToDeviceControl(device),
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+            borderRadius: HBotRadius.largeRadius,
             child: Padding(
-              padding: const EdgeInsets.all(
-                6,
-              ), // Reduced from 12 to 6 for maximum compactness
+              padding: const EdgeInsets.all(HBotSpacing.space2),
               child: isGridView
                   ? _buildGridCardContent(
                       device,
@@ -1484,8 +1532,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                         Expanded(
                           child: Text(
                             device.deviceName,
-                            style: TextStyle(
-                              color: AppTheme.getTextPrimary(context),
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              color: HBotColors.textPrimaryLight,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -1510,10 +1559,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                                       ),
                                       child: Text(
                                         'No realtime (no topic)',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall
-                                            ?.copyWith(color: Colors.orange),
+                                        style: const TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 12,
+                                          color: HBotColors.warning,
+                                        ),
                                       ),
                                     ),
                                   // FETCH-FIRST: Show loading indicator while waiting for initial state
@@ -1525,7 +1575,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                                         strokeWidth: 2,
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
-                                              AppTheme.primaryColor,
+                                              HBotColors.primary,
                                             ),
                                       ),
                                     )
@@ -1561,82 +1611,52 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     int shutterDirection, // 0=stopped, 1=opening, -1=closing
     bool waitingForInitialState, // FETCH-FIRST: loading indicator flag
   ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textPrimary = AppTheme.getTextPrimary(context);
-    final textHint = AppTheme.getTextHint(context);
+    final bool isActive = isOnline && (deviceState || (device.deviceType == DeviceType.shutter && shutterPosition > 0));
 
     return Column(
-      mainAxisSize:
-          MainAxisSize.max, // Changed from min to max to fill available space
-      mainAxisAlignment: MainAxisAlignment
-          .start, // Changed to start to prevent overflow with long names
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Large device icon at the top - compact with online status indicator
+        // Device icon with online status indicator
         Center(
           child: Stack(
             clipBehavior: Clip.none,
             children: [
               Container(
-                padding: const EdgeInsets.all(4), // Reduced from 8 to 4
+                padding: const EdgeInsets.all(HBotSpacing.space1),
                 decoration: BoxDecoration(
-                  color:
-                      // Show blue background only when device is ONLINE AND ON
-                      (isOnline &&
-                          (deviceState ||
-                              (device.deviceType == DeviceType.shutter &&
-                                  shutterPosition > 0)))
-                      ? AppTheme.primaryColor.withOpacity(0.2)
-                      : (isDark
-                            ? AppTheme.textHint.withOpacity(0.1)
-                            : Colors
-                                  .white), // White background for better contrast in Light Mode
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                  color: isActive
+                      ? HBotColors.primarySurface
+                      : HBotColors.neutral100,
+                  borderRadius: HBotRadius.mediumRadius,
                 ),
                 child: Icon(
                   _getDeviceIcon(device.deviceType),
-                  color:
-                      // Show blue icon only when device is ONLINE AND ON
-                      (isOnline &&
-                          (deviceState ||
-                              (device.deviceType == DeviceType.shutter &&
-                                  shutterPosition > 0)))
-                      ? AppTheme.primaryColor
-                      : (isDark
-                            ? AppTheme.textHint
-                            : AppTheme
-                                  .lightTextSecondary), // Better contrast in Light Mode
-                  size: 32, // Reduced from 36 to 32 for maximum compactness
+                  color: isActive
+                      ? HBotColors.primary
+                      : HBotColors.neutral400,
+                  size: 32,
                 ),
               ),
-              // Online/Offline status indicator dot
+              // Online/Offline status dot
               Positioned(
                 top: -2,
                 right: -2,
-                child: Container(
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: isOnline ? Colors.green : Colors.red.shade400,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isDark ? AppTheme.surfaceColor : Colors.white,
-                      width: 2,
-                    ),
-                  ),
-                ),
+                child: hbotStatusDot(isOnline: isOnline, size: 12),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 2), // Minimal spacing
-        // Device name - centered and allow wrapping to 2 lines
+        const SizedBox(height: HBotSpacing.space1),
+        // Device name
         Flexible(
           child: Text(
             device.deviceName,
-            style: TextStyle(
-              color: textPrimary,
-              fontSize: 12, // Reduced from 13 to 12
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              color: HBotColors.textPrimaryLight,
+              fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
             textAlign: TextAlign.center,
@@ -1645,7 +1665,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             softWrap: true,
           ),
         ),
-        const SizedBox(height: 2), // Minimal spacing
+        const SizedBox(height: HBotSpacing.space1),
         // Controls
         if (device.deviceType == DeviceType.shutter)
           Column(
@@ -1655,22 +1675,20 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               Text(
                 '$shutterPosition%',
                 style: const TextStyle(
-                  color: AppTheme.primaryColor,
+                  fontFamily: 'Inter',
+                  color: HBotColors.primary,
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              // Shutter control buttons - larger and easier to tap
-              // MODIFICATION 1: Removed optimistic position updates
-              // MODIFICATION 2: Buttons disabled at physical limits with dimmed appearance
-              // Button order: Close/Stop/Open (matches list view)
+              // Shutter control buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Close button (dimmed at 0%)
                   SizedBox(
-                    width: 32, // Reduced from 36 to 32
-                    height: 32, // Reduced from 36 to 32
+                    width: 32,
+                    height: 32,
                     child: IconButton(
                       icon: const Icon(Icons.arrow_downward),
                       onPressed:
@@ -1682,37 +1700,37 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                           : null,
                       color: isControllable && _mqttConnected && isOnline
                           ? (shutterPosition > 0
-                                ? textPrimary
-                                : textPrimary.withOpacity(0.3))
-                          : textHint,
+                                ? HBotColors.textPrimaryLight
+                                : HBotColors.neutral300)
+                          : HBotColors.textTertiaryLight,
                       padding: EdgeInsets.zero,
                       tooltip: 'Close',
-                      iconSize: 16, // Reduced from 18 to 16
+                      iconSize: 16,
                     ),
                   ),
-                  const SizedBox(width: 2), // Reduced spacing
-                  // Stop button (always enabled when online)
+                  const SizedBox(width: 2),
+                  // Stop button
                   SizedBox(
-                    width: 32, // Reduced from 36 to 32
-                    height: 32, // Reduced from 36 to 32
+                    width: 32,
+                    height: 32,
                     child: IconButton(
                       icon: const Icon(Icons.stop),
                       onPressed: isControllable && _mqttConnected && isOnline
                           ? () => _controlShutter(device, 'stop')
                           : null,
                       color: isControllable && _mqttConnected && isOnline
-                          ? textPrimary
-                          : textHint,
+                          ? HBotColors.textPrimaryLight
+                          : HBotColors.textTertiaryLight,
                       padding: EdgeInsets.zero,
                       tooltip: 'Stop',
-                      iconSize: 16, // Reduced from 18 to 16
+                      iconSize: 16,
                     ),
                   ),
-                  const SizedBox(width: 2), // Reduced spacing
+                  const SizedBox(width: 2),
                   // Open button (dimmed at 100%)
                   SizedBox(
-                    width: 32, // Reduced from 36 to 32
-                    height: 32, // Reduced from 36 to 32
+                    width: 32,
+                    height: 32,
                     child: IconButton(
                       icon: const Icon(Icons.arrow_upward),
                       onPressed:
@@ -1724,12 +1742,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                           : null,
                       color: isControllable && _mqttConnected && isOnline
                           ? (shutterPosition < 100
-                                ? textPrimary
-                                : textPrimary.withOpacity(0.3))
-                          : textHint,
+                                ? HBotColors.textPrimaryLight
+                                : HBotColors.neutral300)
+                          : HBotColors.textTertiaryLight,
                       padding: EdgeInsets.zero,
                       tooltip: 'Open',
-                      iconSize: 16, // Reduced from 18 to 16
+                      iconSize: 16,
                     ),
                   ),
                 ],
@@ -1746,7 +1764,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        AppTheme.primaryColor,
+                        HBotColors.primary,
                       ),
                     ),
                   )
@@ -1825,8 +1843,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     bool isOnline,
   ) {
     final canControl = isControllable && _mqttConnected && isOnline;
-    final textPrimary = AppTheme.getTextPrimary(context);
-    final textHint = AppTheme.getTextHint(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -1835,18 +1851,18 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         Text(
           '$position%',
           style: const TextStyle(
+            fontFamily: 'Inter',
             fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: AppTheme.primaryColor,
+            fontWeight: FontWeight.w700,
+            color: HBotColors.primary,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: HBotSpacing.space2),
 
         // Control buttons row
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Close button (dimmed at 0%)
             IconButton(
               icon: const Icon(Icons.arrow_downward, size: 20),
               onPressed: canControl && position > 0
@@ -1854,29 +1870,25 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   : null,
               color: canControl
                   ? (position > 0
-                        ? textPrimary
-                        : textPrimary.withOpacity(0.3))
-                  : textHint,
+                        ? HBotColors.textPrimaryLight
+                        : HBotColors.neutral300)
+                  : HBotColors.textTertiaryLight,
               tooltip: 'Close',
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(HBotSpacing.space1),
               constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             ),
-            const SizedBox(width: 4),
-
-            // Stop button (always enabled when controllable)
+            const SizedBox(width: HBotSpacing.space1),
             IconButton(
               icon: const Icon(Icons.stop, size: 20),
               onPressed: canControl
                   ? () => _controlShutter(device, 'stop')
                   : null,
-              color: canControl ? textPrimary : textHint,
+              color: canControl ? HBotColors.textPrimaryLight : HBotColors.textTertiaryLight,
               tooltip: 'Stop',
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(HBotSpacing.space1),
               constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             ),
-            const SizedBox(width: 4),
-
-            // Open button (dimmed at 100%)
+            const SizedBox(width: HBotSpacing.space1),
             IconButton(
               icon: const Icon(Icons.arrow_upward, size: 20),
               onPressed: canControl && position < 100
@@ -1884,11 +1896,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   : null,
               color: canControl
                   ? (position < 100
-                        ? textPrimary
-                        : textPrimary.withOpacity(0.3))
-                  : textHint,
+                        ? HBotColors.textPrimaryLight
+                        : HBotColors.neutral300)
+                  : HBotColors.textTertiaryLight,
               tooltip: 'Open',
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(HBotSpacing.space1),
               constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             ),
           ],
@@ -1910,7 +1922,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 Text('Connection lost. Please check your network.'),
               ],
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
         return;
@@ -1939,7 +1951,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to control shutter: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -1955,7 +1967,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             content: Text(
               'Device ${device.name} is not configured for control',
             ),
-            backgroundColor: Colors.orange,
+            backgroundColor: HBotColors.warning,
           ),
         );
         return;
@@ -1972,7 +1984,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 Text('Connection lost. Please check your network.'),
               ],
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
             action: SnackBarAction(
               label: 'Retry',
               textColor: Colors.white,
@@ -1996,7 +2008,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to control ${device.name}: ${e.toString()}'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
             action: SnackBarAction(
               label: 'Debug',
               textColor: Colors.white,
@@ -2011,15 +2023,15 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void _showOptionsMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.getCardColor(context),
+      backgroundColor: HBotColors.cardLight,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(HBotRadius.xl)),
       ),
       builder: (context) => SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(AppTheme.paddingLarge),
+            padding: const EdgeInsets.all(HBotSpacing.space6),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -2030,44 +2042,41 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: AppTheme.getTextHint(context),
-                      borderRadius: BorderRadius.circular(2),
+                      color: HBotColors.neutral300,
+                      borderRadius: HBotRadius.fullRadius,
                     ),
                   ),
                 ),
-                const SizedBox(height: AppTheme.paddingMedium),
-                Text(
+                const SizedBox(height: HBotSpacing.space4),
+                const Text(
                   'View & Filter Options',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: HBotColors.textPrimaryLight,
+                  ),
                 ),
-                const SizedBox(height: AppTheme.paddingMedium),
+                const SizedBox(height: HBotSpacing.space4),
 
-                // Dashboard Background option (only if home is selected)
+                // Dashboard Background option
                 if (_selectedHome != null) ...[
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppTheme.primaryColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(
-                        Icons.image_outlined,
-                        color: AppTheme.primaryColor,
-                      ),
+                    leading: hbotCircleIcon(
+                      icon: Icons.image_outlined,
+                      backgroundColor: HBotColors.primarySurface,
+                      iconColor: HBotColors.primary,
                     ),
                     title: const Text('Dashboard Background'),
                     subtitle: const Text('Set background image'),
-                    trailing: const Icon(Icons.chevron_right),
+                    trailing: const Icon(Icons.chevron_right, color: HBotColors.textTertiaryLight),
                     onTap: () {
                       Navigator.pop(context);
                       _showHomeBackgroundDialog();
                     },
                   ),
-                  const Divider(),
+                  const Divider(color: HBotColors.dividerLight),
                 ],
 
                 // View mode toggle
@@ -2075,7 +2084,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(
                     _isGridView ? Icons.grid_view : Icons.view_list,
-                    color: AppTheme.primaryColor,
+                    color: HBotColors.primary,
                   ),
                   title: const Text('View Mode'),
                   subtitle: Text(_isGridView ? 'Grid View' : 'List View'),
@@ -2088,7 +2097,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       _saveViewPreference(value);
                       Navigator.pop(context);
                     },
-                    activeTrackColor: AppTheme.primaryColor,
                   ),
                   onTap: () {
                     final newValue = !_isGridView;
@@ -2105,7 +2113,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(
                     Icons.visibility_off,
-                    color: AppTheme.secondaryColor,
+                    color: HBotColors.primaryLight,
                   ),
                   title: const Text('Hide Offline Devices'),
                   trailing: Switch(
@@ -2116,7 +2124,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       });
                       Navigator.pop(context);
                     },
-                    activeTrackColor: AppTheme.secondaryColor,
                   ),
                   onTap: () {
                     setState(() {
@@ -2126,18 +2133,16 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   },
                 ),
 
-                const Divider(),
+                const Divider(color: HBotColors.dividerLight),
 
-                // Sort options
+                // Sort options - section header
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    vertical: AppTheme.paddingSmall,
+                    vertical: HBotSpacing.space2,
                   ),
                   child: Text(
-                    'Sort By',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: AppTheme.getTextSecondary(context),
-                    ),
+                    'SORT BY',
+                    style: hbotSectionHeader(),
                   ),
                 ),
 
@@ -2150,7 +2155,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   Icons.category_outlined,
                 ),
 
-                const SizedBox(height: AppTheme.paddingMedium),
+                const SizedBox(height: HBotSpacing.space4),
               ],
             ),
           ),
@@ -2166,20 +2171,21 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       leading: Icon(
         icon,
         color: isSelected
-            ? AppTheme.primaryColor
-            : AppTheme.getTextSecondary(context),
+            ? HBotColors.primary
+            : HBotColors.textSecondaryLight,
       ),
       title: Text(
         label,
         style: TextStyle(
+          fontFamily: 'Inter',
           color: isSelected
-              ? AppTheme.primaryColor
-              : AppTheme.getTextPrimary(context),
-          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+              ? HBotColors.primary
+              : HBotColors.textPrimaryLight,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
         ),
       ),
       trailing: isSelected
-          ? const Icon(Icons.check, color: AppTheme.primaryColor)
+          ? const Icon(Icons.check, color: HBotColors.primary)
           : null,
       onTap: () {
         setState(() {
@@ -2193,31 +2199,34 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void _showHomeSelector() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.getCardColor(context),
-      shape: const RoundedRectangleBorder(
+      backgroundColor: HBotColors.cardLight,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppTheme.radiusLarge),
+          top: Radius.circular(HBotRadius.xl),
         ),
       ),
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.all(AppTheme.paddingLarge),
+          padding: const EdgeInsets.all(HBotSpacing.space6),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Select Home',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: HBotColors.textPrimaryLight,
+                ),
               ),
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
               ..._homes.map(
                 (home) => ListTile(
                   title: Text(home.name),
                   trailing: _selectedHome?.id == home.id
-                      ? Icon(Icons.check, color: AppTheme.primaryColor)
+                      ? const Icon(Icons.check, color: HBotColors.primary)
                       : null,
                   onTap: () {
                     Navigator.pop(context);
@@ -2301,7 +2310,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 content: Text(
                   'Unable to load home data. Please check your connection and try again.',
                 ),
-                backgroundColor: Colors.red,
+                backgroundColor: HBotColors.error,
               ),
             );
           }
@@ -2317,12 +2326,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void _showAddMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.getCardColor(context),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      backgroundColor: HBotColors.cardLight,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(HBotRadius.xl)),
       ),
       builder: (context) => Container(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -2330,33 +2339,32 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppTheme.textHint,
-                borderRadius: BorderRadius.circular(2),
+                color: HBotColors.neutral300,
+                borderRadius: HBotRadius.fullRadius,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
             Text(
               _getAddMenuTitle(),
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: HBotColors.textPrimaryLight,
+              ),
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Show different options based on current state
             if (_homes.isEmpty) ...[
               // No homes exist - prioritize home creation
               ListTile(
-                leading: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.home_work_outlined,
-                    color: AppTheme.primaryColor,
-                  ),
+                leading: hbotCircleIcon(
+                  icon: Icons.home_work_outlined,
+                  backgroundColor: HBotColors.primarySurface,
+                  iconColor: HBotColors.primary,
+                  size: 44,
+                  iconSize: 24,
                 ),
                 title: const Text('Create Your First Home'),
                 subtitle: const Text(
@@ -2383,23 +2391,26 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               if (_selectedHome == null) ...[
                 // No home selected - guide user to select first
                 Container(
-                  padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.all(HBotSpacing.space3),
+                  margin: const EdgeInsets.only(bottom: HBotSpacing.space4),
                   decoration: BoxDecoration(
-                    color: Colors.orange.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
+                    color: HBotColors.warningLight,
+                    borderRadius: HBotRadius.smallRadius,
                     border: Border.all(
-                      color: Colors.orange.withOpacity(0.3),
+                      color: HBotColors.warning.withOpacity(0.3),
                     ),
                   ),
-                  child: Row(
+                  child: const Row(
                     children: [
-                      Icon(Icons.info_outline, color: Colors.orange),
-                      const SizedBox(width: 8),
+                      Icon(Icons.info_outline, color: HBotColors.warningDark),
+                      SizedBox(width: HBotSpacing.space2),
                       Expanded(
                         child: Text(
                           'Select a home first to add devices',
-                          style: TextStyle(color: Colors.orange[700]),
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            color: HBotColors.warningDark,
+                          ),
                         ),
                       ),
                     ],
@@ -2408,16 +2419,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ],
 
               ListTile(
-                leading: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppTheme.secondaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.devices_outlined,
-                    color: AppTheme.secondaryColor,
-                  ),
+                leading: hbotCircleIcon(
+                  icon: Icons.devices_outlined,
+                  backgroundColor: HBotColors.primarySurface,
+                  iconColor: HBotColors.primaryLight,
+                  size: 44,
+                  iconSize: 24,
                 ),
                 title: const Text('Add Device'),
                 subtitle: Text(
@@ -2431,18 +2438,14 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   _showAddDeviceDialog();
                 },
               ),
-              const SizedBox(height: AppTheme.paddingSmall),
+              const SizedBox(height: HBotSpacing.space2),
               ListTile(
-                leading: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(
-                    Icons.home_work_outlined,
-                    color: AppTheme.primaryColor,
-                  ),
+                leading: hbotCircleIcon(
+                  icon: Icons.home_work_outlined,
+                  backgroundColor: HBotColors.primarySurface,
+                  iconColor: HBotColors.primary,
+                  size: 44,
+                  iconSize: 24,
                 ),
                 title: const Text('Create New Home'),
                 subtitle: const Text('Add another home to manage'),
@@ -2463,7 +2466,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 },
               ),
             ],
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
           ],
         ),
       ),
@@ -2511,13 +2514,13 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: Text('Add Device to ${_selectedHome!.name}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.wifi, color: AppTheme.primaryColor),
+                leading: const Icon(Icons.wifi, color: HBotColors.primary),
                 title: const Text('HBOT Device'),
                 subtitle: const Text('Add HBOT device via Wi-Fi'),
                 onTap: () {
@@ -2527,7 +2530,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Divider(),
               ListTile(
-                leading: const Icon(Icons.device_hub, color: AppTheme.textHint),
+                leading: const Icon(Icons.device_hub, color: HBotColors.textTertiaryLight),
                 title: const Text('Other Device'),
                 subtitle: const Text('Coming soon...'),
                 enabled: false,
@@ -2602,7 +2605,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Select Home for Device'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -2678,23 +2681,29 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Create Home First'),
-          content: const Column(
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.home_outlined, size: 64, color: AppTheme.primaryColor),
-              SizedBox(height: 16),
-              Text(
+              hbotCircleIcon(
+                icon: Icons.home_outlined,
+                backgroundColor: HBotColors.primarySurface,
+                iconColor: HBotColors.primary,
+                size: 64,
+                iconSize: 32,
+              ),
+              const SizedBox(height: HBotSpacing.space4),
+              const Text(
                 'You need to create a home before adding devices.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontFamily: 'Inter', fontSize: 16),
               ),
-              SizedBox(height: 8),
-              Text(
+              const SizedBox(height: HBotSpacing.space2),
+              const Text(
                 'A home is a container for organizing your smart devices.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppTheme.textHint),
+                style: TextStyle(fontFamily: 'Inter', color: HBotColors.textTertiaryLight),
               ),
             ],
           ),
@@ -2721,8 +2730,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 _loadData();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
-                foregroundColor: Colors.white,
+                backgroundColor: HBotColors.primary,
+                foregroundColor: HBotColors.textOnPrimary,
               ),
               child: const Text('Create Home'),
             ),
@@ -2741,15 +2750,15 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: Row(
             children: [
               Icon(
                 _mqttConnected ? Icons.wifi : Icons.wifi_off,
-                color: _mqttConnected ? Colors.green : Colors.red,
+                color: _mqttConnected ? HBotColors.success : HBotColors.error,
               ),
-              const SizedBox(width: 8),
-              Text('MQTT Diagnostics'),
+              const SizedBox(width: HBotSpacing.space2),
+              const Text('MQTT Diagnostics'),
             ],
           ),
           content: SingleChildScrollView(
@@ -2802,11 +2811,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   ]),
 
                 // Debug Messages
-                Text(
+                const Text(
                   'Debug Messages:',
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryColor,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w700,
+                    color: HBotColors.primary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -2865,9 +2875,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AppTheme.primaryColor,
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w700,
+            color: HBotColors.primary,
             fontSize: 14,
           ),
         ),

@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'env.dart';
 import 'screens/auth_wrapper.dart';
+import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
 import 'services/app_lifecycle_manager.dart';
 import 'services/enhanced_mqtt_service.dart';
@@ -128,7 +129,7 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeService.themeMode,
-      home: const AuthWrapper(),
+      home: const SplashScreen(),
     );
   }
 }

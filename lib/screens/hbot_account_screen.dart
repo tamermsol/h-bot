@@ -30,16 +30,16 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text(
           'HBOT Account',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -47,7 +47,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
           children: [
             // Email Address Section
             Container(
-              color: AppTheme.getCardColor(context),
+              color: HBotColors.cardLight,
               child: SettingsTile(
                 icon: Icons.email_outlined,
                 title: 'Email address',
@@ -63,12 +63,12 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
 
             // Delete Account Section
             Container(
-              color: AppTheme.getCardColor(context),
+              color: HBotColors.cardLight,
               child: SettingsTile(
                 icon: Icons.person_remove_outlined,
                 title: 'Delete Account',
                 subtitle: '',
-                titleColor: AppTheme.errorColor,
+                titleColor: HBotColors.error,
                 onTap: () {
                   _showDeleteAccountDialog();
                 },
@@ -104,10 +104,10 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: Text(
             'Email Address',
-            style: TextStyle(color: AppTheme.getTextPrimary(context)),
+            style: TextStyle(color: HBotColors.textPrimaryLight),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -117,7 +117,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 widget.userEmail ?? 'No email',
                 style: TextStyle(
                   fontSize: 16,
-                  color: AppTheme.getTextPrimary(context),
+                  color: HBotColors.textPrimaryLight,
                 ),
               ),
             ],
@@ -140,14 +140,14 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: Row(
             children: [
-              Icon(Icons.warning, color: AppTheme.errorColor),
+              Icon(Icons.warning, color: HBotColors.error),
               const SizedBox(width: 8),
               Text(
                 'Delete Account',
-                style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                style: TextStyle(color: HBotColors.textPrimaryLight),
               ),
             ],
           ),
@@ -160,7 +160,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   'This action cannot be undone. Deleting your account will:',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.getTextPrimary(context),
+                    color: HBotColors.textPrimaryLight,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -174,17 +174,17 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.errorColor.withOpacity(0.1),
+                    color: HBotColors.error.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: AppTheme.errorColor.withOpacity(0.3),
+                      color: HBotColors.error.withOpacity(0.3),
                     ),
                   ),
                   child: Row(
                     children: [
                       Icon(
                         Icons.info_outline,
-                        color: AppTheme.errorColor,
+                        color: HBotColors.error,
                         size: 20,
                       ),
                       const SizedBox(width: 8),
@@ -193,7 +193,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                           'This action is permanent and cannot be reversed',
                           style: TextStyle(
                             fontSize: 12,
-                            color: AppTheme.errorColor,
+                            color: HBotColors.error,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -216,7 +216,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 Navigator.of(context).pop();
                 _showDeleteAccountConfirmation();
               },
-              style: TextButton.styleFrom(foregroundColor: AppTheme.errorColor),
+              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
               child: const Text('Continue'),
             ),
           ],
@@ -231,14 +231,14 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.close, color: AppTheme.errorColor, size: 16),
+          Icon(Icons.close, color: HBotColors.error, size: 16),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               text,
               style: TextStyle(
                 fontSize: 14,
-                color: AppTheme.getTextPrimary(context),
+                color: HBotColors.textPrimaryLight,
               ),
             ),
           ),
@@ -255,10 +255,10 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: Text(
             'Final Confirmation',
-            style: TextStyle(color: AppTheme.getTextPrimary(context)),
+            style: TextStyle(color: HBotColors.textPrimaryLight),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -268,7 +268,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 'To confirm deletion, please type:',
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppTheme.getTextPrimary(context),
+                  color: HBotColors.textPrimaryLight,
                 ),
               ),
               const SizedBox(height: 8),
@@ -276,8 +276,8 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Theme.of(context).brightness == Brightness.dark
-                      ? AppTheme.backgroundColor
-                      : AppTheme.lightSurfaceColor,
+                      ? HBotColors.backgroundLight
+                      : HBotColors.surfaceLight,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -285,7 +285,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.errorColor,
+                    color: HBotColors.error,
                     fontFamily: 'monospace',
                   ),
                 ),
@@ -293,7 +293,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               const SizedBox(height: 12),
               TextField(
                 controller: confirmationController,
-                style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                style: TextStyle(color: HBotColors.textPrimaryLight),
                 decoration: InputDecoration(
                   hintText: 'Type here',
                   border: OutlineInputBorder(
@@ -319,12 +319,12 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Please type the exact confirmation text'),
-                      backgroundColor: AppTheme.errorColor,
+                      backgroundColor: HBotColors.error,
                     ),
                   );
                 }
               },
-              style: TextButton.styleFrom(foregroundColor: AppTheme.errorColor),
+              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
               child: const Text('Delete Account'),
             ),
           ],
@@ -353,7 +353,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 Text('Deleting account...'),
               ],
             ),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 30),
           ),
         );
@@ -370,7 +370,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Account deleted successfully'),
-            backgroundColor: Colors.green,
+            backgroundColor: HBotColors.success,
             duration: Duration(seconds: 3),
           ),
         );
@@ -381,7 +381,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error deleting account: $e'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 5),
           ),
         );

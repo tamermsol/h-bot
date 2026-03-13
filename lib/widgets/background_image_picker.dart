@@ -60,7 +60,7 @@ class BackgroundImagePicker extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: isSelected ? AppTheme.primaryColor : Colors.grey,
+                      color: isSelected ? HBotColors.primary : Colors.grey,
                       width: isSelected ? 3 : 1,
                     ),
                   ),
@@ -103,7 +103,7 @@ class BackgroundImagePicker extends StatelessWidget {
                 icon: const Icon(Icons.photo_library),
                 label: const Text('Gallery'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.secondaryColor,
+                  backgroundColor: HBotColors.primaryLight,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
               ),
@@ -115,7 +115,7 @@ class BackgroundImagePicker extends StatelessWidget {
                 icon: const Icon(Icons.camera_alt),
                 label: const Text('Camera'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.secondaryColor,
+                  backgroundColor: HBotColors.primaryLight,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
               ),
@@ -133,7 +133,7 @@ class BackgroundImagePicker extends StatelessWidget {
               icon: const Icon(Icons.delete),
               label: const Text('Remove Background'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.errorColor,
+                backgroundColor: HBotColors.error,
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
             ),
@@ -236,7 +236,7 @@ class BackgroundImagePicker extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Background image updated successfully!'),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
           ),
         );
       }
@@ -246,7 +246,7 @@ class BackgroundImagePicker extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to save image: $e'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -269,7 +269,7 @@ class BackgroundImagePicker extends StatelessWidget {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.errorColor,
+              backgroundColor: HBotColors.error,
             ),
             child: const Text('Remove'),
           ),
@@ -286,7 +286,7 @@ class BackgroundImagePicker extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Background removed successfully!'),
-          backgroundColor: AppTheme.primaryColor,
+          backgroundColor: HBotColors.primary,
         ),
       );
     }

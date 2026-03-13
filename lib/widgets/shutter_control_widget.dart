@@ -350,7 +350,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to open shutter: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
         setState(() {
@@ -379,7 +379,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to close shutter: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
         setState(() {
@@ -408,7 +408,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to stop shutter: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -486,7 +486,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to set position: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: HBotColors.error,
           ),
         );
         setState(() {
@@ -502,27 +502,27 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: AppTheme.cardColor,
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        color: HBotColors.cardLight,
+        borderRadius: BorderRadius.circular(HBotRadius.medium),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Connection status and animation style selector
           _buildConnectionIndicator(),
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           // Animated visualization
           if (_animationStyle != 'none') ...[
             _buildAnimatedVisualization(),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
           ],
 
           // Control buttons (Close, Stop, Open)
           _buildControlButtons(),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Position slider
           _buildPositionSlider(),
@@ -545,7 +545,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 ? Icons.curtains
                 : Icons.visibility_off,
             size: 20,
-            color: AppTheme.textSecondary,
+            color: HBotColors.textSecondaryLight,
           ),
           onSelected: (value) {
             setState(() {
@@ -593,7 +593,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
             height: 16,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
+              valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary),
             ),
           ),
       ],
@@ -618,11 +618,11 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
       height: 200,
       decoration: BoxDecoration(
         color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+        borderRadius: BorderRadius.circular(HBotRadius.small),
         border: Border.all(color: Colors.grey[700]!, width: 2),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppTheme.radiusSmall - 2),
+        borderRadius: BorderRadius.circular(HBotRadius.small - 2),
         child: Stack(
           children: [
             // Window background (visible when open)
@@ -697,11 +697,11 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
       height: 200,
       decoration: BoxDecoration(
         color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+        borderRadius: BorderRadius.circular(HBotRadius.small),
         border: Border.all(color: Colors.grey[700]!, width: 2),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppTheme.radiusSmall - 2),
+        borderRadius: BorderRadius.circular(HBotRadius.small - 2),
         child: Stack(
           children: [
             // Window background (visible when open)
@@ -849,12 +849,12 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+            borderRadius: BorderRadius.circular(HBotRadius.medium),
             // BLUE SHADOW/GLOW when highlighted (active state)
             boxShadow: isHighlighted
                 ? [
                     BoxShadow(
-                      color: AppTheme.primaryColor.withOpacity(0.5),
+                      color: HBotColors.primary.withOpacity(0.5),
                       blurRadius: 12,
                       spreadRadius: 2,
                       offset: const Offset(0, 0),
@@ -865,14 +865,14 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
           child: ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.cardColor,
+              backgroundColor: HBotColors.cardLight,
               // ALL BUTTONS GREY by default, active button also grey (shadow provides the blue)
               foregroundColor: Colors.grey,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                borderRadius: BorderRadius.circular(HBotRadius.medium),
                 side: BorderSide(
-                  color: isHighlighted ? AppTheme.primaryColor : Colors.grey,
+                  color: isHighlighted ? HBotColors.primary : Colors.grey,
                   width: isHighlighted ? 2 : 1,
                 ),
               ),
@@ -909,7 +909,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: AppTheme.primaryColor,
+            color: HBotColors.primary,
           ),
         ),
         const SizedBox(height: 8),
@@ -919,7 +919,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
           children: [
             const Text(
               'Close',
-              style: TextStyle(fontSize: 12, color: AppTheme.textSecondary),
+              style: TextStyle(fontSize: 12, color: HBotColors.textSecondaryLight),
             ),
             Expanded(
               child: Slider(
@@ -928,8 +928,8 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 max: 100,
                 divisions: 100,
                 label: '${safeSliderValue.round()}%',
-                activeColor: AppTheme.primaryColor,
-                inactiveColor: AppTheme.textSecondary.withOpacity(0.3),
+                activeColor: HBotColors.primary,
+                inactiveColor: HBotColors.textSecondaryLight.withOpacity(0.3),
                 // Use debounced handler for onChanged to send commands while dragging
                 // This provides fast feedback (300ms) instead of waiting for onChangeEnd
                 onChanged: _isConnected ? _onSliderChanged : null,
@@ -939,7 +939,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
             ),
             const Text(
               'Open',
-              style: TextStyle(fontSize: 12, color: AppTheme.textSecondary),
+              style: TextStyle(fontSize: 12, color: HBotColors.textSecondaryLight),
             ),
           ],
         ),

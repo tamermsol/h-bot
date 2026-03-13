@@ -1,127 +1,115 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
+/// Scene Card per design spec (03-COMPONENT-LIBRARY.md Section 2.2)
+/// 72px height, horizontal layout
+/// Scene icon in 40px circle ($surfacePrimarySubtle bg)
+/// Scene name ($titleMedium 16/600) + subtitle ($bodySmall 12/400)
+/// Play button (40x40 circle) on the right
 class SceneCard extends StatelessWidget {
   final Map<String, dynamic> scene;
   final Function(bool) onToggle;
   final VoidCallback? onTap;
+  final VoidCallback? onPlay;
 
   const SceneCard({
     super.key,
     required this.scene,
     required this.onToggle,
     this.onTap,
+    this.onPlay,
   });
 
   @override
   Widget build(BuildContext context) {
     final bool isActive = scene['isActive'] ?? false;
-    final Color sceneColor = scene['color'] ?? HBotColors.primary;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        height: 72,
         padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
-          color: isActive ? HBotColors.primarySurface : HBotColors.cardLight,
+          color: HBotColors.cardLight,
           borderRadius: HBotRadius.largeRadius,
           border: Border.all(
-            color: isActive
-                ? HBotColors.primary.withOpacity(0.2)
-                : HBotColors.borderLight,
+            color: HBotColors.borderLight,
             width: 1,
           ),
-          boxShadow: isActive ? HBotShadows.small : HBotShadows.none,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+        child: Row(
           children: [
-            // Header: gradient icon circle + toggle
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Scene icon in gradient circle
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    gradient: isActive ? HBotColors.primaryGradient : null,
-                    color: isActive ? null : HBotColors.neutral100,
-                    borderRadius: HBotRadius.smallRadius,
-                  ),
-                  child: Icon(
-                    scene['icon'],
-                    color: isActive ? Colors.white : HBotColors.neutral400,
-                    size: 20,
-                  ),
-                ),
-                SizedBox(
-                  height: 28,
-                  child: Switch(
-                    value: isActive,
-                    onChanged: onToggle,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                ),
-              ],
-            ),
-
-            const Spacer(),
-
-            // Scene name
-            Text(
-              scene['name'],
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: isActive ? HBotColors.textPrimaryLight : HBotColors.textSecondaryLight,
+            // Scene icon in 40px circle with blue-tinted bg
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: HBotColors.surfacePrimarySubtle,
+                shape: BoxShape.circle,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-
-            const SizedBox(height: 2),
-
-            // Description
-            Text(
-              scene['description'],
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: HBotColors.textTertiaryLight,
+              child: Icon(
+                scene['icon'] ?? Icons.auto_awesome,
+                color: HBotColors.primary,
+                size: 24,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
 
-            const SizedBox(height: HBotSpacing.space2),
+            const SizedBox(width: HBotSpacing.space3),
 
-            // Time/trigger
-            Row(
-              children: [
-                Icon(
-                  _getTimeIcon(scene['time']),
-                  size: 12,
-                  color: isActive ? sceneColor : HBotColors.textTertiaryLight,
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    scene['time'],
-                    style: TextStyle(
+            // Scene name + subtitle
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    scene['name'] ?? '',
+                    style: const TextStyle(
                       fontFamily: 'Inter',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w400,
-                      color: isActive ? sceneColor : HBotColors.textTertiaryLight,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: HBotColors.textPrimaryLight,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  if (scene['description'] != null ||
+                      scene['time'] != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      scene['description'] ?? scene['time'] ?? '',
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: HBotColors.textSecondaryLight,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+
+            const SizedBox(width: HBotSpacing.space3),
+
+            // Play button (40x40 circle)
+            GestureDetector(
+              onTap: onPlay ?? () => onToggle(!isActive),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                  color: HBotColors.surfacePrimarySubtle,
+                  shape: BoxShape.circle,
                 ),
-              ],
+                child: Icon(
+                  isActive ? Icons.pause : Icons.play_arrow,
+                  color: HBotColors.primary,
+                  size: 24,
+                ),
+              ),
             ),
           ],
         ),
@@ -129,7 +117,8 @@ class SceneCard extends StatelessWidget {
     );
   }
 
-  IconData _getTimeIcon(String time) {
+  // Keep legacy helper for backwards compatibility
+  static IconData getTimeIcon(String time) {
     if (time.toLowerCase().contains('manual')) {
       return Icons.touch_app;
     } else if (time.toLowerCase().contains('location')) {

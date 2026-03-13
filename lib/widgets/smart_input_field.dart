@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
+/// Smart Input Field per design spec (03-COMPONENT-LIBRARY.md Section 3.1)
+/// Height: 52px, Radius: 12px, Border: 1.5px #E8ECF1
+/// Focus: 2px #0883FD + glow shadow
+/// Label above input, helper/error text below
 class SmartInputField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final String? label;
+  final String? helperText;
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
   final String? Function(String?)? validator;
@@ -23,6 +28,7 @@ class SmartInputField extends StatefulWidget {
     required this.controller,
     String? hintText,
     this.label,
+    this.helperText,
     this.onChanged,
     this.onSubmitted,
     this.validator,
@@ -62,7 +68,7 @@ class _SmartInputFieldState extends State<SmartInputField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Label above input
+        // Label above input ($labelMedium 14/500, $textSecondary)
         if (widget.label != null) ...[
           Text(
             widget.label!,
@@ -76,11 +82,14 @@ class _SmartInputFieldState extends State<SmartInputField> {
           const SizedBox(height: HBotSpacing.space1),
         ],
 
-        // Input container
+        // Input container — 52px height, 12px radius, 1.5px border
         Container(
+          height: widget.maxLines > 1 ? null : 52,
           decoration: BoxDecoration(
-            color: HBotColors.surfaceLight,
-            borderRadius: HBotRadius.smallRadius,
+            color: widget.enabled
+                ? HBotColors.surfaceLight
+                : HBotColors.neutral100,
+            borderRadius: HBotRadius.mediumRadius,
             border: Border.all(
               color: _isFocused
                   ? HBotColors.primary
@@ -103,9 +112,11 @@ class _SmartInputFieldState extends State<SmartInputField> {
               maxLines: widget.maxLines,
               textCapitalization: widget.textCapitalization,
               enabled: widget.enabled,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Inter',
-                color: HBotColors.textPrimaryLight,
+                color: widget.enabled
+                    ? HBotColors.textPrimaryLight
+                    : HBotColors.neutral400,
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
                 letterSpacing: 0,
@@ -124,7 +135,9 @@ class _SmartInputFieldState extends State<SmartInputField> {
                   vertical: 14,
                 ),
                 prefixIcon: _resolvedPrefixIcon,
-                prefixIconColor: _isFocused ? HBotColors.primary : HBotColors.iconDefault,
+                prefixIconColor: _isFocused
+                    ? HBotColors.primary
+                    : HBotColors.iconDefault,
                 suffixIcon: widget.suffixIcon,
                 suffixIconColor: HBotColors.iconDefault,
                 errorStyle: const TextStyle(
@@ -137,6 +150,20 @@ class _SmartInputFieldState extends State<SmartInputField> {
             ),
           ),
         ),
+
+        // Helper text below input
+        if (widget.helperText != null) ...[
+          const SizedBox(height: HBotSpacing.space1),
+          Text(
+            widget.helperText!,
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: HBotColors.textSecondaryLight,
+            ),
+          ),
+        ],
       ],
     );
   }
