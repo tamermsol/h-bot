@@ -4,16 +4,14 @@ import '../theme/app_theme.dart';
 class DeviceCard extends StatelessWidget {
   final String title;
   final IconData icon;
-
-  /// Optional explicit online flag. If null the caller's previous behavior
-  /// should provide a computed boolean; keep the existing `isOn` for backward
-  /// compatibility.
   final bool? isOnline;
   final bool isOn;
   final String? value;
+  final String? roomName;
   final Function(bool) onToggle;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final Color? deviceColor;
 
   const DeviceCard({
     super.key,
@@ -23,110 +21,105 @@ class DeviceCard extends StatelessWidget {
     required this.isOn,
     required this.onToggle,
     this.value,
+    this.roomName,
     this.onTap,
     this.onLongPress,
+    this.deviceColor,
   });
+
+  Color get _activeColor => deviceColor ?? HBotColors.primary;
 
   @override
   Widget build(BuildContext context) {
+    final online = isOnline ?? isOn;
+
     return GestureDetector(
       onTap: onTap,
       onLongPress: onLongPress,
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
-        decoration: BoxDecoration(
-          color: AppTheme.cardColor,
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          border: Border.all(
-            color: isOn
-                ? AppTheme.primaryColor.withOpacity(0.3)
-                : Colors.transparent,
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
+        decoration: hbotDeviceCardDecoration(isOn: isOn),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header with icon and toggle
+            // Header: icon circle + status dot
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // Device type icon
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
                     color: isOn
-                        ? AppTheme.primaryColor.withOpacity(0.2)
-                        : AppTheme.textHint.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                        ? _activeColor.withOpacity(0.12)
+                        : HBotColors.neutral100,
+                    borderRadius: HBotRadius.smallRadius,
                   ),
                   child: Icon(
                     icon,
-                    color: isOn ? AppTheme.primaryColor : AppTheme.textHint,
-                    size: 24,
+                    color: isOn ? _activeColor : HBotColors.neutral400,
+                    size: 22,
                   ),
                 ),
-                Switch(
-                  value: isOn,
-                  onChanged: onToggle,
-                  inactiveTrackColor: AppTheme.textHint.withOpacity(0.3),
+                // Toggle switch
+                SizedBox(
+                  height: 28,
+                  child: Switch(
+                    value: isOn,
+                    onChanged: onToggle,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                 ),
               ],
             ),
 
             const Spacer(),
 
-            // Device title
+            // Device name
             Text(
               title,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: isOn ? AppTheme.textPrimary : AppTheme.textSecondary,
-                fontWeight: FontWeight.w600,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: isOn ? HBotColors.textPrimaryLight : HBotColors.textSecondaryLight,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
 
-            // Value display (if provided)
+            // Value (dimmer %, sensor reading, etc.)
             if (value != null) ...[
-              const SizedBox(height: 4),
+              const SizedBox(height: 2),
               Text(
                 value!,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: isOn ? AppTheme.primaryColor : AppTheme.textHint,
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 12,
                   fontWeight: FontWeight.w500,
+                  color: isOn ? _activeColor : HBotColors.textTertiaryLight,
                 ),
               ),
             ],
 
-            // Status indicator
-            const SizedBox(height: 8),
+            // Room name or status
+            const SizedBox(height: HBotSpacing.space2),
             Row(
               children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: (isOnline ?? isOn)
-                        ? AppTheme.accentColor
-                        : AppTheme.textHint,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  (isOnline ?? isOn) ? 'Online' : 'Offline',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: (isOnline ?? isOn)
-                        ? AppTheme.accentColor
-                        : AppTheme.textHint,
-                    fontSize: 12,
+                hbotStatusDot(isOnline: online, size: 7),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    roomName ?? (online ? 'Online' : 'Offline'),
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: HBotColors.textTertiaryLight,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

@@ -16,59 +16,52 @@ class SceneCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isActive = scene['isActive'] ?? false;
-    final Color sceneColor = scene['color'] ?? AppTheme.primaryColor;
+    final Color sceneColor = scene['color'] ?? HBotColors.primary;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
-          color: AppTheme.cardColor,
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          color: isActive ? HBotColors.primarySurface : HBotColors.cardLight,
+          borderRadius: HBotRadius.largeRadius,
           border: Border.all(
             color: isActive
-                ? sceneColor.withOpacity(0.5)
-                : Colors.transparent,
-            width: 2,
+                ? HBotColors.primary.withOpacity(0.2)
+                : HBotColors.borderLight,
+            width: 1,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: isActive
-                  ? sceneColor.withOpacity(0.2)
-                  : Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          boxShadow: isActive ? HBotShadows.small : HBotShadows.none,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Header with icon and toggle
+            // Header: gradient icon circle + toggle
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                // Scene icon in gradient circle
                 Container(
-                  padding: const EdgeInsets.all(6),
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    color: isActive
-                        ? sceneColor.withOpacity(0.2)
-                        : AppTheme.textHint.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                    gradient: isActive ? HBotColors.primaryGradient : null,
+                    color: isActive ? null : HBotColors.neutral100,
+                    borderRadius: HBotRadius.smallRadius,
                   ),
                   child: Icon(
                     scene['icon'],
-                    color: isActive ? sceneColor : AppTheme.textHint,
+                    color: isActive ? Colors.white : HBotColors.neutral400,
                     size: 20,
                   ),
                 ),
-                Transform.scale(
-                  scale: 0.8,
+                SizedBox(
+                  height: 28,
                   child: Switch(
                     value: isActive,
                     onChanged: onToggle,
-                    inactiveTrackColor: AppTheme.textHint.withOpacity(0.3),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
               ],
@@ -79,10 +72,11 @@ class SceneCard extends StatelessWidget {
             // Scene name
             Text(
               scene['name'],
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: isActive ? AppTheme.textPrimary : AppTheme.textSecondary,
-                fontWeight: FontWeight.w600,
+              style: TextStyle(
+                fontFamily: 'Inter',
                 fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: isActive ? HBotColors.textPrimaryLight : HBotColors.textSecondaryLight,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -90,34 +84,38 @@ class SceneCard extends StatelessWidget {
 
             const SizedBox(height: 2),
 
-            // Scene description
+            // Description
             Text(
               scene['description'],
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: isActive ? AppTheme.textSecondary : AppTheme.textHint,
-                fontSize: 11,
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: HBotColors.textTertiaryLight,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
 
-            const SizedBox(height: 6),
+            const SizedBox(height: HBotSpacing.space2),
 
-            // Time/trigger info
+            // Time/trigger
             Row(
               children: [
                 Icon(
                   _getTimeIcon(scene['time']),
-                  size: 10,
-                  color: isActive ? sceneColor : AppTheme.textHint,
+                  size: 12,
+                  color: isActive ? sceneColor : HBotColors.textTertiaryLight,
                 ),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
                     scene['time'],
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isActive ? sceneColor : AppTheme.textHint,
-                      fontSize: 10,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                      color: isActive ? sceneColor : HBotColors.textTertiaryLight,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

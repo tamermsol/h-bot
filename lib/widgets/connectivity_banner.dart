@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 /// Banner that shows when device is offline
 class ConnectivityBanner extends StatelessWidget {
@@ -12,19 +13,20 @@ class ConnectivityBanner extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: const Color(0xFFFF9500), // Orange warning color
-      child: Row(
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: HBotSpacing.space4),
+      color: HBotColors.warning,
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Icon(Icons.cloud_off, size: 16, color: Colors.white),
           SizedBox(width: 8),
           Expanded(
             child: Text(
               'No internet connection',
               style: TextStyle(
+                fontFamily: 'Inter',
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),
               textAlign: TextAlign.center,

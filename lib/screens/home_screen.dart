@@ -38,10 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _startConnectivityMonitoring() {
-    // Check immediately
     _checkConnectivity();
-
-    // Then check every 10 seconds
     _connectivityCheckTimer = Timer.periodic(
       const Duration(seconds: 10),
       (_) => _checkConnectivity(),
@@ -68,22 +65,63 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      backgroundColor: isDark
-          ? Colors.transparent
-          : Theme.of(context).scaffoldBackgroundColor,
-      extendBodyBehindAppBar: isDark,
-      extendBody: isDark,
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
-        title: Text(
-          _getAppBarTitle(),
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor
-            ?.withOpacity(0.7), // Semi-transparent
+        title: _currentIndex == 0
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/branding/hbot_logo.png',
+                    height: 26,
+                    errorBuilder: (_, __, ___) => const Text(
+                      'H-Bot',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: HBotColors.primary,
+                      ),
+                    ),
+                  ),
+                  if (_currentHomeName != null) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      width: 1,
+                      height: 18,
+                      color: HBotColors.borderLight,
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        _currentHomeName!,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: HBotColors.textSecondaryLight,
+                          letterSpacing: -0.1,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ],
+              )
+            : Text(
+                _getAppBarTitle(),
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: HBotColors.textPrimaryLight,
+                  letterSpacing: -0.2,
+                ),
+              ),
+        backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
+        scrolledUnderElevation: 0.5,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(0),
           child: ConnectivityBanner(isOnline: _isOnline),
@@ -110,13 +148,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBody() {
     switch (_currentIndex) {
       case 0:
-        // Home dashboard - uses custom padding for edge-to-edge background
         return HomeDashboardScreen(onHomeNameChanged: _updateHomeName);
       case 1:
-        // Scenes - use SafeArea for proper padding
         return SafeArea(child: const ScenesScreen());
       case 2:
-        // Profile - use SafeArea for proper padding
         return SafeArea(child: const ProfileScreen());
       default:
         return HomeDashboardScreen(onHomeNameChanged: _updateHomeName);
@@ -124,69 +159,63 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBottomNavigation() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Container(
-      decoration: BoxDecoration(
-        color: isDark
-            ? AppTheme.surfaceColor.withOpacity(0.7)
-            : AppTheme.lightNavBarBackground,
-        border: isDark
-            ? null
-            : const Border(
-                top: BorderSide(color: AppTheme.lightNavBarBorder, width: 1),
-              ),
-        boxShadow: isDark
-            ? [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
-                ),
-              ]
-            : null,
+      decoration: const BoxDecoration(
+        color: HBotColors.surfaceLight,
+        border: Border(
+          top: BorderSide(color: HBotColors.borderLight, width: 0.5),
+        ),
       ),
-      child: BottomNavigationBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(
-          context,
-        ).bottomNavigationBarTheme.selectedItemColor,
-        unselectedItemColor: Theme.of(
-          context,
-        ).bottomNavigationBarTheme.unselectedItemColor,
-        selectedLabelStyle: Theme.of(
-          context,
-        ).bottomNavigationBarTheme.selectedLabelStyle,
-        unselectedLabelStyle: Theme.of(
-          context,
-        ).bottomNavigationBarTheme.unselectedLabelStyle,
-        selectedFontSize: 12,
-        unselectedFontSize: 12,
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
+      child: SafeArea(
+        top: false,
+        child: SizedBox(
+          height: 64,
+          child: BottomNavigationBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: HBotColors.primary,
+            unselectedItemColor: HBotColors.neutral400,
+            selectedLabelStyle: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+            ),
+            unselectedLabelStyle: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              letterSpacing: 0.2,
+            ),
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            iconSize: 24,
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.auto_awesome_outlined),
+                activeIcon: Icon(Icons.auto_awesome),
+                label: 'Scenes',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                activeIcon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.auto_awesome_outlined),
-            activeIcon: Icon(Icons.auto_awesome),
-            label: 'Scenes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        ),
       ),
     );
   }

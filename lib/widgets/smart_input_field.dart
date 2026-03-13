@@ -8,12 +8,15 @@ class SmartInputField extends StatefulWidget {
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
   final String? Function(String?)? validator;
-  final IconData? prefixIcon;
+  final IconData? iconData;       // legacy: named parameter
+  final Widget? prefixIcon;       // new: widget-based prefix
   final Widget? suffixIcon;
   final VoidCallback? onSuffixIconPressed;
   final bool obscureText;
   final TextInputType keyboardType;
   final int maxLines;
+  final TextCapitalization textCapitalization;
+  final bool enabled;
 
   const SmartInputField({
     super.key,
@@ -23,12 +26,15 @@ class SmartInputField extends StatefulWidget {
     this.onChanged,
     this.onSubmitted,
     this.validator,
+    this.iconData,
     this.prefixIcon,
     this.suffixIcon,
     this.onSuffixIconPressed,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.maxLines = 1,
+    this.textCapitalization = TextCapitalization.none,
+    this.enabled = true,
   }) : hintText = hintText ?? label ?? '';
 
   @override
@@ -38,76 +44,100 @@ class SmartInputField extends StatefulWidget {
 class _SmartInputFieldState extends State<SmartInputField> {
   bool _isFocused = false;
 
+  Widget? get _resolvedPrefixIcon {
+    if (widget.prefixIcon != null) return widget.prefixIcon;
+    if (widget.iconData != null) {
+      return Icon(
+        widget.iconData,
+        color: _isFocused ? HBotColors.primary : HBotColors.iconDefault,
+        size: 20,
+      );
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Label above input
+        if (widget.label != null) ...[
+          Text(
+            widget.label!,
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: HBotColors.textSecondaryLight,
+            ),
+          ),
+          const SizedBox(height: HBotSpacing.space1),
+        ],
 
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? AppTheme.surfaceColor : Colors.white,
-        borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-        border: Border.all(
-          color: _isFocused
-              ? AppTheme.primaryColor.withOpacity(0.5)
-              : (isDark ? Colors.transparent : AppTheme.lightCardBorder),
-          width: _isFocused ? 2 : 1,
-        ),
-        boxShadow: _isFocused
-            ? [
-                BoxShadow(
-                  color: AppTheme.primaryColor.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+        // Input container
+        Container(
+          decoration: BoxDecoration(
+            color: HBotColors.surfaceLight,
+            borderRadius: HBotRadius.smallRadius,
+            border: Border.all(
+              color: _isFocused
+                  ? HBotColors.primary
+                  : HBotColors.borderLight,
+              width: _isFocused ? 2 : 1.5,
+            ),
+            boxShadow: _isFocused ? HBotShadows.glow : null,
+          ),
+          child: Focus(
+            onFocusChange: (hasFocus) {
+              setState(() => _isFocused = hasFocus);
+            },
+            child: TextFormField(
+              controller: widget.controller,
+              onChanged: widget.onChanged,
+              onFieldSubmitted: widget.onSubmitted,
+              validator: widget.validator,
+              obscureText: widget.obscureText,
+              keyboardType: widget.keyboardType,
+              maxLines: widget.maxLines,
+              textCapitalization: widget.textCapitalization,
+              enabled: widget.enabled,
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                color: HBotColors.textPrimaryLight,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0,
+              ),
+              decoration: InputDecoration(
+                hintText: widget.hintText,
+                hintStyle: const TextStyle(
+                  fontFamily: 'Inter',
+                  color: HBotColors.textTertiaryLight,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
                 ),
-              ]
-            : null,
-      ),
-      child: Focus(
-        onFocusChange: (hasFocus) {
-          setState(() {
-            _isFocused = hasFocus;
-          });
-        },
-        child: TextFormField(
-          controller: widget.controller,
-          onChanged: widget.onChanged,
-          onFieldSubmitted: widget.onSubmitted,
-          validator: widget.validator,
-          obscureText: widget.obscureText,
-          keyboardType: widget.keyboardType,
-          maxLines: widget.maxLines,
-          style: TextStyle(
-            color: AppTheme.getTextPrimary(context),
-            fontSize: 17,
-            fontWeight: FontWeight.w400,
-            letterSpacing: -0.41,
-          ),
-          decoration: InputDecoration(
-            hintText: widget.hintText,
-            hintStyle: TextStyle(
-              color: AppTheme.getTextHint(context),
-              fontSize: 17,
-              fontWeight: FontWeight.w400,
-              letterSpacing: -0.41,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: HBotSpacing.space4,
+                  vertical: 14,
+                ),
+                prefixIcon: _resolvedPrefixIcon,
+                prefixIconColor: _isFocused ? HBotColors.primary : HBotColors.iconDefault,
+                suffixIcon: widget.suffixIcon,
+                suffixIconColor: HBotColors.iconDefault,
+                errorStyle: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: HBotColors.error,
+                ),
+              ),
             ),
-            border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: AppTheme.paddingMedium,
-              vertical: 14,
-            ),
-            prefixIcon: widget.prefixIcon != null
-                ? Icon(
-                    widget.prefixIcon,
-                    color: _isFocused
-                        ? AppTheme.primaryColor
-                        : AppTheme.getTextHint(context),
-                    size: 20,
-                  )
-                : null,
-            suffixIcon: widget.suffixIcon,
           ),
         ),
-      ),
+      ],
     );
   }
 }

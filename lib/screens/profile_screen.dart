@@ -297,49 +297,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.symmetric(
+        horizontal: HBotSpacing.screenPadding,
+        vertical: HBotSpacing.space4,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Profile Header
           _buildProfileHeader(),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Home Information
           _buildHomeInfoSection(),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Settings Section
           _buildSettingsSection(),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Account Section
           _buildAccountSection(),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Support Section
           _buildSupportSection(),
+
+          const SizedBox(height: HBotSpacing.space7),
         ],
       ),
     );
   }
 
   Widget _buildProfileHeader() {
-    final cardColor = AppTheme.getCardColor(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Container(
-      padding: const EdgeInsets.all(AppTheme.paddingLarge),
+      padding: const EdgeInsets.all(HBotSpacing.space6),
       decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [AppTheme.primaryColor.withOpacity(0.1), cardColor]
-              : [AppTheme.lightGradientStart, AppTheme.lightGradientEnd],
-        ),
+        color: HBotColors.cardLight,
+        borderRadius: HBotRadius.xlRadius,
+        border: Border.all(color: HBotColors.borderLight, width: 1),
+        boxShadow: HBotShadows.small,
       ),
       child: Row(
         children: [
