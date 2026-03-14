@@ -76,11 +76,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 32,
                 height: 32,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: HBotColors.primary,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.smart_toy, color: Colors.white, size: 20),
+                ),
               ),
             ),
             const SizedBox(width: 10),
             Text(
-              _getAppBarTitle(),
+              _currentIndex == 0 ? 'H-Bot' : _getAppBarTitle(),
               style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 20,

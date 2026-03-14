@@ -77,6 +77,15 @@ class _SplashScreenState extends State<SplashScreen>
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      gradient: HBotColors.primaryGradient,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Icon(Icons.smart_toy, color: Colors.white, size: 40),
+                  ),
                 ),
               ),
 

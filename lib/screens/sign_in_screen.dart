@@ -167,6 +167,15 @@ class _SignInScreenState extends State<SignInScreen> {
                           width: 64,
                           height: 64,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Container(
+                            width: 64,
+                            height: 64,
+                            decoration: BoxDecoration(
+                              color: HBotColors.primary,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Icon(Icons.smart_toy, color: Colors.white, size: 32),
+                          ),
                         ),
                       ),
                     ),

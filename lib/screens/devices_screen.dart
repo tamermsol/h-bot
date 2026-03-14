@@ -225,8 +225,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                     crossAxisCount: 2,
                                     crossAxisSpacing: HBotSpacing.space2,
                                     mainAxisSpacing: HBotSpacing.space2,
-                                    childAspectRatio:
-                                        1.3, // Match dashboard exactly
+                                    mainAxisExtent:
+                                        130, // Match dashboard exactly
                                   ),
                               itemCount: _filteredDevices.length,
                               itemBuilder: (context, index) {

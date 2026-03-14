@@ -886,8 +886,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         if (_selectedHome != null)
           Positioned(
             right: 20,
-            bottom: 20,
-            child: FloatingActionButton(
+            bottom: 16,
+            child: FloatingActionButton.extended(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -902,7 +902,15 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 );
               },
               backgroundColor: HBotColors.primary,
-              child: const Icon(Icons.add, color: Colors.white),
+              icon: const Icon(Icons.add, color: Colors.white),
+              label: const Text(
+                'Add Device',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
       ],
@@ -1238,7 +1246,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          childAspectRatio: 1.3,
+          mainAxisExtent: 130,
         ),
         itemCount: 4,
         itemBuilder: (context, index) {
@@ -1313,12 +1321,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       onRefresh: _loadData,
       color: HBotColors.primary,
       child: GridView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 80),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          childAspectRatio: 1.3,
+          mainAxisExtent: 130,
         ),
         itemCount: _filteredDevices.length,
         itemBuilder: (context, index) {
