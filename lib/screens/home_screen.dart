@@ -71,40 +71,16 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        titleSpacing: 16,
-        title: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                'assets/images/branding/hbot_app_icon.png',
-                width: 36,
-                height: 36,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    gradient: HBotColors.primaryGradient,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(HBotIcons.smartToy, color: Colors.white, size: 22),
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            _currentIndex == 0
-                ? AppTheme.hbotGradientText('H-Bot', fontSize: 20, fontWeight: FontWeight.w700)
-                : Text(
-                    _getAppBarTitle(),
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: HBotColors.textPrimaryLight,
-                    ),
-                  ),
-          ],
+        titleSpacing: 20,
+        title: Text(
+          _getAppBarTitle(),
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: HBotColors.textPrimaryLight,
+            letterSpacing: -0.3,
+          ),
         ),
         backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
@@ -123,32 +99,44 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget>? _buildAppBarActions() {
     if (_currentIndex == 0) {
       return [
-        IconButton(
-          icon: Icon(HBotIcons.notifications, size: 22),
-          color: HBotColors.iconDefault,
-          onPressed: () {
-            // Notifications placeholder
-          },
+        SizedBox(
+          width: 44,
+          height: 44,
+          child: IconButton(
+            icon: Icon(HBotIcons.notifications, size: 24),
+            color: HBotColors.iconDefault,
+            onPressed: () {
+              // Notifications placeholder
+            },
+          ),
         ),
-        IconButton(
-          icon: Icon(HBotIcons.settings, size: 22),
-          color: HBotColors.iconDefault,
-          onPressed: () {
-            setState(() => _currentIndex = 2);
-          },
+        SizedBox(
+          width: 44,
+          height: 44,
+          child: IconButton(
+            icon: Icon(HBotIcons.settings, size: 24),
+            color: HBotColors.iconDefault,
+            onPressed: () {
+              setState(() => _currentIndex = 2);
+            },
+          ),
         ),
-        SizedBox(width: 4),
+        const SizedBox(width: 8),
       ];
     } else if (_currentIndex == 1) {
       return [
-        IconButton(
-          icon: Icon(HBotIcons.add, size: 22),
-          color: HBotColors.iconDefault,
-          onPressed: () {
-            // Scene creation is handled by ScenesScreen internally
-          },
+        SizedBox(
+          width: 44,
+          height: 44,
+          child: IconButton(
+            icon: Icon(HBotIcons.add, size: 24),
+            color: HBotColors.iconDefault,
+            onPressed: () {
+              // Scene creation is handled by ScenesScreen internally
+            },
+          ),
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: 8),
       ];
     }
     return null;

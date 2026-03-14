@@ -873,11 +873,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           children: [
             // Greeting section
             _buildGreetingSection(),
-            // Decorative gradient divider between sections
-            if (_homes.isNotEmpty)
-              const GradientDivider(
-                margin: EdgeInsets.symmetric(horizontal: 40, vertical: 4),
-              ),
             // Room tabs
             if (_homes.isNotEmpty && _rooms.isNotEmpty)
               Container(
@@ -966,124 +961,83 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (_homes.isNotEmpty) ...[
-            // Greeting card with gradient
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF0A1628),
-                    Color(0xFF0668CA),
-                    Color(0xFF0883FD),
-                  ],
-                  stops: [0.0, 0.55, 1.0],
+            // Home selector pill
+            GestureDetector(
+              onTap: _showHomeSelector,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: HBotColors.surfacePrimarySubtle,
+                  borderRadius: BorderRadius.circular(HBotRadius.full),
+                  border: Border.all(
+                    color: HBotColors.primary.withOpacity(0.15),
+                    width: 1,
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(HBotRadius.large),
-                // No drop shadow per design spec — depth via gradient + border
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      HBotIcons.home,
+                      color: HBotColors.primary,
+                      size: 14,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        _selectedHome?.name ?? 'Select Home',
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: HBotColors.primary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      HBotIcons.chevronDown,
+                      color: HBotColors.primary.withOpacity(0.6),
+                      size: 16,
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            const SizedBox(height: 16),
+            // Greeting — $titleLarge (18px/600), $textPrimary
+            Text(
+              '${_getGreeting()} ${_getGreetingEmoji()}',
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: HBotColors.textPrimaryLight,
+                letterSpacing: -0.2,
+              ),
+            ),
+            const SizedBox(height: 4),
+            // Online device count — $bodyMedium (14px/400), count in $primary
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: HBotColors.textSecondaryLight,
+                ),
                 children: [
-                  // Home selector row
-                  GestureDetector(
-                    onTap: _showHomeSelector,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.12),
-                        borderRadius:
-                            BorderRadius.circular(HBotRadius.full),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            HBotIcons.home,
-                            color: Colors.white.withOpacity(0.9),
-                            size: 14,
-                          ),
-                          const SizedBox(width: 6),
-                          Flexible(
-                            child: Text(
-                              _selectedHome?.name ?? 'Select Home',
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white.withOpacity(0.9),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          SizedBox(width: 2),
-                          Icon(
-                            HBotIcons.chevronDown,
-                            color: Colors.white.withOpacity(0.7),
-                            size: 16,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Greeting
-                  Text(
-                    '${_getGreeting()}${_getGreetingEmoji()}',
+                  TextSpan(
+                    text: '$onlineCount',
                     style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      letterSpacing: -0.3,
+                      color: HBotColors.primary,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  // Online device count
-                  if (_devices.isNotEmpty)
-                    Row(
-                      children: [
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: onlineCount > 0
-                                ? HBotColors.success
-                                : HBotColors.neutral400,
-                            shape: BoxShape.circle,
-                            boxShadow: onlineCount > 0
-                                ? [
-                                    BoxShadow(
-                                      color: HBotColors.success
-                                          .withOpacity(0.5),
-                                      blurRadius: 6,
-                                      spreadRadius: 1,
-                                    ),
-                                  ]
-                                : null,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '$onlineCount device${onlineCount == 1 ? '' : 's'} online',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white.withOpacity(0.75),
-                          ),
-                        ),
-                        const Spacer(),
-                        Icon(
-                          HBotIcons.devices,
-                          color: Colors.white.withOpacity(0.3),
-                          size: 32,
-                        ),
-                      ],
-                    ),
+                  TextSpan(
+                    text: ' device${onlineCount == 1 ? '' : 's'} online',
+                  ),
                 ],
               ),
             ),
@@ -1338,7 +1292,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          mainAxisExtent: 130,
+          mainAxisExtent: 140,
         ),
         itemCount: 4,
         itemBuilder: (context, index) {
@@ -1418,7 +1372,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          mainAxisExtent: 130,
+          mainAxisExtent: 140,
         ),
         itemCount: _filteredDevices.length,
         itemBuilder: (context, index) {

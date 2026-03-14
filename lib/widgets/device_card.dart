@@ -63,7 +63,7 @@ class _DeviceCardState extends State<DeviceCard> {
         child: AnimatedContainer(
           duration: HBotDurations.fast,
           curve: HBotCurves.standard,
-          constraints: const BoxConstraints(minHeight: 120),
+          constraints: const BoxConstraints(minHeight: 140),
           decoration: BoxDecoration(
             color: _isPressed
                 ? HBotColors.surfaceCardHover
@@ -107,9 +107,9 @@ class _DeviceCardState extends State<DeviceCard> {
                       ),
                     ),
 
-                  // Card content with 12px padding
+                  // Card content with 16px padding per spec
                   Padding(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
@@ -122,7 +122,7 @@ class _DeviceCardState extends State<DeviceCard> {
                               color: widget.isOn
                                   ? HBotColors.iconActive
                                   : HBotColors.iconDefault,
-                              size: 28,
+                              size: 32,
                             ),
                             const SizedBox(width: 8),
                             Expanded(
@@ -130,11 +130,11 @@ class _DeviceCardState extends State<DeviceCard> {
                                 widget.title,
                                 style: const TextStyle(
                                   fontFamily: 'Inter',
-                                  fontSize: 14,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                   color: HBotColors.textPrimaryLight,
                                 ),
-                                maxLines: 1,
+                                maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -149,7 +149,7 @@ class _DeviceCardState extends State<DeviceCard> {
                               widget.roomName!,
                               style: const TextStyle(
                                 fontFamily: 'Inter',
-                                fontSize: 11,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w400,
                                 color: HBotColors.textSecondaryLight,
                               ),
