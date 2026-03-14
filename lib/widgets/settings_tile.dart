@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
 /// Settings Tile per design spec (03-COMPONENT-LIBRARY.md Section 2.3)
-/// 56px height, icon + label + chevron
-/// Grouped in card wrapper with 16px radius and 1px border
+/// 56px height, 16px horizontal padding
+/// Icon: 24px, iconDefault=#5A6577
+/// Label: bodyLarge 16/400, textPrimary=#0A1628
+/// Value: bodyMedium 14/400, textSecondary=#5A6577
+/// Chevron: 16px, neutral400
+/// Pressed bg = neutral100
 class SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -28,58 +32,65 @@ class SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            height: 56,
-            padding: const EdgeInsets.symmetric(
-              horizontal: HBotSpacing.space4,
-            ),
-            child: Row(
-              children: [
-                // Icon
-                Icon(
-                  icon,
-                  color: titleColor ?? HBotColors.iconDefault,
-                  size: 24,
-                ),
-                const SizedBox(width: HBotSpacing.space3),
-                // Label
-                Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: titleColor ?? HBotColors.textPrimaryLight,
-                    ),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            splashColor: HBotColors.neutral100,
+            highlightColor: HBotColors.neutral100,
+            child: Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(
+                horizontal: HBotSpacing.space4,
+              ),
+              child: Row(
+                children: [
+                  // Icon (24px, $iconDefault)
+                  Icon(
+                    icon,
+                    color: titleColor ?? HBotColors.iconDefault,
+                    size: 24,
                   ),
-                ),
-                // Value/trailing
-                if (subtitle.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(right: HBotSpacing.space2),
+                  const SizedBox(width: HBotSpacing.space3),
+                  // Label ($bodyLarge 16/400, $textPrimary)
+                  Expanded(
                     child: Text(
-                      subtitle,
-                      style: const TextStyle(
+                      title,
+                      style: TextStyle(
                         fontFamily: 'Inter',
-                        fontSize: 14,
+                        fontSize: 16,
                         fontWeight: FontWeight.w400,
-                        color: HBotColors.textSecondaryLight,
+                        color: titleColor ?? HBotColors.textPrimaryLight,
                       ),
                     ),
                   ),
-                trailing ??
-                    const Icon(
-                      Icons.chevron_right,
-                      color: HBotColors.neutral400,
-                      size: 16,
+                  // Value text ($bodyMedium 14/400, $textSecondary)
+                  if (subtitle.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(right: HBotSpacing.space2),
+                      child: Text(
+                        subtitle,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: HBotColors.textSecondaryLight,
+                        ),
+                      ),
                     ),
-              ],
+                  // Trailing widget or chevron (16px, neutral400)
+                  trailing ??
+                      const Icon(
+                        Icons.chevron_right,
+                        color: HBotColors.neutral400,
+                        size: 16,
+                      ),
+                ],
+              ),
             ),
           ),
         ),
+        // Inner divider: 1px #F0F2F5, inset 56px from leading
         if (showDivider)
           Padding(
             padding: const EdgeInsets.only(left: 56),
@@ -93,8 +104,10 @@ class SettingsTile extends StatelessWidget {
   }
 }
 
-/// Group wrapper for settings tiles
-/// Per design spec: 16px radius, 1px border, white bg, 24px margin between groups
+/// Group wrapper for settings tiles per design spec
+/// White bg, 1px border #E8ECF1, 16px radius
+/// Inner dividers between tiles (1px #F0F2F5, inset from leading)
+/// 24px margin bottom between groups
 class SettingsTileGroup extends StatelessWidget {
   final List<Widget> children;
   final String? title;

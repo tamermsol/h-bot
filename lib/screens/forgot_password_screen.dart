@@ -57,12 +57,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: HBotTheme.background(context),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight),
+          icon: Icon(Icons.arrow_back_ios, color: HBotTheme.textPrimary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -73,7 +73,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
                 horizontal: HBotSpacing.screenPadding,
-                vertical: HBotSpacing.space4,
               ),
               child: Form(
                 key: _formKey,
@@ -88,7 +87,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: HBotColors.primarySurface,
+                          color: HBotTheme.surfacePrimarySubtle(context),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
@@ -99,104 +98,89 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                     ),
 
+                    const SizedBox(height: HBotSpacing.space6),
+
+                    // "Reset Password" (28px/700, textPrimary)
+                    Text(
+                      'Reset Password',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 28,
+                        fontWeight: FontWeight.w700,
+                        color: HBotTheme.textPrimary(context),
+                        letterSpacing: -0.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+
+                    // "Enter your email to reset" (14px/400, textSecondary)
+                    Text(
+                      'Enter your email to reset',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: HBotTheme.textSecondary(context),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+
                     const SizedBox(height: HBotSpacing.space7),
 
-                    // Form Card
+                    // Email Field
+                    SmartInputField(
+                      controller: _emailController,
+                      label: 'Email',
+                      keyboardType: TextInputType.emailAddress,
+                      prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        if (!RegExp(
+                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                        ).hasMatch(value)) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    const SizedBox(height: HBotSpacing.space6),
+
+                    // Gradient "Send Reset Link" button (52px)
                     Container(
-                      padding: const EdgeInsets.all(HBotSpacing.space6),
-                      decoration: BoxDecoration(
-                        color: HBotColors.cardLight,
-                        borderRadius: HBotRadius.xlRadius,
-                        boxShadow: HBotShadows.small,
-                        border: Border.all(color: HBotColors.borderLight, width: 1),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: HBotColors.textPrimaryLight,
-                              letterSpacing: -0.3,
-                            ),
-                            textAlign: TextAlign.center,
+                      height: 52,
+                      decoration: hbotPrimaryButtonDecoration(enabled: !_isLoading),
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : _sendResetEmail,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: HBotRadius.mediumRadius,
                           ),
-
-                          const SizedBox(height: HBotSpacing.space3),
-
-                          const Text(
-                            'Enter your email address and we\'ll send you a code to reset your password.',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: HBotColors.textSecondaryLight,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-
-                          const SizedBox(height: HBotSpacing.space6),
-
-                          // Email Field
-                          SmartInputField(
-                            controller: _emailController,
-                            label: 'Email',
-                            keyboardType: TextInputType.emailAddress,
-                            prefixIcon: const Icon(Icons.email_outlined, size: 20),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your email';
-                              }
-                              if (!RegExp(
-                                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                              ).hasMatch(value)) {
-                                return 'Please enter a valid email';
-                              }
-                              return null;
-                            },
-                          ),
-
-                          const SizedBox(height: HBotSpacing.space6),
-
-                          // Send Reset Code Button
-                          Container(
-                            height: 48,
-                            decoration: hbotPrimaryButtonDecoration(enabled: !_isLoading),
-                            child: ElevatedButton(
-                              onPressed: _isLoading ? null : _sendResetEmail,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.transparent,
-                                shadowColor: Colors.transparent,
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: HBotRadius.mediumRadius,
+                        ),
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                            : const Text(
+                                'Send Reset Link',
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              child: _isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  : const Text(
-                                      'Send Reset Code',
-                                      style: TextStyle(
-                                        fontFamily: 'Inter',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                            ),
-                          ),
-                        ],
                       ),
                     ),
 
@@ -206,11 +190,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     Center(
                       child: TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text(
+                        child: Text(
                           'Back to Sign In',
                           style: TextStyle(
                             fontFamily: 'Inter',
-                            color: HBotColors.textSecondaryLight,
+                            color: HBotTheme.textSecondary(context),
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                           ),

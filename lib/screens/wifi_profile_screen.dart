@@ -96,60 +96,49 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: const Color(0xFFF8F9FB),
       appBar: AppBar(
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
-        title: Text(
-          widget.initialProfile != null ? 'Edit Wi-Fi Profile' : 'Home Wi-Fi',
-        ),
+        backgroundColor: const Color(0xFFF8F9FB),
         elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text(
+          widget.initialProfile != null ? 'Edit WiFi Profile' : 'WiFi Profiles',
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF0A1628),
+          ),
+        ),
       ),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
           padding: EdgeInsets.only(
-            left: HBotSpacing.space6,
-            right: HBotSpacing.space6,
-            top: HBotSpacing.space6,
-            bottom:
-                HBotSpacing.space6 +
-                MediaQuery.of(context).viewInsets.bottom,
+            left: 20,
+            right: 20,
+            top: 24,
+            bottom: 24 + MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.initialProfile != null
-                    ? 'Update your Wi-Fi credentials'
-                    : 'Enter your home Wi-Fi credentials for device provisioning',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: HBotColors.textSecondaryLight,
-                ),
-              ),
-              const SizedBox(height: HBotSpacing.space6),
-
+              // Current network info
               if (_currentSSID != null) ...[
                 Container(
-                  padding: const EdgeInsets.all(HBotSpacing.space4),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: HBotColors.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(HBotRadius.medium),
+                    color: const Color(0xFFF0F7FF),
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: HBotColors.primary.withOpacity(0.3),
+                      color: const Color(0xFF0883FD).withOpacity(0.2),
                     ),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.wifi, color: HBotColors.primary),
-                      const SizedBox(width: HBotSpacing.space2),
+                      const Icon(Icons.wifi, color: Color(0xFF0883FD), size: 24),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,161 +146,297 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                             const Text(
                               'Current Network',
                               style: TextStyle(
+                                fontFamily: 'Inter',
                                 fontSize: 12,
-                                color: HBotColors.textSecondaryLight,
+                                color: Color(0xFF5A6577),
                               ),
                             ),
                             Text(
                               _currentSSID!,
                               style: const TextStyle(
+                                fontFamily: 'Inter',
                                 fontWeight: FontWeight.w600,
-                                color: HBotColors.textPrimaryLight,
+                                fontSize: 16,
+                                color: Color(0xFF0A1628),
                               ),
                             ),
                           ],
                         ),
                       ),
                       if (_existingProfile != null)
-                        const Icon(Icons.check_circle, color: HBotColors.success),
+                        const Icon(Icons.check_circle, color: Color(0xFF22C55E), size: 24),
                     ],
                   ),
                 ),
-                const SizedBox(height: HBotSpacing.space6),
+                const SizedBox(height: 24),
               ],
 
-              TextFormField(
-                controller: _ssidController,
-                decoration: const InputDecoration(
-                  labelText: 'Wi-Fi Network (SSID)',
-                  hintText: 'Enter your Wi-Fi network name',
-                  prefixIcon: Icon(Icons.wifi),
+              // Form fields in a card
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE8ECF1)),
                 ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'SSID is required.';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: HBotSpacing.space4),
-
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Wi-Fi Password',
-                  hintText: 'Enter your Wi-Fi password',
-                  prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // SSID field
+                    const Text(
+                      'Network Name (SSID)',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF0A1628),
+                      ),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                    tooltip: _obscurePassword
-                        ? 'Show password'
-                        : 'Hide password',
-                  ),
-                ),
-                obscureText: _obscurePassword,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Password is required.';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: HBotSpacing.space6),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: _ssidController,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 16,
+                        color: Color(0xFF0A1628),
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Enter your WiFi network name',
+                        hintStyle: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 14,
+                          color: Color(0xFF7A8494),
+                        ),
+                        filled: true,
+                        fillColor: const Color(0xFFF8F9FB),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFF0883FD), width: 1.5),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'SSID is required.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
 
+                    // Password field
+                    const Text(
+                      'Password',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF0A1628),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 16,
+                        color: Color(0xFF0A1628),
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Enter your WiFi password',
+                        hintStyle: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 14,
+                          color: Color(0xFF7A8494),
+                        ),
+                        filled: true,
+                        fillColor: const Color(0xFFF8F9FB),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFF0883FD), width: 1.5),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            color: const Color(0xFF5A6577),
+                            size: 22,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password is required.';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Options
               if (widget.initialProfile == null) ...[
-                CheckboxListTile(
-                  title: const Text('Save to my account for future devices'),
-                  subtitle: const Text(
-                    'Reuse these credentials when adding more devices',
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFFE8ECF1)),
                   ),
-                  value: _saveToAccount,
-                  onChanged: (value) {
-                    setState(() {
-                      _saveToAccount = value ?? true;
-                    });
-                  },
-                  activeColor: HBotColors.primary,
-                  contentPadding: EdgeInsets.zero,
+                  child: Column(
+                    children: [
+                      SwitchListTile(
+                        title: const Text(
+                          'Save to my account',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Color(0xFF0A1628),
+                          ),
+                        ),
+                        subtitle: const Text(
+                          'Reuse credentials for future devices',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 12,
+                            color: Color(0xFF5A6577),
+                          ),
+                        ),
+                        value: _saveToAccount,
+                        onChanged: (value) {
+                          setState(() {
+                            _saveToAccount = value;
+                          });
+                        },
+                        activeColor: const Color(0xFF0883FD),
+                      ),
+                      if (_saveToAccount) ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          child: Divider(height: 1, color: Color(0xFFF0F2F5)),
+                        ),
+                        SwitchListTile(
+                          title: const Text(
+                            'Set as default profile',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF0A1628),
+                            ),
+                          ),
+                          subtitle: const Text(
+                            'Use by default for new devices',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 12,
+                              color: Color(0xFF5A6577),
+                            ),
+                          ),
+                          value: _setAsDefault,
+                          onChanged: (value) {
+                            setState(() {
+                              _setAsDefault = value;
+                            });
+                          },
+                          activeColor: const Color(0xFF0883FD),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
-
-                if (_saveToAccount) ...[
-                  CheckboxListTile(
-                    title: const Text('Set as default Wi-Fi profile'),
-                    subtitle: const Text(
-                      'Use this network by default for new devices',
-                    ),
-                    value: _setAsDefault,
-                    onChanged: (value) {
-                      setState(() {
-                        _setAsDefault = value ?? true;
-                      });
-                    },
-                    activeColor: HBotColors.primary,
-                    contentPadding: EdgeInsets.zero,
-                  ),
-                ],
+                const SizedBox(height: 24),
               ],
 
-              const SizedBox(height: HBotSpacing.space6),
-
-              if (_isLoading) ...[
-                const Center(child: CircularProgressIndicator()),
-                const SizedBox(height: HBotSpacing.space4),
-              ],
-
+              // Status message
               if (_statusMessage.isNotEmpty) ...[
                 Container(
-                  padding: const EdgeInsets.all(HBotSpacing.space4),
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: HBotColors.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(HBotRadius.medium),
+                    color: const Color(0xFFF0F7FF),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     _statusMessage,
-                    style: const TextStyle(color: HBotColors.textPrimaryLight),
-                  ),
-                ),
-                const SizedBox(height: HBotSpacing.space4),
-              ],
-
-              const SizedBox(height: HBotSpacing.space6),
-
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _saveProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.primary,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: HBotSpacing.space4,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 14,
+                      color: Color(0xFF0A1628),
                     ),
                   ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
+                ),
+                const SizedBox(height: 16),
+              ],
+
+              // Save button
+              InkWell(
+                onTap: _isLoading ? null : _saveProfile,
+                borderRadius: BorderRadius.circular(12),
+                child: Ink(
+                  decoration: BoxDecoration(
+                    gradient: _isLoading
+                        ? null
+                        : const LinearGradient(
+                            colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                          ),
+                    color: _isLoading ? const Color(0xFFD1D7E0) : null,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Container(
+                    height: 52,
+                    alignment: Alignment.center,
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : Text(
+                            widget.initialProfile != null ? 'Update Profile' : 'Save',
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                        )
-                      : Text(
-                          widget.initialProfile != null
-                              ? 'Update Profile'
-                              : 'Continue',
-                          style: const TextStyle(fontSize: 16),
-                        ),
+                  ),
                 ),
               ),
             ],

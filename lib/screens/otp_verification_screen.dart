@@ -138,13 +138,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final borderColor = HBotTheme.border(context);
+
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: HBotTheme.background(context),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight),
+          icon: Icon(Icons.arrow_back_ios, color: HBotTheme.textPrimary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -168,7 +170,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: HBotColors.primarySurface,
+                        color: HBotTheme.surfacePrimarySubtle(context),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -185,21 +187,21 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   Container(
                     padding: const EdgeInsets.all(HBotSpacing.space6),
                     decoration: BoxDecoration(
-                      color: HBotColors.cardLight,
+                      color: HBotTheme.card(context),
                       borderRadius: HBotRadius.xlRadius,
                       boxShadow: HBotShadows.small,
-                      border: Border.all(color: HBotColors.borderLight, width: 1),
+                      border: Border.all(color: borderColor, width: 1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Text(
+                        Text(
                           'Verify Your Email',
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
-                            color: HBotColors.textPrimaryLight,
+                            color: HBotTheme.textPrimary(context),
                             letterSpacing: -0.3,
                           ),
                           textAlign: TextAlign.center,
@@ -207,12 +209,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
                         const SizedBox(height: HBotSpacing.space3),
 
-                        const Text(
+                        Text(
                           'We sent a 6-digit code to:',
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 14,
-                            color: HBotColors.textSecondaryLight,
+                            color: HBotTheme.textSecondary(context),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -245,11 +247,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 textAlign: TextAlign.center,
                                 keyboardType: TextInputType.number,
                                 maxLength: 1,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 24,
                                   fontWeight: FontWeight.w700,
-                                  color: HBotColors.textPrimaryLight,
+                                  color: HBotTheme.textPrimary(context),
                                 ),
                                 decoration: InputDecoration(
                                   counterText: '',
@@ -258,15 +260,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                   contentPadding: const EdgeInsets.symmetric(vertical: 14),
                                   border: OutlineInputBorder(
                                     borderRadius: HBotRadius.smallRadius,
-                                    borderSide: const BorderSide(
-                                      color: HBotColors.borderLight,
+                                    borderSide: BorderSide(
+                                      color: borderColor,
                                       width: 1.5,
                                     ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: HBotRadius.smallRadius,
-                                    borderSide: const BorderSide(
-                                      color: HBotColors.borderLight,
+                                    borderSide: BorderSide(
+                                      color: borderColor,
                                       width: 1.5,
                                     ),
                                   ),
@@ -298,7 +300,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
                         // Verify Button
                         Container(
-                          height: 48,
+                          height: 52,
                           decoration: hbotPrimaryButtonDecoration(enabled: !_isVerifying),
                           child: ElevatedButton(
                             onPressed: _isVerifying ? null : _verifyOtp,
@@ -336,20 +338,20 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
+                            Text(
                               "Didn't receive the code? ",
                               style: TextStyle(
                                 fontFamily: 'Inter',
-                                color: HBotColors.textSecondaryLight,
+                                color: HBotTheme.textSecondary(context),
                                 fontSize: 14,
                               ),
                             ),
                             if (_resendCountdown > 0)
                               Text(
                                 'Resend in ${_resendCountdown}s',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontFamily: 'Inter',
-                                  color: HBotColors.textTertiaryLight,
+                                  color: HBotTheme.textTertiary(context),
                                   fontSize: 14,
                                 ),
                               )
@@ -399,11 +401,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           (route) => false,
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'Skip for now',
                         style: TextStyle(
                           fontFamily: 'Inter',
-                          color: HBotColors.textTertiaryLight,
+                          color: HBotTheme.textTertiary(context),
                           fontSize: 14,
                         ),
                       ),

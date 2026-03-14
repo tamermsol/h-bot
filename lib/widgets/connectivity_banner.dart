@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
 /// Connectivity Banner per design spec
-/// Slim banner with success green / error red, slide-down animation
+/// Slim banner: 40px height
+/// Online: #22C55E bg, white text "Connected"
+/// Offline: #EF4444 bg, white text "No Connection"
+/// Slide down animation when appearing, slide up when disappearing
+/// 12px/500 text, centered with 16px icon
 class ConnectivityBanner extends StatelessWidget {
   final bool isOnline;
   final String? message;
@@ -16,7 +20,7 @@ class ConnectivityBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSlide(
-      offset: isOnline ? const Offset(0, -1) : Offset.zero,
+      offset: Offset(0, isOnline ? -1 : 0),
       duration: HBotDurations.medium,
       curve: HBotCurves.standard,
       child: AnimatedOpacity(
@@ -24,13 +28,8 @@ class ConnectivityBanner extends StatelessWidget {
         duration: HBotDurations.medium,
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(
-            vertical: 8,
-            horizontal: HBotSpacing.space4,
-          ),
-          decoration: BoxDecoration(
-            color: isOnline ? HBotColors.success : HBotColors.error,
-          ),
+          height: 40,
+          color: isOnline ? HBotColors.success : HBotColors.error,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -42,11 +41,12 @@ class ConnectivityBanner extends StatelessWidget {
               const SizedBox(width: HBotSpacing.space2),
               Flexible(
                 child: Text(
-                  message ?? (isOnline ? 'Connected' : 'No internet connection'),
+                  message ??
+                      (isOnline ? 'Connected' : 'No Connection'),
                   style: const TextStyle(
                     fontFamily: 'Inter',
                     color: Colors.white,
-                    fontSize: 13,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,

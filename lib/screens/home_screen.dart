@@ -68,60 +68,19 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
-        title: _currentIndex == 0
-            ? Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset(
-                    'assets/images/branding/hbot_logo.png',
-                    height: 26,
-                    errorBuilder: (_, __, ___) => const Text(
-                      'H-Bot',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: HBotColors.primary,
-                      ),
-                    ),
-                  ),
-                  if (_currentHomeName != null) ...[
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 1,
-                      height: 18,
-                      color: HBotColors.borderLight,
-                    ),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        _currentHomeName!,
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: HBotColors.textSecondaryLight,
-                          letterSpacing: -0.1,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ],
-              )
-            : Text(
-                _getAppBarTitle(),
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: HBotColors.textPrimaryLight,
-                  letterSpacing: -0.2,
-                ),
-              ),
+        title: Text(
+          _getAppBarTitle(),
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: HBotColors.textPrimaryLight,
+          ),
+        ),
         backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
-        scrolledUnderElevation: 0.5,
+        scrolledUnderElevation: 0,
+        actions: _buildAppBarActions(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(0),
           child: ConnectivityBanner(isOnline: _isOnline),
@@ -132,16 +91,61 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  List<Widget>? _buildAppBarActions() {
+    if (_currentIndex == 0) {
+      return [
+        SizedBox(
+          width: 44,
+          height: 44,
+          child: IconButton(
+            icon: const Icon(Icons.notifications_outlined, size: 24),
+            color: HBotColors.iconDefault,
+            onPressed: () {
+              // Notifications placeholder
+            },
+          ),
+        ),
+        SizedBox(
+          width: 44,
+          height: 44,
+          child: IconButton(
+            icon: const Icon(Icons.settings_outlined, size: 24),
+            color: HBotColors.iconDefault,
+            onPressed: () {
+              // Navigate to profile/settings tab
+              setState(() => _currentIndex = 2);
+            },
+          ),
+        ),
+      ];
+    } else if (_currentIndex == 1) {
+      return [
+        SizedBox(
+          width: 44,
+          height: 44,
+          child: IconButton(
+            icon: const Icon(Icons.add, size: 24),
+            color: HBotColors.iconDefault,
+            onPressed: () {
+              // Scene creation is handled by ScenesScreen internally
+            },
+          ),
+        ),
+      ];
+    }
+    return null;
+  }
+
   String _getAppBarTitle() {
     switch (_currentIndex) {
       case 0:
-        return _currentHomeName ?? 'Smart Home';
+        return 'Home';
       case 1:
         return 'Scenes';
       case 2:
         return 'Profile';
       default:
-        return 'Smart Home';
+        return 'Home';
     }
   }
 
@@ -161,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBottomNavigation() {
     return Container(
       decoration: const BoxDecoration(
-        color: HBotColors.surfaceLight,
+        color: HBotColors.cardLight,
         border: Border(
           top: BorderSide(color: HBotColors.borderLight, width: 0.5),
         ),

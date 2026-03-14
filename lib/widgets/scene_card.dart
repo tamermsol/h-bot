@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
 /// Scene Card per design spec (03-COMPONENT-LIBRARY.md Section 2.2)
-/// 72px height, horizontal layout
-/// Scene icon in 40px circle ($surfacePrimarySubtle bg)
-/// Scene name ($titleMedium 16/600) + subtitle ($bodySmall 12/400)
-/// Play button (40x40 circle) on the right
+/// 72px height, 16px padding, white bg, 1px border, 16px radius
+/// Leading: 40x40 circle, #F0F7FF bg, emoji/icon 24px inside
+/// Title: 16px/600, textPrimary
+/// Subtitle: 12px/400, textSecondary (e.g., "5 devices")
+/// Trailing: 40x40 circle, #F0F7FF bg, play icon 24px, #0883FD color
 class SceneCard extends StatelessWidget {
   final Map<String, dynamic> scene;
   final Function(bool) onToggle;
@@ -39,7 +40,7 @@ class SceneCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Scene icon in 40px circle with blue-tinted bg
+            // Scene icon in 40px circle with $surfacePrimarySubtle bg
             Container(
               width: 40,
               height: 40,
@@ -47,11 +48,17 @@ class SceneCard extends StatelessWidget {
                 color: HBotColors.surfacePrimarySubtle,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                scene['icon'] ?? Icons.auto_awesome,
-                color: HBotColors.primary,
-                size: 24,
-              ),
+              alignment: Alignment.center,
+              child: scene['emoji'] != null
+                  ? Text(
+                      scene['emoji'],
+                      style: const TextStyle(fontSize: 24),
+                    )
+                  : Icon(
+                      scene['icon'] ?? Icons.auto_awesome,
+                      color: HBotColors.primary,
+                      size: 24,
+                    ),
             ),
 
             const SizedBox(width: HBotSpacing.space3),
@@ -62,6 +69,7 @@ class SceneCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Title: $titleMedium 16/600, textPrimary
                   Text(
                     scene['name'] ?? '',
                     style: const TextStyle(
@@ -74,10 +82,16 @@ class SceneCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   if (scene['description'] != null ||
-                      scene['time'] != null) ...[
+                      scene['time'] != null ||
+                      scene['deviceCount'] != null) ...[
                     const SizedBox(height: 2),
+                    // Subtitle: $bodySmall 12/400, textSecondary
                     Text(
-                      scene['description'] ?? scene['time'] ?? '',
+                      scene['description'] ??
+                          scene['time'] ??
+                          (scene['deviceCount'] != null
+                              ? '${scene['deviceCount']} devices'
+                              : ''),
                       style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 12,
@@ -94,7 +108,7 @@ class SceneCard extends StatelessWidget {
 
             const SizedBox(width: HBotSpacing.space3),
 
-            // Play button (40x40 circle)
+            // Play button: 40x40 circle, $surfacePrimarySubtle bg, play icon
             GestureDetector(
               onTap: onPlay ?? () => onToggle(!isActive),
               child: Container(
@@ -104,6 +118,7 @@ class SceneCard extends StatelessWidget {
                   color: HBotColors.surfacePrimarySubtle,
                   shape: BoxShape.circle,
                 ),
+                alignment: Alignment.center,
                 child: Icon(
                   isActive ? Icons.pause : Icons.play_arrow,
                   color: HBotColors.primary,

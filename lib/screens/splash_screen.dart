@@ -3,7 +3,7 @@ import '../theme/app_theme.dart';
 import 'auth_wrapper.dart';
 
 /// Splash / Launch screen per design spec (04-SCREEN-DESIGNS.md Section 1)
-/// Background: $surfaceBackground (#F8F9FB)
+/// Background: theme-aware (dark: #010510, light: #F8F9FB)
 /// Centered logo placeholder (gradient "H" in rounded square 80x80)
 /// "H-Bot" gradient text ($displayLarge 32/700)
 /// "Smart Home, Simplified" in $textSecondary
@@ -62,27 +62,27 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: HBotTheme.background(context),
       body: Center(
         child: FadeTransition(
           opacity: _fadeAnimation,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo placeholder: gradient-filled rounded square 80x80 with "H"
+              // Logo placeholder: gradient-filled rounded square 80x80, radius 20, "H" 32px/700
               Container(
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
                   gradient: HBotColors.primaryGradient,
-                  borderRadius: BorderRadius.circular(HBotRadius.large),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 alignment: Alignment.center,
                 child: const Text(
                   'H',
                   style: TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 40,
+                    fontSize: 32,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                     height: 1,
@@ -112,13 +112,13 @@ class _SplashScreenState extends State<SplashScreen>
               const SizedBox(height: HBotSpacing.space2),
 
               // "Smart Home, Simplified" in $textSecondary
-              const Text(
+              Text(
                 'Smart Home, Simplified',
                 style: TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
-                  color: HBotColors.textSecondaryLight,
+                  color: HBotTheme.textSecondary(context),
                   letterSpacing: -0.2,
                 ),
               ),

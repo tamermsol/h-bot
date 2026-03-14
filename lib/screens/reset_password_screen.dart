@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../services/auth_service.dart';
+import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import 'sign_in_screen.dart';
 
@@ -181,309 +182,336 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: HBotColors.textPrimaryLight,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 20),
-
-              // Icon
-              const Icon(
-                Icons.lock_reset,
-                size: 80,
-                color: HBotColors.primary,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: HBotSpacing.tabletMaxWidth,
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: HBotSpacing.screenPadding,
+                vertical: HBotSpacing.space4,
               ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: HBotSpacing.space5),
 
-              const SizedBox(height: 32),
-
-              // Title
-              const Text(
-                'Reset Password',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 16),
-
-              // Subtitle
-              Text(
-                'Enter the 6-digit code sent to:',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white.withOpacity(0.7),
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 8),
-
-              Text(
-                widget.email,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: HBotColors.primary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 40),
-
-              // OTP Input Fields
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(6, (index) {
-                  return SizedBox(
-                    width: 50,
-                    height: 60,
-                    child: TextField(
-                      controller: _otpControllers[index],
-                      focusNode: _focusNodes[index],
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      maxLength: 1,
-                      obscureText: false,
-                      enableInteractiveSelection: false,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 0,
+                  // Icon in circle
+                  Center(
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      decoration: const BoxDecoration(
+                        color: HBotColors.primarySurface,
+                        shape: BoxShape.circle,
                       ),
-                      decoration: InputDecoration(
-                        counterText: '',
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.15),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.white24,
-                            width: 1.5,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.white24,
-                            width: 1.5,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: HBotColors.primary,
-                            width: 2.5,
-                          ),
-                        ),
+                      child: const Icon(
+                        Icons.lock_reset,
+                        size: 40,
+                        color: HBotColors.primary,
                       ),
-                      onChanged: (value) {
-                        if (value.isNotEmpty && index < 5) {
-                          _focusNodes[index + 1].requestFocus();
-                        } else if (value.isEmpty && index > 0) {
-                          _focusNodes[index - 1].requestFocus();
-                        }
-                      },
-                    ),
-                  );
-                }),
-              ),
-
-              const SizedBox(height: 32),
-
-              // New Password Field
-              TextField(
-                controller: _newPasswordController,
-                obscureText: _obscureNewPassword,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'New Password',
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white24),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white24),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: HBotColors.primary,
-                      width: 2,
                     ),
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureNewPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.white54,
+
+                  const SizedBox(height: HBotSpacing.space7),
+
+                  // Card
+                  Container(
+                    padding: const EdgeInsets.all(HBotSpacing.space6),
+                    decoration: BoxDecoration(
+                      color: HBotColors.cardLight,
+                      borderRadius: HBotRadius.xlRadius,
+                      boxShadow: HBotShadows.small,
+                      border: Border.all(
+                        color: HBotColors.borderLight,
+                        width: 1,
+                      ),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureNewPassword = !_obscureNewPassword;
-                      });
-                    },
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Confirm Password Field
-              TextField(
-                controller: _confirmPasswordController,
-                obscureText: _obscureConfirmPassword,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white24),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Colors.white24),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: HBotColors.primary,
-                      width: 2,
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureConfirmPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.white54,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureConfirmPassword = !_obscureConfirmPassword;
-                      });
-                    },
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              Text(
-                'Password must be at least 6 characters',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white.withOpacity(0.6),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              // Reset Password Button
-              SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _isResetting ? null : _resetPassword,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: _isResetting
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          ),
-                        )
-                      : const Text(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
                           'Reset Password',
                           style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: HBotColors.textPrimaryLight,
+                            letterSpacing: -0.3,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+
+                        const SizedBox(height: HBotSpacing.space3),
+
+                        const Text(
+                          'Enter the 6-digit code sent to:',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 14,
+                            color: HBotColors.textSecondaryLight,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+
+                        const SizedBox(height: HBotSpacing.space1),
+
+                        Text(
+                          widget.email,
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
+                            color: HBotColors.primary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+
+                        const SizedBox(height: HBotSpacing.space7),
+
+                        // OTP Input Fields
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: List.generate(6, (index) {
+                            return SizedBox(
+                              width: 48,
+                              height: 56,
+                              child: TextField(
+                                controller: _otpControllers[index],
+                                focusNode: _focusNodes[index],
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.number,
+                                maxLength: 1,
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                  color: HBotColors.textPrimaryLight,
+                                ),
+                                decoration: InputDecoration(
+                                  counterText: '',
+                                  filled: true,
+                                  fillColor: HBotColors.neutral50,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 14,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: HBotRadius.smallRadius,
+                                    borderSide: const BorderSide(
+                                      color: HBotColors.borderLight,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: HBotRadius.smallRadius,
+                                    borderSide: const BorderSide(
+                                      color: HBotColors.borderLight,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: HBotRadius.smallRadius,
+                                    borderSide: const BorderSide(
+                                      color: HBotColors.primary,
+                                      width: 2,
+                                    ),
+                                  ),
+                                ),
+                                onChanged: (value) {
+                                  if (value.isNotEmpty && index < 5) {
+                                    _focusNodes[index + 1].requestFocus();
+                                  } else if (value.isEmpty && index > 0) {
+                                    _focusNodes[index - 1].requestFocus();
+                                  }
+                                },
+                              ),
+                            );
+                          }),
+                        ),
+
+                        const SizedBox(height: HBotSpacing.space6),
+
+                        // New Password Field
+                        SmartInputField(
+                          controller: _newPasswordController,
+                          label: 'New Password',
+                          obscureText: _obscureNewPassword,
+                          prefixIcon: const Icon(
+                            Icons.lock_outline,
+                            size: 20,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscureNewPassword
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: HBotColors.iconDefault,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureNewPassword = !_obscureNewPassword;
+                              });
+                            },
                           ),
                         ),
-                ),
-              ),
 
-              const SizedBox(height: 24),
+                        const SizedBox(height: HBotSpacing.space4),
 
-              // Resend Code
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Didn't receive the code? ",
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
-                      fontSize: 14,
-                    ),
-                  ),
-                  if (_resendCountdown > 0)
-                    Text(
-                      'Resend in ${_resendCountdown}s',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                        fontSize: 14,
-                      ),
-                    )
-                  else
-                    TextButton(
-                      onPressed: _isResending ? null : _resendOtp,
-                      child: _isResending
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  HBotColors.primary,
-                                ),
-                              ),
-                            )
-                          : const Text(
-                              'Resend',
-                              style: TextStyle(
-                                color: HBotColors.primary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                        // Confirm Password Field
+                        SmartInputField(
+                          controller: _confirmPasswordController,
+                          label: 'Confirm Password',
+                          obscureText: _obscureConfirmPassword,
+                          prefixIcon: const Icon(
+                            Icons.lock_outline,
+                            size: 20,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscureConfirmPassword
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: HBotColors.iconDefault,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureConfirmPassword =
+                                    !_obscureConfirmPassword;
+                              });
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: HBotSpacing.space2),
+
+                        const Text(
+                          'Password must be at least 6 characters',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 12,
+                            color: HBotColors.textTertiaryLight,
+                          ),
+                        ),
+
+                        const SizedBox(height: HBotSpacing.space6),
+
+                        // Reset Password Button
+                        Container(
+                          height: 52,
+                          decoration: hbotPrimaryButtonDecoration(
+                            enabled: !_isResetting,
+                          ),
+                          child: ElevatedButton(
+                            onPressed: _isResetting ? null : _resetPassword,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: HBotRadius.mediumRadius,
                               ),
                             ),
+                            child: _isResetting
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor:
+                                          AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : const Text(
+                                    'Reset Password',
+                                    style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                          ),
+                        ),
+
+                        const SizedBox(height: HBotSpacing.space5),
+
+                        // Resend Code
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Didn't receive the code? ",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                color: HBotColors.textSecondaryLight,
+                                fontSize: 14,
+                              ),
+                            ),
+                            if (_resendCountdown > 0)
+                              Text(
+                                'Resend in ${_resendCountdown}s',
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  color: HBotColors.textTertiaryLight,
+                                  fontSize: 14,
+                                ),
+                              )
+                            else
+                              TextButton(
+                                onPressed: _isResending ? null : _resendOtp,
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                child: _isResending
+                                    ? const SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            HBotColors.primary,
+                                          ),
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Resend',
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          color: HBotColors.primary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                              ),
+                          ],
+                        ),
+                      ],
                     ),
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),

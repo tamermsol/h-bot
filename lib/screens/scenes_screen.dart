@@ -5,6 +5,7 @@ import '../services/smart_home_service.dart';
 import '../services/current_home_service.dart';
 import '../utils/error_handler.dart';
 import '../widgets/error_message_widget.dart';
+import '../widgets/scene_card.dart';
 import 'add_scene_screen.dart';
 
 class ScenesScreen extends StatefulWidget {
@@ -107,62 +108,13 @@ class _ScenesScreenState extends State<ScenesScreen>
         ? _buildNoHomeState()
         : _scenes.isEmpty
         ? _buildEmptyState()
-        : Column(
-            children: [
-              // Add Scene Button at the top - gradient
-              Padding(
-                padding: const EdgeInsets.all(HBotSpacing.screenPadding),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    decoration: hbotPrimaryButtonDecoration(),
-                    child: ElevatedButton.icon(
-                      onPressed: _currentHomeId != null
-                          ? _showCreateSceneDialog
-                          : null,
-                      icon: const Icon(Icons.add),
-                      label: const Text(
-                        'Add Scene',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: HBotColors.textOnPrimary,
-                        shadowColor: Colors.transparent,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: HBotSpacing.space3,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: HBotRadius.mediumRadius,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // Scenes Grid
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: HBotSpacing.screenPadding,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [_buildScenesGrid()],
-                  ),
-                ),
-              ),
-            ],
-          );
+        : _buildScenesList();
   }
 
   Widget _buildNoHomeState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(HBotSpacing.space6),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -173,27 +125,36 @@ class _ScenesScreenState extends State<ScenesScreen>
                 color: HBotColors.neutral100,
                 shape: BoxShape.circle,
               ),
+              alignment: Alignment.center,
               child: const Icon(
                 Icons.home_outlined,
-                size: 40,
-                color: HBotColors.neutral400,
+                size: 48,
+                color: HBotColors.neutral300,
               ),
             ),
-            const SizedBox(height: HBotSpacing.space5),
-            hbotGradientText(
-              'No Home Selected',
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-            const SizedBox(height: HBotSpacing.space3),
+            const SizedBox(height: 24),
             const Text(
-              'Please select a home from the dashboard to view and manage scenes',
+              'No Home Selected',
               style: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 14,
-                color: HBotColors.textTertiaryLight,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: HBotColors.textPrimaryLight,
               ),
-              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
+            const ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 260),
+              child: Text(
+                'Please select a home from the dashboard to view and manage scenes',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: HBotColors.textSecondaryLight,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
         ),
@@ -204,7 +165,7 @@ class _ScenesScreenState extends State<ScenesScreen>
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(HBotSpacing.space6),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -215,51 +176,58 @@ class _ScenesScreenState extends State<ScenesScreen>
                 color: HBotColors.neutral100,
                 shape: BoxShape.circle,
               ),
+              alignment: Alignment.center,
               child: const Icon(
-                Icons.auto_awesome_outlined,
-                size: 40,
-                color: HBotColors.neutral400,
+                Icons.play_circle_outline,
+                size: 48,
+                color: HBotColors.neutral300,
               ),
             ),
-            const SizedBox(height: HBotSpacing.space5),
-            hbotGradientText(
-              'No Scenes Yet',
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-            const SizedBox(height: HBotSpacing.space3),
+            const SizedBox(height: 24),
             const Text(
-              'Create your first scene to automate your smart home',
+              'No scenes yet',
               style: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 14,
-                color: HBotColors.textTertiaryLight,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: HBotColors.textPrimaryLight,
               ),
-              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: HBotSpacing.space6),
-            Container(
-              decoration: hbotPrimaryButtonDecoration(),
-              child: ElevatedButton.icon(
-                onPressed: _showCreateSceneDialog,
-                icon: const Icon(Icons.add),
-                label: const Text(
-                  'Create Your First Scene',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                  ),
+            const SizedBox(height: 8),
+            const ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 260),
+              child: Text(
+                'Create scenes to control multiple devices with a single tap.',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: HBotColors.textSecondaryLight,
                 ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: HBotColors.textOnPrimary,
-                  shadowColor: Colors.transparent,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: HBotSpacing.space6,
-                    vertical: HBotSpacing.space4,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: HBotRadius.mediumRadius,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 24),
+            InkWell(
+              onTap: _showCreateSceneDialog,
+              borderRadius: BorderRadius.circular(12),
+              child: Ink(
+                decoration: BoxDecoration(
+                  gradient: HBotColors.primaryGradient,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Container(
+                  height: 52,
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    '+ Create Scene',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -270,135 +238,41 @@ class _ScenesScreenState extends State<ScenesScreen>
     );
   }
 
-  Widget _buildScenesGrid() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'ALL SCENES',
-          style: hbotSectionHeader(),
-        ),
-        const SizedBox(height: HBotSpacing.space4),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: _scenes.length,
-          itemBuilder: (context, index) {
-            final scene = _scenes[index];
+  Widget _buildScenesList() {
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      itemCount: _scenes.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final scene = _scenes[index];
 
-            // Get icon and color from scene or use defaults
-            final iconData = scene.iconCode != null
-                ? IconData(scene.iconCode!, fontFamily: 'MaterialIcons')
-                : Icons.auto_awesome;
-            final sceneColor = scene.colorValue != null
-                ? Color(scene.colorValue!)
-                : HBotColors.primary;
+        // Get icon from scene or use default
+        final iconData = scene.iconCode != null
+            ? IconData(scene.iconCode!, fontFamily: 'MaterialIcons')
+            : Icons.auto_awesome;
 
-            return Container(
-              margin: const EdgeInsets.only(bottom: HBotSpacing.space3),
-              decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: HBotRadius.largeRadius,
-                border: Border.all(color: HBotColors.borderLight, width: 1),
-                boxShadow: scene.isEnabled ? HBotShadows.small : HBotShadows.none,
-              ),
-              child: ListTile(
-                leading: Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: scene.isEnabled
-                        ? sceneColor.withOpacity(0.15)
-                        : HBotColors.neutral100,
-                    borderRadius: HBotRadius.mediumRadius,
-                  ),
-                  child: Icon(
-                    iconData,
-                    color: scene.isEnabled ? sceneColor : HBotColors.neutral400,
-                  ),
-                ),
-                title: Text(
-                  scene.name,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    color: HBotColors.textPrimaryLight,
-                  ),
-                ),
-                subtitle: Text(
-                  scene.isEnabled ? 'Enabled' : 'Disabled',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    color: scene.isEnabled
-                        ? sceneColor
-                        : HBotColors.textTertiaryLight,
-                  ),
-                ),
-                trailing: PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert, color: HBotColors.textTertiaryLight),
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'toggle':
-                        _toggleScene(scene);
-                        break;
-                      case 'edit':
-                        _showEditSceneDialog(scene);
-                        break;
-                      case 'delete':
-                        _showDeleteSceneDialog(scene);
-                        break;
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 'toggle',
-                      child: ListTile(
-                        leading: Icon(
-                          scene.isEnabled ? Icons.pause : Icons.play_arrow,
-                        ),
-                        title: Text(scene.isEnabled ? 'Disable' : 'Enable'),
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: ListTile(
-                        leading: Icon(Icons.edit_outlined),
-                        title: Text('Edit Scene'),
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 'delete',
-                      child: ListTile(
-                        leading: const Icon(Icons.delete_outline, color: HBotColors.error),
-                        title: const Text(
-                          'Delete Scene',
-                          style: TextStyle(color: HBotColors.error),
-                        ),
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () => _showSceneDetails(scene),
-              ),
-            );
-          },
-        ),
-      ],
+        // Convert Scene model to map for SceneCard widget
+        final sceneMap = <String, dynamic>{
+          'name': scene.name,
+          'isActive': scene.isEnabled,
+          'icon': iconData,
+          'description': scene.isEnabled ? 'Enabled' : 'Disabled',
+        };
+
+        return GestureDetector(
+          onLongPress: () => _showSceneContextMenu(scene),
+          child: SceneCard(
+            scene: sceneMap,
+            onToggle: (value) => _toggleScene(scene),
+            onTap: () => _showSceneDetails(scene),
+            onPlay: () => _runScene(scene),
+          ),
+        );
+      },
     );
   }
 
-  void _showSceneDetails(Scene scene) {
-    // Get icon and color from scene or use defaults
-    final iconData = scene.iconCode != null
-        ? IconData(scene.iconCode!, fontFamily: 'MaterialIcons')
-        : Icons.auto_awesome;
-    final sceneColor = scene.colorValue != null
-        ? Color(scene.colorValue!)
-        : HBotColors.primary;
-
+  void _showSceneContextMenu(Scene scene) {
     showModalBottomSheet(
       context: context,
       backgroundColor: HBotColors.cardLight,
@@ -407,120 +281,83 @@ class _ScenesScreenState extends State<ScenesScreen>
           top: Radius.circular(HBotRadius.xl),
         ),
       ),
-      builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(HBotSpacing.space6),
+      builder: (context) => SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(HBotSpacing.space3),
-                    decoration: BoxDecoration(
-                      color: sceneColor.withOpacity(0.15),
-                      borderRadius: HBotRadius.smallRadius,
-                    ),
-                    child: Icon(iconData, color: sceneColor, size: 28),
-                  ),
-                  const SizedBox(width: HBotSpacing.space4),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          scene.name,
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: HBotColors.textPrimaryLight,
-                          ),
-                        ),
-                        Text(
-                          scene.isEnabled ? 'Enabled' : 'Disabled',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            color: scene.isEnabled
-                                ? sceneColor
-                                : HBotColors.textTertiaryLight,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: HBotSpacing.space6),
-
-              // Run Scene Button - gradient
-              SizedBox(
-                width: double.infinity,
+              // Handle bar
+              Center(
                 child: Container(
-                  decoration: hbotPrimaryButtonDecoration(),
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _runScene(scene);
-                    },
-                    icon: const Icon(Icons.play_arrow),
-                    label: const Text(
-                      'Run Scene',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: HBotColors.textOnPrimary,
-                      shadowColor: Colors.transparent,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: HBotSpacing.space4,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: HBotRadius.mediumRadius,
-                      ),
-                    ),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: HBotColors.neutral300,
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
-
-              const SizedBox(height: HBotSpacing.space3),
-
-              // Edit Button - secondary outlined
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _showEditSceneDialog(scene);
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: HBotColors.textPrimaryLight,
-                    side: const BorderSide(color: HBotColors.borderLight),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: HBotSpacing.space4,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: HBotRadius.mediumRadius,
-                    ),
-                  ),
-                  child: const Text(
-                    'Edit Scene',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),
+              const SizedBox(height: 16),
+              ListTile(
+                leading: const Icon(Icons.edit_outlined, color: HBotColors.iconDefault),
+                title: const Text(
+                  'Edit',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: HBotColors.textPrimaryLight,
                   ),
                 ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showEditSceneDialog(scene);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.copy_outlined, color: HBotColors.iconDefault),
+                title: const Text(
+                  'Duplicate',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: HBotColors.textPrimaryLight,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  // Duplicate scene: navigate to add scene in create mode with pre-filled data
+                  _showEditSceneDialog(scene);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete_outline, color: HBotColors.error),
+                title: const Text(
+                  'Delete',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: HBotColors.error,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showDeleteSceneDialog(scene);
+                },
               ),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
+  }
+
+  void _showSceneDetails(Scene scene) {
+    // Navigate to edit mode directly when tapping a scene
+    _showEditSceneDialog(scene);
   }
 
   Future<void> _runScene(Scene scene) async {
@@ -593,7 +430,7 @@ class _ScenesScreenState extends State<ScenesScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: HBotTheme.card(context),
           title: const Text('Delete Scene'),
           content: Text(
             'Are you sure you want to delete "${scene.name}"? This action cannot be undone.',

@@ -292,28 +292,47 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
         title: Text(
-          _isEditMode ? 'Edit Scene' : 'Create New Scene',
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          _isEditMode ? 'Edit Scene' : 'New Scene',
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: HBotColors.textPrimaryLight,
+          ),
         ),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        iconTheme: const IconThemeData(color: HBotColors.textPrimaryLight),
         actions: [
-          if (_currentStep > 0)
-            TextButton(onPressed: _previousStep, child: const Text('Back')),
+          TextButton(
+            onPressed: (_canProceed() && !_isCreating && _currentStep == 5)
+                ? _createScene
+                : null,
+            child: Text(
+              'Save',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: (_canProceed() && !_isCreating && _currentStep == 5)
+                    ? HBotColors.primary
+                    : HBotColors.neutral300,
+              ),
+            ),
+          ),
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary),
+              ),
+            )
           : Column(
               children: [
                 // Progress indicator
@@ -344,21 +363,19 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   Widget _buildProgressIndicator() {
     return Container(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
         children: List.generate(6, (index) {
           final isActive = index <= _currentStep;
 
           return Expanded(
             child: Container(
-              margin: EdgeInsets.only(
-                right: index < 5 ? HBotSpacing.space2 : 0,
-              ),
+              margin: EdgeInsets.only(right: index < 5 ? 8 : 0),
               height: 4,
               decoration: BoxDecoration(
                 color: isActive
                     ? HBotColors.primary
-                    : HBotColors.textTertiaryLight.withOpacity(0.3),
+                    : HBotColors.borderLight,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -371,75 +388,90 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   Widget _buildBasicInfoStep() {
     return GestureDetector(
       onTap: () {
-        // Dismiss keyboard when tapping outside text fields
         FocusScope.of(context).unfocus();
       },
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(HBotSpacing.space4),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Section label
             Text(
-              'Basic Information',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: HBotSpacing.space2),
-            Text(
-              'Give your scene a name',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              'SCENE NAME',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
                 color: HBotColors.textSecondaryLight,
+                letterSpacing: 0.5,
               ),
             ),
-            const SizedBox(height: HBotSpacing.space4),
-
-            SmartInputField(
-              controller: _nameController,
-              hintText: 'Scene name (e.g., Movie Night)',
-              onChanged: (value) => setState(() {}),
+            const SizedBox(height: 8),
+            // Text input
+            Container(
+              height: 52,
+              decoration: BoxDecoration(
+                color: HBotColors.cardLight,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: HBotColors.borderLight, width: 1.5),
+              ),
+              child: TextField(
+                controller: _nameController,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 16,
+                  color: HBotColors.textPrimaryLight,
+                ),
+                decoration: const InputDecoration(
+                  hintText: 'Scene name (e.g., Movie Night)',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Inter',
+                    color: HBotColors.textTertiaryLight,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                ),
+                onChanged: (value) => setState(() {}),
+              ),
             ),
 
-            const SizedBox(height: HBotSpacing.space4),
+            const SizedBox(height: 16),
 
             // Preview card
             if (_nameController.text.isNotEmpty)
               Container(
-                padding: const EdgeInsets.all(HBotSpacing.space4),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: HBotColors.cardLight,
-                  borderRadius: BorderRadius.circular(HBotRadius.medium),
-                  border: Border.all(
-                    color: HBotColors.primary.withOpacity(0.3),
-                  ),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: HBotColors.borderLight, width: 1),
                 ),
                 child: Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: HBotColors.primary.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(
-                          HBotRadius.small,
-                        ),
+                      width: 40,
+                      height: 40,
+                      decoration: const BoxDecoration(
+                        color: HBotColors.surfacePrimarySubtle,
+                        shape: BoxShape.circle,
                       ),
+                      alignment: Alignment.center,
                       child: Icon(
-                        Icons.auto_awesome,
+                        _selectedIcon,
                         color: HBotColors.primary,
                         size: 24,
                       ),
                     ),
-                    const SizedBox(width: HBotSpacing.space4),
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _nameController.text,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                        ],
+                      child: Text(
+                        _nameController.text,
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: HBotColors.textPrimaryLight,
+                        ),
                       ),
                     ),
                   ],
@@ -453,33 +485,22 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   Widget _buildAppearanceStep() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Icon section
           Text(
-            'Appearance',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: HBotSpacing.space2),
-          Text(
-            'Choose an icon and color for your scene',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            'ICON',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
               color: HBotColors.textSecondaryLight,
+              letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: HBotSpacing.space6),
-
-          // Icon selection
-          Text(
-            'Icon',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: HBotSpacing.space4),
+          const SizedBox(height: 8),
           SceneIconSelector(
             selectedIcon: _selectedIcon,
             onIconSelected: (icon) {
@@ -489,14 +510,18 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             },
           ),
 
-          const SizedBox(height: HBotSpacing.space6),
+          const SizedBox(height: 24),
 
-          // Color selection
+          // Color section
           Text(
-            'Color',
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+            'COLOR',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: HBotColors.textSecondaryLight,
+              letterSpacing: 0.5,
+            ),
           ),
           const SizedBox(height: HBotSpacing.space4),
           Wrap(
@@ -1654,27 +1679,13 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   }
 
   Widget _buildBottomNavigation() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Container(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? HBotColors.cardLight : Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: isDark
-                ? HBotColors.textTertiaryLight.withOpacity(0.2)
-                : HBotColors.borderLight,
-            width: 1,
-          ),
+        color: HBotColors.cardLight,
+        border: const Border(
+          top: BorderSide(color: HBotColors.borderLight, width: 1),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
       ),
       child: SafeArea(
         top: false,
@@ -1682,63 +1693,73 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           children: [
             if (_currentStep > 0)
               Expanded(
-                child: ElevatedButton(
-                  onPressed: _isCreating ? null : _previousStep,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark ? HBotColors.cardLight : Colors.white,
-                    foregroundColor: HBotColors.textPrimaryLight,
-                    side: BorderSide(
-                      color: isDark
-                          ? HBotColors.textTertiaryLight
-                          : HBotColors.borderLight,
-                      width: 2,
-                    ),
-                    elevation: 0,
-                    minimumSize: const Size(0, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(HBotRadius.small),
-                    ),
+                child: Container(
+                  height: 52,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: HBotColors.borderLight, width: 1.5),
                   ),
-                  child: const Text(
-                    'Previous',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  child: TextButton(
+                    onPressed: _isCreating ? null : _previousStep,
+                    style: TextButton.styleFrom(
+                      foregroundColor: HBotColors.textPrimaryLight,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Previous',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            if (_currentStep > 0) const SizedBox(width: HBotSpacing.space4),
+            if (_currentStep > 0) const SizedBox(width: 12),
             Expanded(
-              child: ElevatedButton(
-                onPressed: (_canProceed() && !_isCreating) ? _nextStep : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _selectedColor,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  minimumSize: const Size(0, 48),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(HBotRadius.small),
+              child: InkWell(
+                onTap: (_canProceed() && !_isCreating) ? _nextStep : null,
+                borderRadius: BorderRadius.circular(12),
+                child: Ink(
+                  decoration: BoxDecoration(
+                    gradient: (_canProceed() && !_isCreating)
+                        ? HBotColors.primaryGradient
+                        : null,
+                    color: (_canProceed() && !_isCreating)
+                        ? null
+                        : HBotColors.neutral300,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  disabledBackgroundColor: _selectedColor.withOpacity(0.5),
-                ),
-                child: _isCreating
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
+                  child: Container(
+                    height: 52,
+                    alignment: Alignment.center,
+                    child: _isCreating
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            _currentStep == 5
+                                ? (_isEditMode ? 'Update Scene' : 'Create Scene')
+                                : 'Next',
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                      )
-                    : Text(
-                        _currentStep == 5
-                            ? (_isEditMode ? 'Update Scene' : 'Create Scene')
-                            : 'Next',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                  ),
+                ),
               ),
             ),
           ],

@@ -501,102 +501,247 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      decoration: BoxDecoration(
-        color: HBotColors.cardLight,
-        borderRadius: BorderRadius.circular(HBotRadius.medium),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Connection status and animation style selector
-          _buildConnectionIndicator(),
-          const SizedBox(height: HBotSpacing.space4),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Connection status and animation style selector
+        _buildConnectionIndicator(),
 
-          // Animated visualization
-          if (_animationStyle != 'none') ...[
-            _buildAnimatedVisualization(),
-            const SizedBox(height: HBotSpacing.space6),
-          ],
+        // Circular progress indicator per design spec (140x140)
+        _buildCircularProgress(),
+        const SizedBox(height: HBotSpacing.space7),
 
-          // Control buttons (Close, Stop, Open)
-          _buildControlButtons(),
+        // Control buttons (Up, Stop, Down) - 56px per design spec
+        _buildControlButtons(),
+        const SizedBox(height: HBotSpacing.space6),
+
+        // Quick position chips per design spec
+        _buildQuickPositions(),
+
+        // Animated visualization (optional, below quick positions)
+        if (_animationStyle != 'none') ...[
           const SizedBox(height: HBotSpacing.space6),
-
-          // Position slider
-          _buildPositionSlider(),
+          _buildAnimatedVisualization(),
         ],
-      ),
+      ],
     );
   }
 
-  Widget _buildConnectionIndicator() {
-    return Row(
-      children: [
-        // Removed green/red connection indicator dot - not useful
-        const Spacer(),
-        // Animation style selector
-        PopupMenuButton<String>(
-          icon: Icon(
-            _animationStyle == 'shutter'
-                ? Icons.window
-                : _animationStyle == 'curtain'
-                ? Icons.curtains
-                : Icons.visibility_off,
-            size: 20,
-            color: HBotColors.textSecondaryLight,
-          ),
-          onSelected: (value) {
-            setState(() {
-              _animationStyle = value;
-            });
-            // Save the preference
-            _saveAnimationPreference(value);
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 'shutter',
-              child: Row(
-                children: [
-                  Icon(Icons.window, size: 20),
-                  SizedBox(width: 8),
-                  Text('Shutter'),
-                ],
+  /// Circular progress display per design spec Section 4.4
+  /// 140x140px, centered, shows percentage + open/closed/moving label
+  Widget _buildCircularProgress() {
+    final safePosition = _currentPosition.isFinite
+        ? _currentPosition.clamp(0.0, 100.0)
+        : 0.0;
+
+    String statusLabel;
+    if (_isMoving) {
+      statusLabel = 'Moving...';
+    } else if (safePosition <= 0) {
+      statusLabel = 'Closed';
+    } else if (safePosition >= 100) {
+      statusLabel = 'Open';
+    } else {
+      statusLabel = 'Open';
+    }
+
+    return Center(
+      child: SizedBox(
+        width: 140,
+        height: 140,
+        child: Stack(
+          children: [
+            // Background track
+            Positioned.fill(
+              child: CircularProgressIndicator(
+                value: 1.0,
+                strokeWidth: 6,
+                color: HBotColors.neutral200,
+                backgroundColor: Colors.transparent,
               ),
             ),
-            const PopupMenuItem(
-              value: 'curtain',
-              child: Row(
-                children: [
-                  Icon(Icons.curtains, size: 20),
-                  SizedBox(width: 8),
-                  Text('Curtain'),
-                ],
+            // Active progress
+            Positioned.fill(
+              child: TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0, end: safePosition / 100),
+                duration: HBotDurations.medium,
+                curve: HBotCurves.standard,
+                builder: (context, value, _) {
+                  return CircularProgressIndicator(
+                    value: value,
+                    strokeWidth: 6,
+                    color: HBotColors.primary,
+                    backgroundColor: Colors.transparent,
+                    strokeCap: StrokeCap.round,
+                  );
+                },
               ),
             ),
-            const PopupMenuItem(
-              value: 'none',
-              child: Row(
+            // Center text
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.visibility_off, size: 20),
-                  SizedBox(width: 8),
-                  Text('None'),
+                  Text(
+                    '${safePosition.round()}%',
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: HBotColors.textPrimaryLight,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    statusLabel,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: _isMoving ? HBotColors.primary : HBotColors.textSecondaryLight,
+                    ),
+                  ),
                 ],
               ),
             ),
           ],
         ),
-        if (_isMoving)
-          const SizedBox(
-            width: 16,
-            height: 16,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary),
+      ),
+    );
+  }
+
+  /// Quick position chips per design spec
+  Widget _buildQuickPositions() {
+    final positions = [0, 25, 50, 100];
+    final safePosition = _currentPosition.isFinite
+        ? _currentPosition.clamp(0.0, 100.0).round()
+        : 0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: HBotSpacing.space1, bottom: HBotSpacing.space2),
+          child: Text(
+            'QUICK POSITIONS',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.0,
+              color: HBotColors.textTertiaryLight,
             ),
           ),
+        ),
+        Row(
+          children: positions.map((pos) {
+            final isActive = safePosition == pos;
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space1),
+                child: GestureDetector(
+                  onTap: _isConnected ? () => _setPosition(pos.toDouble()) : null,
+                  child: AnimatedContainer(
+                    duration: HBotDurations.fast,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      gradient: isActive ? HBotColors.primaryGradient : null,
+                      color: isActive ? null : HBotColors.cardLight,
+                      borderRadius: HBotRadius.mediumRadius,
+                      border: isActive
+                          ? null
+                          : Border.all(color: HBotColors.borderLight, width: 1),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '$pos%',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: isActive ? Colors.white : HBotColors.textPrimaryLight,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
       ],
+    );
+  }
+
+  Widget _buildConnectionIndicator() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: HBotSpacing.space2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          // Animation style selector
+          PopupMenuButton<String>(
+            icon: Icon(
+              _animationStyle == 'shutter'
+                  ? Icons.window
+                  : _animationStyle == 'curtain'
+                  ? Icons.curtains
+                  : Icons.visibility_off,
+              size: 20,
+              color: HBotColors.iconDefault,
+            ),
+            shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
+            color: HBotColors.cardLight,
+            onSelected: (value) {
+              setState(() {
+                _animationStyle = value;
+              });
+              _saveAnimationPreference(value);
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'shutter',
+                child: Row(
+                  children: [
+                    Icon(Icons.window, size: 20, color: _animationStyle == 'shutter' ? HBotColors.primary : HBotColors.iconDefault),
+                    const SizedBox(width: 8),
+                    Text('Shutter', style: TextStyle(fontFamily: 'Inter', color: _animationStyle == 'shutter' ? HBotColors.primary : HBotColors.textPrimaryLight)),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'curtain',
+                child: Row(
+                  children: [
+                    Icon(Icons.curtains, size: 20, color: _animationStyle == 'curtain' ? HBotColors.primary : HBotColors.iconDefault),
+                    const SizedBox(width: 8),
+                    Text('Curtain', style: TextStyle(fontFamily: 'Inter', color: _animationStyle == 'curtain' ? HBotColors.primary : HBotColors.textPrimaryLight)),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'none',
+                child: Row(
+                  children: [
+                    Icon(Icons.visibility_off, size: 20, color: _animationStyle == 'none' ? HBotColors.primary : HBotColors.iconDefault),
+                    const SizedBox(width: 8),
+                    Text('None', style: TextStyle(fontFamily: 'Inter', color: _animationStyle == 'none' ? HBotColors.primary : HBotColors.textPrimaryLight)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (_isMoving)
+            const SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -797,37 +942,36 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
   }
 
   Widget _buildControlButtons() {
-    // Determine which button should be highlighted based on shutter direction
     // Direction: 0 = stopped, 1 = opening (up), -1 = closing (down)
     final bool isClosing = _shutterDirection == -1;
-    final bool isStopped = _shutterDirection == 0;
     final bool isOpening = _shutterDirection == 1;
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Close button (highlighted when closing)
+        // Up/Open button
         _buildControlButton(
-          icon: Icons.arrow_circle_down,
-          label: 'Close',
-          onPressed: _isConnected ? _closeShutter : null,
-          isHighlighted: isClosing,
-        ),
-
-        // Stop button (highlighted when stopped)
-        _buildControlButton(
-          icon: Icons.pause_circle,
-          label: 'Stop',
-          onPressed: _isConnected ? _stopShutter : null,
-          isHighlighted: isStopped,
-        ),
-
-        // Open button (highlighted when opening)
-        _buildControlButton(
-          icon: Icons.arrow_circle_up,
-          label: 'Open',
+          icon: Icons.keyboard_arrow_up,
           onPressed: _isConnected ? _openShutter : null,
           isHighlighted: isOpening,
+        ),
+
+        const SizedBox(width: HBotSpacing.space7),
+
+        // Stop button (red icon per design spec)
+        _buildControlButton(
+          icon: Icons.stop,
+          onPressed: _isConnected ? _stopShutter : null,
+          isStop: true,
+        ),
+
+        const SizedBox(width: HBotSpacing.space7),
+
+        // Down/Close button
+        _buildControlButton(
+          icon: Icons.keyboard_arrow_down,
+          onPressed: _isConnected ? _closeShutter : null,
+          isHighlighted: isClosing,
         ),
       ],
     );
@@ -835,57 +979,32 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
 
   Widget _buildControlButton({
     required IconData icon,
-    required String label,
     required VoidCallback? onPressed,
     bool isHighlighted = false,
+    bool isStop = false,
   }) {
-    // CRITICAL FIX FOR ISSUE 2: Proper blue shadow/glow for active buttons
-    // All buttons are grey by default
-    // Active button (based on shutter direction) has blue shadow/glow
-    // Shadow remains visible continuously while in that state
-
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(HBotRadius.medium),
-            // BLUE SHADOW/GLOW when highlighted (active state)
-            boxShadow: isHighlighted
-                ? [
-                    BoxShadow(
-                      color: HBotColors.primary.withOpacity(0.5),
-                      blurRadius: 12,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 0),
-                    ),
-                  ]
-                : null,
+    return GestureDetector(
+      onTap: onPressed,
+      child: AnimatedContainer(
+        duration: HBotDurations.fast,
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          color: HBotColors.cardLight,
+          borderRadius: HBotRadius.mediumRadius,
+          border: Border.all(
+            color: isHighlighted ? HBotColors.primary : HBotColors.borderLight,
+            width: isHighlighted ? 2 : 1.5,
           ),
-          child: ElevatedButton(
-            onPressed: onPressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: HBotColors.cardLight,
-              // ALL BUTTONS GREY by default, active button also grey (shadow provides the blue)
-              foregroundColor: Colors.grey,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
-                side: BorderSide(
-                  color: isHighlighted ? HBotColors.primary : Colors.grey,
-                  width: isHighlighted ? 2 : 1,
-                ),
-              ),
-              elevation: 0, // Remove default elevation to show custom shadow
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 32),
-                const SizedBox(height: 4),
-                Text(label, style: const TextStyle(fontSize: 12)),
-              ],
-            ),
+          boxShadow: isHighlighted ? HBotShadows.glow : HBotShadows.small,
+        ),
+        child: Center(
+          child: Icon(
+            icon,
+            size: 24,
+            color: isStop
+                ? (isHighlighted ? HBotColors.error : HBotColors.error)
+                : (isHighlighted ? HBotColors.primary : HBotColors.iconDefault),
           ),
         ),
       ),
@@ -893,53 +1012,51 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
   }
 
   Widget _buildPositionSlider() {
-    // Sanitize values before rendering (guard against NaN/Infinity)
-    final safeCurrentPosition = _currentPosition.isFinite
-        ? _currentPosition.clamp(0.0, 100.0)
-        : 0.0;
     final safeSliderValue = _sliderValue.isFinite
         ? _sliderValue.clamp(0.0, 100.0)
         : 0.0;
 
     return Column(
       children: [
-        // Position percentage display
-        Text(
-          '${safeCurrentPosition.round()}%',
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: HBotColors.primary,
-          ),
-        ),
-        const SizedBox(height: 8),
-
-        // Slider
+        // Slider with labels
         Row(
           children: [
             const Text(
-              'Close',
-              style: TextStyle(fontSize: 12, color: HBotColors.textSecondaryLight),
+              'Closed',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 12,
+                color: HBotColors.textTertiaryLight,
+              ),
             ),
             Expanded(
-              child: Slider(
-                value: safeSliderValue,
-                min: 0,
-                max: 100,
-                divisions: 100,
-                label: '${safeSliderValue.round()}%',
-                activeColor: HBotColors.primary,
-                inactiveColor: HBotColors.textSecondaryLight.withOpacity(0.3),
-                // Use debounced handler for onChanged to send commands while dragging
-                // This provides fast feedback (300ms) instead of waiting for onChangeEnd
-                onChanged: _isConnected ? _onSliderChanged : null,
-                // Also handle onChangeEnd to send final position immediately
-                onChangeEnd: _isConnected ? _onSliderChangeEnd : null,
+              child: SliderTheme(
+                data: SliderThemeData(
+                  activeTrackColor: HBotColors.primary,
+                  inactiveTrackColor: HBotColors.neutral200,
+                  thumbColor: HBotColors.primary,
+                  overlayColor: HBotColors.primary.withOpacity(0.1),
+                  trackHeight: 4,
+                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                ),
+                child: Slider(
+                  value: safeSliderValue,
+                  min: 0,
+                  max: 100,
+                  divisions: 100,
+                  label: '${safeSliderValue.round()}%',
+                  onChanged: _isConnected ? _onSliderChanged : null,
+                  onChangeEnd: _isConnected ? _onSliderChangeEnd : null,
+                ),
               ),
             ),
             const Text(
               'Open',
-              style: TextStyle(fontSize: 12, color: HBotColors.textSecondaryLight),
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 12,
+                color: HBotColors.textTertiaryLight,
+              ),
             ),
           ],
         ),

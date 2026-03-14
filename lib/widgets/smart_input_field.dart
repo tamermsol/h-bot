@@ -96,7 +96,15 @@ class _SmartInputFieldState extends State<SmartInputField> {
                   : HBotColors.borderLight,
               width: _isFocused ? 2 : 1.5,
             ),
-            boxShadow: _isFocused ? HBotShadows.glow : null,
+            boxShadow: _isFocused
+                ? const [
+                    BoxShadow(
+                      color: Color(0x1F0883FD), // rgba(8,131,253,0.12)
+                      blurRadius: 0,
+                      spreadRadius: 3,
+                    ),
+                  ]
+                : null,
           ),
           child: Focus(
             onFocusChange: (hasFocus) {
@@ -125,7 +133,7 @@ class _SmartInputFieldState extends State<SmartInputField> {
                 hintText: widget.hintText,
                 hintStyle: const TextStyle(
                   fontFamily: 'Inter',
-                  color: HBotColors.textTertiaryLight,
+                  color: HBotColors.neutral500, // #7A8494 per spec
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),

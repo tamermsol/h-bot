@@ -27,6 +27,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
   final TextEditingController _nameController = TextEditingController();
   List<Room> _rooms = [];
   bool _isLoading = true;
+  // Device counts per room
+  final Map<String, int> _deviceCounts = {};
 
   @override
   void initState() {
@@ -48,6 +50,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
         _rooms = rooms;
         _isLoading = false;
       });
+      // Load device counts in background
+      _loadDeviceCounts();
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
@@ -57,6 +61,21 @@ class _RoomsScreenState extends State<RoomsScreen> {
             backgroundColor: HBotColors.error,
           ),
         );
+      }
+    }
+  }
+
+  Future<void> _loadDeviceCounts() async {
+    for (final room in _rooms) {
+      try {
+        final devices = await _service.getDevicesByRoom(room.id);
+        if (mounted) {
+          setState(() {
+            _deviceCounts[room.id] = devices.length;
+          });
+        }
+      } catch (_) {
+        // Silently ignore count errors
       }
     }
   }
@@ -109,34 +128,121 @@ class _RoomsScreenState extends State<RoomsScreen> {
     }
   }
 
-  void _showCreateRoomDialog() {
-    showDialog(
+  void _showCreateRoomBottomSheet() {
+    _nameController.clear();
+    String? selectedIconName;
+
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
-        title: const Text('Create New Room'),
-        content: TextField(
-          controller: _nameController,
-          decoration: const InputDecoration(
-            labelText: 'Room Name',
-            hintText: 'e.g., Living Room, Kitchen, etc.',
-          ),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: _createRoom,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: HBotColors.primary,
-            ),
-            child: const Text('Create'),
-          ),
-        ],
-      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 12,
+                bottom: 20 + MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Drag handle
+                  Center(
+                    child: Container(
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFD1D7E0),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'New Room',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF0A1628),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Room name input
+                  TextField(
+                    controller: _nameController,
+                    autofocus: true,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      color: Color(0xFF0A1628),
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Room name',
+                      hintStyle: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 14,
+                        color: Color(0xFF7A8494),
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xFFF8F9FB),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Color(0xFF0883FD), width: 1.5),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Save button
+                  InkWell(
+                    onTap: _createRoom,
+                    borderRadius: BorderRadius.circular(12),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        height: 52,
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Save',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -229,35 +335,112 @@ class _RoomsScreenState extends State<RoomsScreen> {
     }
   }
 
-  void _showEditRoomDialog(Room room) {
+  void _showEditRoomBottomSheet(Room room) {
     _nameController.text = room.name;
-    showDialog(
+
+    showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) {
-        return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
-          title: const Text('Edit Room'),
-          content: TextField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Room Name',
-              hintText: 'e.g., Living Room, Kitchen, etc.',
-            ),
-            autofocus: true,
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () => _editRoom(room),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: HBotColors.primary,
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 12,
+            bottom: 20 + MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Drag handle
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD1D7E0),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
               ),
-              child: const Text('Save'),
-            ),
-          ],
+              const SizedBox(height: 16),
+              const Text(
+                'Edit Room',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF0A1628),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _nameController,
+                autofocus: true,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 16,
+                  color: Color(0xFF0A1628),
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Room name',
+                  hintStyle: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 14,
+                    color: Color(0xFF7A8494),
+                  ),
+                  filled: true,
+                  fillColor: const Color(0xFFF8F9FB),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Color(0xFF0883FD), width: 1.5),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              InkWell(
+                onTap: () => _editRoom(room),
+                borderRadius: BorderRadius.circular(12),
+                child: Ink(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Container(
+                    width: double.infinity,
+                    height: 52,
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -268,22 +451,124 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
-          title: const Text('Delete Room'),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Text(
+            'Delete Room?',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF0A1628),
+            ),
+          ),
           content: Text(
             'Are you sure you want to delete "${room.name}"? This action cannot be undone and will remove all devices in this room.',
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 14,
+              color: Color(0xFF5A6577),
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(fontFamily: 'Inter', color: Color(0xFF5A6577)),
+              ),
             ),
-            ElevatedButton(
-              onPressed: () => _deleteRoom(room),
-              style: ElevatedButton.styleFrom(backgroundColor: HBotColors.error),
-              child: const Text('Delete'),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _deleteRoom(room);
+              },
+              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
+              child: const Text(
+                'Delete',
+                style: TextStyle(fontFamily: 'Inter'),
+              ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  void _showRoomOptionsSheet(Room room) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Drag handle
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFD1D7E0),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ListTile(
+                leading: const Icon(Icons.edit_outlined, color: Color(0xFF5A6577)),
+                title: const Text(
+                  'Rename',
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showEditRoomBottomSheet(room);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.category_outlined, color: Color(0xFF5A6577)),
+                title: const Text(
+                  'Change Icon',
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showIconPickerDialog(room);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.image_outlined, color: Color(0xFF5A6577)),
+                title: const Text(
+                  'Background Image',
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showBackgroundImageDialog(room);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete_outline, color: Color(0xFFEF4444)),
+                title: const Text(
+                  'Delete',
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFFEF4444)),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showDeleteRoomDialog(room);
+                },
+              ),
+            ],
+          ),
         );
       },
     );
@@ -297,7 +582,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: HBotTheme.card(context),
           title: const Text('Room Background Image'),
           content: SingleChildScrollView(
             child: BackgroundImagePicker(
@@ -307,7 +592,6 @@ class _RoomsScreenState extends State<RoomsScreen> {
               entityId: room.id,
               onImageSelected: (imageUrl) async {
                 try {
-                  // If imageUrl is null, we're removing the background
                   if (imageUrl == null) {
                     await _roomsRepo.updateRoom(room.id, clearBackground: true);
                   } else {
@@ -317,7 +601,6 @@ class _RoomsScreenState extends State<RoomsScreen> {
                     );
                   }
 
-                  // Reload rooms to get updated data
                   await _loadRooms();
 
                   if (mounted) {
@@ -356,8 +639,19 @@ class _RoomsScreenState extends State<RoomsScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: HBotColors.cardLight,
-              title: const Text('Change Room Icon'),
+              backgroundColor: HBotTheme.card(context),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              title: const Text(
+                'Change Room Icon',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF0A1628),
+                ),
+              ),
               content: SizedBox(
                 width: double.maxFinite,
                 child: SingleChildScrollView(
@@ -374,9 +668,12 @@ class _RoomsScreenState extends State<RoomsScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(fontFamily: 'Inter', color: Color(0xFF5A6577)),
+                  ),
                 ),
-                ElevatedButton(
+                TextButton(
                   onPressed: () async {
                     if (selectedIconName == null) {
                       Navigator.pop(context);
@@ -389,7 +686,6 @@ class _RoomsScreenState extends State<RoomsScreen> {
                         iconName: selectedIconName,
                       );
 
-                      // Reload rooms to get updated data
                       await _loadRooms();
 
                       if (mounted) {
@@ -412,10 +708,11 @@ class _RoomsScreenState extends State<RoomsScreen> {
                       }
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.primary,
+                  style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(fontFamily: 'Inter'),
                   ),
-                  child: const Text('Save'),
                 ),
               ],
             );
@@ -455,68 +752,107 @@ class _RoomsScreenState extends State<RoomsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: const Color(0xFFF8F9FB),
       appBar: AppBar(
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
-        title: Text(
-          widget.home.name,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-        ),
+        backgroundColor: const Color(0xFFF8F9FB),
         elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text(
+          'Rooms',
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF0A1628),
+          ),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _showCreateRoomDialog,
+            icon: const Icon(Icons.add, color: Color(0xFF0883FD)),
+            onPressed: _showCreateRoomBottomSheet,
           ),
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0883FD)),
+              ),
+            )
           : _rooms.isEmpty
-          ? _buildEmptyState()
-          : _buildRoomsList(),
+              ? _buildEmptyState()
+              : _buildRoomsList(),
     );
   }
 
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(HBotSpacing.space6),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.room_outlined, size: 80, color: HBotColors.textTertiaryLight),
-            const SizedBox(height: HBotSpacing.space6),
-            Text(
-              'No Rooms Yet',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: HBotColors.textPrimaryLight,
+            Container(
+              width: 80,
+              height: 80,
+              decoration: const BoxDecoration(
+                color: Color(0xFFF0F2F5),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.home_outlined,
+                size: 48,
+                color: Color(0xFFD1D7E0),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'No rooms yet',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
+                color: Color(0xFF0A1628),
               ),
             ),
-            const SizedBox(height: HBotSpacing.space4),
-            Text(
-              'Add rooms to organize your smart devices by location',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: HBotColors.textSecondaryLight,
+            const SizedBox(height: 8),
+            const SizedBox(
+              width: 260,
+              child: Text(
+                'Organize your devices by adding rooms.',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF5A6577),
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: HBotSpacing.space6),
-            ElevatedButton.icon(
-              onPressed: _showCreateRoomDialog,
-              icon: const Icon(Icons.add),
-              label: const Text('Add Your First Room'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: HBotColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: HBotSpacing.space6,
-                  vertical: HBotSpacing.space4,
+            const SizedBox(height: 24),
+            InkWell(
+              onTap: _showCreateRoomBottomSheet,
+              borderRadius: BorderRadius.circular(12),
+              child: Ink(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Container(
+                  height: 52,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    '+ Add Room',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -527,185 +863,108 @@ class _RoomsScreenState extends State<RoomsScreen> {
   }
 
   Widget _buildRoomsList() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      itemCount: _rooms.length,
-      itemBuilder: (context, index) {
-        final room = _rooms[index];
-        // Use EXACT same Card structure as Dashboard
-        return Card(
-          color: HBotColors.cardLight,
-          margin: const EdgeInsets.symmetric(
-            horizontal: 0,
-            vertical: HBotSpacing.space2,
-          ),
-          child: Stack(
-            children: [
-              // Background image if available
-              if (room.backgroundImageUrl != null &&
-                  room.backgroundImageUrl!.isNotEmpty)
-                Positioned.fill(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(HBotRadius.medium),
-                    child: BackgroundContainer(
-                      backgroundImageUrl: room.backgroundImageUrl,
-                      overlayColor:
-                          Theme.of(context).brightness == Brightness.dark
-                          ? Colors.black
-                          : Colors
-                                .black, // Changed to black for better contrast in Light Mode
-                      overlayOpacity:
-                          Theme.of(context).brightness == Brightness.dark
-                          ? 0.5
-                          : 0.6, // Increased to 0.6 for better text visibility in Light Mode
-                      child: const SizedBox.expand(),
-                    ),
-                  ),
-                ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DevicesScreen(
-                        home: widget.home,
-                        room: room,
-                        onDeviceChanged: () {
-                          // Could refresh room data here if needed
-                        },
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFFE8ECF1)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: List.generate(_rooms.length, (index) {
+            final room = _rooms[index];
+            final deviceCount = _deviceCounts[room.id] ?? 0;
+            final isLast = index == _rooms.length - 1;
+
+            return Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DevicesScreen(
+                          home: widget.home,
+                          room: room,
+                          onDeviceChanged: () {},
+                        ),
                       ),
-                    ),
-                  );
-                },
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
-                child: Padding(
-                  padding: const EdgeInsets.all(HBotSpacing.space4),
-                  child: Row(
-                    children: [
-                      // Icon container
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: HBotColors.primary.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(
-                            HBotRadius.medium,
+                    );
+                  },
+                  onLongPress: () => _showRoomOptionsSheet(room),
+                  child: Container(
+                    height: 72,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        // Leading icon
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFF0F7FF),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            _getRoomIcon(room),
+                            color: const Color(0xFF0883FD),
+                            size: 24,
                           ),
                         ),
-                        child: Icon(
-                          _getRoomIcon(room),
-                          color: HBotColors.primary,
-                          size: 28,
-                        ),
-                      ),
-                      const SizedBox(width: HBotSpacing.space4),
-                      // Room info
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              room.name,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                color:
-                                    room.backgroundImageUrl != null &&
-                                        room.backgroundImageUrl!.isNotEmpty
-                                    ? Colors.white
-                                    : HBotColors.textPrimaryLight,
+                        const SizedBox(width: 12),
+                        // Room info
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                room.name,
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF0A1628),
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Tap to manage devices',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color:
-                                    room.backgroundImageUrl != null &&
-                                        room.backgroundImageUrl!.isNotEmpty
-                                    ? Colors.white70
-                                    : HBotColors.textSecondaryLight,
+                              const SizedBox(height: 2),
+                              Text(
+                                '$deviceCount device${deviceCount == 1 ? '' : 's'}',
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xFF5A6577),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        // Chevron
+                        const Icon(
+                          Icons.chevron_right,
+                          size: 20,
+                          color: Color(0xFFA0AAB8),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Positioned(
-                top: 4,
-                right: 4,
-                child: PopupMenuButton<String>(
-                  icon: Icon(
-                    Icons.more_vert,
-                    color:
-                        room.backgroundImageUrl != null &&
-                            room.backgroundImageUrl!.isNotEmpty
-                        ? Colors.white
-                        : HBotColors.textTertiaryLight,
-                    size: 20,
+                if (!isLast)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 68),
+                    child: Container(
+                      height: 1,
+                      color: const Color(0xFFF0F2F5),
+                    ),
                   ),
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'edit':
-                        _showEditRoomDialog(room);
-                        break;
-                      case 'icon':
-                        _showIconPickerDialog(room);
-                        break;
-                      case 'background':
-                        _showBackgroundImageDialog(room);
-                        break;
-                      case 'delete':
-                        _showDeleteRoomDialog(room);
-                        break;
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'edit',
-                      child: ListTile(
-                        leading: Icon(Icons.edit_outlined),
-                        title: Text('Edit Room'),
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'icon',
-                      child: ListTile(
-                        leading: Icon(Icons.category_outlined),
-                        title: Text('Change Icon'),
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'background',
-                      child: ListTile(
-                        leading: Icon(Icons.image_outlined),
-                        title: Text('Background Image'),
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: ListTile(
-                        leading: Icon(Icons.delete_outline, color: HBotColors.error),
-                        title: Text(
-                          'Delete Room',
-                          style: TextStyle(color: HBotColors.error),
-                        ),
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            );
+          }),
+        ),
+      ),
     );
   }
 }

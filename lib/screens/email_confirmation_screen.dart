@@ -43,12 +43,12 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: HBotTheme.background(context),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight),
+          icon: Icon(Icons.arrow_back_ios, color: HBotTheme.textPrimary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -61,12 +61,12 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Mail icon in circle
+                  // Envelope icon in success-colored circle
                   Container(
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: HBotColors.primarySurface,
+                      color: HBotTheme.surfacePrimarySubtle(context),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -82,20 +82,20 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                   Container(
                     padding: const EdgeInsets.all(HBotSpacing.space6),
                     decoration: BoxDecoration(
-                      color: HBotColors.cardLight,
+                      color: HBotTheme.card(context),
                       borderRadius: HBotRadius.xlRadius,
                       boxShadow: HBotShadows.small,
-                      border: Border.all(color: HBotColors.borderLight, width: 1),
+                      border: Border.all(color: HBotTheme.border(context), width: 1),
                     ),
                     child: Column(
                       children: [
-                        const Text(
+                        Text(
                           'Check Your Email',
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
-                            color: HBotColors.textPrimaryLight,
+                            color: HBotTheme.textPrimary(context),
                             letterSpacing: -0.3,
                           ),
                           textAlign: TextAlign.center,
@@ -103,12 +103,12 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
 
                         const SizedBox(height: HBotSpacing.space3),
 
-                        const Text(
+                        Text(
                           'We sent a confirmation link to:',
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 14,
-                            color: HBotColors.textSecondaryLight,
+                            color: HBotTheme.textSecondary(context),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -132,27 +132,27 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                         Container(
                           padding: const EdgeInsets.all(HBotSpacing.space4),
                           decoration: BoxDecoration(
-                            color: HBotColors.infoLight,
+                            color: HBotTheme.surfacePrimarySubtle(context),
                             borderRadius: HBotRadius.mediumRadius,
                           ),
-                          child: const Column(
+                          child: Column(
                             children: [
                               Text(
-                                '📱 Mobile App Note',
+                                'Mobile App Note',
                                 style: TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: HBotColors.textPrimaryLight,
+                                  color: HBotTheme.textPrimary(context),
                                 ),
                               ),
-                              SizedBox(height: HBotSpacing.space2),
+                              const SizedBox(height: HBotSpacing.space2),
                               Text(
                                 'If the email link doesn\'t work, you can still use the app! Email confirmation is optional for testing.',
                                 style: TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 13,
-                                  color: HBotColors.textSecondaryLight,
+                                  color: HBotTheme.textSecondary(context),
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -165,7 +165,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                         // Resend Button (gradient)
                         Container(
                           width: double.infinity,
-                          height: 48,
+                          height: 52,
                           decoration: hbotPrimaryButtonDecoration(enabled: !_isResending),
                           child: ElevatedButton(
                             onPressed: _isResending ? null : _resendConfirmation,
@@ -202,7 +202,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                         // Continue without confirmation
                         SizedBox(
                           width: double.infinity,
-                          height: 48,
+                          height: 52,
                           child: OutlinedButton(
                             onPressed: () => Navigator.of(context).pop(),
                             style: OutlinedButton.styleFrom(
@@ -233,7 +233,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 12,
-                      color: HBotColors.textTertiaryLight,
+                      color: HBotTheme.textTertiary(context),
                     ),
                     textAlign: TextAlign.center,
                   ),

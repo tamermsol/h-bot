@@ -16,6 +16,7 @@ import '../services/app_lifecycle_manager.dart';
 import '../services/room_change_notifier.dart';
 import '../widgets/background_image_picker.dart';
 import '../widgets/background_container.dart';
+import '../widgets/device_card.dart';
 import 'homes_screen.dart';
 import 'add_device_flow_screen.dart';
 import 'device_control_screen.dart';
@@ -864,140 +865,103 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Stack(
+    return Column(
       children: [
-        // Background layer
-        Positioned.fill(
-          child: BackgroundContainer(
-            backgroundImageUrl: _selectedHome?.backgroundImageUrl,
-            overlayColor: isDark ? Colors.black : Colors.white,
-            overlayOpacity: isDark ? 0.3 : 0.7,
-            child: const SizedBox.expand(),
+        // Greeting section
+        _buildGreetingSection(),
+        // Room tabs
+        if (_homes.isNotEmpty && _rooms.isNotEmpty)
+          Container(
+            key: ValueKey('tabs_${_rooms.map((r) => r.id).join("_")}'),
+            child: _buildTabBar(),
           ),
-        ),
-        // Content layer - with proper padding
-        Column(
-          children: [
-            // Add top padding for status bar + AppBar (minimized spacing)
-            SizedBox(
-              height:
-                  MediaQuery.of(context).padding.top +
-                  kToolbarHeight -
-                  40, // Aggressive reduction to remove gap
-            ),
-            _buildHeader(),
-            if (_homes.isNotEmpty && _devices.isNotEmpty) _buildSearchBar(),
-            if (_homes.isNotEmpty && _rooms.isNotEmpty)
-              Container(
-                key: ValueKey('tabs_${_rooms.map((r) => r.id).join("_")}'),
-                margin: const EdgeInsets.only(
-                  top: 4,
-                ), // Minimal spacing above tabs
-                child: _buildTabBar(),
-              ),
-            Expanded(child: _buildContent()),
-            // Add bottom padding for navigation bar (reduced)
-            SizedBox(
-              height:
-                  MediaQuery.of(context).padding.bottom +
-                  kBottomNavigationBarHeight -
-                  40, // Reduce gap at bottom
-            ),
-          ],
-        ),
+        const SizedBox(height: 12),
+        // Main content
+        Expanded(child: _buildContent()),
       ],
     );
   }
 
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(
-        HBotSpacing.screenPadding,
-        0,
-        HBotSpacing.screenPadding,
-        HBotSpacing.space1,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildGreetingSection() {
+    // Count online devices for status line
+    final onlineCount = _devices.where((d) {
+      final state = _mqttManager.getDeviceState(d.id);
+      if (state == null) return false;
+      final online = state['online'];
+      if (online is bool) return online;
+      if (online is String) {
+        return online.toLowerCase() == 'online' || online.toLowerCase() == 'true';
+      }
+      return false;
+    }).length;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Home dropdown
-          Expanded(
-            child: GestureDetector(
+          if (_homes.isNotEmpty) ...[
+            // Home selector row
+            GestureDetector(
               onTap: _showHomeSelector,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: HBotSpacing.space4,
-                  vertical: HBotSpacing.space2,
-                ),
-                decoration: BoxDecoration(
-                  color: HBotColors.cardLight,
-                  borderRadius: HBotRadius.mediumRadius,
-                  border: Border.all(color: HBotColors.borderLight, width: 1),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        _selectedHome?.name ?? 'Select Home',
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: HBotColors.textPrimaryLight,
-                        ),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      _selectedHome?.name ?? 'Select Home',
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: HBotColors.textSecondaryLight,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const Icon(
-                      Icons.keyboard_arrow_down,
-                      color: HBotColors.textSecondaryLight,
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: HBotColors.textSecondaryLight,
+                    size: 18,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Greeting
+            Text(
+              '${_getGreeting()}${_getGreetingEmoji()}',
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: HBotColors.textPrimaryLight,
+              ),
+            ),
+            const SizedBox(height: 4),
+            // Online device count
+            if (_devices.isNotEmpty)
+              RichText(
+                text: TextSpan(
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: HBotColors.textSecondaryLight,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: '$onlineCount',
+                      style: const TextStyle(color: HBotColors.primary),
+                    ),
+                    TextSpan(
+                      text: ' device${onlineCount == 1 ? '' : 's'} online',
                     ),
                   ],
                 ),
               ),
-            ),
-          ),
-          const SizedBox(width: HBotSpacing.space2),
-          // Add button - gradient
-          Container(
-            decoration: BoxDecoration(
-              gradient: HBotColors.primaryGradient,
-              borderRadius: HBotRadius.mediumRadius,
-              boxShadow: HBotShadows.small,
-            ),
-            child: IconButton(
-              icon: const Icon(Icons.add, color: HBotColors.textOnPrimary),
-              onPressed: _showAddMenu,
-              padding: const EdgeInsets.all(HBotSpacing.space2),
-              constraints: const BoxConstraints(),
-            ),
-          ),
-          const SizedBox(width: HBotSpacing.space2),
-          // MQTT status indicator
-          Tooltip(
-            message: _mqttConnected ? 'MQTT Connected' : 'MQTT Disconnected',
-            child: Container(
-              padding: const EdgeInsets.all(HBotSpacing.space3),
-              decoration: BoxDecoration(
-                color: _mqttConnected
-                    ? HBotColors.successLight
-                    : HBotColors.errorLight,
-                borderRadius: HBotRadius.mediumRadius,
-                border: Border.all(
-                  color: _mqttConnected
-                      ? HBotColors.success.withOpacity(0.3)
-                      : HBotColors.error.withOpacity(0.3),
-                  width: 1,
-                ),
-              ),
-              child: Icon(
-                _mqttConnected ? Icons.wifi : Icons.wifi_off,
-                color: _mqttConnected ? HBotColors.success : HBotColors.error,
-                size: 20,
-              ),
-            ),
-          ),
+            const SizedBox(height: 20),
+          ],
         ],
       ),
     );
@@ -1145,12 +1109,33 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     return Container(
       key: ValueKey(_rooms.map((r) => r.name).join(',')),
       height: 40,
-      margin: const EdgeInsets.symmetric(horizontal: HBotSpacing.screenPadding),
+      padding: const EdgeInsets.only(left: 20),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: tabs.length,
-        separatorBuilder: (_, __) => const SizedBox(width: HBotSpacing.space2),
+        itemCount: tabs.length + 1, // +1 for the add room button
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
+          // Last item is the add room button
+          if (index == tabs.length) {
+            return GestureDetector(
+              onTap: _showAddMenu,
+              child: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: HBotColors.borderLight, width: 1),
+                ),
+                alignment: Alignment.center,
+                child: const Icon(
+                  Icons.add,
+                  color: HBotColors.iconDefault,
+                  size: 18,
+                ),
+              ),
+            );
+          }
+
           final isSelected = _tabController!.index == index;
           return GestureDetector(
             onTap: () {
@@ -1160,16 +1145,13 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               });
             },
             child: AnimatedContainer(
-              duration: HBotDurations.fast,
-              curve: HBotCurves.standard,
-              padding: const EdgeInsets.symmetric(
-                horizontal: HBotSpacing.space4,
-                vertical: HBotSpacing.space2,
-              ),
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+              height: 36,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                gradient: isSelected ? HBotColors.primaryGradient : null,
-                color: isSelected ? null : HBotColors.neutral100,
-                borderRadius: HBotRadius.fullRadius,
+                color: isSelected ? HBotColors.primary : Colors.transparent,
+                borderRadius: BorderRadius.circular(999),
               ),
               alignment: Alignment.center,
               child: Text(
@@ -1179,7 +1161,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   fontSize: 14,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   color: isSelected
-                      ? HBotColors.textOnPrimary
+                      ? Colors.white
                       : HBotColors.textSecondaryLight,
                 ),
               ),
@@ -1190,26 +1172,75 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     );
   }
 
+  /// Get time-of-day greeting per design spec
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    final user = Supabase.instance.client.auth.currentUser;
+    final name = user?.userMetadata?['full_name'] as String? ??
+        user?.email?.split('@').first ??
+        '';
+    final firstName = name.split(' ').first;
+
+    if (hour >= 5 && hour < 12) {
+      return 'Good morning, $firstName';
+    } else if (hour >= 12 && hour < 18) {
+      return 'Good afternoon, $firstName';
+    } else if (hour >= 18 && hour < 22) {
+      return 'Good evening, $firstName';
+    } else {
+      return 'Good night, $firstName';
+    }
+  }
+
+  /// Get greeting emoji per design spec
+  String _getGreetingEmoji() {
+    final hour = DateTime.now().hour;
+    if (hour >= 5 && hour < 12) return ' ☀️';
+    if (hour >= 12 && hour < 18) return '';
+    return ' 🌙';
+  }
+
+  /// Build skeleton loading cards (4 cards in 2x2 grid) with shimmer
+  Widget _buildSkeletonLoading() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.85,
+        ),
+        itemCount: 4,
+        itemBuilder: (context, index) {
+          return _ShimmerSkeletonCard();
+        },
+      ),
+    );
+  }
+
   Widget _buildContent() {
     if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return _buildSkeletonLoading();
     }
 
     if (_homes.isEmpty) {
       return _buildEmptyState(
         icon: Icons.home_outlined,
-        title: 'No homes yet',
-        subtitle: 'Create your first home to get started',
-        actionText: 'Create Home',
+        title: 'Your smart home awaits',
+        subtitle: 'Add your first device to start controlling your home.',
+        actionText: '+ Add Device',
         onAction: _showAddMenu,
       );
     }
 
     if (_filteredDevices.isEmpty) {
       // Show appropriate empty state message
-      String emptyTitle = 'No devices yet';
+      String emptyTitle = 'Your smart home awaits';
       String emptySubtitle =
-          'Add your first device to start controlling your home';
+          'Add your first device to start controlling your home.';
 
       if (_searchQuery.isNotEmpty) {
         emptyTitle = 'No devices found';
@@ -1220,47 +1251,54 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       }
 
       return _buildEmptyState(
-        icon: Icons.devices_outlined,
+        icon: Icons.home_outlined,
         title: emptyTitle,
         subtitle: emptySubtitle,
-        actionText: 'Add Device',
+        actionText: '+ Add Device',
         onAction: _showAddMenu,
       );
     }
 
-    // Return grid or list view based on user preference
-    if (_isGridView) {
-      return _buildDeviceGrid();
-    } else {
-      return _buildDeviceList();
-    }
+    // Always use grid view per design spec
+    return _buildDeviceGrid();
   }
 
   Widget _buildDeviceList() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      itemCount: _filteredDevices.length,
-      itemBuilder: (context, index) {
-        final device = _filteredDevices[index];
-        return _buildDeviceCardWrapper(device);
-      },
+    return RefreshIndicator(
+      onRefresh: _loadData,
+      color: HBotColors.primary,
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(
+          horizontal: HBotSpacing.space5,
+          vertical: HBotSpacing.space4,
+        ),
+        itemCount: _filteredDevices.length,
+        itemBuilder: (context, index) {
+          final device = _filteredDevices[index];
+          return _buildDeviceCardWrapper(device);
+        },
+      ),
     );
   }
 
   Widget _buildDeviceGrid() {
-    return GridView.builder(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: HBotSpacing.space2,
-        mainAxisSpacing: HBotSpacing.space2,
-        childAspectRatio: 1.25, // Increased to 1.25 for maximum compactness
+    return RefreshIndicator(
+      onRefresh: _loadData,
+      color: HBotColors.primary,
+      child: GridView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.85,
+        ),
+        itemCount: _filteredDevices.length,
+        itemBuilder: (context, index) {
+          final device = _filteredDevices[index];
+          return _buildDeviceCardWrapper(device, isGridView: true);
+        },
       ),
-      itemCount: _filteredDevices.length,
-      itemBuilder: (context, index) {
-        final device = _filteredDevices[index];
-        return _buildDeviceCardWrapper(device, isGridView: true);
-      },
     );
   }
 
@@ -1305,11 +1343,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(HBotSpacing.space6),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Icon in neutral circle
+            // Icon in neutral circle (80x80, #F0F2F5 bg)
             Container(
               width: 80,
               height: 80,
@@ -1317,45 +1355,57 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 color: HBotColors.neutral100,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 40, color: HBotColors.neutral400),
+              alignment: Alignment.center,
+              child: Icon(icon, size: 48, color: HBotColors.neutral300),
             ),
-            const SizedBox(height: HBotSpacing.space5),
-            // Gradient text title
-            hbotGradientText(title, fontSize: 20, fontWeight: FontWeight.w600),
-            const SizedBox(height: HBotSpacing.space2),
+            const SizedBox(height: 24),
+            // Title
             Text(
-              subtitle,
+              title,
               style: const TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: HBotColors.textTertiaryLight,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: HBotColors.textPrimaryLight,
               ),
-              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: HBotSpacing.space6),
-            // Gradient primary button
-            Container(
-              decoration: hbotPrimaryButtonDecoration(),
-              child: ElevatedButton(
-                onPressed: onAction,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: HBotColors.textOnPrimary,
-                  shadowColor: Colors.transparent,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: HBotSpacing.space6,
-                    vertical: HBotSpacing.space4,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: HBotRadius.mediumRadius,
-                  ),
+            const SizedBox(height: 8),
+            // Subtitle
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 260),
+              child: Text(
+                subtitle,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: HBotColors.textSecondaryLight,
                 ),
-                child: Text(
-                  actionText,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Gradient button
+            InkWell(
+              onTap: onAction,
+              borderRadius: BorderRadius.circular(12),
+              child: Ink(
+                decoration: BoxDecoration(
+                  gradient: HBotColors.primaryGradient,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Container(
+                  height: 52,
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  alignment: Alignment.center,
+                  child: Text(
+                    actionText,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -1427,7 +1477,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             } else if (shutterData is String) {
               shutterPosition = int.tryParse(shutterData)?.clamp(0, 100) ?? 0;
             } else if (shutterData is Map<String, dynamic>) {
-              // Handle object form: {"Position": 50, "Direction": 1, ...}
               final pos = shutterData['Position'];
               if (pos is int) {
                 shutterPosition = pos.clamp(0, 100);
@@ -1436,8 +1485,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               } else if (pos is String) {
                 shutterPosition = int.tryParse(pos)?.clamp(0, 100) ?? 0;
               }
-
-              // Extract direction for blue glow indicator
               final dir = shutterData['Direction'];
               if (dir is int) {
                 shutterDirection = dir;
@@ -1467,10 +1514,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           final mqttState = _mqttManager.getDeviceState(device.id);
           if (mqttState != null) {
             if (device.deviceType == DeviceType.shutter) {
-              // For shutters: get position from Shutter1
               shutterPosition = _mqttManager.getShutterPosition(device.id, 1);
             } else {
-              // For relays/dimmers: compute power state
               if (device.effectiveChannels > 1) {
                 for (int i = 1; i <= device.effectiveChannels; i++) {
                   final p = mqttState['POWER$i'];
@@ -1502,98 +1547,108 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           }
         }
 
+        final bool isOn = deviceState || (device.deviceType == DeviceType.shutter && shutterPosition > 0);
+        final roomName = _getRoomName(device.roomId);
+        String stateValue;
+        if (device.deviceType == DeviceType.shutter) {
+          stateValue = '$shutterPosition%';
+        } else {
+          stateValue = deviceState ? 'ON' : 'OFF';
+        }
+
+        // Use DeviceCard widget for grid view
+        if (isGridView) {
+          return DeviceCard(
+            title: device.deviceName,
+            icon: _getDeviceIcon(device.deviceType),
+            isOnline: isOnline,
+            isOn: isOn,
+            value: stateValue,
+            roomName: roomName,
+            isLoading: waitingForInitialState,
+            onToggle: (value) {
+              if (device.deviceType == DeviceType.shutter) {
+                _controlShutter(device, value ? 'open' : 'close');
+              } else {
+                _toggleDevice(device, value);
+              }
+            },
+            onTap: () => _navigateToDeviceControl(device),
+            onLongPress: () => _showOptionsMenu(),
+          );
+        }
+
+        // List view fallback
         return Container(
-          margin: isGridView
-              ? EdgeInsets.zero
-              : const EdgeInsets.symmetric(
-                  horizontal: HBotSpacing.screenPadding,
-                  vertical: HBotSpacing.space1,
-                ),
-          decoration: hbotDeviceCardDecoration(isOn: deviceState || (device.deviceType == DeviceType.shutter && shutterPosition > 0)),
+          margin: const EdgeInsets.symmetric(
+            horizontal: HBotSpacing.screenPadding,
+            vertical: HBotSpacing.space1,
+          ),
+          decoration: hbotDeviceCardDecoration(isOn: isOn),
           child: InkWell(
             onTap: () => _navigateToDeviceControl(device),
             borderRadius: HBotRadius.largeRadius,
             child: Padding(
               padding: const EdgeInsets.all(HBotSpacing.space2),
-              child: isGridView
-                  ? _buildGridCardContent(
-                      device,
-                      deviceState,
-                      shutterPosition,
-                      isOnline,
-                      isControllable,
-                      merged,
-                      shutterDirection,
-                      waitingForInitialState,
-                    )
-                  : Row(
-                      children: [
-                        // Left side: device name only (simplified)
-                        Expanded(
-                          child: Text(
-                            device.deviceName,
-                            style: const TextStyle(
-                              fontFamily: 'Inter',
-                              color: HBotColors.textPrimaryLight,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        // Right side: controls (shutter buttons or toggle switch)
-                        device.deviceType == DeviceType.shutter
-                            ? _buildShutterControls(
-                                device,
-                                shutterPosition,
-                                shutterDirection,
-                                isControllable,
-                                isOnline,
-                              )
-                            : Column(
-                                children: [
-                                  if (!isControllable)
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        bottom: 8.0,
-                                      ),
-                                      child: Text(
-                                        'No realtime (no topic)',
-                                        style: const TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: 12,
-                                          color: HBotColors.warning,
-                                        ),
-                                      ),
-                                    ),
-                                  // FETCH-FIRST: Show loading indicator while waiting for initial state
-                                  if (waitingForInitialState)
-                                    const SizedBox(
-                                      width: 24,
-                                      height: 24,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              HBotColors.primary,
-                                            ),
-                                      ),
-                                    )
-                                  else
-                                    Switch(
-                                      value: deviceState,
-                                      onChanged:
-                                          isControllable &&
-                                              _mqttConnected &&
-                                              isOnline
-                                          ? (value) =>
-                                                _toggleDevice(device, value)
-                                          : null,
-                                    ),
-                                ],
-                              ),
-                      ],
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      device.deviceName,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        color: HBotColors.textPrimaryLight,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
+                  ),
+                  const SizedBox(width: 8),
+                  device.deviceType == DeviceType.shutter
+                      ? _buildShutterControls(
+                          device,
+                          shutterPosition,
+                          shutterDirection,
+                          isControllable,
+                          isOnline,
+                        )
+                      : Column(
+                          children: [
+                            if (!isControllable)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Text(
+                                  'No realtime (no topic)',
+                                  style: const TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: 12,
+                                    color: HBotColors.warning,
+                                  ),
+                                ),
+                              ),
+                            if (waitingForInitialState)
+                              const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    HBotColors.primary,
+                                  ),
+                                ),
+                              )
+                            else
+                              Switch(
+                                value: deviceState,
+                                onChanged:
+                                    isControllable && _mqttConnected && isOnline
+                                        ? (value) => _toggleDevice(device, value)
+                                        : null,
+                              ),
+                          ],
+                        ),
+                ],
+              ),
             ),
           ),
         );
@@ -1649,14 +1704,14 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           ),
         ),
         const SizedBox(height: HBotSpacing.space1),
-        // Device name
+        // Device name (per design spec: $titleMedium 16/600)
         Flexible(
           child: Text(
             device.deviceName,
             style: const TextStyle(
               fontFamily: 'Inter',
               color: HBotColors.textPrimaryLight,
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w600,
             ),
             textAlign: TextAlign.center,
@@ -2913,5 +2968,95 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     } catch (e) {
       return 'Invalid';
     }
+  }
+}
+
+/// Shimmer skeleton card for loading state
+class _ShimmerSkeletonCard extends StatefulWidget {
+  @override
+  State<_ShimmerSkeletonCard> createState() => _ShimmerSkeletonCardState();
+}
+
+class _ShimmerSkeletonCardState extends State<_ShimmerSkeletonCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: Tween<double>(begin: 0.5, end: 1.0).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: HBotColors.cardLight,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: HBotColors.borderLight, width: 1),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Skeleton icon (32x32)
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: HBotColors.neutral100,
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            const SizedBox(height: 12),
+            // Skeleton title (100x14)
+            Container(
+              width: 100,
+              height: 14,
+              decoration: BoxDecoration(
+                color: HBotColors.neutral200,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Skeleton subtitle (40x12)
+            Container(
+              width: 40,
+              height: 12,
+              decoration: BoxDecoration(
+                color: HBotColors.neutral100,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const Spacer(),
+            // Skeleton toggle (52x28) bottom-right
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                width: 52,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: HBotColors.neutral100,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
