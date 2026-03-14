@@ -886,29 +886,55 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         if (_selectedHome != null)
           Positioned(
             right: 20,
-            bottom: 16,
-            child: FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddDeviceFlowScreen(
-                      home: _selectedHome!,
-                      onDeviceAdded: () {
-                        _loadData();
-                      },
+            bottom: 20,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: HBotColors.primaryGradient,
+                boxShadow: [
+                  BoxShadow(
+                    color: HBotColors.primary.withOpacity(0.35),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddDeviceFlowScreen(
+                          home: _selectedHome!,
+                          onDeviceAdded: () {
+                            _loadData();
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(16),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.add, color: Colors.white, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          'Add Device',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              },
-              backgroundColor: HBotColors.primary,
-              icon: const Icon(Icons.add, color: Colors.white),
-              label: const Text(
-                'Add Device',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
                 ),
               ),
             ),

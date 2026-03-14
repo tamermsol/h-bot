@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 import 'auth_wrapper.dart';
 
-/// Splash / Launch screen per design spec (04-SCREEN-DESIGNS.md Section 1)
-/// Background: theme-aware (dark: #010510, light: #F8F9FB)
-/// Centered logo placeholder (gradient "H" in rounded square 80x80)
-/// "H-Bot" gradient text ($displayLarge 32/700)
-/// "Smart Home, Simplified" in $textSecondary
-/// Auto-navigates after 2s to AuthWrapper
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -17,25 +12,28 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  late AnimationController _fadeController;
+  late AnimationController _controller;
   late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    _fadeController = AnimationController(
-      duration: HBotDurations.slow,
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 800),
       vsync: this,
     );
     _fadeAnimation = CurvedAnimation(
-      parent: _fadeController,
-      curve: HBotCurves.decelerate,
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
     );
 
-    _fadeController.forward();
+    _controller.forward();
 
-    // Auto-navigate after 2 seconds
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
@@ -55,73 +53,107 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
-    _fadeController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Set status bar to light text for dark gradient background
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
     return Scaffold(
-      backgroundColor: HBotTheme.background(context),
-      body: Center(
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // H-Bot logo
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  'assets/images/branding/hbot_app_icon.png',
-                  width: 80,
-                  height: 80,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      gradient: HBotColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Icon(Icons.smart_toy, color: Colors.white, size: 40),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: HBotSpacing.space6),
-
-              // "H-Bot" in gradient text ($displayLarge 32/700)
-              ShaderMask(
-                shaderCallback: (bounds) =>
-                    HBotColors.primaryGradient.createShader(bounds),
-                child: const Text(
-                  'H-Bot',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 32,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    letterSpacing: -0.5,
-                    height: 1.25,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: HBotSpacing.space2),
-
-              // "Smart Home, Simplified" in $textSecondary
-              Text(
-                'Smart Home, Simplified',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: HBotTheme.textSecondary(context),
-                  letterSpacing: -0.2,
-                ),
-              ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0A1628), // deep navy
+              Color(0xFF0668CA), // dark blue
+              Color(0xFF0883FD), // primary blue
             ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: SafeArea(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo with white glow effect
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.15),
+                          blurRadius: 40,
+                          spreadRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(28),
+                      child: Image.asset(
+                        'assets/images/branding/hbot_app_icon.png',
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(28),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.2),
+                              width: 1,
+                            ),
+                          ),
+                          child: const Icon(Icons.smart_toy, color: Colors.white, size: 56),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // "H-Bot" in white
+                  const Text(
+                    'H-Bot',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 36,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // Tagline
+                  Text(
+                    'Smart Home, Simplified',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white.withOpacity(0.7),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

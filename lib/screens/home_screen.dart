@@ -67,23 +67,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        titleSpacing: 16,
         title: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
               child: Image.asset(
                 'assets/images/branding/hbot_app_icon.png',
-                width: 32,
-                height: 32,
+                width: 36,
+                height: 36,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  width: 32,
-                  height: 32,
+                  width: 36,
+                  height: 36,
                   decoration: BoxDecoration(
-                    color: HBotColors.primary,
-                    borderRadius: BorderRadius.circular(8),
+                    gradient: HBotColors.primaryGradient,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(Icons.smart_toy, color: Colors.white, size: 20),
+                  child: const Icon(Icons.smart_toy, color: Colors.white, size: 22),
                 ),
               ),
             ),
@@ -116,43 +118,32 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget>? _buildAppBarActions() {
     if (_currentIndex == 0) {
       return [
-        SizedBox(
-          width: 44,
-          height: 44,
-          child: IconButton(
-            icon: const Icon(Icons.notifications_outlined, size: 24),
-            color: HBotColors.iconDefault,
-            onPressed: () {
-              // Notifications placeholder
-            },
-          ),
+        IconButton(
+          icon: const Icon(Icons.notifications_outlined, size: 22),
+          color: HBotColors.iconDefault,
+          onPressed: () {
+            // Notifications placeholder
+          },
         ),
-        SizedBox(
-          width: 44,
-          height: 44,
-          child: IconButton(
-            icon: const Icon(Icons.settings_outlined, size: 24),
-            color: HBotColors.iconDefault,
-            onPressed: () {
-              // Navigate to profile/settings tab
-              setState(() => _currentIndex = 2);
-            },
-          ),
+        IconButton(
+          icon: const Icon(Icons.settings_outlined, size: 22),
+          color: HBotColors.iconDefault,
+          onPressed: () {
+            setState(() => _currentIndex = 2);
+          },
         ),
+        const SizedBox(width: 4),
       ];
     } else if (_currentIndex == 1) {
       return [
-        SizedBox(
-          width: 44,
-          height: 44,
-          child: IconButton(
-            icon: const Icon(Icons.add, size: 24),
-            color: HBotColors.iconDefault,
-            onPressed: () {
-              // Scene creation is handled by ScenesScreen internally
-            },
-          ),
+        IconButton(
+          icon: const Icon(Icons.add, size: 22),
+          color: HBotColors.iconDefault,
+          onPressed: () {
+            // Scene creation is handled by ScenesScreen internally
+          },
         ),
+        const SizedBox(width: 4),
       ];
     }
     return null;

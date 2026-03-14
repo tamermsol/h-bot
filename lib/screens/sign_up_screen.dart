@@ -159,80 +159,102 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotTheme.background(context),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: HBotTheme.textPrimary(context)),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: HBotSpacing.tabletMaxWidth),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: HBotSpacing.screenPadding,
+      backgroundColor: HBotColors.backgroundLight,
+      body: Column(
+        children: [
+          // Gradient header
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF0A1628),
+                  Color(0xFF0668CA),
+                  Color(0xFF0883FD),
+                ],
+                stops: [0.0, 0.5, 1.0],
               ),
-              child: Form(
-                key: _formKey,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(32),
+                bottomRight: Radius.circular(32),
+              ),
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 28),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: HBotSpacing.space4),
-
-                    // H-Bot logo
-                    Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          'assets/images/branding/hbot_app_icon.png',
+                    // Back button
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
+                      child: Image.asset(
+                        'assets/images/branding/hbot_app_icon.png',
+                        width: 64,
+                        height: 64,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
                           width: 64,
                           height: 64,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            width: 64,
-                            height: 64,
-                            decoration: BoxDecoration(
-                              color: HBotColors.primary,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: const Icon(Icons.smart_toy, color: Colors.white, size: 32),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(18),
                           ),
+                          child: const Icon(Icons.smart_toy, color: Colors.white, size: 32),
                         ),
                       ),
                     ),
-
-                    const SizedBox(height: HBotSpacing.space6),
-
-                    // "Create account" (28px/700, textPrimary)
-                    Text(
+                    const SizedBox(height: 12),
+                    const Text(
                       'Create account',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        fontSize: 28,
+                        fontSize: 24,
                         fontWeight: FontWeight.w700,
-                        color: HBotTheme.textPrimary(context),
-                        letterSpacing: -0.5,
+                        color: Colors.white,
+                        letterSpacing: -0.3,
                       ),
-                      textAlign: TextAlign.center,
                     ),
-
-                    // "Join H-Bot today" (14px/400, textSecondary)
+                    const SizedBox(height: 4),
                     Text(
                       'Join H-Bot today',
                       style: TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: HBotTheme.textSecondary(context),
+                        color: Colors.white.withOpacity(0.7),
                       ),
-                      textAlign: TextAlign.center,
                     ),
+                  ],
+                ),
+              ),
+            ),
+          ),
 
-                    const SizedBox(height: HBotSpacing.space7),
+          // Form section
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: HBotSpacing.tabletMaxWidth),
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: HBotSpacing.screenPadding,
+                  ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(height: 24),
 
                     // Full Name Field
                     SmartInputField(
@@ -492,13 +514,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: HBotSpacing.space4),
-                  ],
+                        const SizedBox(height: 24),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
