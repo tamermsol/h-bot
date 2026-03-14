@@ -302,18 +302,18 @@ class _FigmaDevScreenState extends State<FigmaDevScreen> {
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: HBotColors.error[50],
-                border: Border.all(color: HBotColors.error[300]!),
+                color: HBotColors.errorLight,
+                border: Border.all(color: HBotColors.error),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.error, color: HBotColors.error[700]),
+                  Icon(Icons.error, color: HBotColors.errorDark),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(color: HBotColors.error[700]),
+                      style: TextStyle(color: HBotColors.errorDark),
                     ),
                   ),
                 ],

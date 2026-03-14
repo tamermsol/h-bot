@@ -495,7 +495,7 @@ class _EnhancedDeviceControlWidgetState
                   icon: const Icon(Icons.power_settings_new, size: 18),
                   label: const Text('All ON'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.success[700],
+                    backgroundColor: HBotColors.successDark,
                     foregroundColor: Colors.white,
                     disabledBackgroundColor: Colors.grey[800],
                     disabledForegroundColor: Colors.grey[600],
@@ -513,7 +513,7 @@ class _EnhancedDeviceControlWidgetState
                   icon: const Icon(Icons.power_off, size: 18),
                   label: const Text('All OFF'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.error[700],
+                    backgroundColor: HBotColors.errorDark,
                     foregroundColor: Colors.white,
                     disabledBackgroundColor: Colors.grey[800],
                     disabledForegroundColor: Colors.grey[600],
