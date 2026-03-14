@@ -962,65 +962,133 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (_homes.isNotEmpty) ...[
-            // Home selector row
-            GestureDetector(
-              onTap: _showHomeSelector,
-              child: Row(
-                children: [
-                  Flexible(
-                    child: Text(
-                      _selectedHome?.name ?? 'Select Home',
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: HBotColors.textSecondaryLight,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  const Icon(
-                    Icons.keyboard_arrow_down,
-                    color: HBotColors.textSecondaryLight,
-                    size: 18,
+            // Greeting card with gradient
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF0A1628),
+                    Color(0xFF0668CA),
+                    Color(0xFF0883FD),
+                  ],
+                  stops: [0.0, 0.55, 1.0],
+                ),
+                borderRadius: BorderRadius.circular(HBotRadius.large),
+                boxShadow: [
+                  BoxShadow(
+                    color: HBotColors.primaryDark.withOpacity(0.25),
+                    blurRadius: 16,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 8),
-            // Greeting
-            Text(
-              '${_getGreeting()}${_getGreetingEmoji()}',
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
-              ),
-            ),
-            const SizedBox(height: 4),
-            // Online device count
-            if (_devices.isNotEmpty)
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: HBotColors.textSecondaryLight,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Home selector row
+                  GestureDetector(
+                    onTap: _showHomeSelector,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.12),
+                        borderRadius:
+                            BorderRadius.circular(HBotRadius.full),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.home_outlined,
+                            color: Colors.white.withOpacity(0.9),
+                            size: 14,
+                          ),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              _selectedHome?.name ?? 'Select Home',
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white.withOpacity(0.9),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.white.withOpacity(0.7),
+                            size: 16,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  children: [
-                    TextSpan(
-                      text: '$onlineCount',
-                      style: const TextStyle(color: HBotColors.primary),
+                  const SizedBox(height: 16),
+                  // Greeting
+                  Text(
+                    '${_getGreeting()}${_getGreetingEmoji()}',
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      letterSpacing: -0.3,
                     ),
-                    TextSpan(
-                      text: ' device${onlineCount == 1 ? '' : 's'} online',
+                  ),
+                  const SizedBox(height: 8),
+                  // Online device count
+                  if (_devices.isNotEmpty)
+                    Row(
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: onlineCount > 0
+                                ? HBotColors.success
+                                : HBotColors.neutral400,
+                            shape: BoxShape.circle,
+                            boxShadow: onlineCount > 0
+                                ? [
+                                    BoxShadow(
+                                      color: HBotColors.success
+                                          .withOpacity(0.5),
+                                      blurRadius: 6,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '$onlineCount device${onlineCount == 1 ? '' : 's'} online',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white.withOpacity(0.75),
+                          ),
+                        ),
+                        const Spacer(),
+                        Icon(
+                          Icons.devices_other,
+                          color: Colors.white.withOpacity(0.3),
+                          size: 32,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                ],
               ),
+            ),
             const SizedBox(height: 20),
           ],
         ],

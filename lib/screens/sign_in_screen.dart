@@ -148,8 +148,8 @@ class _SignInScreenState extends State<SignInScreen> {
           // Gradient header with logo
           Container(
             width: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
@@ -159,55 +159,82 @@ class _SignInScreenState extends State<SignInScreen> {
                 ],
                 stops: [0.0, 0.5, 1.0],
               ),
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(32),
                 bottomRight: Radius.circular(32),
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF0668CA).withOpacity(0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
             child: SafeArea(
               bottom: false,
               child: Padding(
-                padding: const EdgeInsets.only(top: 24, bottom: 32),
+                padding: const EdgeInsets.only(top: 28, bottom: 36),
                 child: Column(
                   children: [
-                    // Logo
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(
-                        'assets/images/branding/hbot_app_icon.png',
-                        width: 72,
-                        height: 72,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
-                          width: 72,
-                          height: 72,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(20),
+                    // Logo with white ring
+                    Container(
+                      width: 88,
+                      height: 88,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.25),
+                          width: 2.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.white.withOpacity(0.12),
+                            blurRadius: 24,
+                            spreadRadius: 4,
                           ),
-                          child: const Icon(Icons.smart_toy, color: Colors.white, size: 36),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(19),
+                        child: Image.asset(
+                          'assets/images/branding/hbot_app_icon.png',
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(19),
+                            ),
+                            child: const Icon(Icons.smart_toy,
+                                color: Colors.white, size: 40),
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
                     const Text(
                       'Welcome back',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        fontSize: 26,
+                        fontSize: 28,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                         letterSpacing: -0.3,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     Text(
                       'Sign in to your smart home',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        fontSize: 14,
+                        fontSize: 15,
                         fontWeight: FontWeight.w400,
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withOpacity(0.8),
                       ),
                     ),
                   ],
@@ -220,7 +247,8 @@ class _SignInScreenState extends State<SignInScreen> {
           Expanded(
             child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: HBotSpacing.tabletMaxWidth),
+                constraints:
+                    const BoxConstraints(maxWidth: HBotSpacing.tabletMaxWidth),
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(
                     horizontal: HBotSpacing.screenPadding,
@@ -237,7 +265,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           controller: _emailController,
                           label: 'Email',
                           keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                          prefixIcon:
+                              const Icon(Icons.email_outlined, size: 20),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
@@ -258,7 +287,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           controller: _passwordController,
                           label: 'Password',
                           obscureText: _obscurePassword,
-                          prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                          prefixIcon:
+                              const Icon(Icons.lock_outline, size: 20),
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscurePassword
@@ -268,7 +298,8 @@ class _SignInScreenState extends State<SignInScreen> {
                               size: 24,
                             ),
                             onPressed: () {
-                              setState(() => _obscurePassword = !_obscurePassword);
+                              setState(
+                                  () => _obscurePassword = !_obscurePassword);
                             },
                           ),
                           validator: (value) {
@@ -291,7 +322,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const ForgotPasswordScreen(),
+                                  builder: (context) =>
+                                      const ForgotPasswordScreen(),
                                 ),
                               );
                             },
@@ -320,7 +352,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         // Sign In button
                         Container(
                           height: 52,
-                          decoration: hbotPrimaryButtonDecoration(enabled: !_isLoading),
+                          decoration:
+                              hbotPrimaryButtonDecoration(enabled: !_isLoading),
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _signInWithEmail,
                             style: ElevatedButton.styleFrom(
@@ -337,7 +370,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                     width: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                      valueColor:
+                                          AlwaysStoppedAnimation<Color>(
                                         Colors.white,
                                       ),
                                     ),
@@ -353,24 +387,32 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 28),
 
                         // Divider
                         Row(
                           children: [
-                            Expanded(child: Container(height: 1, color: HBotColors.borderLight)),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
+                            Expanded(
+                                child: Container(
+                                    height: 1,
+                                    color: HBotColors.borderLight)),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: HBotSpacing.space4),
                               child: Text(
                                 'or continue with',
                                 style: TextStyle(
                                   fontFamily: 'Inter',
                                   color: HBotColors.textTertiaryLight,
-                                  fontSize: 14,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ),
-                            Expanded(child: Container(height: 1, color: HBotColors.borderLight)),
+                            Expanded(
+                                child: Container(
+                                    height: 1,
+                                    color: HBotColors.borderLight)),
                           ],
                         ),
 
@@ -391,13 +433,15 @@ class _SignInScreenState extends State<SignInScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: HBotRadius.mediumRadius,
                               ),
+                              elevation: 0,
                             ),
                             icon: Image.asset(
                               'assets/images/google_logo.png',
                               height: 20,
                               width: 20,
                               errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.login, color: HBotColors.iconDefault, size: 20);
+                                return const Icon(Icons.login,
+                                    color: HBotColors.iconDefault, size: 20);
                               },
                             ),
                             label: const Text(
@@ -436,7 +480,8 @@ class _SignInScreenState extends State<SignInScreen> {
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                tapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
                               ),
                               child: const Text(
                                 'Sign Up',

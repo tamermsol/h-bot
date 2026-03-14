@@ -11,17 +11,19 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 900),
       vsync: this,
     );
     _fadeAnimation = CurvedAnimation(
@@ -32,9 +34,18 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
     );
 
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+    _pulseAnimation = Tween<double>(begin: 0.3, end: 1.0).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+    _pulseController.repeat(reverse: true);
+
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(milliseconds: 2500), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
@@ -54,16 +65,17 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void dispose() {
     _controller.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Set status bar to light text for dark gradient background
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
-    return Scaffold(
-      body: Container(
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
@@ -71,9 +83,9 @@ class _SplashScreenState extends State<SplashScreen>
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xFF0A1628), // deep navy
-              Color(0xFF0668CA), // dark blue
-              Color(0xFF0883FD), // primary blue
+              Color(0xFF0A1628),
+              Color(0xFF0668CA),
+              Color(0xFF0883FD),
             ],
             stops: [0.0, 0.5, 1.0],
           ),
@@ -84,8 +96,9 @@ class _SplashScreenState extends State<SplashScreen>
             child: ScaleTransition(
               scale: _scaleAnimation,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const Spacer(flex: 3),
+
                   // Logo with white glow effect
                   Container(
                     width: 120,
@@ -94,9 +107,14 @@ class _SplashScreenState extends State<SplashScreen>
                       borderRadius: BorderRadius.circular(28),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.white.withOpacity(0.15),
-                          blurRadius: 40,
-                          spreadRadius: 8,
+                          color: Colors.white.withOpacity(0.18),
+                          blurRadius: 48,
+                          spreadRadius: 10,
+                        ),
+                        BoxShadow(
+                          color: HBotColors.primary.withOpacity(0.3),
+                          blurRadius: 60,
+                          spreadRadius: 4,
                         ),
                       ],
                     ),
@@ -118,7 +136,8 @@ class _SplashScreenState extends State<SplashScreen>
                               width: 1,
                             ),
                           ),
-                          child: const Icon(Icons.smart_toy, color: Colors.white, size: 56),
+                          child: const Icon(Icons.smart_toy,
+                              color: Colors.white, size: 56),
                         ),
                       ),
                     ),
@@ -151,6 +170,30 @@ class _SplashScreenState extends State<SplashScreen>
                       letterSpacing: 0.5,
                     ),
                   ),
+
+                  const Spacer(flex: 3),
+
+                  // Pulsing loading indicator
+                  FadeTransition(
+                    opacity: _pulseAnimation,
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.white.withOpacity(0.4),
+                            blurRadius: 8,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 48),
                 ],
               ),
             ),

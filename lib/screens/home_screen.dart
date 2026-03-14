@@ -165,11 +165,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBody() {
     switch (_currentIndex) {
       case 0:
-        return SafeArea(child: HomeDashboardScreen(onHomeNameChanged: _updateHomeName));
+        return HomeDashboardScreen(onHomeNameChanged: _updateHomeName);
       case 1:
-        return SafeArea(child: const ScenesScreen());
+        return const ScenesScreen();
       case 2:
-        return SafeArea(child: const ProfileScreen());
+        return const ProfileScreen();
       default:
         return HomeDashboardScreen(onHomeNameChanged: _updateHomeName);
     }
