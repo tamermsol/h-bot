@@ -573,6 +573,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                           hintText: 'WiFi Network Name (SSID)',
                           hintStyle: TextStyle(fontFamily: 'Inter', color: Color(0xFF9CA3AF)),
                           border: InputBorder.none,
+                          filled: false,
                           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         ),
                       ),
@@ -593,6 +594,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                           hintText: 'Password',
                           hintStyle: const TextStyle(fontFamily: 'Inter', color: Color(0xFF9CA3AF)),
                           border: InputBorder.none,
+                          filled: false,
                           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                           suffixIcon: IconButton(
                             icon: Icon(
@@ -662,6 +664,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       hintText: 'Password',
                       hintStyle: const TextStyle(fontFamily: 'Inter', color: Color(0xFF9CA3AF)),
                       border: InputBorder.none,
+                      filled: false,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -1807,6 +1810,7 @@ Troubleshooting:
                     hintText: 'Device Name (e.g. Hallway Light)',
                     hintStyle: TextStyle(fontFamily: 'Inter', color: Color(0xFF9CA3AF)),
                     border: InputBorder.none,
+                    filled: false,
                     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   ),
                 ),

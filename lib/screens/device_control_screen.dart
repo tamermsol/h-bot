@@ -52,8 +52,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
   bool _isRefreshing = false;
   late AnimationController _refreshAnimController;
 
-  // 3-dot menu
-  bool _menuOpen = false;
+  // 3-dot menu handled by PopupMenuButton
 
   @override
   void dispose() {
@@ -578,11 +577,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: GestureDetector(
-        onTap: () {
-          if (_menuOpen) setState(() => _menuOpen = false);
-        },
-        child: Column(
+      body: Column(
           children: [
             // ── App Bar per v0 ──
             SafeArea(
@@ -625,7 +620,6 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
             ),
           ],
         ),
-      ),
     );
   }
 
@@ -702,84 +696,64 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
     );
   }
 
-  /// Three-dot menu with dropdown per v0
+  /// Three-dot menu with dropdown per v0 — uses PopupMenuButton for proper overlay
   Widget _buildMoreMenu() {
-    // Build menu items per v0
     final menuItems = <_MenuItem>[
-      _MenuItem(icon: HBotIcons.edit, label: 'Rename Device', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _showDeviceRenameDialog(); }),
-      _MenuItem(icon: HBotIcons.room, label: 'Move to Room', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _showMoveToRoomDialog(); }),
-      _MenuItem(icon: HBotIcons.share, label: 'Share Device', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); Navigator.push(context, MaterialPageRoute(builder: (context) => ShareDeviceScreen(device: widget.device))); }),
-      _MenuItem(icon: HBotIcons.info, label: 'Show Device Info', color: const Color(0xFF1F2937), onTap: () { setState(() { _menuOpen = false; _showDebugInfo = !_showDebugInfo; }); }),
+      _MenuItem(icon: HBotIcons.edit, label: 'Rename Device', color: const Color(0xFF1F2937), onTap: () { _showDeviceRenameDialog(); }),
+      _MenuItem(icon: HBotIcons.room, label: 'Move to Room', color: const Color(0xFF1F2937), onTap: () { _showMoveToRoomDialog(); }),
+      _MenuItem(icon: HBotIcons.share, label: 'Share Device', color: const Color(0xFF1F2937), onTap: () { Navigator.push(context, MaterialPageRoute(builder: (context) => ShareDeviceScreen(device: widget.device))); }),
+      _MenuItem(icon: HBotIcons.info, label: 'Show Device Info', color: const Color(0xFF1F2937), onTap: () { setState(() { _showDebugInfo = !_showDebugInfo; }); }),
       if (_currentDevice.deviceType == DeviceType.shutter) ...[
-        _MenuItem(icon: HBotIcons.settings, label: 'Auto Calibrate', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _navigateToCalibration(); }),
-        _MenuItem(icon: HBotIcons.settings, label: 'Manual Calibrate', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _navigateToManualCalibration(); }),
+        _MenuItem(icon: HBotIcons.settings, label: 'Auto Calibrate', color: const Color(0xFF1F2937), onTap: () { _navigateToCalibration(); }),
+        _MenuItem(icon: HBotIcons.settings, label: 'Manual Calibrate', color: const Color(0xFF1F2937), onTap: () { _navigateToManualCalibration(); }),
       ],
-      _MenuItem(icon: HBotIcons.delete, label: 'Delete', color: const Color(0xFFEF4444), onTap: () { setState(() => _menuOpen = false); _showDeleteConfirmationDialog(); }),
+      _MenuItem(icon: HBotIcons.delete, label: 'Delete', color: const Color(0xFFEF4444), onTap: () { _showDeleteConfirmationDialog(); }),
     ];
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        _V0AppBarButton(
-          onTap: () {
-            setState(() => _menuOpen = !_menuOpen);
-          },
-          child: Icon(HBotIcons.more, size: 19, color: Color(0xFF4B5563)),
+    return PopupMenuButton<int>(
+      icon: Container(
+        width: 36, height: 36,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
         ),
-        if (_menuOpen)
-          Positioned(
-            right: 0,
-            top: 40,
-            child: GestureDetector(
-              onTap: () {}, // prevent bubble
-              child: Container(
-                width: 232,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: const [
-                    BoxShadow(color: Color(0x33000000), blurRadius: 24, offset: Offset(0, 8)),
-                  ],
-                  border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(menuItems.length, (i) {
-                      final item = menuItems[i];
-                      return InkWell(
-                        onTap: item.onTap,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                          decoration: BoxDecoration(
-                            border: i > 0
-                                ? const Border(top: BorderSide(color: Color(0xFFF3F4F6), width: 1))
-                                : null,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(item.icon, size: 16, color: item.color),
-                              const SizedBox(width: 12),
-                              Text(
-                                item.label,
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 14,
-                                  color: item.color,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
+        child: Icon(HBotIcons.more, size: 19, color: const Color(0xFF4B5563)),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.white,
+      elevation: 12,
+      offset: const Offset(0, 8),
+      onSelected: (index) {
+        menuItems[index].onTap();
+      },
+      itemBuilder: (context) => List.generate(menuItems.length, (i) {
+        final item = menuItems[i];
+        return PopupMenuItem<int>(
+          value: i,
+          padding: EdgeInsets.zero,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              border: i > 0
+                  ? const Border(top: BorderSide(color: Color(0xFFF3F4F6), width: 1))
+                  : null,
+            ),
+            child: Row(
+              children: [
+                Icon(item.icon, size: 16, color: item.color),
+                const SizedBox(width: 12),
+                Text(
+                  item.label,
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 14,
+                    color: item.color,
                   ),
                 ),
-              ),
+              ],
             ),
           ),
-      ],
+        );
+      }),
     );
   }
 

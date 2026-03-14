@@ -1264,6 +1264,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   )
                 : null,
             border: InputBorder.none,
+            filled: false,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 8,

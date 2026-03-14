@@ -243,6 +243,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     color: Color(0xFF6B7280),
                   ),
                   border: InputBorder.none,
+                  filled: false,
                   contentPadding: EdgeInsets.all(16),
                 ),
               ),
