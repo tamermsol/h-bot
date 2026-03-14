@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../utils/phosphor_icons.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import 'sign_up_screen.dart';
@@ -41,7 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
             _passwordController.text,
           )
           .timeout(
-            const Duration(seconds: 30),
+            const Duration(seconds: 45),
             onTimeout: () {
               throw Exception(
                 'Sign-in timed out. Please check your connection and try again.',
@@ -185,7 +186,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 height: 72,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) =>
-                                    const Icon(Icons.smart_toy, color: Colors.white, size: 36),
+                                    Icon(HBotIcons.smartToy, color: Colors.white, size: 36),
                               ),
                             ),
                           ),
@@ -233,7 +234,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           controller: _emailController,
                           hintText: 'Email address',
                           keyboardType: TextInputType.emailAddress,
-                          prefixIcon: Icons.mail_outline,
+                          prefixIcon: HBotIcons.email,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
@@ -254,7 +255,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           controller: _passwordController,
                           hintText: 'Password',
                           obscureText: _obscurePassword,
-                          prefixIcon: Icons.lock_outline,
+                          prefixIcon: HBotIcons.lock,
                           suffixIcon: GestureDetector(
                             onTap: () {
                               setState(() => _obscurePassword = !_obscurePassword);
@@ -263,8 +264,8 @@ class _SignInScreenState extends State<SignInScreen> {
                               padding: const EdgeInsets.only(right: 16),
                               child: Icon(
                                 _obscurePassword
-                                    ? Icons.visibility_outlined
-                                    : Icons.visibility_off_outlined,
+                                    ? HBotIcons.eye
+                                    : HBotIcons.eyeOff,
                                 color: const Color(0xFF9CA3AF),
                                 size: 17,
                               ),
@@ -357,7 +358,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
 
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 16),
 
                         // v0: "or" divider with lines, 12px #9CA3AF font-medium
                         Row(
@@ -383,7 +384,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           ],
                         ),
 
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 16),
 
                         // v0: Google button h-12 rounded-xl border #E5E7EB white bg, 14px medium
                         SizedBox(
@@ -410,7 +411,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   height: 18,
                                   width: 18,
                                   errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(Icons.login,
+                                    return Icon(HBotIcons.login,
                                         color: Color(0xFF6B7280), size: 18);
                                   },
                                 ),

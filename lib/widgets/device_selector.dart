@@ -154,7 +154,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
         return _mapDeviceTypeToIcon(DeviceType.values.byName(deviceType));
       }
     } catch (_) {}
-    return Icons.device_unknown;
+    return HBotIcons.deviceUnknown;
   }
 
   IconData _mapDeviceTypeToIcon(DeviceType deviceType) {
@@ -163,11 +163,11 @@ class _DeviceSelectorState extends State<DeviceSelector> {
       case DeviceType.dimmer:
         return HBotIcons.lightbulb;
       case DeviceType.sensor:
-        return Icons.thermostat;
+        return HBotIcons.thermometer;
       case DeviceType.shutter:
-        return Icons.window;
+        return HBotIcons.shutter;
       case DeviceType.other:
-        return Icons.device_unknown;
+        return HBotIcons.deviceUnknown;
     }
   }
 

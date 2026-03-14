@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:convert';
 import 'package:local_auth/local_auth.dart';
-import '../theme/app_theme.dart';
 import '../models/device.dart';
 import '../models/device_share_invitation.dart';
 import '../models/device_share_request.dart';
@@ -54,8 +53,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading data: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text('Error loading data: $e', style: const TextStyle(fontFamily: 'Inter')),
+            backgroundColor: const Color(0xFFEF4444),
           ),
         );
       }
@@ -96,8 +95,9 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                 const SnackBar(
                   content: Text(
                     'Biometric not available. Please use device password.',
+                    style: TextStyle(fontFamily: 'Inter'),
                   ),
-                  backgroundColor: HBotColors.warning,
+                  backgroundColor: Color(0xFFF59E0B),
                 ),
               );
             }
@@ -120,8 +120,11 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Authentication cancelled or failed'),
-            backgroundColor: HBotColors.warning,
+            content: Text(
+              'Authentication cancelled or failed',
+              style: TextStyle(fontFamily: 'Inter'),
+            ),
+            backgroundColor: Color(0xFFF59E0B),
           ),
         );
       }
@@ -132,8 +135,11 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Authentication required to generate QR code'),
-            backgroundColor: HBotColors.warning,
+            content: Text(
+              'Authentication required to generate QR code',
+              style: TextStyle(fontFamily: 'Inter'),
+            ),
+            backgroundColor: Color(0xFFF59E0B),
           ),
         );
       }
@@ -153,8 +159,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error generating QR: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text('Error generating QR: $e', style: const TextStyle(fontFamily: 'Inter')),
+            backgroundColor: const Color(0xFFEF4444),
           ),
         );
       }
@@ -167,30 +173,50 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     return showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
-        title: const Text('Choose Authentication Method'),
+        backgroundColor: const Color(0xFFF5F7FA),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Choose Authentication Method',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F2937),
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (canCheckBiometrics)
               ListTile(
-                leading: const Icon(
-                  Icons.fingerprint,
-                  color: HBotColors.primary,
+                leading: Icon(
+                  HBotIcons.lock,
+                  color: Color(0xFF0883FD),
                   size: 32,
                 ),
-                title: const Text('Biometric'),
-                subtitle: const Text('Fingerprint, face, or iris'),
+                title: const Text(
+                  'Biometric',
+                  style: TextStyle(fontFamily: 'Inter', color: Color(0xFF1F2937)),
+                ),
+                subtitle: const Text(
+                  'Fingerprint, face, or iris',
+                  style: TextStyle(fontFamily: 'Inter', color: Color(0xFF6B7280)),
+                ),
                 onTap: () => Navigator.pop(context, 'biometric'),
               ),
             ListTile(
               leading: Icon(
                 HBotIcons.lock,
-                color: HBotColors.primary,
+                color: const Color(0xFF0883FD),
                 size: 32,
               ),
-              title: const Text('Device Password'),
-              subtitle: const Text('PIN, password, or pattern'),
+              title: const Text(
+                'Device Password',
+                style: TextStyle(fontFamily: 'Inter', color: Color(0xFF1F2937)),
+              ),
+              subtitle: const Text(
+                'PIN, password, or pattern',
+                style: TextStyle(fontFamily: 'Inter', color: Color(0xFF6B7280)),
+              ),
               onTap: () => Navigator.pop(context, 'password'),
             ),
           ],
@@ -198,7 +224,10 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(fontFamily: 'Inter', color: Color(0xFF6B7280)),
+            ),
           ),
         ],
       ),
@@ -214,8 +243,11 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Request approved!'),
-            backgroundColor: HBotColors.success,
+            content: Text(
+              'Request approved!',
+              style: TextStyle(fontFamily: 'Inter'),
+            ),
+            backgroundColor: Color(0xFF22C55E),
           ),
         );
       }
@@ -223,7 +255,10 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: HBotColors.error),
+          SnackBar(
+            content: Text('Error: $e', style: const TextStyle(fontFamily: 'Inter')),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
         );
       }
     }
@@ -235,8 +270,11 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Request rejected'),
-            backgroundColor: HBotColors.warning,
+            content: Text(
+              'Request rejected',
+              style: TextStyle(fontFamily: 'Inter'),
+            ),
+            backgroundColor: Color(0xFFF59E0B),
           ),
         );
       }
@@ -244,7 +282,10 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: HBotColors.error),
+          SnackBar(
+            content: Text('Error: $e', style: const TextStyle(fontFamily: 'Inter')),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
         );
       }
     }
@@ -254,27 +295,47 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     return showDialog<PermissionLevel>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
-        title: const Text('Choose Permission Level'),
+        backgroundColor: const Color(0xFFF5F7FA),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Choose Permission Level',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F2937),
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
               leading: Icon(
                 HBotIcons.visibility,
-                color: HBotColors.primary,
+                color: const Color(0xFF0883FD),
               ),
-              title: const Text('View Only'),
-              subtitle: const Text('Can see device status'),
+              title: const Text(
+                'View Only',
+                style: TextStyle(fontFamily: 'Inter', color: Color(0xFF1F2937)),
+              ),
+              subtitle: const Text(
+                'Can see device status',
+                style: TextStyle(fontFamily: 'Inter', color: Color(0xFF6B7280)),
+              ),
               onTap: () => Navigator.pop(context, PermissionLevel.view),
             ),
             ListTile(
               leading: Icon(
                 HBotIcons.power,
-                color: HBotColors.primary,
+                color: const Color(0xFF0883FD),
               ),
-              title: const Text('Control'),
-              subtitle: const Text('Can control the device'),
+              title: const Text(
+                'Control',
+                style: TextStyle(fontFamily: 'Inter', color: Color(0xFF1F2937)),
+              ),
+              subtitle: const Text(
+                'Can control the device',
+                style: TextStyle(fontFamily: 'Inter', color: Color(0xFF6B7280)),
+              ),
               onTap: () => Navigator.pop(context, PermissionLevel.control),
             ),
           ],
@@ -285,28 +346,51 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Share Device'),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Center(
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                HBotIcons.back,
+                color: Color(0xFF1F2937),
+                size: 18,
+              ),
+            ),
+          ),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Share Device',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F2937),
+          ),
+        ),
         actions: [
           IconButton(
-            icon: Icon(HBotIcons.refresh),
+            icon: Icon(HBotIcons.refresh, color: const Color(0xFF1F2937)),
             onPressed: _loadData,
             tooltip: 'Refresh',
           ),
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: Color(0xFF0883FD)))
           : RefreshIndicator(
+              color: const Color(0xFF0883FD),
               onRefresh: _loadData,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
@@ -318,14 +402,15 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: HBotColors.cardLight,
-                        borderRadius: BorderRadius.circular(12),
+                        color: const Color(0xFFF5F7FA),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
                       ),
                       child: Row(
                         children: [
                           Icon(
                             HBotIcons.devices,
-                            color: HBotColors.primary,
+                            color: const Color(0xFF0883FD),
                             size: 32,
                           ),
                           const SizedBox(width: 16),
@@ -335,10 +420,11 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                               children: [
                                 Text(
                                   widget.device.deviceName,
-                                  style: TextStyle(
+                                  style: const TextStyle(
+                                    fontFamily: 'Inter',
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
-                                    color: HBotColors.textPrimaryLight,
+                                    color: Color(0xFF1F2937),
                                   ),
                                 ),
                                 Text(
@@ -346,8 +432,9 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                                       .toString()
                                       .split('.')
                                       .last,
-                                  style: TextStyle(
-                                    color: HBotColors.textSecondaryLight,
+                                  style: const TextStyle(
+                                    fontFamily: 'Inter',
+                                    color: Color(0xFF6B7280),
                                   ),
                                 ),
                               ],
@@ -359,46 +446,76 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                     const SizedBox(height: 24),
 
                     // QR Code Section
-                    Text(
+                    const Text(
                       'Share via QR Code',
                       style: TextStyle(
+                        fontFamily: 'Inter',
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: HBotColors.textPrimaryLight,
+                        color: Color(0xFF1F2937),
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(
+                    const Text(
                       'Choose biometric or device password for authentication',
                       style: TextStyle(
+                        fontFamily: 'Inter',
                         fontSize: 13,
-                        color: HBotColors.textSecondaryLight,
+                        color: Color(0xFF6B7280),
                       ),
                     ),
                     const SizedBox(height: 12),
                     if (_invitation == null)
                       Center(
-                        child: ElevatedButton.icon(
-                          onPressed: _isGeneratingQR ? null : _generateQRCode,
-                          icon: _isGeneratingQR
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : const Icon(Icons.qr_code),
-                          label: Text(
-                            _isGeneratingQR
-                                ? 'Generating...'
-                                : 'Generate QR Code',
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: HBotColors.primary,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 12,
+                        child: SizedBox(
+                          height: 50,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x590883FD),
+                                  blurRadius: 12,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: ElevatedButton.icon(
+                              onPressed: _isGeneratingQR ? null : _generateQRCode,
+                              icon: _isGeneratingQR
+                                  ? const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Icon(HBotIcons.devices),
+                              label: Text(
+                                _isGeneratingQR
+                                    ? 'Generating...'
+                                    : 'Generate QR Code',
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -408,7 +525,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: const Color(0xFFE5E7EB)),
                         ),
                         child: Column(
                           children: [
@@ -426,18 +544,25 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                             Text(
                               'Expires: ${_invitation!.expiresAt.toLocal().toString().substring(0, 16)}',
                               style: const TextStyle(
+                                fontFamily: 'Inter',
                                 fontSize: 12,
-                                color: Colors.grey,
+                                color: Color(0xFF9CA3AF),
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             TextButton.icon(
                               onPressed: () async {
                                 await _repo.deleteInvitation(_invitation!.id);
                                 setState(() => _invitation = null);
                               },
-                              icon: Icon(HBotIcons.close),
-                              label: const Text('Cancel QR Code'),
+                              icon: Icon(HBotIcons.close, color: const Color(0xFFEF4444)),
+                              label: const Text(
+                                'Cancel QR Code',
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  color: Color(0xFFEF4444),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -448,32 +573,39 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                     if (_pendingRequests.isNotEmpty) ...[
                       Text(
                         'Pending Requests (${_pendingRequests.length})',
-                        style: TextStyle(
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: HBotColors.textPrimaryLight,
+                          color: Color(0xFF1F2937),
                         ),
                       ),
                       const SizedBox(height: 12),
                       ..._pendingRequests.map(
-                        (request) => Card(
-                          color: HBotColors.cardLight,
+                        (request) => Container(
                           margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F7FA),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: const Color(0xFFE5E7EB)),
+                          ),
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: HBotColors.primary,
+                              backgroundColor: const Color(0xFF0883FD),
                               child: Icon(HBotIcons.person, color: Colors.white),
                             ),
                             title: Text(
                               request.requesterName ?? request.requesterEmail,
-                              style: TextStyle(
-                                color: HBotColors.textPrimaryLight,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                color: Color(0xFF1F2937),
                               ),
                             ),
                             subtitle: Text(
                               request.requesterEmail,
-                              style: TextStyle(
-                                color: HBotColors.textSecondaryLight,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                color: Color(0xFF6B7280),
                               ),
                             ),
                             trailing: Row(
@@ -482,14 +614,14 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                                 IconButton(
                                   icon: Icon(
                                     HBotIcons.check,
-                                    color: HBotColors.success,
+                                    color: const Color(0xFF22C55E),
                                   ),
                                   onPressed: () => _approveRequest(request),
                                 ),
                                 IconButton(
                                   icon: Icon(
                                     HBotIcons.close,
-                                    color: HBotColors.error,
+                                    color: const Color(0xFFEF4444),
                                   ),
                                   onPressed: () => _rejectRequest(request),
                                 ),
@@ -505,57 +637,85 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                     if (_sharedWith.isNotEmpty) ...[
                       Text(
                         'Shared With (${_sharedWith.length})',
-                        style: TextStyle(
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: HBotColors.textPrimaryLight,
+                          color: Color(0xFF1F2937),
                         ),
                       ),
                       const SizedBox(height: 12),
                       ..._sharedWith.map(
-                        (shared) => Card(
-                          color: HBotColors.cardLight,
+                        (shared) => Container(
                           margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F7FA),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: const Color(0xFFE5E7EB)),
+                          ),
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: HBotColors.primary,
+                              backgroundColor: const Color(0xFF0883FD),
                               child: Icon(HBotIcons.person, color: Colors.white),
                             ),
                             title: Text(
                               shared.ownerEmail ?? 'User',
-                              style: TextStyle(
-                                color: HBotColors.textPrimaryLight,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                color: Color(0xFF1F2937),
                               ),
                             ),
                             subtitle: Text(
                               'Permission: ${shared.permissionLevel.name}',
-                              style: TextStyle(
-                                color: HBotColors.textSecondaryLight,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                color: Color(0xFF6B7280),
                               ),
                             ),
                             trailing: IconButton(
-                              icon: Icon(HBotIcons.delete, color: HBotColors.error),
+                              icon: Icon(HBotIcons.delete, color: const Color(0xFFEF4444)),
                               onPressed: () async {
                                 final confirm = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
-                                    backgroundColor: HBotColors.cardLight,
-                                    title: const Text('Revoke Access?'),
+                                    backgroundColor: const Color(0xFFF5F7FA),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                    title: const Text(
+                                      'Revoke Access?',
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1F2937),
+                                      ),
+                                    ),
                                     content: const Text(
                                       'This user will no longer have access to this device.',
+                                      style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: Color(0xFF6B7280),
+                                      ),
                                     ),
                                     actions: [
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.pop(context, false),
-                                        child: const Text('Cancel'),
+                                        child: const Text(
+                                          'Cancel',
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            color: Color(0xFF6B7280),
+                                          ),
+                                        ),
                                       ),
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.pop(context, true),
                                         child: const Text(
                                           'Revoke',
-                                          style: TextStyle(color: HBotColors.error),
+                                          style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            color: Color(0xFFEF4444),
+                                          ),
                                         ),
                                       ),
                                     ],

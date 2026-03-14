@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../theme/app_theme.dart';
 import '../utils/phosphor_icons.dart';
 
 class NotificationsSettingsScreen extends StatefulWidget {
@@ -108,8 +107,11 @@ class _NotificationsSettingsScreenState
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(message),
-          backgroundColor: HBotColors.primaryLight,
+          content: Text(
+            message,
+            style: const TextStyle(fontFamily: 'Inter'),
+          ),
+          backgroundColor: const Color(0xFF8CD1FB),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -120,22 +122,32 @@ class _NotificationsSettingsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
-        title: const Text('Permission Denied'),
+        backgroundColor: const Color(0xFFF5F7FA),
+        title: const Text(
+          'Permission Denied',
+          style: TextStyle(fontFamily: 'Inter'),
+        ),
         content: const Text(
           'Notification permission was denied. You can enable it later from your device settings or try again.',
+          style: TextStyle(fontFamily: 'Inter'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(fontFamily: 'Inter'),
+            ),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               _toggleNotifications(true); // Try again
             },
-            child: const Text('Try Again'),
+            child: const Text(
+              'Try Again',
+              style: TextStyle(fontFamily: 'Inter'),
+            ),
           ),
         ],
       ),
@@ -146,22 +158,32 @@ class _NotificationsSettingsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
-        title: const Text('Permission Required'),
+        backgroundColor: const Color(0xFFF5F7FA),
+        title: const Text(
+          'Permission Required',
+          style: TextStyle(fontFamily: 'Inter'),
+        ),
         content: const Text(
           'Notification permission is permanently denied. Please enable it from your device settings to receive notifications.',
+          style: TextStyle(fontFamily: 'Inter'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(fontFamily: 'Inter'),
+            ),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               openAppSettings(); // Open device settings
             },
-            child: const Text('Open Settings'),
+            child: const Text(
+              'Open Settings',
+              style: TextStyle(fontFamily: 'Inter'),
+            ),
           ),
         ],
       ),
@@ -170,103 +192,126 @@ class _NotificationsSettingsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Notifications'),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: Colors.white,
         elevation: 0,
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Center(
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                HBotIcons.back,
+                size: 16,
+                color: Color(0xFF1F2937),
+              ),
+            ),
+          ),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Notifications',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Inter',
+            color: Color(0xFF1F2937),
+          ),
+        ),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(HBotSpacing.space6),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header
-                  Text(
+                  const Text(
                     'Notification Preferences',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    style: TextStyle(
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: HBotColors.textPrimaryLight,
+                      color: Color(0xFF1F2937),
+                      fontFamily: 'Inter',
                     ),
                   ),
-                  const SizedBox(height: HBotSpacing.space2),
-                  Text(
+                  const SizedBox(height: 8),
+                  const Text(
                     'Manage how you receive notifications from HBOT',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: HBotColors.textSecondaryLight,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF6B7280),
+                      fontFamily: 'Inter',
                     ),
                   ),
-                  const SizedBox(height: HBotSpacing.space6),
+                  const SizedBox(height: 24),
 
                   // Enable/Disable Notifications
                   Container(
                     decoration: BoxDecoration(
-                      color: HBotColors.cardLight,
-                      borderRadius: BorderRadius.circular(
-                        HBotRadius.medium,
-                      ),
+                      color: const Color(0xFFF5F7FA),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: SwitchListTile(
                       value: _notificationsEnabled,
                       onChanged: _toggleNotifications,
-                      title: Text(
+                      title: const Text(
                         'Enable Notifications',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        style: TextStyle(
                           fontWeight: FontWeight.w500,
-                          color: HBotColors.textPrimaryLight,
+                          fontSize: 16,
+                          color: Color(0xFF1F2937),
+                          fontFamily: 'Inter',
                         ),
                       ),
                       subtitle: Text(
                         _notificationsEnabled
                             ? 'You will receive notifications about device status, automations, and updates'
                             : 'Turn on to receive notifications',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: HBotColors.textSecondaryLight,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF6B7280),
+                          fontFamily: 'Inter',
                         ),
                       ),
                       secondary: Container(
-                        padding: const EdgeInsets.all(HBotSpacing.space2),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: _notificationsEnabled
-                              ? HBotColors.primary.withOpacity(0.1)
-                              : HBotColors.textSecondaryLight.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(
-                            HBotRadius.small,
-                          ),
+                              ? const Color(0xFF0883FD).withOpacity(0.1)
+                              : const Color(0xFF6B7280).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
                           _notificationsEnabled
-                              ? Icons.notifications_active
-                              : Icons.notifications_off_outlined,
+                              ? HBotIcons.notificationsFilled
+                              : HBotIcons.notifications,
                           color: _notificationsEnabled
-                              ? HBotColors.primary
-                              : HBotColors.textSecondaryLight,
+                              ? const Color(0xFF0883FD)
+                              : const Color(0xFF6B7280),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: HBotSpacing.space6),
+                  const SizedBox(height: 24),
 
                   // Permission Status Info
                   if (_permissionStatus != PermissionStatus.granted)
                     Container(
-                      padding: const EdgeInsets.all(HBotSpacing.space4),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: HBotColors.warning.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(
-                          HBotRadius.medium,
-                        ),
+                        color: const Color(0xFFF59E0B).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: HBotColors.warning.withOpacity(0.3),
+                          color: const Color(0xFFF59E0B).withOpacity(0.3),
                           width: 1,
                         ),
                       ),
@@ -274,29 +319,31 @@ class _NotificationsSettingsScreenState
                         children: [
                           Icon(
                             HBotIcons.info,
-                            color: HBotColors.warning,
+                            color: Color(0xFFF59E0B),
                             size: 24,
                           ),
-                          const SizedBox(width: HBotSpacing.space4),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: const [
                                 Text(
                                   'Permission Required',
-                                  style: Theme.of(context).textTheme.bodyMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: HBotColors.textPrimaryLight,
-                                      ),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                    color: Color(0xFF1F2937),
+                                    fontFamily: 'Inter',
+                                  ),
                                 ),
-                                const SizedBox(height: 4),
+                                SizedBox(height: 4),
                                 Text(
                                   'Notification permission is required to receive alerts. Enable notifications above to grant permission.',
-                                  style: Theme.of(context).textTheme.bodySmall
-                                      ?.copyWith(
-                                        color: HBotColors.textSecondaryLight,
-                                      ),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xFF6B7280),
+                                    fontFamily: 'Inter',
+                                  ),
                                 ),
                               ],
                             ),
@@ -305,23 +352,23 @@ class _NotificationsSettingsScreenState
                       ),
                     ),
 
-                  const SizedBox(height: HBotSpacing.space6),
+                  const SizedBox(height: 24),
 
                   // What you'll receive section
-                  Text(
+                  const Text(
                     'What you\'ll receive',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: TextStyle(
+                      fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: HBotColors.textPrimaryLight,
+                      color: Color(0xFF1F2937),
+                      fontFamily: 'Inter',
                     ),
                   ),
-                  SizedBox(height: HBotSpacing.space4),
+                  const SizedBox(height: 16),
                   Container(
                     decoration: BoxDecoration(
-                      color: HBotColors.cardLight,
-                      borderRadius: BorderRadius.circular(
-                        HBotRadius.medium,
-                      ),
+                      color: const Color(0xFFF5F7FA),
+                      borderRadius: BorderRadius.circular(16),
                     ),
                     child: Column(
                       children: [
@@ -340,7 +387,7 @@ class _NotificationsSettingsScreenState
                         ),
                         const Divider(height: 1, indent: 72),
                         _buildNotificationTypeItem(
-                          icon: Icons.update,
+                          icon: HBotIcons.refresh,
                           title: 'System Updates',
                           description: 'Important updates and announcements',
                           showDivider: false,
@@ -362,24 +409,28 @@ class _NotificationsSettingsScreenState
   }) {
     return ListTile(
       leading: Container(
-        padding: const EdgeInsets.all(HBotSpacing.space2),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: HBotColors.primary.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(HBotRadius.small),
+          color: const Color(0xFF0883FD).withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: Icon(icon, color: HBotColors.primary, size: 24),
+        child: Icon(icon, color: const Color(0xFF0883FD), size: 24),
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+        style: const TextStyle(
           fontWeight: FontWeight.w500,
-          color: HBotColors.textPrimaryLight,
+          fontSize: 16,
+          color: Color(0xFF1F2937),
+          fontFamily: 'Inter',
         ),
       ),
       subtitle: Text(
         description,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: HBotColors.textSecondaryLight,
+        style: const TextStyle(
+          fontSize: 12,
+          color: Color(0xFF6B7280),
+          fontFamily: 'Inter',
         ),
       ),
     );

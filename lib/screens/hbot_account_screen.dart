@@ -66,7 +66,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
             Container(
               color: HBotColors.cardLight,
               child: SettingsTile(
-                icon: Icons.person_remove_outlined,
+                icon: HBotIcons.delete,
                 title: 'Delete Account',
                 subtitle: '',
                 titleColor: HBotColors.error,

@@ -30,29 +30,37 @@ Device _$DeviceFromJson(Map<String, dynamic> json) => Device(
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
 
-Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
-      'id': instance.id,
-      'home_id': instance.homeId,
-      'room_id': instance.roomId,
-      if (instance.name case final value?) 'name': value,
-      if (instance.displayName case final value?) 'display_name': value,
-      if (instance.nameIsCustom case final value?) 'name_is_custom': value,
-      'device_type': instance.deviceType,
-      'channels': instance.channels,
-      if (instance.channelCount case final value?) 'channel_count': value,
-      if (instance.online case final value?) 'online': value,
-      if (instance.lastSeenAt?.toIso8601String() case final value?)
-        'last_seen_at': value,
-      if (instance.tasmotaTopicBase case final value?)
-        'tasmota_topic_base': value,
-      if (instance.topicBase case final value?) 'topic_base': value,
-      if (instance.macAddress case final value?) 'mac_address': value,
-      if (instance.ownerUserId case final value?) 'owner_user_id': value,
-      'matter_type': instance.matterType,
-      'meta_json': instance.metaJson,
-      'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
-    };
+Map<String, dynamic> _$DeviceToJson(Device instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'home_id': instance.homeId,
+    'room_id': instance.roomId,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('name', instance.name);
+  writeNotNull('display_name', instance.displayName);
+  writeNotNull('name_is_custom', instance.nameIsCustom);
+  val['device_type'] = _$DeviceTypeEnumMap[instance.deviceType]!;
+  val['channels'] = instance.channels;
+  writeNotNull('channel_count', instance.channelCount);
+  writeNotNull('online', instance.online);
+  writeNotNull('last_seen_at', instance.lastSeenAt?.toIso8601String());
+  writeNotNull('tasmota_topic_base', instance.tasmotaTopicBase);
+  writeNotNull('topic_base', instance.topicBase);
+  writeNotNull('mac_address', instance.macAddress);
+  writeNotNull('owner_user_id', instance.ownerUserId);
+  val['matter_type'] = instance.matterType;
+  val['meta_json'] = instance.metaJson;
+  val['created_at'] = instance.createdAt.toIso8601String();
+  val['updated_at'] = instance.updatedAt.toIso8601String();
+  return val;
+}
 
 const _$DeviceTypeEnumMap = {
   DeviceType.relay: 'relay',

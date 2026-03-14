@@ -177,7 +177,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
           children: [
             Icon(
               _permissionStatus == WiFiPermissionStatus.locationServicesDisabled
-                  ? Icons.location_off
+                  ? HBotIcons.close
                   : HBotIcons.wifiOff,
               size: 80,
               color: HBotColors.warning,

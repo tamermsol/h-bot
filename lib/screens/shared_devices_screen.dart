@@ -59,7 +59,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
             : HBotColors.backgroundLight,
         actions: [
           IconButton(
-            icon: const Icon(Icons.qr_code_scanner),
+            icon: Icon(HBotIcons.devices),
             onPressed: () {
               Navigator.push(
                 context,
@@ -196,7 +196,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                   ),
                 ).then((_) => _loadSharedDevices());
               },
-              icon: const Icon(Icons.qr_code_scanner),
+              icon: Icon(HBotIcons.devices),
               label: const Text('Scan QR Code'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.primary,
@@ -234,7 +234,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
       case 'light':
         return HBotIcons.lightbulb;
       case 'shutter':
-        return Icons.blinds;
+        return HBotIcons.shutter;
       case 'switch':
         return HBotIcons.power;
       default:

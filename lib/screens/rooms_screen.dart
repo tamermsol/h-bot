@@ -732,19 +732,19 @@ class _RoomsScreenState extends State<RoomsScreen> {
     // Otherwise, auto-detect from name
     final name = room.name.toLowerCase();
     if (name.contains('living') || name.contains('lounge')) {
-      return Icons.weekend;
+      return HBotIcons.armchair;
     } else if (name.contains('kitchen')) {
-      return Icons.kitchen;
+      return HBotIcons.cookingPot;
     } else if (name.contains('bedroom') || name.contains('bed')) {
-      return Icons.bed;
+      return HBotIcons.bed;
     } else if (name.contains('bathroom') || name.contains('bath')) {
-      return Icons.bathtub;
+      return HBotIcons.bathtub;
     } else if (name.contains('office') || name.contains('study')) {
-      return Icons.desk;
+      return HBotIcons.desk;
     } else if (name.contains('garage')) {
-      return Icons.garage;
+      return HBotIcons.garage;
     } else if (name.contains('garden') || name.contains('outdoor')) {
-      return Icons.grass;
+      return HBotIcons.plant;
     } else {
       return HBotIcons.room;
     }

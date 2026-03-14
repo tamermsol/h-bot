@@ -91,8 +91,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           color: HBotTheme.surfacePrimarySubtle(context),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
-                          Icons.lock_reset,
+                        child: Icon(
+                          HBotIcons.lock,
                           size: 40,
                           color: HBotColors.primary,
                         ),

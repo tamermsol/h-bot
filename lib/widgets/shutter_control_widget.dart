@@ -684,9 +684,9 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
           PopupMenuButton<String>(
             icon: Icon(
               _animationStyle == 'shutter'
-                  ? Icons.window
+                  ? HBotIcons.shutter
                   : _animationStyle == 'curtain'
-                  ? Icons.curtains
+                  ? HBotIcons.shutter
                   : HBotIcons.visibilityOff,
               size: 20,
               color: HBotColors.iconDefault,
@@ -704,7 +704,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 value: 'shutter',
                 child: Row(
                   children: [
-                    Icon(Icons.window, size: 20, color: _animationStyle == 'shutter' ? HBotColors.primary : HBotColors.iconDefault),
+                    Icon(HBotIcons.shutter, size: 20, color: _animationStyle == 'shutter' ? HBotColors.primary : HBotColors.iconDefault),
                     const SizedBox(width: 8),
                     Text('Shutter', style: TextStyle(fontFamily: 'Inter', color: _animationStyle == 'shutter' ? HBotColors.primary : HBotColors.textPrimaryLight)),
                   ],
@@ -714,7 +714,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 value: 'curtain',
                 child: Row(
                   children: [
-                    Icon(Icons.curtains, size: 20, color: _animationStyle == 'curtain' ? HBotColors.primary : HBotColors.iconDefault),
+                    Icon(HBotIcons.shutter, size: 20, color: _animationStyle == 'curtain' ? HBotColors.primary : HBotColors.iconDefault),
                     SizedBox(width: 8),
                     Text('Curtain', style: TextStyle(fontFamily: 'Inter', color: _animationStyle == 'curtain' ? HBotColors.primary : HBotColors.textPrimaryLight)),
                   ],
@@ -952,7 +952,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
       children: [
         // Up/Open button
         _buildControlButton(
-          icon: Icons.keyboard_arrow_up,
+          icon: HBotIcons.arrowUp,
           onPressed: _isConnected ? _openShutter : null,
           isHighlighted: isOpening,
         ),
@@ -970,7 +970,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
 
         // Down/Close button
         _buildControlButton(
-          icon: Icons.keyboard_arrow_down,
+          icon: HBotIcons.arrowDown,
           onPressed: _isConnected ? _closeShutter : null,
           isHighlighted: isClosing,
         ),

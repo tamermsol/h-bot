@@ -108,6 +108,56 @@ class HBotIcons {
   static IconData get wifiFind => PhosphorIcons.wifiHigh();
   static IconData get errorOutline => PhosphorIcons.warningCircle();
 
+  // ─── Scene Icons ───
+  static IconData get sun => PhosphorIcons.sun();
+  static IconData get moon => PhosphorIcons.moon();
+  static IconData get shield => PhosphorIcons.shield();
+  static IconData get celebration => PhosphorIcons.confetti();
+  static IconData get briefcase => PhosphorIcons.briefcase();
+  static IconData get barbell => PhosphorIcons.barbell();
+  static IconData get coffee => PhosphorIcons.coffee();
+  static IconData get music => PhosphorIcons.musicNote();
+  static IconData get pawPrint => PhosphorIcons.pawPrint();
+  static IconData get flower => PhosphorIcons.flower();
+  static IconData get umbrella => PhosphorIcons.umbrella();
+  static IconData get leaf => PhosphorIcons.leaf();
+  static IconData get fire => PhosphorIcons.fire();
+  static IconData get broom => PhosphorIcons.broom();
+  static IconData get couch => PhosphorIcons.couch();
+  static IconData get graduationCap => PhosphorIcons.graduationCap();
+  static IconData get shoppingCart => PhosphorIcons.shoppingCart();
+  static IconData get device => PhosphorIcons.circuitry();
+
+  // ─── Room Icons ───
+  static IconData get bed => PhosphorIcons.bed();
+  static IconData get armchair => PhosphorIcons.armchair();
+  static IconData get cookingPot => PhosphorIcons.cookingPot();
+  static IconData get forkKnife => PhosphorIcons.forkKnife();
+  static IconData get bathtub => PhosphorIcons.bathtub();
+  static IconData get shower => PhosphorIcons.shower();
+  static IconData get desk => PhosphorIcons.desk();
+  static IconData get desktop => PhosphorIcons.desktop();
+  static IconData get garage => PhosphorIcons.garage();
+  static IconData get car => PhosphorIcons.car();
+  static IconData get plant => PhosphorIcons.plant();
+  static IconData get tree => PhosphorIcons.tree();
+  static IconData get park => PhosphorIcons.park();
+  static IconData get swimmingPool => PhosphorIcons.swimmingPool();
+  static IconData get gameController => PhosphorIcons.gameController();
+  static IconData get television => PhosphorIcons.television();
+  static IconData get filmSlate => PhosphorIcons.filmSlate();
+  static IconData get books => PhosphorIcons.books();
+  static IconData get baby => PhosphorIcons.baby();
+  static IconData get puzzle => PhosphorIcons.puzzlePiece();
+  static IconData get tShirt => PhosphorIcons.tShirt();
+  static IconData get washingMachine => PhosphorIcons.washingMachine();
+  static IconData get package => PhosphorIcons.package();
+  static IconData get warehouse => PhosphorIcons.warehouse();
+  static IconData get stairs => PhosphorIcons.stairs();
+  static IconData get doorOpen => PhosphorIcons.door();
+  static IconData get usersThree => PhosphorIcons.usersThree();
+  static IconData get chevronUp => PhosphorIcons.caretUp();
+
   /// Get device type icon based on DeviceType
   static IconData deviceTypeIcon(String deviceType) {
     switch (deviceType) {
@@ -121,5 +171,58 @@ class HBotIcons {
       default:
         return deviceUnknown;
     }
+  }
+}
+
+/// Device type visual config matching v0 design spec.
+/// Returns {icon, color, bgColor} for each device type.
+///   relay:   color=#3B82F6, bg=#EFF6FF
+///   dimmer:  color=#F59E0B, bg=#FFFBEB
+///   sensor:  color=#10B981, bg=#ECFDF5
+///   shutter: color=#8B5CF6, bg=#F5F3FF
+class DeviceTypeConfig {
+  final IconData icon;
+  final Color color;
+  final Color bgColor;
+
+  const DeviceTypeConfig({
+    required this.icon,
+    required this.color,
+    required this.bgColor,
+  });
+}
+
+DeviceTypeConfig deviceTypeConfig(String type) {
+  switch (type) {
+    case 'relay':
+      return DeviceTypeConfig(
+        icon: HBotIcons.lightbulb,
+        color: const Color(0xFF3B82F6),
+        bgColor: const Color(0xFFEFF6FF),
+      );
+    case 'dimmer':
+      return DeviceTypeConfig(
+        icon: HBotIcons.lightbulb,
+        color: const Color(0xFFF59E0B),
+        bgColor: const Color(0xFFFFFBEB),
+      );
+    case 'sensor':
+      return DeviceTypeConfig(
+        icon: HBotIcons.thermometer,
+        color: const Color(0xFF10B981),
+        bgColor: const Color(0xFFECFDF5),
+      );
+    case 'shutter':
+      return DeviceTypeConfig(
+        icon: HBotIcons.shutter,
+        color: const Color(0xFF8B5CF6),
+        bgColor: const Color(0xFFF5F3FF),
+      );
+    default:
+      return DeviceTypeConfig(
+        icon: HBotIcons.deviceUnknown,
+        color: const Color(0xFF6B7280),
+        bgColor: const Color(0xFFF5F7FA),
+      );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import '../utils/phosphor_icons.dart';
 import '../theme/app_theme.dart';
 import '../widgets/smart_input_field.dart';
 import '../widgets/device_selector.dart';
@@ -31,7 +32,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   // Scene data
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  IconData _selectedIcon = Icons.wb_sunny;
+  IconData _selectedIcon = HBotIcons.lightbulb;
   Color _selectedColor = const Color(0xFFF59E0B);
   String _selectedTrigger = 'Manual';
   TimeOfDay? _selectedTime;
@@ -68,14 +69,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   // v0 icon keys -> Material Icons
   final List<_SceneIconOption> _iconOptions = [
-    _SceneIconOption('sun', Icons.wb_sunny),
-    _SceneIconOption('film', Icons.movie),
-    _SceneIconOption('shield', Icons.shield),
-    _SceneIconOption('moon', Icons.dark_mode),
-    _SceneIconOption('star', Icons.star),
-    _SceneIconOption('zap', Icons.flash_on),
-    _SceneIconOption('home', Icons.home),
-    _SceneIconOption('coffee', Icons.coffee),
+    _SceneIconOption('sun', HBotIcons.lightbulb),
+    _SceneIconOption('film', HBotIcons.play),
+    _SceneIconOption('shield', HBotIcons.lock),
+    _SceneIconOption('moon', HBotIcons.scenes),
+    _SceneIconOption('star', HBotIcons.scenes),
+    _SceneIconOption('zap', HBotIcons.bolt),
+    _SceneIconOption('home', HBotIcons.home),
+    _SceneIconOption('coffee', HBotIcons.lightbulb),
   ];
 
   String _selectedIconKey = 'sun';
@@ -234,11 +235,11 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   IconData _getDeviceIcon(String deviceType) {
     switch (deviceType.toLowerCase()) {
-      case 'relay': return Icons.power;
-      case 'dimmer': return Icons.lightbulb;
-      case 'shutter': return Icons.window;
-      case 'sensor': return Icons.sensors;
-      default: return Icons.device_unknown;
+      case 'relay': return HBotIcons.power;
+      case 'dimmer': return HBotIcons.lightbulb;
+      case 'shutter': return HBotIcons.shutter;
+      case 'sensor': return HBotIcons.thermometer;
+      default: return HBotIcons.deviceUnknown;
     }
   }
 
@@ -312,7 +313,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               ),
               alignment: Alignment.center,
               child: Icon(
-                _currentStep == 0 ? Icons.close : Icons.arrow_back,
+                _currentStep == 0 ? HBotIcons.close : HBotIcons.back,
                 size: 19,
                 color: _currentStep == 0 ? const Color(0xFF4B5563) : const Color(0xFF1F2937),
               ),
@@ -589,7 +590,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   ),
                   alignment: Alignment.center,
                   child: isSelected
-                      ? const Icon(Icons.check, size: 16, color: Colors.white)
+                      ? Icon(HBotIcons.check, size: 16, color: Colors.white)
                       : null,
                 ),
               );
@@ -651,9 +652,9 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   // ── Step 2: Trigger ──
   Widget _buildTriggerStep() {
     final triggerIcons = {
-      'Manual': Icons.play_arrow,
-      'Scheduled': Icons.access_time,
-      'Location': Icons.location_on,
+      'Manual': HBotIcons.play,
+      'Scheduled': HBotIcons.accessTime,
+      'Location': HBotIcons.network,
     };
     final triggerDescs = {
       'Manual': 'Run this scene manually by tapping the play button',
@@ -725,7 +726,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                           ),
                         ),
                         if (active)
-                          const Icon(Icons.check, size: 16, color: Color(0xFF0883FD)),
+                          Icon(HBotIcons.check, size: 16, color: Color(0xFF0883FD)),
                       ],
                     ),
                   ),
@@ -953,7 +954,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 ),
                 alignment: Alignment.center,
                 child: Icon(
-                  deviceMap['icon'] as IconData? ?? Icons.device_unknown,
+                  deviceMap['icon'] as IconData? ?? HBotIcons.deviceUnknown,
                   size: 16, color: color,
                 ),
               ),

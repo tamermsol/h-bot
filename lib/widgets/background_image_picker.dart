@@ -101,7 +101,7 @@ class BackgroundImagePicker extends StatelessWidget {
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () => _pickFromGallery(context),
-                icon: const Icon(Icons.photo_library),
+                icon: Icon(HBotIcons.image),
                 label: const Text('Gallery'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primaryLight,
@@ -157,8 +157,8 @@ class BackgroundImagePicker extends StatelessWidget {
         errorBuilder: (context, error, stackTrace) {
           return Container(
             color: HBotColors.neutral800,
-            child: const Center(
-              child: Icon(Icons.broken_image, color: HBotColors.neutral400, size: 48),
+            child: Center(
+              child: Icon(HBotIcons.image, color: HBotColors.neutral400, size: 48),
             ),
           );
         },
@@ -172,8 +172,8 @@ class BackgroundImagePicker extends StatelessWidget {
       errorBuilder: (context, error, stackTrace) {
         return Container(
           color: HBotColors.neutral800,
-          child: const Center(
-            child: Icon(Icons.broken_image, color: HBotColors.neutral400, size: 48),
+          child: Center(
+            child: Icon(HBotIcons.image, color: HBotColors.neutral400, size: 48),
           ),
         );
       },

@@ -207,9 +207,9 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                 children: [
                   Icon(
                     mode == TimerMode.sunrise
-                        ? Icons.wb_sunny
+                        ? HBotIcons.lightbulb
                         : mode == TimerMode.sunset
-                        ? Icons.nights_stay
+                        ? HBotIcons.scenes
                         : HBotIcons.accessTime,
                     color: isSelected
                         ? HBotColors.primary
@@ -301,7 +301,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.all_inclusive,
+                    HBotIcons.refresh,
                     color: _output == 0
                         ? Colors.white
                         : HBotColors.textSecondaryLight,
@@ -396,8 +396,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                     action == TimerAction.on
                         ? HBotIcons.power
                         : action == TimerAction.off
-                        ? Icons.power_off
-                        : Icons.sync,
+                        ? HBotIcons.power
+                        : HBotIcons.refresh,
                     color: isSelected
                         ? (action == TimerAction.on
                               ? Colors.green
@@ -506,7 +506,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
     return Row(
       children: [
         Expanded(
-          child: _buildQuickDayButton('Every Day', Icons.calendar_today, () {
+          child: _buildQuickDayButton('Every Day', HBotIcons.accessTime, () {
             setState(() {
               _days = [true, true, true, true, true, true, true];
             });
@@ -514,7 +514,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
         ),
         const SizedBox(width: 8),
         Expanded(
-          child: _buildQuickDayButton('Weekdays', Icons.work_outline, () {
+          child: _buildQuickDayButton('Weekdays', HBotIcons.settings, () {
             setState(() {
               _days = [false, true, true, true, true, true, false];
             });
@@ -522,7 +522,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
         ),
         const SizedBox(width: 8),
         Expanded(
-          child: _buildQuickDayButton('Weekends', Icons.weekend_outlined, () {
+          child: _buildQuickDayButton('Weekends', HBotIcons.home, () {
             setState(() {
               _days = [true, false, false, false, false, false, true];
             });
@@ -570,7 +570,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Icon(Icons.repeat, color: HBotColors.textSecondaryLight),
+          Icon(HBotIcons.refresh, color: HBotColors.textSecondaryLight),
           const SizedBox(width: 16),
           Expanded(
             child: Column(

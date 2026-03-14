@@ -65,7 +65,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   String _sortOption = 'name'; // 'name', 'recent', 'room', 'type'
-  bool _isGridView = false; // false = list view, true = grid view
+  bool _isGridView = true; // true = grid view (default per v0), false = list view
   bool _hideOfflineDevices = false;
 
   // SharedPreferences key for view preference
@@ -871,6 +871,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       children: [
         Column(
           children: [
+            // v0: App bar — "My Home" + 3-dot menu
+            _buildV0AppBar(),
             // v0: Search bar (px-4 pt-3 pb-2)
             _buildSearchBar(),
             const SizedBox(height: 4),
@@ -925,7 +927,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     );
                   },
                   customBorder: const CircleBorder(),
-                  child: const Icon(Icons.add, color: Colors.white, size: 24),
+                  child: Icon(HBotIcons.add, color: Colors.white, size: 24),
                 ),
               ),
             ),
@@ -934,8 +936,232 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     );
   }
 
-  // Greeting section removed per v0 design. Home selection moved to 3-dot menu.
-  // Keeping _getGreeting and _getGreetingEmoji for potential future use.
+  // ── v0 App Bar: "My Home" + 3-dot menu ──
+  Widget _buildV0AppBar() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6), width: 1)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            _selectedHome?.name ?? 'My Home',
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF1F2937),
+            ),
+          ),
+          GestureDetector(
+            onTap: _showV0HomeMenu,
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Icon(HBotIcons.more, size: 17, color: const Color(0xFF4B5563)),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── v0 popup menu: Dashboard Background, View Mode, Hide Offline, Switch Home ──
+  void _showV0HomeMenu() {
+    final RenderBox? button = context.findRenderObject() as RenderBox?;
+    if (button == null) return;
+    final position = button.localToGlobal(Offset.zero);
+    // Position the menu near top-right
+    showMenu<String>(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        position.dx + button.size.width - 240, // right-aligned
+        position.dy + 56, // below the bar
+        16,
+        0,
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.white,
+      elevation: 8,
+      items: [
+        // Dashboard Background
+        PopupMenuItem<String>(
+          value: 'background',
+          child: Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Icon(HBotIcons.image, size: 14, color: const Color(0xFF0883FD)),
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'Dashboard Background',
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // View Mode
+        PopupMenuItem<String>(
+          value: 'viewMode',
+          child: Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F7FA),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Icon(
+                    _isGridView ? HBotIcons.listView : HBotIcons.gridView,
+                    size: 14,
+                    color: const Color(0xFF4B5563),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'View Mode',
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                ),
+              ),
+              Text(
+                _isGridView ? 'Grid' : 'List',
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
+              ),
+            ],
+          ),
+        ),
+        // Hide Offline
+        PopupMenuItem<String>(
+          value: 'hideOffline',
+          child: Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F7FA),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Icon(
+                    _hideOfflineDevices ? HBotIcons.visibility : HBotIcons.visibilityOff,
+                    size: 14,
+                    color: const Color(0xFF4B5563),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  'Hide Offline',
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                ),
+              ),
+              // Mini toggle
+              Container(
+                width: 36,
+                height: 20,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: _hideOfflineDevices ? const Color(0xFF0883FD) : const Color(0xFFD1D5DB),
+                ),
+                child: AnimatedAlign(
+                  duration: const Duration(milliseconds: 200),
+                  alignment: _hideOfflineDevices ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    width: 16,
+                    height: 16,
+                    margin: const EdgeInsets.symmetric(horizontal: 2),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Switch Home (real feature)
+        if (_homes.length > 1)
+          PopupMenuItem<String>(
+            value: 'switchHome',
+            child: Row(
+              children: [
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Icon(HBotIcons.home, size: 14, color: const Color(0xFF4B5563)),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text(
+                    'Switch Home',
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    ).then((value) {
+      if (value == null) return;
+      switch (value) {
+        case 'background':
+          _showHomeBackgroundDialog();
+          break;
+        case 'viewMode':
+          setState(() {
+            _isGridView = !_isGridView;
+            _saveViewPreference(_isGridView);
+          });
+          break;
+        case 'hideOffline':
+          setState(() {
+            _hideOfflineDevices = !_hideOfflineDevices;
+          });
+          break;
+        case 'switchHome':
+          _navigateToHomes();
+          break;
+      }
+    });
+  }
+
+  void _navigateToHomes() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomesScreen()),
+    ).then((_) => _loadData());
+  }
 
   void _showHomeBackgroundDialog() {
     if (_selectedHome == null) return;
@@ -1017,16 +1243,16 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               fontSize: 14,
               color: Color(0xFFC9CDD6), // v0 placeholder
             ),
-            prefixIcon: const Icon(
-              Icons.search,
-              color: Color(0xFF9CA3AF),
+            prefixIcon: Icon(
+              HBotIcons.search,
+              color: const Color(0xFF9CA3AF),
               size: 20,
             ),
             suffixIcon: _searchQuery.isNotEmpty
                 ? IconButton(
-                    icon: const Icon(
-                      Icons.close,
-                      color: Color(0xFF9CA3AF),
+                    icon: Icon(
+                      HBotIcons.close,
+                      color: const Color(0xFF9CA3AF),
                       size: 18,
                     ),
                     onPressed: () {
@@ -1198,20 +1424,17 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       );
     }
 
-    // Always use grid view per design spec
-    return _buildDeviceGrid();
+    return _isGridView ? _buildDeviceGrid() : _buildDeviceList();
   }
 
   Widget _buildDeviceList() {
     return RefreshIndicator(
       onRefresh: _loadData,
       color: HBotColors.primary,
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(
-          horizontal: HBotSpacing.space5,
-          vertical: HBotSpacing.space4,
-        ),
+      child: ListView.separated(
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 112),
         itemCount: _filteredDevices.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 10),
         itemBuilder: (context, index) {
           final device = _filteredDevices[index];
           return _buildDeviceCardWrapper(device);
@@ -1224,7 +1447,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     // v0: px-4 pb-28 (112px), 2-col grid gap-3 (12px)
     return RefreshIndicator(
       onRefresh: _loadData,
-      color: const Color(0xFF0883FD),
+      color: HBotColors.primary,
       child: GridView.builder(
         padding: const EdgeInsets.only(left: 16, right: 16, bottom: 112),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -1376,6 +1599,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         int shutterPosition = 0; // For shutter devices
         int shutterDirection =
             0; // For shutter direction: 0=stopped, 1=opening, -1=closing
+        double? temperature; // For sensor devices
+        double? humidity; // For sensor devices
+        int? brightness; // For dimmer devices
 
         // FETCH-FIRST: Check if device is waiting for initial state from physical device
         bool waitingForInitialState = false;
@@ -1449,6 +1675,57 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               deviceState = p1 == 'ON' || p1 == true || p == 'ON' || p == true;
             }
           }
+
+          // Extract temperature from sensor data
+          if (device.deviceType == DeviceType.sensor) {
+            final statusSns = merged['StatusSNS'];
+            if (statusSns is Map<String, dynamic>) {
+              // Try DS18B20 sensor first
+              final ds = statusSns['DS18B20'];
+              if (ds is Map<String, dynamic>) {
+                final t = ds['Temperature'];
+                if (t is num) temperature = t.toDouble();
+              }
+              // Try AM2301 sensor (has both temp and humidity)
+              final am = statusSns['AM2301'];
+              if (am is Map<String, dynamic>) {
+                final t = am['Temperature'];
+                if (t is num) temperature ??= t.toDouble();
+                final h = am['Humidity'];
+                if (h is num) humidity = h.toDouble();
+              }
+            }
+            // Fallback: top-level keys
+            if (temperature == null) {
+              final t = merged['Temperature'];
+              if (t is num) temperature = t.toDouble();
+            }
+            if (humidity == null) {
+              final h = merged['Humidity'];
+              if (h is num) humidity = h.toDouble();
+            }
+          }
+
+          // Extract brightness for dimmer devices
+          if (device.deviceType == DeviceType.dimmer) {
+            final dim = merged['Dimmer'];
+            if (dim is int) {
+              brightness = dim.clamp(0, 100);
+            } else if (dim is double) {
+              brightness = dim.round().clamp(0, 100);
+            } else if (dim is String) {
+              brightness = int.tryParse(dim)?.clamp(0, 100);
+            }
+            // Fallback: Channel key
+            if (brightness == null) {
+              final ch = merged['Channel'];
+              if (ch is int) {
+                brightness = ch.clamp(0, 100);
+              } else if (ch is double) {
+                brightness = ch.round().clamp(0, 100);
+              }
+            }
+          }
         } else {
           // If no merged MQTT data, try manager cached MQTT snapshot as best-effort
           final mqttState = _mqttManager.getDeviceState(device.id);
@@ -1507,6 +1784,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             roomName: roomName,
             deviceType: device.deviceType,
             isLoading: waitingForInitialState,
+            position: device.deviceType == DeviceType.shutter ? shutterPosition : null,
+            temperature: temperature,
+            humidity: humidity,
+            brightness: brightness,
             onToggle: (value) {
               if (device.deviceType == DeviceType.shutter) {
                 _controlShutter(device, value ? 'open' : 'close');
@@ -1529,6 +1810,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           roomName: roomName,
           deviceType: device.deviceType,
           isLoading: waitingForInitialState,
+          position: device.deviceType == DeviceType.shutter ? shutterPosition : null,
+          temperature: temperature,
           onToggle: (value) {
             if (device.deviceType == DeviceType.shutter) {
               _controlShutter(device, value ? 'open' : 'close');
@@ -1539,188 +1822,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           onTap: () => _navigateToDeviceControl(device),
         );
       },
-    );
-  }
-
-  Widget _buildGridCardContent(
-    Device device,
-    bool deviceState,
-    int shutterPosition,
-    bool isOnline,
-    bool isControllable,
-    Map<String, dynamic>? merged,
-    int shutterDirection, // 0=stopped, 1=opening, -1=closing
-    bool waitingForInitialState, // FETCH-FIRST: loading indicator flag
-  ) {
-    final bool isActive = isOnline && (deviceState || (device.deviceType == DeviceType.shutter && shutterPosition > 0));
-
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // Device icon with online status indicator
-        Center(
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(HBotSpacing.space1),
-                decoration: BoxDecoration(
-                  color: isActive
-                      ? HBotColors.primarySurface
-                      : HBotColors.neutral100,
-                  borderRadius: HBotRadius.mediumRadius,
-                ),
-                child: Icon(
-                  _getDeviceIcon(device.deviceType),
-                  color: isActive
-                      ? HBotColors.primary
-                      : HBotColors.neutral400,
-                  size: 32,
-                ),
-              ),
-              // Online/Offline status dot
-              Positioned(
-                top: -2,
-                right: -2,
-                child: hbotStatusDot(isOnline: isOnline, size: 12),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: HBotSpacing.space1),
-        // Device name (per design spec: $titleMedium 16/600)
-        Flexible(
-          child: Text(
-            device.deviceName,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              color: HBotColors.textPrimaryLight,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            softWrap: true,
-          ),
-        ),
-        const SizedBox(height: HBotSpacing.space1),
-        // Controls
-        if (device.deviceType == DeviceType.shutter)
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Position indicator above buttons
-              Text(
-                '$shutterPosition%',
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  color: HBotColors.primary,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              // Shutter control buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Close button (dimmed at 0%)
-                  SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: IconButton(
-                      icon: Icon(HBotIcons.arrowDown),
-                      onPressed:
-                          isControllable &&
-                              _mqttConnected &&
-                              isOnline &&
-                              shutterPosition > 0
-                          ? () => _controlShutter(device, 'close')
-                          : null,
-                      color: isControllable && _mqttConnected && isOnline
-                          ? (shutterPosition > 0
-                                ? HBotColors.textPrimaryLight
-                                : HBotColors.neutral300)
-                          : HBotColors.textTertiaryLight,
-                      padding: EdgeInsets.zero,
-                      tooltip: 'Close',
-                      iconSize: 16,
-                    ),
-                  ),
-                  SizedBox(width: 2),
-                  // Stop button
-                  SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: IconButton(
-                      icon: Icon(HBotIcons.stop),
-                      onPressed: isControllable && _mqttConnected && isOnline
-                          ? () => _controlShutter(device, 'stop')
-                          : null,
-                      color: isControllable && _mqttConnected && isOnline
-                          ? HBotColors.textPrimaryLight
-                          : HBotColors.textTertiaryLight,
-                      padding: EdgeInsets.zero,
-                      tooltip: 'Stop',
-                      iconSize: 16,
-                    ),
-                  ),
-                  SizedBox(width: 2),
-                  // Open button (dimmed at 100%)
-                  SizedBox(
-                    width: 32,
-                    height: 32,
-                    child: IconButton(
-                      icon: Icon(HBotIcons.arrowUp),
-                      onPressed:
-                          isControllable &&
-                              _mqttConnected &&
-                              isOnline &&
-                              shutterPosition < 100
-                          ? () => _controlShutter(device, 'open')
-                          : null,
-                      color: isControllable && _mqttConnected && isOnline
-                          ? (shutterPosition < 100
-                                ? HBotColors.textPrimaryLight
-                                : HBotColors.neutral300)
-                          : HBotColors.textTertiaryLight,
-                      padding: EdgeInsets.zero,
-                      tooltip: 'Open',
-                      iconSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          )
-        else
-          Center(
-            // FETCH-FIRST: Show loading indicator while waiting for initial state
-            child: waitingForInitialState
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        HBotColors.primary,
-                      ),
-                    ),
-                  )
-                : Transform.scale(
-                    scale: 0.85,
-                    child: Switch(
-                      value: deviceState,
-                      onChanged: isControllable && _mqttConnected && isOnline
-                          ? (value) => _toggleDevice(device, value)
-                          : null,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                  ),
-          ),
-      ],
     );
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import '../utils/phosphor_icons.dart';
 import 'dart:convert';
 import '../theme/app_theme.dart';
 import '../repos/device_sharing_repo.dart';
@@ -256,12 +257,12 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              _controller.torchEnabled ? Icons.flash_on : Icons.flash_off,
+              _controller.torchEnabled ? HBotIcons.bolt : HBotIcons.bolt,
             ),
             onPressed: () => _controller.toggleTorch(),
           ),
           IconButton(
-            icon: const Icon(Icons.flip_camera_ios),
+            icon: Icon(HBotIcons.camera),
             onPressed: () => _controller.switchCamera(),
           ),
         ],

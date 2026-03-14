@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../utils/phosphor_icons.dart';
 import '../theme/app_theme.dart';
 import '../models/profile.dart';
 import 'home_screen.dart';
@@ -177,8 +178,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Center(
-                  child: Icon(Icons.arrow_back, color: Color(0xFF1F2937), size: 20),
+                child: Center(
+                  child: Icon(HBotIcons.back, color: const Color(0xFF1F2937), size: 20),
                 ),
               ),
             ),
@@ -210,7 +211,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: _fullNameController,
                 hintText: 'Full Name',
                 keyboardType: TextInputType.name,
-                prefixIcon: Icons.person_outline,
+                prefixIcon: HBotIcons.person,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your full name';
@@ -229,7 +230,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: _emailController,
                 hintText: 'Email address',
                 keyboardType: TextInputType.emailAddress,
-                prefixIcon: Icons.mail_outline,
+                prefixIcon: HBotIcons.email,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
@@ -250,7 +251,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: _phoneController,
                 hintText: 'Phone Number (Optional)',
                 keyboardType: TextInputType.phone,
-                prefixIcon: Icons.phone_outlined,
+                prefixIcon: HBotIcons.phone,
                 validator: (value) {
                   if (value != null && value.isNotEmpty) {
                     if (!Profile.isValidPhoneNumber(value)) {
@@ -268,7 +269,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: _passwordController,
                 hintText: 'Password',
                 obscureText: _obscurePassword,
-                prefixIcon: Icons.lock_outline,
+                prefixIcon: HBotIcons.lock,
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() => _obscurePassword = !_obscurePassword);
@@ -277,8 +278,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     padding: const EdgeInsets.only(right: 16),
                     child: Icon(
                       _obscurePassword
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
+                          ? HBotIcons.eye
+                          : HBotIcons.eyeOff,
                       color: const Color(0xFF9CA3AF),
                       size: 17,
                     ),
@@ -302,7 +303,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 controller: _confirmPasswordController,
                 hintText: 'Confirm Password',
                 obscureText: _obscureConfirmPassword,
-                prefixIcon: Icons.lock_outline,
+                prefixIcon: HBotIcons.lock,
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(
@@ -313,8 +314,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     padding: const EdgeInsets.only(right: 16),
                     child: Icon(
                       _obscureConfirmPassword
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
+                          ? HBotIcons.eye
+                          : HBotIcons.eyeOff,
                       color: const Color(0xFF9CA3AF),
                       size: 17,
                     ),
@@ -435,8 +436,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 18,
                         width: 18,
                         errorBuilder: (context, error, stackTrace) {
-                          return const Icon(
-                            Icons.login,
+                          return Icon(
+                            HBotIcons.login,
                             color: Color(0xFF6B7280),
                             size: 18,
                           );

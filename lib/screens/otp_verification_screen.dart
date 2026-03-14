@@ -174,8 +174,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         color: HBotTheme.surfacePrimarySubtle(context),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.verified_outlined,
+                      child: Icon(
+                        HBotIcons.checkCircle,
                         size: 40,
                         color: HBotColors.primary,
                       ),

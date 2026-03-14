@@ -220,8 +220,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         color: HBotColors.primarySurface,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.lock_reset,
+                      child: Icon(
+                        HBotIcons.lock,
                         size: 40,
                         color: HBotColors.primary,
                       ),

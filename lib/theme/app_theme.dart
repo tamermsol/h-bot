@@ -379,8 +379,8 @@ class HBotShadows {
 
   static const List<BoxShadow> none = [];
 
-  // Per BRAND-DNA.md: no drop shadows — use blur/border instead
-  // Kept as minimal blur-only effects (no vertical offset)
+  // v0 design: subtle shadows only (cards barely visible)
+  // Minimal blur-only effects (no vertical offset)
   static const List<BoxShadow> small = [
     BoxShadow(
       color: Color(0x080A1628),
@@ -939,10 +939,10 @@ class AppTheme {
         ),
       ),
 
-      // ─── Input Decoration ───
+      // ─── Input Decoration (v0: #F5F7FA fill, #E5E7EB border, 12px radius) ───
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: HBotColors.surfaceLight,
+        fillColor: HBotColors.cardLight, // #F5F7FA per v0
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: HBotRadius.mediumRadius,

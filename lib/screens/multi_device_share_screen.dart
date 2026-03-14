@@ -242,7 +242,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                                     color: Colors.white,
                                   ),
                                 )
-                              : const Icon(Icons.qr_code, size: 18),
+                              : Icon(HBotIcons.devices, size: 18),
                           label: const Text(
                             'Generate',
                             style: TextStyle(fontSize: 13),

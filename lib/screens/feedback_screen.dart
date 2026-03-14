@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../theme/app_theme.dart';
 import '../utils/phosphor_icons.dart';
 
 class FeedbackScreen extends StatefulWidget {
@@ -128,8 +127,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   void _showSuccessSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        backgroundColor: HBotColors.primaryLight,
+        content: Text(message, style: const TextStyle(fontFamily: 'Inter')),
+        backgroundColor: const Color(0xFF8CD1FB),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -138,8 +137,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
-        backgroundColor: HBotColors.error,
+        content: Text(message, style: const TextStyle(fontFamily: 'Inter')),
+        backgroundColor: const Color(0xFFEF4444),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -147,138 +146,197 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Send Feedback'),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: Colors.white,
         elevation: 0,
+        leading: GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Center(
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                HBotIcons.back,
+                color: Color(0xFF1F2937),
+                size: 18,
+              ),
+            ),
+          ),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Send Feedback',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F2937),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(HBotSpacing.space6),
+        padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Text(
+            const Text(
               'We value your feedback',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: HBotColors.textPrimaryLight,
+                color: Color(0xFF1F2937),
               ),
             ),
-            const SizedBox(height: HBotSpacing.space2),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               'Help us improve HBOT by sharing your thoughts, suggestions, or reporting issues',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: HBotColors.textSecondaryLight,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                color: Color(0xFF6B7280),
               ),
             ),
-            const SizedBox(height: HBotSpacing.space6),
+            const SizedBox(height: 24),
 
             // Feedback Input
-            Text(
+            const Text(
               'Your Feedback',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                color: Color(0xFF1F2937),
               ),
             ),
-            const SizedBox(height: HBotSpacing.space4),
+            const SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: HBotColors.textSecondaryLight.withOpacity(0.3),
+                  color: const Color(0xFFE5E7EB),
                   width: 1,
                 ),
               ),
               child: TextField(
                 controller: _feedbackController,
                 maxLines: 8,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: HBotColors.textPrimaryLight,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 16,
+                  color: Color(0xFF1F2937),
                 ),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText:
-                      'Tell us what you think...\n\nYou can share:\n• Feature suggestions\n• Bug reports\n• General feedback\n• Questions or concerns',
-                  hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: HBotColors.textSecondaryLight,
+                      'Tell us what you think...\n\nYou can share:\n\u2022 Feature suggestions\n\u2022 Bug reports\n\u2022 General feedback\n\u2022 Questions or concerns',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 14,
+                    color: Color(0xFF6B7280),
                   ),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.all(HBotSpacing.space4),
+                  contentPadding: EdgeInsets.all(16),
                 ),
               ),
             ),
-            const SizedBox(height: HBotSpacing.space6),
+            const SizedBox(height: 24),
 
             // Send Options
-            Text(
+            const Text(
               'Send via',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                color: Color(0xFF1F2937),
               ),
             ),
-            SizedBox(height: HBotSpacing.space4),
+            const SizedBox(height: 16),
 
             // Email Button
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: _isSending ? null : _sendEmailFeedback,
-                icon: Icon(HBotIcons.email),
-                label: const Text('Send via Email'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: HBotColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: HBotSpacing.space4,
+              height: 50,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(HBotRadius.medium),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x590883FD),
+                      blurRadius: 12,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ElevatedButton.icon(
+                  onPressed: _isSending ? null : _sendEmailFeedback,
+                  icon: Icon(HBotIcons.email),
+                  label: const Text(
+                    'Send via Email',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: HBotSpacing.space4),
+            const SizedBox(height: 16),
 
             // WhatsApp Button
             SizedBox(
               width: double.infinity,
+              height: 50,
               child: OutlinedButton.icon(
                 onPressed: _isSending ? null : _sendWhatsAppFeedback,
-                icon: const Icon(Icons.chat_outlined),
-                label: const Text('Send via WhatsApp'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: HBotColors.primary,
-                  side: const BorderSide(color: HBotColors.primary),
-                  padding: const EdgeInsets.symmetric(
-                    vertical: HBotSpacing.space4,
+                icon: Icon(HBotIcons.feedback),
+                label: const Text(
+                  'Send via WhatsApp',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
                   ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF0883FD),
+                  side: const BorderSide(color: Color(0xFF0883FD)),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(HBotRadius.medium),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: HBotSpacing.space6),
+            const SizedBox(height: 24),
 
             // Info Box
             Container(
-              padding: const EdgeInsets.all(HBotSpacing.space4),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: HBotColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
+                color: const Color(0xFF0883FD).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: HBotColors.primary.withOpacity(0.3),
+                  color: const Color(0xFF0883FD).withOpacity(0.3),
                   width: 1,
                 ),
               ),
@@ -287,29 +345,31 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 children: [
                   Icon(
                     HBotIcons.info,
-                    color: HBotColors.primary,
+                    color: const Color(0xFF0883FD),
                     size: 24,
                   ),
-                  const SizedBox(width: HBotSpacing.space4),
-                  Expanded(
+                  const SizedBox(width: 16),
+                  const Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Your feedback matters',
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: HBotColors.textPrimaryLight,
-                              ),
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF1F2937),
+                          ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4),
                         Text(
                           'We read every message and use your feedback to improve HBOT. We typically respond within 24 hours during business days.',
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                color: HBotColors.textPrimaryLight,
-                              ),
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 12,
+                            color: Color(0xFF1F2937),
+                          ),
                         ),
                       ],
                     ),

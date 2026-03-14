@@ -323,11 +323,11 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
       case DeviceType.dimmer:
         return HBotIcons.lightbulb;
       case DeviceType.shutter:
-        return Icons.window;
+        return HBotIcons.shutter;
       case DeviceType.sensor:
-        return Icons.sensors;
+        return HBotIcons.thermometer;
       case DeviceType.other:
-        return Icons.device_unknown;
+        return HBotIcons.deviceUnknown;
     }
   }
 }

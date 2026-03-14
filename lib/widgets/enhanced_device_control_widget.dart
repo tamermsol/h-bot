@@ -511,7 +511,7 @@ class _EnhancedDeviceControlWidgetState
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: isConnected ? _turnAllOff : null,
-                  icon: const Icon(Icons.power_off, size: 18),
+                  icon: Icon(HBotIcons.power, size: 18),
                   label: const Text('All OFF'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: HBotColors.errorDark,
@@ -539,11 +539,11 @@ class _EnhancedDeviceControlWidgetState
       case DeviceType.dimmer:
         return HBotIcons.lightbulb;
       case DeviceType.shutter:
-        return Icons.window;
+        return HBotIcons.shutter;
       case DeviceType.sensor:
-        return Icons.sensors;
+        return HBotIcons.thermometer;
       case DeviceType.other:
-        return Icons.device_unknown;
+        return HBotIcons.deviceUnknown;
     }
   }
 }

@@ -4,6 +4,8 @@ import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../services/smart_home_service.dart';
 import '../repos/devices_repo.dart';
+import '../repos/rooms_repo.dart';
+import '../utils/phosphor_icons.dart';
 import '../widgets/shutter_control_widget.dart';
 import '../widgets/settings_tile.dart';
 import 'shutter_calibration_screen.dart';
@@ -31,6 +33,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
   final MqttDeviceManager _mqttManager = MqttDeviceManager();
   final DevicesRepo _devicesRepo = DevicesRepo();
   final SmartHomeService _service = SmartHomeService();
+  final RoomsRepo _roomsRepo = RoomsRepo();
 
   Map<String, dynamic>? _deviceState;
   bool _isLoading = true;
@@ -39,6 +42,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
 
   // Local device instance that can be updated
   late Device _currentDevice;
+  String _roomName = 'No Room';
 
   // Channel management
   final Map<int, String> _channelNames = {};
@@ -69,6 +73,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
     );
     _initializeDeviceControl();
     _loadChannelNames();
+    _loadRoomName();
   }
 
   // ═══════════════════════════════════════════════════════════════════
@@ -97,6 +102,23 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
       }
     } catch (e) {
       debugPrint('Failed to load channel names: $e');
+    }
+  }
+
+  Future<void> _loadRoomName() async {
+    if (_currentDevice.roomId == null) return;
+    try {
+      final rooms = await _roomsRepo.listRooms(
+        _currentDevice.homeId ?? '',
+      );
+      final room = rooms.where((r) => r.id == _currentDevice.roomId).firstOrNull;
+      if (room != null && mounted) {
+        setState(() {
+          _roomName = room.name;
+        });
+      }
+    } catch (e) {
+      debugPrint('Failed to load room name: $e');
     }
   }
 
@@ -451,7 +473,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
           builder: (context) => AlertDialog(
             backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            title: const Row(children: [Icon(Icons.error_outline, color: Color(0xFFEF4444), size: 24), SizedBox(width: 8), Text('Remove Failed', style: TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w600))]),
+            title: Row(children: [Icon(HBotIcons.errorOutline, color: const Color(0xFFEF4444), size: 24), const SizedBox(width: 8), const Text('Remove Failed', style: TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w600))]),
             content: Text(errorMessage, style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF6B7280))),
             actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('OK', style: TextStyle(color: Color(0xFF0883FD))))],
           ),
@@ -545,11 +567,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
   // ═══════════════════════════════════════════════════════════════════
 
   // Type icon config matching v0
-  static const _typeIconCfg = <DeviceType, _DeviceTypeCfg>{
-    DeviceType.relay: _DeviceTypeCfg(icon: Icons.power_settings_new, color: Color(0xFF3B82F6), bg: Color(0xFFEFF6FF)),
-    DeviceType.dimmer: _DeviceTypeCfg(icon: Icons.lightbulb_outline, color: Color(0xFFF59E0B), bg: Color(0xFFFFFBEB)),
-    DeviceType.sensor: _DeviceTypeCfg(icon: Icons.thermostat, color: Color(0xFF10B981), bg: Color(0xFFECFDF5)),
-    DeviceType.shutter: _DeviceTypeCfg(icon: Icons.blinds, color: Color(0xFF8B5CF6), bg: Color(0xFFF5F3FF)),
+  static final _typeIconCfg = <DeviceType, _DeviceTypeCfg>{
+    DeviceType.relay: _DeviceTypeCfg(icon: HBotIcons.power, color: const Color(0xFF3B82F6), bg: const Color(0xFFEFF6FF)),
+    DeviceType.dimmer: _DeviceTypeCfg(icon: HBotIcons.lightbulb, color: const Color(0xFFF59E0B), bg: const Color(0xFFFFFBEB)),
+    DeviceType.sensor: _DeviceTypeCfg(icon: HBotIcons.thermometer, color: const Color(0xFF10B981), bg: const Color(0xFFECFDF5)),
+    DeviceType.shutter: _DeviceTypeCfg(icon: HBotIcons.shutter, color: const Color(0xFF8B5CF6), bg: const Color(0xFFF5F3FF)),
   };
 
   @override
@@ -620,7 +642,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
           // Back button
           _V0AppBarButton(
             onTap: () => Navigator.of(context).pop(),
-            child: const Icon(Icons.arrow_back, size: 20, color: Color(0xFF1F2937)),
+            child: Icon(HBotIcons.back, size: 20, color: Color(0xFF1F2937)),
           ),
           // Centered title
           Expanded(
@@ -661,14 +683,14 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                       ),
                     );
                   },
-                  child: const Icon(Icons.timer, size: 19, color: Color(0xFF4B5563)),
+                  child: Icon(HBotIcons.timer, size: 19, color: Color(0xFF4B5563)),
                 ),
               // Refresh icon with spin animation
               _V0AppBarButton(
                 onTap: _refreshDeviceStatus,
                 child: RotationTransition(
                   turns: _isRefreshing ? _refreshAnimController : const AlwaysStoppedAnimation(0),
-                  child: const Icon(Icons.refresh, size: 17, color: Color(0xFF4B5563)),
+                  child: Icon(HBotIcons.refresh, size: 17, color: Color(0xFF4B5563)),
                 ),
               ),
               // 3-dot menu
@@ -684,15 +706,15 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
   Widget _buildMoreMenu() {
     // Build menu items per v0
     final menuItems = <_MenuItem>[
-      _MenuItem(icon: Icons.edit, label: 'Rename Device', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _showDeviceRenameDialog(); }),
-      _MenuItem(icon: Icons.drive_file_move_outlined, label: 'Move to Room', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _showMoveToRoomDialog(); }),
-      _MenuItem(icon: Icons.share, label: 'Share Device', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); Navigator.push(context, MaterialPageRoute(builder: (context) => ShareDeviceScreen(device: widget.device))); }),
-      _MenuItem(icon: Icons.info_outline, label: 'Show Device Info', color: const Color(0xFF1F2937), onTap: () { setState(() { _menuOpen = false; _showDebugInfo = !_showDebugInfo; }); }),
+      _MenuItem(icon: HBotIcons.edit, label: 'Rename Device', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _showDeviceRenameDialog(); }),
+      _MenuItem(icon: HBotIcons.room, label: 'Move to Room', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _showMoveToRoomDialog(); }),
+      _MenuItem(icon: HBotIcons.share, label: 'Share Device', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); Navigator.push(context, MaterialPageRoute(builder: (context) => ShareDeviceScreen(device: widget.device))); }),
+      _MenuItem(icon: HBotIcons.info, label: 'Show Device Info', color: const Color(0xFF1F2937), onTap: () { setState(() { _menuOpen = false; _showDebugInfo = !_showDebugInfo; }); }),
       if (_currentDevice.deviceType == DeviceType.shutter) ...[
-        _MenuItem(icon: Icons.settings, label: 'Auto Calibrate', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _navigateToCalibration(); }),
-        _MenuItem(icon: Icons.settings, label: 'Manual Calibrate', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _navigateToManualCalibration(); }),
+        _MenuItem(icon: HBotIcons.settings, label: 'Auto Calibrate', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _navigateToCalibration(); }),
+        _MenuItem(icon: HBotIcons.settings, label: 'Manual Calibrate', color: const Color(0xFF1F2937), onTap: () { setState(() => _menuOpen = false); _navigateToManualCalibration(); }),
       ],
-      _MenuItem(icon: Icons.delete_outline, label: 'Delete', color: const Color(0xFFEF4444), onTap: () { setState(() => _menuOpen = false); _showDeleteConfirmationDialog(); }),
+      _MenuItem(icon: HBotIcons.delete, label: 'Delete', color: const Color(0xFFEF4444), onTap: () { setState(() => _menuOpen = false); _showDeleteConfirmationDialog(); }),
     ];
 
     return Stack(
@@ -702,7 +724,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
           onTap: () {
             setState(() => _menuOpen = !_menuOpen);
           },
-          child: const Icon(Icons.more_vert, size: 19, color: Color(0xFF4B5563)),
+          child: Icon(HBotIcons.more, size: 19, color: Color(0xFF4B5563)),
         ),
         if (_menuOpen)
           Positioned(
@@ -808,7 +830,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                   const SizedBox(height: 2),
                   // Room: 12px #9CA3AF
                   Text(
-                    _currentDevice.roomId != null ? 'Room' : 'No Room',
+                    _roomName,
                     style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 12,
@@ -912,7 +934,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                       child: Opacity(
                         opacity: isOnline ? 1.0 : 0.4,
                         child: Icon(
-                          Icons.power_settings_new,
+                          HBotIcons.power,
                           size: 44,
                           color: isOn ? Colors.white : const Color(0xFFC9CDD6),
                         ),
@@ -996,7 +1018,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                 child: Opacity(
                   opacity: isOnline ? 1.0 : 0.4,
                   child: Icon(
-                    Icons.lightbulb_outline,
+                    HBotIcons.lightbulb,
                     size: 44,
                     color: isOn ? Colors.white : const Color(0xFFC9CDD6),
                   ),
@@ -1034,7 +1056,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.wb_sunny, size: 14, color: Color(0xFFF59E0B)),
+                      Icon(HBotIcons.lightbulb, size: 14, color: Color(0xFFF59E0B)),
                       const SizedBox(width: 6),
                       const Text(
                         'Brightness',
@@ -1158,7 +1180,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                     color: Color(0xFFDCFCE7),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.thermostat, size: 22, color: Color(0xFF10B981)),
+                  child: Icon(HBotIcons.thermometer, size: 22, color: Color(0xFF10B981)),
                 ),
                 const SizedBox(height: 12),
                 // Value: 32px bold
@@ -1220,7 +1242,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                     color: Color(0xFFDBEAFE),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.water_drop, size: 22, color: Color(0xFF3B82F6)),
+                  child: Icon(HBotIcons.thermometer, size: 22, color: Color(0xFF3B82F6)),
                 ),
                 const SizedBox(height: 12),
                 RichText(
@@ -1322,7 +1344,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
           children: [
             if (power != null)
               SettingsTile(
-                icon: Icons.bolt,
+                icon: HBotIcons.bolt,
                 title: 'Power',
                 subtitle: power,
                 showDivider: todayEnergy != null || signalStrength != null || ipAddress != null || firmware != null,
@@ -1330,7 +1352,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
               ),
             if (todayEnergy != null)
               SettingsTile(
-                icon: Icons.electric_meter,
+                icon: HBotIcons.meter,
                 title: 'Today',
                 subtitle: todayEnergy,
                 showDivider: signalStrength != null || ipAddress != null || firmware != null,
@@ -1338,7 +1360,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
               ),
             if (signalStrength != null)
               SettingsTile(
-                icon: Icons.wifi,
+                icon: HBotIcons.wifi,
                 title: 'Signal',
                 subtitle: signalStrength,
                 showDivider: ipAddress != null || firmware != null,
@@ -1346,7 +1368,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
               ),
             if (ipAddress != null)
               SettingsTile(
-                icon: Icons.lan,
+                icon: HBotIcons.lan,
                 title: 'IP Address',
                 subtitle: ipAddress,
                 showDivider: firmware != null,
@@ -1354,7 +1376,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
               ),
             if (firmware != null)
               SettingsTile(
-                icon: Icons.system_update,
+                icon: HBotIcons.firmware,
                 title: 'Firmware',
                 subtitle: firmware,
                 showDivider: false,
@@ -1384,10 +1406,10 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
     return SettingsTileGroup(
       title: 'Device Information',
       children: [
-        SettingsTile(icon: Icons.business, title: 'Manufacturer', subtitle: manufacturer, trailing: const SizedBox.shrink()),
-        SettingsTile(icon: Icons.devices, title: 'Device Model', subtitle: modelName, trailing: const SizedBox.shrink()),
-        SettingsTile(icon: Icons.memory, title: 'MAC Address', subtitle: macAddress ?? 'Unknown', trailing: const SizedBox.shrink()),
-        SettingsTile(icon: Icons.lan, title: 'IP Address', subtitle: ipAddress ?? 'Unknown', showDivider: false, trailing: const SizedBox.shrink()),
+        SettingsTile(icon: HBotIcons.building, title: 'Manufacturer', subtitle: manufacturer, trailing: const SizedBox.shrink()),
+        SettingsTile(icon: HBotIcons.devices, title: 'Device Model', subtitle: modelName, trailing: const SizedBox.shrink()),
+        SettingsTile(icon: HBotIcons.memory, title: 'MAC Address', subtitle: macAddress ?? 'Unknown', trailing: const SizedBox.shrink()),
+        SettingsTile(icon: HBotIcons.lan, title: 'IP Address', subtitle: ipAddress ?? 'Unknown', showDivider: false, trailing: const SizedBox.shrink()),
       ],
     );
   }
@@ -1453,7 +1475,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ListTile(
-                            leading: const Icon(Icons.home, color: Color(0xFF0883FD)),
+                            leading: Icon(HBotIcons.home, color: Color(0xFF0883FD)),
                             title: const Text('No Room', style: TextStyle(color: Color(0xFF1F2937))),
                             subtitle: const Text('Place device in the main area', style: TextStyle(color: Color(0xFF6B7280))),
                             selected: _currentDevice.roomId == null,
@@ -1464,7 +1486,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                           if (rooms.isNotEmpty) ...[
                             const SizedBox(height: 8),
                             ...rooms.map((room) => ListTile(
-                              leading: const Icon(Icons.door_front_door, color: Color(0xFF0883FD)),
+                              leading: Icon(HBotIcons.room, color: Color(0xFF0883FD)),
                               title: Text(room.name, style: const TextStyle(color: Color(0xFF1F2937))),
                               selected: _currentDevice.roomId == room.id,
                               selectedTileColor: const Color(0xFF0883FD).withOpacity(0.1),
@@ -1560,18 +1582,18 @@ class _DeviceControlScreenState extends State<DeviceControlScreen>
                 child: Align(alignment: Alignment.centerLeft, child: Text(_getChannelName(channel), style: const TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)))),
               ),
               ListTile(
-                leading: const Icon(Icons.edit, color: Color(0xFF4B5563)),
+                leading: Icon(HBotIcons.edit, color: const Color(0xFF4B5563)),
                 title: const Text('Rename Channel', style: TextStyle(fontFamily: 'Inter')),
                 onTap: () { Navigator.pop(context); _showChannelRenameDialog(channel); },
               ),
               const Padding(padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8), child: Align(alignment: Alignment.centerLeft, child: Text('CHANNEL TYPE', style: TextStyle(fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 1.0, color: Color(0xFF9CA3AF))))),
               ListTile(
-                leading: Icon(Icons.lightbulb_outline, color: channelType == 'light' ? const Color(0xFF0883FD) : const Color(0xFF4B5563)),
+                leading: Icon(HBotIcons.lightbulb, color: channelType == 'light' ? const Color(0xFF0883FD) : const Color(0xFF4B5563)),
                 title: Text('Light', style: TextStyle(fontFamily: 'Inter', color: channelType == 'light' ? const Color(0xFF0883FD) : null)),
                 onTap: () { Navigator.pop(context); _updateChannelType(channel, 'light'); },
               ),
               ListTile(
-                leading: Icon(Icons.power_settings_new, color: channelType == 'switch' ? const Color(0xFF0883FD) : const Color(0xFF4B5563)),
+                leading: Icon(HBotIcons.power, color: channelType == 'switch' ? const Color(0xFF0883FD) : const Color(0xFF4B5563)),
                 title: Text('Switch', style: TextStyle(fontFamily: 'Inter', color: channelType == 'switch' ? const Color(0xFF0883FD) : null)),
                 onTap: () { Navigator.pop(context); _updateChannelType(channel, 'switch'); },
               ),

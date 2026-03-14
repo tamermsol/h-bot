@@ -406,7 +406,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               height: 36,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
               alignment: Alignment.center,
-              child: const Icon(Icons.arrow_back, size: 20, color: Color(0xFF1F2937)),
+              child: Icon(HBotIcons.back, size: 20, color: const Color(0xFF1F2937)),
             ),
           ),
           const Expanded(
@@ -500,7 +500,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   color: Color(0xFFEFF6FF),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(Icons.wifi, size: 30, color: Color(0xFF0883FD)),
+                child: Icon(HBotIcons.wifi, size: 30, color: const Color(0xFF0883FD)),
               ),
               const SizedBox(height: 20),
               const Text(
@@ -596,7 +596,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                              _passwordVisible ? HBotIcons.eyeOff : HBotIcons.eye,
                               color: const Color(0xFF9CA3AF), size: 20,
                             ),
                             onPressed: () => _safeSetState(() => _passwordVisible = !_passwordVisible),
@@ -637,7 +637,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                           onPressed: () async {
                             try { await Geolocator.openAppSettings(); } catch (_) { await Geolocator.openLocationSettings(); }
                           },
-                          icon: const Icon(Icons.settings, size: 16),
+                          icon: Icon(HBotIcons.settings, size: 16),
                           label: const Text('Open App Settings'),
                           style: TextButton.styleFrom(foregroundColor: const Color(0xFF0883FD)),
                         ),
@@ -665,7 +665,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                          _passwordVisible ? HBotIcons.eyeOff : HBotIcons.eye,
                           color: const Color(0xFF9CA3AF), size: 20,
                         ),
                         onPressed: () => _safeSetState(() => _passwordVisible = !_passwordVisible),
@@ -819,7 +819,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   color: Color(0xFFEFF6FF),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(Icons.wifi, size: 30, color: Color(0xFF0883FD)),
+                child: Icon(HBotIcons.wifi, size: 30, color: const Color(0xFF0883FD)),
               ),
               const SizedBox(height: 20),
               const Text(
@@ -887,8 +887,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.open_in_new, size: 16, color: Color(0xFF4B5563)),
+                    children: [
+                      Icon(HBotIcons.openInNew, size: 16, color: Color(0xFF4B5563)),
                       SizedBox(width: 8),
                       Text(
                         'Open WiFi Settings',
@@ -935,8 +935,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.qr_code, size: 16, color: Color(0xFF4B5563)),
+                    children: [
+                      Icon(HBotIcons.devices, size: 16, color: Color(0xFF4B5563)),
                       SizedBox(width: 8),
                       Text(
                         'Scan QR Code Instead',
@@ -1001,7 +1001,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.wifi, size: 20, color: Color(0xFF0883FD)),
+                          Icon(HBotIcons.wifi, size: 20, color: const Color(0xFF0883FD)),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
@@ -1010,7 +1010,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                             ),
                           ),
                           if (_selectedDeviceAP == ap)
-                            const Icon(Icons.check_circle, size: 20, color: Color(0xFF10B981)),
+                            Icon(HBotIcons.checkFilled, size: 20, color: const Color(0xFF10B981)),
                         ],
                       ),
                     ),
@@ -1055,7 +1055,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   color: Color(0xFFEFF6FF),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(Icons.wifi, size: 30, color: Color(0xFF0883FD)),
+                child: Icon(HBotIcons.wifi, size: 30, color: const Color(0xFF0883FD)),
               ),
               const SizedBox(height: 20),
               const Text(
@@ -1119,8 +1119,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.open_in_new, size: 16, color: Color(0xFF4B5563)),
+                    children: [
+                      Icon(HBotIcons.openInNew, size: 16, color: Color(0xFF4B5563)),
                       SizedBox(width: 8),
                       Text(
                         'Open WiFi Settings',
@@ -1166,8 +1166,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.qr_code, size: 16, color: Color(0xFF4B5563)),
+                    children: [
+                      Icon(HBotIcons.devices, size: 16, color: Color(0xFF4B5563)),
                       SizedBox(width: 8),
                       Text(
                         'Scan QR Code Instead',
@@ -1344,7 +1344,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   color: Color(0xFFEFF6FF),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(Icons.wifi, size: 30, color: Color(0xFF0883FD)),
+                child: Icon(HBotIcons.wifi, size: 30, color: const Color(0xFF0883FD)),
               ),
               const SizedBox(height: 20),
               const Text(
@@ -1401,8 +1401,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.open_in_new, size: 16, color: Color(0xFF4B5563)),
+                    children: [
+                      Icon(HBotIcons.openInNew, size: 16, color: Color(0xFF4B5563)),
                       SizedBox(width: 8),
                       Text(
                         'Open WiFi Settings',
@@ -1644,7 +1644,7 @@ Troubleshooting:
                     color: Color(0xFFFEF2F2),
                   ),
                   alignment: Alignment.center,
-                  child: const Icon(Icons.error_outline, size: 32, color: Color(0xFFEF4444)),
+                  child: Icon(HBotIcons.errorOutline, size: 32, color: const Color(0xFFEF4444)),
                 ),
               const SizedBox(height: 20),
 
@@ -1696,14 +1696,14 @@ Troubleshooting:
                     child: Row(
                       children: [
                         if (isComplete)
-                          const Icon(Icons.check_circle, size: 22, color: Color(0xFF10B981))
+                          Icon(HBotIcons.checkFilled, size: 22, color: const Color(0xFF10B981))
                         else if (isActive)
                           const SizedBox(
                             width: 22, height: 22,
                             child: CircularProgressIndicator(strokeWidth: 2.5, color: Color(0xFF0883FD)),
                           )
                         else
-                          const Icon(Icons.circle_outlined, size: 22, color: Color(0xFFE5E7EB)),
+                          Icon(HBotIcons.checkCircle, size: 22, color: const Color(0xFFE5E7EB)),
                         const SizedBox(width: 12),
                         Text(
                           setupSteps[i]['label']!,
@@ -1775,7 +1775,7 @@ Troubleshooting:
                   color: Color(0xFFECFDF5),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(Icons.check_circle, size: 36, color: Color(0xFF10B981)),
+                child: Icon(HBotIcons.checkFilled, size: 36, color: const Color(0xFF10B981)),
               ),
               const SizedBox(height: 20),
 
@@ -1837,7 +1837,7 @@ Troubleshooting:
                           ),
                         ),
                       ),
-                      const Icon(Icons.keyboard_arrow_down, size: 17, color: Color(0xFF9CA3AF)),
+                      Icon(HBotIcons.chevronDown, size: 17, color: const Color(0xFF9CA3AF)),
                     ],
                   ),
                 ),

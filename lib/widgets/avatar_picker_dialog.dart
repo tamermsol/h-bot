@@ -82,7 +82,7 @@ class AvatarPickerDialog extends StatelessWidget {
               children: [
                 _buildOptionButton(
                   context,
-                  icon: Icons.photo_library,
+                  icon: HBotIcons.image,
                   label: 'Gallery',
                   onTap: () => Navigator.pop(context, 'gallery'),
                 ),

@@ -147,17 +147,17 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
       case MqttConnectionState.connecting:
         statusColor = Colors.orange;
         statusText = 'Connecting...';
-        statusIcon = Icons.sync;
+        statusIcon = HBotIcons.refresh;
         break;
       case MqttConnectionState.disconnected:
         statusColor = Colors.red;
         statusText = 'Disconnected';
-        statusIcon = Icons.cancel;
+        statusIcon = HBotIcons.close;
         break;
       case MqttConnectionState.disconnecting:
         statusColor = Colors.orange;
         statusText = 'Disconnecting...';
-        statusIcon = Icons.sync;
+        statusIcon = HBotIcons.refresh;
         break;
       case MqttConnectionState.faulted:
         statusColor = Colors.red;
@@ -306,7 +306,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                 ),
                 TextButton.icon(
                   onPressed: _clearDebugMessages,
-                  icon: const Icon(Icons.clear_all, size: 16),
+                  icon: Icon(HBotIcons.delete, size: 16),
                   label: const Text('Clear'),
                   style: TextButton.styleFrom(foregroundColor: Colors.red),
                 ),

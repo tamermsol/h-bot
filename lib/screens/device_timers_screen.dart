@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/phosphor_icons.dart';
 import 'dart:convert';
 import '../models/device.dart';
 import '../models/device_timer.dart';
@@ -120,7 +121,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: Row(
               children: [
-                Icon(Icons.warning_amber_rounded, color: const Color(0xFFF59E0B), size: 24),
+                Icon(HBotIcons.error, color: const Color(0xFFF59E0B), size: 24),
                 const SizedBox(width: 12),
                 const Expanded(
                   child: Text(
@@ -431,7 +432,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                   // Back button: 36x36 rounded-xl
                   _V0AppBarButton(
                     onTap: () => Navigator.of(context).pop(),
-                    child: const Icon(Icons.arrow_back, size: 20, color: Color(0xFF1F2937)),
+                    child: Icon(HBotIcons.back, size: 20, color: Color(0xFF1F2937)),
                   ),
                   const Expanded(
                     child: Text(
@@ -455,7 +456,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                         color: const Color(0xFFEFF6FF),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.add, size: 18, color: Color(0xFF0883FD)),
+                      child: Icon(HBotIcons.add, size: 18, color: Color(0xFF0883FD)),
                     ),
                   ),
                 ],
@@ -491,7 +492,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                 color: Color(0xFFF5F7FA),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.timer, size: 28, color: Color(0xFFD1D5DB)),
+              child: Icon(HBotIcons.timer, size: 28, color: Color(0xFFD1D5DB)),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -535,15 +536,15 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
     final Color iconBg;
 
     if (timer.mode == TimerMode.sunrise) {
-      iconData = Icons.wb_sunny;
+      iconData = HBotIcons.lightbulb;
       iconColor = const Color(0xFFF59E0B);
       iconBg = const Color(0xFFFFFBEB);
     } else if (timer.mode == TimerMode.sunset) {
-      iconData = Icons.nightlight_round;
+      iconData = HBotIcons.scenes;
       iconColor = const Color(0xFF8B5CF6);
       iconBg = const Color(0xFFF5F3FF);
     } else {
-      iconData = Icons.access_time;
+      iconData = HBotIcons.accessTime;
       iconColor = const Color(0xFF3B82F6);
       iconBg = const Color(0xFFEFF6FF);
     }
@@ -706,9 +707,9 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                   // Trash icon
                   GestureDetector(
                     onTap: () => _deleteTimer(timer),
-                    child: const Padding(
-                      padding: EdgeInsets.all(4),
-                      child: Icon(Icons.delete_outline, size: 15, color: Color(0xFFEF4444)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Icon(HBotIcons.delete, size: 15, color: const Color(0xFFEF4444)),
                     ),
                   ),
                 ],

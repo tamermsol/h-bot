@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
 import '../widgets/smart_input_field.dart';
 import '../services/auth_service.dart';
 import '../models/profile.dart';
@@ -59,9 +58,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Profile updated successfully!'),
-            backgroundColor: HBotColors.primaryLight,
+          const SnackBar(
+            content: Text(
+              'Profile updated successfully!',
+              style: TextStyle(fontFamily: 'Inter'),
+            ),
+            backgroundColor: Color(0xFF8CD1FB),
           ),
         );
         Navigator.of(context).pop(updatedProfile);
@@ -70,8 +72,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error updating profile: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(
+              'Error updating profile: $e',
+              style: const TextStyle(fontFamily: 'Inter'),
+            ),
+            backgroundColor: const Color(0xFFEF4444),
           ),
         );
       }
@@ -84,18 +89,39 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Edit Profile'),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: Colors.white,
         elevation: 0,
+        leading: GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Center(
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                HBotIcons.back,
+                color: Color(0xFF1F2937),
+                size: 18,
+              ),
+            ),
+          ),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Edit Profile',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1F2937),
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: _isLoading ? null : _saveProfile,
@@ -106,14 +132,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        HBotColors.primary,
+                        Color(0xFF0883FD),
                       ),
                     ),
                   )
                 : const Text(
                     'Save',
                     style: TextStyle(
-                      color: HBotColors.primary,
+                      fontFamily: 'Inter',
+                      color: Color(0xFF0883FD),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -121,7 +148,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(HBotSpacing.space4),
+        padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
           child: Column(
@@ -129,27 +156,28 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             children: [
               // Info card
               Container(
-                padding: const EdgeInsets.all(HBotSpacing.space4),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: HBotColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(HBotRadius.medium),
+                  color: const Color(0xFF0883FD).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: HBotColors.primary.withOpacity(0.2),
+                    color: const Color(0xFF0883FD).withOpacity(0.2),
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       HBotIcons.info,
-                      color: HBotColors.primary,
+                      color: const Color(0xFF0883FD),
                       size: 20,
                     ),
                     const SizedBox(width: 12),
-                    Expanded(
+                    const Expanded(
                       child: Text(
                         'Update your profile information. Phone numbers must be in E.164 format (e.g., +1234567890).',
                         style: TextStyle(
-                          color: HBotColors.textSecondaryLight,
+                          fontFamily: 'Inter',
+                          color: Color(0xFF6B7280),
                           fontSize: 14,
                         ),
                       ),
@@ -197,34 +225,51 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               // Save Button
               SizedBox(
                 height: 50,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _saveProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
                     ),
-                    elevation: 0,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x590883FD),
+                        blurRadius: 12,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
                   ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _saveProfile,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                        : const Text(
+                            'Update Profile',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        )
-                      : const Text(
-                          'Update Profile',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                  ),
                 ),
               ),
             ],

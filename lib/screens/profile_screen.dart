@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import '../utils/phosphor_icons.dart';
 import 'dart:io';
-import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
 import '../services/auth_service.dart';
 import '../services/smart_home_service.dart';
 import '../services/current_home_service.dart';
 import '../services/avatar_service.dart';
-import '../services/theme_service.dart';
 import '../models/profile.dart';
 import '../utils/error_handler.dart';
 import '../widgets/avatar_picker_dialog.dart';
@@ -254,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 8),
                 _buildSectionCard([
                   _buildSettingsRow(
-                    icon: Icons.palette_outlined,
+                    icon: HBotIcons.palette,
                     iconBg: const Color(0xFFFFF7ED),
                     iconColor: const Color(0xFFF97316),
                     label: 'Appearance',
@@ -269,7 +268,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   _buildSettingsRow(
-                    icon: Icons.apartment,
+                    icon: HBotIcons.building,
                     iconBg: const Color(0xFFF5F3FF),
                     iconColor: const Color(0xFF8B5CF6),
                     label: 'Manage Homes',
@@ -289,7 +288,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   _buildSettingsRow(
-                    icon: Icons.notifications_outlined,
+                    icon: HBotIcons.notifications,
                     iconBg: const Color(0xFFEFF6FF),
                     iconColor: const Color(0xFF3B82F6),
                     label: 'Notifications',
@@ -312,24 +311,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 8),
                 _buildSectionCard([
                   _buildSettingsRow(
-                    icon: Icons.person_outline,
+                    icon: HBotIcons.person,
                     iconBg: const Color(0xFFECFDF5),
                     iconColor: const Color(0xFF10B981),
                     label: 'Personal Information',
                     onTap: _openEditProfile,
                   ),
                   _buildSettingsRow(
-                    icon: Icons.lock_outline,
+                    icon: HBotIcons.lock,
                     iconBg: const Color(0xFFEFF6FF),
                     iconColor: const Color(0xFF3B82F6),
                     label: 'Change Password',
                     showDivider: true,
                     onTap: () {
-                      // TODO: navigate to change password
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Change password from your email provider')),
+                      );
                     },
                   ),
                   _buildSettingsRow(
-                    icon: Icons.share_outlined,
+                    icon: HBotIcons.share,
                     iconBg: const Color(0xFFFFF7ED),
                     iconColor: const Color(0xFFF59E0B),
                     label: 'Share My Devices',
@@ -344,17 +345,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   _buildSettingsRow(
-                    icon: Icons.people_outline,
+                    icon: HBotIcons.profile,
                     iconBg: const Color(0xFFF5F3FF),
                     iconColor: const Color(0xFF8B5CF6),
                     label: 'Shared with Me',
                     showDivider: true,
                     onTap: () {
-                      // TODO: navigate to shared with me
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SharedDevicesScreen(),
+                        ),
+                      );
                     },
                   ),
                   _buildSettingsRow(
-                    icon: Icons.smartphone,
+                    icon: HBotIcons.devices,
                     iconBg: const Color(0xFFF0FDF4),
                     iconColor: const Color(0xFF22C55E),
                     label: 'HBOT Account',
@@ -370,7 +376,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 8),
                 _buildSectionCard([
                   _buildSettingsRow(
-                    icon: Icons.help_outline,
+                    icon: HBotIcons.help,
                     iconBg: const Color(0xFFEFF6FF),
                     iconColor: const Color(0xFF3B82F6),
                     label: 'Help Center',
@@ -384,7 +390,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   _buildSettingsRow(
-                    icon: Icons.chat_bubble_outline,
+                    icon: HBotIcons.feedback,
                     iconBg: const Color(0xFFF5F3FF),
                     iconColor: const Color(0xFF8B5CF6),
                     label: 'Send Feedback',
@@ -426,11 +432,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: const Color(0xFFFFF1F2),
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Center(
+                              child: Center(
                                 child: Icon(
-                                  Icons.logout,
+                                  HBotIcons.signOut,
                                   size: 15,
-                                  color: Color(0xFFEF4444),
+                                  color: const Color(0xFFEF4444),
                                 ),
                               ),
                             ),
@@ -455,10 +461,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 const SizedBox(height: 16),
 
-                // v0: Version text "H-Bot v2.1.0" 11px #C7C9CF centered
+                // Version text
                 const Center(
                   child: Text(
-                    'H-Bot v2.1.0',
+                    'H-Bot v1.0.0',
                     style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 11,
@@ -555,11 +561,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Icon(
-                            Icons.edit,
+                            HBotIcons.edit,
                             size: 10,
-                            color: Color(0xFF6B7280),
+                            color: const Color(0xFF6B7280),
                           ),
                         ),
                       ),
@@ -617,28 +623,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildStatsGrid() {
     final stats = [
       _StatData(
-        icon: Icons.memory,
+        icon: HBotIcons.memory,
         iconColor: const Color(0xFF3B82F6),
         bg: const Color(0xFFEFF6FF),
         label: 'Devices',
         value: _isLoadingStats ? '...' : '$_totalDevices',
       ),
       _StatData(
-        icon: Icons.home_outlined,
+        icon: HBotIcons.home,
         iconColor: const Color(0xFF0EA5E9),
         bg: const Color(0xFFF0F9FF),
         label: 'Rooms',
         value: _isLoadingStats ? '...' : '$_totalRooms',
       ),
       _StatData(
-        icon: Icons.apartment,
+        icon: HBotIcons.building,
         iconColor: const Color(0xFF8B5CF6),
         bg: const Color(0xFFF5F3FF),
         label: 'Homes',
         value: _isLoadingStats ? '...' : '$_totalHomes',
       ),
       _StatData(
-        icon: Icons.auto_awesome,
+        icon: HBotIcons.scenes,
         iconColor: const Color(0xFFF59E0B),
         bg: const Color(0xFFFFFBEB),
         label: 'Scenes',
@@ -801,8 +807,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  const Icon(
-                    Icons.chevron_right,
+                  Icon(
+                    HBotIcons.chevronRight,
                     size: 16,
                     color: Color(0xFFC7C9CF),
                   ),
@@ -944,9 +950,9 @@ class _UserSilhouette extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Icon(
-        Icons.person,
+        HBotIcons.person,
         size: 42,
         color: Colors.white,
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/device.dart';
+import '../utils/phosphor_icons.dart';
 
 /// v0 Toggle switch: w-11 (44px) h-6 (24px), thumb w-5 (20px) h-5 (20px)
 /// ON: #0883FD, OFF: #D1D5DB
@@ -55,26 +56,26 @@ class V0Toggle extends StatelessWidget {
 }
 
 // ─── Type config matching v0 TYPE_CFG ───
-const _typeCfg = <DeviceType, _TypeCfgEntry>{
+final _typeCfg = <DeviceType, _TypeCfgEntry>{
   DeviceType.relay: _TypeCfgEntry(
-    icon: Icons.power_settings_new,
-    color: Color(0xFF3B82F6),
-    bg: Color(0xFFEFF6FF),
+    icon: HBotIcons.power,
+    color: const Color(0xFF3B82F6),
+    bg: const Color(0xFFEFF6FF),
   ),
   DeviceType.dimmer: _TypeCfgEntry(
-    icon: Icons.lightbulb_outline,
-    color: Color(0xFFF59E0B),
-    bg: Color(0xFFFFFBEB),
+    icon: HBotIcons.lightbulb,
+    color: const Color(0xFFF59E0B),
+    bg: const Color(0xFFFFFBEB),
   ),
   DeviceType.sensor: _TypeCfgEntry(
-    icon: Icons.thermostat,
-    color: Color(0xFF10B981),
-    bg: Color(0xFFECFDF5),
+    icon: HBotIcons.thermometer,
+    color: const Color(0xFF10B981),
+    bg: const Color(0xFFECFDF5),
   ),
   DeviceType.shutter: _TypeCfgEntry(
-    icon: Icons.blinds,
-    color: Color(0xFF8B5CF6),
-    bg: Color(0xFFF5F3FF),
+    icon: HBotIcons.shutter,
+    color: const Color(0xFF8B5CF6),
+    bg: const Color(0xFFF5F3FF),
   ),
 };
 
@@ -282,7 +283,7 @@ class _DeviceCardState extends State<DeviceCard> {
   Widget _buildSensorBottom() {
     return Row(
       children: [
-        const Icon(Icons.thermostat, size: 12, color: Color(0xFF10B981)),
+        Icon(HBotIcons.thermometer, size: 12, color: const Color(0xFF10B981)),
         const SizedBox(width: 6),
         Text(
           '${widget.temperature ?? '--'}°C',
