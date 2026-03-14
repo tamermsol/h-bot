@@ -6,8 +6,6 @@ import '../widgets/connectivity_banner.dart';
 import 'home_dashboard_screen.dart';
 import 'profile_screen.dart';
 import 'scenes_screen.dart';
-import 'add_device_flow_screen.dart';
-
 class HomeScreen extends StatefulWidget {
   final String? homeName;
   final int initialIndex;
@@ -101,20 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ConnectivityBanner(isOnline: _isOnline),
         ),
       ),
-      floatingActionButton: _currentIndex == 0
-          ? FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddDeviceFlowScreen(),
-                  ),
-                );
-              },
-              backgroundColor: HBotColors.primary,
-              child: const Icon(Icons.add, color: Colors.white),
-            )
-          : null,
       body: _buildBody(),
       bottomNavigationBar: _buildBottomNavigation(),
     );

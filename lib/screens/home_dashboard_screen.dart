@@ -865,19 +865,46 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        // Greeting section
-        _buildGreetingSection(),
-        // Room tabs
-        if (_homes.isNotEmpty && _rooms.isNotEmpty)
-          Container(
-            key: ValueKey('tabs_${_rooms.map((r) => r.id).join("_")}'),
-            child: _buildTabBar(),
+        Column(
+          children: [
+            // Greeting section
+            _buildGreetingSection(),
+            // Room tabs
+            if (_homes.isNotEmpty && _rooms.isNotEmpty)
+              Container(
+                key: ValueKey('tabs_${_rooms.map((r) => r.id).join("_")}'),
+                child: _buildTabBar(),
+              ),
+            const SizedBox(height: 12),
+            // Main content
+            Expanded(child: _buildContent()),
+          ],
+        ),
+        // Floating Add Device button
+        if (_selectedHome != null)
+          Positioned(
+            right: 20,
+            bottom: 20,
+            child: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddDeviceFlowScreen(
+                      home: _selectedHome!,
+                      onDeviceAdded: () {
+                        _loadData();
+                      },
+                    ),
+                  ),
+                );
+              },
+              backgroundColor: HBotColors.primary,
+              child: const Icon(Icons.add, color: Colors.white),
+            ),
           ),
-        const SizedBox(height: 12),
-        // Main content
-        Expanded(child: _buildContent()),
       ],
     );
   }
