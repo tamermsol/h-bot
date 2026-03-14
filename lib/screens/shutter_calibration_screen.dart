@@ -3,6 +3,7 @@ import 'dart:async';
 import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Screen for calibrating shutter open/close durations
 class ShutterCalibrationScreen extends StatefulWidget {
@@ -308,7 +309,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
             : HBotColors.cardLight,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),
+          icon: Icon(HBotIcons.back, color: HBotColors.textPrimaryLight),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
@@ -339,7 +340,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
             // Instructions card
             _buildInstructionsCard(),
-            const SizedBox(height: HBotSpacing.space6),
+            SizedBox(height: HBotSpacing.space6),
 
             // Close calibration section
             _buildCalibrationSection(
@@ -349,10 +350,10 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
               isActive: _mode == CalibrationMode.close,
               duration: _closeDuration,
               onStart: _startCloseCalibration,
-              icon: Icons.arrow_downward,
+              icon: HBotIcons.arrowDown,
               color: HBotColors.error,
             ),
-            const SizedBox(height: HBotSpacing.space6),
+            SizedBox(height: HBotSpacing.space6),
 
             // Open calibration section
             _buildCalibrationSection(
@@ -362,7 +363,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
               isActive: _mode == CalibrationMode.open,
               duration: _openDuration,
               onStart: _startOpenCalibration,
-              icon: Icons.arrow_upward,
+              icon: HBotIcons.arrowUp,
               color: HBotColors.success,
             ),
             const SizedBox(height: HBotSpacing.space6),
@@ -372,10 +373,10 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
             // Stop button (when calibrating)
             if (_isCalibrating) ...[
-              const SizedBox(height: HBotSpacing.space6),
+              SizedBox(height: HBotSpacing.space6),
               ElevatedButton.icon(
                 onPressed: _stopCalibration,
-                icon: const Icon(Icons.stop, size: 32),
+                icon: Icon(HBotIcons.stop, size: 32),
                 label: const Text(
                   'STOP',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -393,13 +394,13 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
             // Apply and Reset buttons
             if (!_isCalibrating) ...[
-              const SizedBox(height: HBotSpacing.space6),
+              SizedBox(height: HBotSpacing.space6),
               Row(
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: _resetCalibration,
-                      icon: const Icon(Icons.refresh),
+                      icon: Icon(HBotIcons.refresh),
                       label: const Text('Reset'),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: HBotColors.textPrimaryLight,
@@ -408,12 +409,12 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: HBotSpacing.space4),
+                  SizedBox(width: HBotSpacing.space4),
                   Expanded(
                     flex: 2,
                     child: ElevatedButton.icon(
                       onPressed: _applyCalibration,
-                      icon: const Icon(Icons.check),
+                      icon: Icon(HBotIcons.check),
                       label: const Text('Apply Calibration'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: HBotColors.primary,
@@ -442,7 +443,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
             Row(
               children: [
                 Icon(
-                  Icons.info_outline,
+                  HBotIcons.info,
                   color: HBotColors.primary,
                   size: 24,
                 ),
@@ -521,8 +522,8 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
-                          Icons.check_circle,
+                        Icon(
+                          HBotIcons.checkCircle,
                           color: HBotColors.success,
                           size: 16,
                         ),

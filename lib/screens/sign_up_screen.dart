@@ -5,6 +5,7 @@ import '../theme/app_theme.dart';
 import '../models/profile.dart';
 import 'home_screen.dart';
 import 'otp_verification_screen.dart';
+import '../utils/phosphor_icons.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -191,7 +192,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: IconButton(
-                        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                        icon: Icon(HBotIcons.back, color: Colors.white),
                         onPressed: () => Navigator.of(context).pop(),
                       ),
                     ),
@@ -209,7 +210,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             color: Colors.white.withOpacity(0.15),
                             borderRadius: BorderRadius.circular(18),
                           ),
-                          child: const Icon(Icons.smart_toy, color: Colors.white, size: 32),
+                          child: Icon(HBotIcons.smartToy, color: Colors.white, size: 32),
                         ),
                       ),
                     ),
@@ -254,14 +255,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24),
 
                     // Full Name Field
                     SmartInputField(
                       controller: _fullNameController,
                       label: 'Full Name',
                       keyboardType: TextInputType.name,
-                      prefixIcon: const Icon(Icons.person_outline, size: 20),
+                      prefixIcon: Icon(HBotIcons.person, size: 20),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your full name';
@@ -273,14 +274,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     ),
 
-                    const SizedBox(height: HBotSpacing.space4),
+                    SizedBox(height: HBotSpacing.space4),
 
                     // Email Field
                     SmartInputField(
                       controller: _emailController,
                       label: 'Email',
                       keyboardType: TextInputType.emailAddress,
-                      prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                      prefixIcon: Icon(HBotIcons.email, size: 20),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
@@ -294,14 +295,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     ),
 
-                    const SizedBox(height: HBotSpacing.space4),
+                    SizedBox(height: HBotSpacing.space4),
 
                     // Phone Number Field (Optional)
                     SmartInputField(
                       controller: _phoneController,
                       label: 'Phone Number (Optional)',
                       keyboardType: TextInputType.phone,
-                      prefixIcon: const Icon(Icons.phone_outlined, size: 20),
+                      prefixIcon: Icon(HBotIcons.phone, size: 20),
                       validator: (value) {
                         if (value != null && value.isNotEmpty) {
                           if (!Profile.isValidPhoneNumber(value)) {
@@ -312,19 +313,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     ),
 
-                    const SizedBox(height: HBotSpacing.space4),
+                    SizedBox(height: HBotSpacing.space4),
 
                     // Password Field
                     SmartInputField(
                       controller: _passwordController,
                       label: 'Password',
                       obscureText: _obscurePassword,
-                      prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                      prefixIcon: Icon(HBotIcons.lock, size: 20),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
+                              ? HBotIcons.visibility
+                              : HBotIcons.visibilityOff,
                           color: HBotTheme.iconDefault(context),
                           size: 24,
                         ),
@@ -343,19 +344,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                     ),
 
-                    const SizedBox(height: HBotSpacing.space4),
+                    SizedBox(height: HBotSpacing.space4),
 
                     // Confirm Password Field
                     SmartInputField(
                       controller: _confirmPasswordController,
                       label: 'Confirm Password',
                       obscureText: _obscureConfirmPassword,
-                      prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                      prefixIcon: Icon(HBotIcons.lock, size: 20),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscureConfirmPassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
+                              ? HBotIcons.visibility
+                              : HBotIcons.visibilityOff,
                           color: HBotTheme.iconDefault(context),
                           size: 24,
                         ),
@@ -463,7 +464,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: 20,
                           errorBuilder: (context, error, stackTrace) {
                             return Icon(
-                              Icons.login,
+                              HBotIcons.login,
                               color: HBotTheme.iconDefault(context),
                               size: 20,
                             );

@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../services/smart_home_service.dart';
 import '../models/home.dart';
 import 'rooms_screen.dart';
+import '../utils/phosphor_icons.dart';
 
 class HomesScreen extends StatefulWidget {
   final VoidCallback? onHomeChanged;
@@ -483,9 +484,9 @@ class _HomesScreenState extends State<HomesScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ListTile(
-                leading: const Icon(Icons.room_outlined, color: Color(0xFF5A6577)),
+                leading: Icon(HBotIcons.room, color: Color(0xFF5A6577)),
                 title: const Text(
                   'Manage Rooms',
                   style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
@@ -506,7 +507,7 @@ class _HomesScreenState extends State<HomesScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.edit_outlined, color: Color(0xFF5A6577)),
+                leading: Icon(HBotIcons.edit, color: Color(0xFF5A6577)),
                 title: const Text(
                   'Edit Home',
                   style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
@@ -517,7 +518,7 @@ class _HomesScreenState extends State<HomesScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.delete_outline, color: Color(0xFFEF4444)),
+                leading: Icon(HBotIcons.delete, color: Color(0xFFEF4444)),
                 title: const Text(
                   'Delete Home',
                   style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFFEF4444)),
@@ -553,7 +554,7 @@ class _HomesScreenState extends State<HomesScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add, color: Color(0xFF0883FD)),
+            icon: Icon(HBotIcons.add, color: Color(0xFF0883FD)),
             onPressed: _showCreateHomeBottomSheet,
           ),
         ],
@@ -584,8 +585,8 @@ class _HomesScreenState extends State<HomesScreen> {
                 color: Color(0xFFF0F2F5),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.home_outlined,
+              child: Icon(
+                HBotIcons.home,
                 size: 48,
                 color: Color(0xFFD1D7E0),
               ),
@@ -700,8 +701,8 @@ class _HomesScreenState extends State<HomesScreen> {
                                   ),
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(
-                                  Icons.home_rounded,
+                                child: Icon(
+                                  HBotIcons.homeFilled,
                                   color: Colors.white,
                                   size: 22,
                                 ),
@@ -721,8 +722,8 @@ class _HomesScreenState extends State<HomesScreen> {
                               ),
                               // More options
                               IconButton(
-                                icon: const Icon(
-                                  Icons.more_vert,
+                                icon: Icon(
+                                  HBotIcons.more,
                                   color: Color(0xFFA0AAB8),
                                   size: 20,
                                 ),
@@ -767,8 +768,8 @@ class _HomesScreenState extends State<HomesScreen> {
                               strokeAlign: BorderSide.strokeAlignInside,
                             ),
                           ),
-                          child: const Icon(
-                            Icons.add,
+                          child: Icon(
+                            HBotIcons.add,
                             color: Color(0xFF0883FD),
                             size: 20,
                           ),

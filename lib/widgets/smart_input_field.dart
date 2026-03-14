@@ -104,7 +104,15 @@ class _SmartInputFieldState extends State<SmartInputField> {
                       spreadRadius: 3,
                     ),
                   ]
-                : null,
+                : const [
+                    // Subtle inset shadow for recessed feel per BRAND-DNA.md
+                    BoxShadow(
+                      color: Color(0x14000000), // rgba(0,0,0,0.08)
+                      blurRadius: 4,
+                      spreadRadius: -2,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
           ),
           child: Focus(
             onFocusChange: (hasFocus) {

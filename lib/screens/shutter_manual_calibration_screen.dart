@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Screen for manual shutter calibration by entering times directly
 class ShutterManualCalibrationScreen extends StatefulWidget {
@@ -155,7 +156,7 @@ class _ShutterManualCalibrationScreenState
             : HBotColors.cardLight,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),
+          icon: Icon(HBotIcons.back, color: HBotColors.textPrimaryLight),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
@@ -192,32 +193,32 @@ class _ShutterManualCalibrationScreenState
 
               // Current position selection
               _buildPositionSelector(),
-              const SizedBox(height: HBotSpacing.space6),
+              SizedBox(height: HBotSpacing.space6),
 
               // Open time input
               _buildTimeInput(
                 controller: _openTimeController,
                 label: 'Open Duration (seconds)',
                 hint: 'Enter time to fully open',
-                icon: Icons.arrow_upward,
+                icon: HBotIcons.arrowUp,
                 color: HBotColors.success,
               ),
-              const SizedBox(height: HBotSpacing.space4),
+              SizedBox(height: HBotSpacing.space4),
 
               // Close time input
               _buildTimeInput(
                 controller: _closeTimeController,
                 label: 'Close Duration (seconds)',
                 hint: 'Enter time to fully close',
-                icon: Icons.arrow_downward,
+                icon: HBotIcons.arrowDown,
                 color: HBotColors.error,
               ),
-              const SizedBox(height: HBotSpacing.space6),
+              SizedBox(height: HBotSpacing.space6),
 
               // Apply button
               ElevatedButton.icon(
                 onPressed: _applyManualCalibration,
-                icon: const Icon(Icons.check),
+                icon: Icon(HBotIcons.check),
                 label: const Text(
                   'Apply Calibration',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -249,7 +250,7 @@ class _ShutterManualCalibrationScreenState
             Row(
               children: [
                 Icon(
-                  Icons.info_outline,
+                  HBotIcons.info,
                   color: HBotColors.primary,
                   size: 24,
                 ),
@@ -305,7 +306,7 @@ class _ShutterManualCalibrationScreenState
               'Select where your shutter is right now:',
               style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 14),
             ),
-            const SizedBox(height: HBotSpacing.space4),
+            SizedBox(height: HBotSpacing.space4),
             Row(
               children: [
                 Expanded(
@@ -313,17 +314,17 @@ class _ShutterManualCalibrationScreenState
                     position: ShutterPosition.fullyClosed,
                     label: 'Fully Closed',
                     subtitle: '0%',
-                    icon: Icons.arrow_downward,
+                    icon: HBotIcons.arrowDown,
                     color: HBotColors.error,
                   ),
                 ),
-                const SizedBox(width: HBotSpacing.space4),
+                SizedBox(width: HBotSpacing.space4),
                 Expanded(
                   child: _buildPositionButton(
                     position: ShutterPosition.fullyOpen,
                     label: 'Fully Open',
                     subtitle: '100%',
-                    icon: Icons.arrow_upward,
+                    icon: HBotIcons.arrowUp,
                     color: HBotColors.success,
                   ),
                 ),

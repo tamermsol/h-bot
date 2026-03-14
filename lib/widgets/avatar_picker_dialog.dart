@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/avatar_service.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class AvatarPickerDialog extends StatelessWidget {
   final String? currentAvatarPath;
@@ -73,7 +74,7 @@ class AvatarPickerDialog extends StatelessWidget {
 
             const SizedBox(height: 20),
             Divider(color: HBotColors.textSecondaryLight.withOpacity(0.2)),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
 
             // Custom options
             Row(
@@ -87,7 +88,7 @@ class AvatarPickerDialog extends StatelessWidget {
                 ),
                 _buildOptionButton(
                   context,
-                  icon: Icons.camera_alt,
+                  icon: HBotIcons.camera,
                   label: 'Camera',
                   onTap: () => Navigator.pop(context, 'camera'),
                 ),

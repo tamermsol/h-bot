@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class SceneIconSelector extends StatelessWidget {
   final IconData selectedIcon;
@@ -11,12 +12,12 @@ class SceneIconSelector extends StatelessWidget {
     required this.onIconSelected,
   });
 
-  static const List<IconData> _availableIcons = [
-    Icons.auto_awesome,
+  static final List<IconData> _availableIcons = [
+    HBotIcons.scenes,
     Icons.wb_sunny,
     Icons.bedtime,
     Icons.movie,
-    Icons.home,
+    HBotIcons.home,
     Icons.shield,
     Icons.celebration,
     Icons.restaurant,
@@ -30,7 +31,7 @@ class SceneIconSelector extends StatelessWidget {
     Icons.nature,
     Icons.local_fire_department,
     Icons.ac_unit,
-    Icons.lightbulb,
+    HBotIcons.lightbulb,
     Icons.security,
     Icons.cleaning_services,
     Icons.weekend,

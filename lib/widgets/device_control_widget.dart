@@ -6,6 +6,7 @@ import '../services/tasmota_mqtt_service.dart';
 import '../repos/devices_repo.dart';
 import '../theme/app_theme.dart';
 import '../utils/channel_detection_utils.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Widget for controlling multi-channel Tasmota devices with MQTT
 class DeviceControlWidget extends StatefulWidget {
@@ -318,9 +319,9 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
   IconData _getDeviceIcon() {
     switch (widget.device.deviceType) {
       case DeviceType.relay:
-        return Icons.power_settings_new;
+        return HBotIcons.power;
       case DeviceType.dimmer:
-        return Icons.lightbulb_outline;
+        return HBotIcons.lightbulb;
       case DeviceType.shutter:
         return Icons.window;
       case DeviceType.sensor:

@@ -4,6 +4,7 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'dart:async';
 import '../services/mqtt_device_manager.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Debug information sheet for MQTT connection troubleshooting
 class MqttDebugSheet extends StatefulWidget {
@@ -89,7 +90,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                 padding: const EdgeInsets.all(HBotSpacing.space4),
                 child: Row(
                   children: [
-                    const Icon(Icons.bug_report, color: HBotColors.primary),
+                    Icon(HBotIcons.bug, color: HBotColors.primary),
                     const SizedBox(width: HBotSpacing.space2),
                     const Expanded(
                       child: Text(
@@ -103,7 +104,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close),
+                      icon: Icon(HBotIcons.close),
                     ),
                   ],
                 ),
@@ -135,13 +136,13 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
   Widget _buildConnectionInfo() {
     Color statusColor = Colors.grey;
     String statusText = 'Unknown';
-    IconData statusIcon = Icons.help;
+    IconData statusIcon = HBotIcons.help;
 
     switch (_connectionState) {
       case MqttConnectionState.connected:
         statusColor = Colors.green;
         statusText = 'Connected';
-        statusIcon = Icons.check_circle;
+        statusIcon = HBotIcons.checkCircle;
         break;
       case MqttConnectionState.connecting:
         statusColor = Colors.orange;
@@ -161,7 +162,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
       case MqttConnectionState.faulted:
         statusColor = Colors.red;
         statusText = 'Connection Error';
-        statusIcon = Icons.error;
+        statusIcon = HBotIcons.error;
         break;
     }
 
@@ -194,7 +195,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: HBotSpacing.space4),
+            SizedBox(height: HBotSpacing.space4),
             Row(
               children: [
                 Expanded(
@@ -203,7 +204,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                         _connectionState == MqttConnectionState.disconnected
                         ? _reconnect
                         : null,
-                    icon: const Icon(Icons.refresh),
+                    icon: Icon(HBotIcons.refresh),
                     label: const Text('Reconnect'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: HBotColors.primary,
@@ -211,11 +212,11 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                     ),
                   ),
                 ),
-                const SizedBox(width: HBotSpacing.space2),
+                SizedBox(width: HBotSpacing.space2),
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: _copyDebugInfo,
-                    icon: const Icon(Icons.copy),
+                    icon: Icon(HBotIcons.copy),
                     label: const Text('Copy Info'),
                   ),
                 ),

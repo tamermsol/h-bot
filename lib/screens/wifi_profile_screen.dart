@@ -4,6 +4,7 @@ import '../theme/app_theme.dart';
 import '../models/wifi_profile.dart';
 import '../services/smart_home_service.dart';
 import '../core/supabase_client.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Screen for managing Wi-Fi profiles for device provisioning
 class WiFiProfileScreen extends StatefulWidget {
@@ -137,7 +138,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.wifi, color: Color(0xFF0883FD), size: 24),
+                      Icon(HBotIcons.wifi, color: Color(0xFF0883FD), size: 24),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
@@ -164,7 +165,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                         ),
                       ),
                       if (_existingProfile != null)
-                        const Icon(Icons.check_circle, color: Color(0xFF22C55E), size: 24),
+                        Icon(HBotIcons.checkCircle, color: Color(0xFF22C55E), size: 24),
                     ],
                   ),
                 ),
@@ -283,7 +284,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            _obscurePassword ? HBotIcons.visibility : HBotIcons.visibilityOff,
                             color: const Color(0xFF5A6577),
                             size: 22,
                           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../widgets/settings_tile.dart';
 import '../services/auth_service.dart';
+import '../utils/phosphor_icons.dart';
 
 class HBOTAccountScreen extends StatefulWidget {
   final String? userEmail;
@@ -49,7 +50,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
             Container(
               color: HBotColors.cardLight,
               child: SettingsTile(
-                icon: Icons.email_outlined,
+                icon: HBotIcons.email,
                 title: 'Email address',
                 subtitle: _maskEmail(widget.userEmail ?? ''),
                 onTap: () {
@@ -143,7 +144,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
           backgroundColor: HBotColors.cardLight,
           title: Row(
             children: [
-              Icon(Icons.warning, color: HBotColors.error),
+              Icon(HBotIcons.error, color: HBotColors.error),
               const SizedBox(width: 8),
               Text(
                 'Delete Account',
@@ -183,7 +184,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   child: Row(
                     children: [
                       Icon(
-                        Icons.info_outline,
+                        HBotIcons.info,
                         color: HBotColors.error,
                         size: 20,
                       ),
@@ -231,7 +232,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.close, color: HBotColors.error, size: 16),
+          Icon(HBotIcons.close, color: HBotColors.error, size: 16),
           const SizedBox(width: 8),
           Expanded(
             child: Text(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/device.dart';
 import '../models/device_timer.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class AddTimerScreen extends StatefulWidget {
   final Device device;
@@ -209,7 +210,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                         ? Icons.wb_sunny
                         : mode == TimerMode.sunset
                         ? Icons.nights_stay
-                        : Icons.schedule,
+                        : HBotIcons.accessTime,
                     color: isSelected
                         ? HBotColors.primary
                         : HBotColors.textSecondaryLight,
@@ -230,8 +231,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                     ),
                   ),
                   if (isSelected)
-                    const Icon(
-                      Icons.check_circle,
+                    Icon(
+                      HBotIcons.checkCircle,
                       color: HBotColors.primary,
                     ),
                 ],
@@ -255,8 +256,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.access_time,
+            Icon(
+              HBotIcons.accessTime,
               color: HBotColors.primary,
               size: 32,
             ),
@@ -393,7 +394,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                 children: [
                   Icon(
                     action == TimerAction.on
-                        ? Icons.power_settings_new
+                        ? HBotIcons.power
                         : action == TimerAction.off
                         ? Icons.power_off
                         : Icons.sync,
@@ -421,8 +422,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                     ),
                   ),
                   if (isSelected)
-                    const Icon(
-                      Icons.check_circle,
+                    Icon(
+                      HBotIcons.checkCircle,
                       color: HBotColors.primary,
                     ),
                 ],

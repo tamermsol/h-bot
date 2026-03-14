@@ -112,12 +112,12 @@ class HBotColors {
   // ─── Primary Disabled ───
   static const Color primaryDisabled = Color(0xFFD1D7E0);
 
-  // ─── Device Type Colors ───
-  static const Color deviceSwitch = Color(0xFF0883FD);
-  static const Color deviceDimmer = Color(0xFFF59E0B);
-  static const Color deviceSensor = Color(0xFF22C55E);
-  static const Color deviceShutter = Color(0xFF8B5CF6);
-  static const Color devicePower = Color(0xFFEF4444);
+  // ─── Device Type Colors (Rule of Blue — all shades of blue only) ───
+  static const Color deviceSwitch = Color(0xFF0883FD);  // Primary blue
+  static const Color deviceDimmer = Color(0xFF2FB8EC);   // Bright cyan blue
+  static const Color deviceSensor = Color(0xFF1070AD);   // Mid teal blue
+  static const Color deviceShutter = Color(0xFF5BBDF7);  // Light sky blue
+  static const Color devicePower = Color(0xFF094972);     // Deep navy blue
 
   // ─── Light Mode Surfaces ───
   static const Color backgroundLight = Color(0xFFF8F9FB);
@@ -354,40 +354,37 @@ class HBotShadows {
 
   static const List<BoxShadow> none = [];
 
+  // Per BRAND-DNA.md: no drop shadows — use blur/border instead
+  // Kept as minimal blur-only effects (no vertical offset)
   static const List<BoxShadow> small = [
     BoxShadow(
-      color: Color(0x0F0A1628),
-      blurRadius: 3,
-      offset: Offset(0, 1),
-    ),
-    BoxShadow(
-      color: Color(0x0A0A1628),
+      color: Color(0x080A1628),
       blurRadius: 2,
-      offset: Offset(0, 1),
+      offset: Offset.zero,
     ),
   ];
 
   static const List<BoxShadow> medium = [
     BoxShadow(
-      color: Color(0x140A1628),
-      blurRadius: 12,
-      offset: Offset(0, 4),
+      color: Color(0x0A0A1628),
+      blurRadius: 6,
+      offset: Offset.zero,
     ),
   ];
 
   static const List<BoxShadow> large = [
     BoxShadow(
-      color: Color(0x1F0A1628),
-      blurRadius: 24,
-      offset: Offset(0, 8),
+      color: Color(0x0F0A1628),
+      blurRadius: 12,
+      offset: Offset.zero,
     ),
   ];
 
   static const List<BoxShadow> xl = [
     BoxShadow(
-      color: Color(0x290A1628),
-      blurRadius: 40,
-      offset: Offset(0, 12),
+      color: Color(0x140A1628),
+      blurRadius: 20,
+      offset: Offset.zero,
     ),
   ];
 
@@ -586,13 +583,51 @@ class AppTheme {
   );
 
   /// Gradient text helper — applies primary gradient as a ShaderMask
-  static Widget gradientText(String text, TextStyle style) {
+  static Widget gradientText(String text, TextStyle style, {TextAlign? textAlign, int? maxLines}) {
     return ShaderMask(
       shaderCallback: (bounds) =>
           HBotColors.primaryGradient.createShader(bounds),
       child: Text(
         text,
         style: style.copyWith(color: Colors.white),
+        textAlign: textAlign,
+        maxLines: maxLines,
+      ),
+    );
+  }
+
+  /// H-Bot branded gradient text — convenience for the brand name
+  static Widget hbotGradientText(String text, {double fontSize = 20, FontWeight fontWeight = FontWeight.w700}) {
+    return ShaderMask(
+      shaderCallback: (bounds) =>
+          HBotColors.primaryGradient.createShader(bounds),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          color: Colors.white,
+          letterSpacing: -0.3,
+        ),
+      ),
+    );
+  }
+
+  /// Section header with gradient text — use for key branding moments
+  static Widget gradientSectionHeader(String text) {
+    return ShaderMask(
+      shaderCallback: (bounds) =>
+          HBotColors.primaryGradient.createShader(bounds),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+          letterSpacing: -0.1,
+        ),
       ),
     );
   }
@@ -798,7 +833,7 @@ class AppTheme {
       ),
 
       // ─── Cards ───
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: HBotColors.cardLight,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -969,7 +1004,7 @@ class AppTheme {
       ),
 
       // ─── Dialog ───
-      dialogTheme: DialogThemeData(
+      dialogTheme: DialogTheme(
         backgroundColor: HBotColors.surfaceLight,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
@@ -1047,7 +1082,7 @@ class AppTheme {
       ),
 
       // ─── Tab Bar ───
-      tabBarTheme: TabBarThemeData(
+      tabBarTheme: TabBarTheme(
         labelColor: HBotColors.primary,
         unselectedLabelColor: HBotColors.textSecondaryLight,
         labelStyle: const TextStyle(
@@ -1158,7 +1193,7 @@ class AppTheme {
       ),
 
       // ─── Cards ───
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: HBotColors.cardDark,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -1330,7 +1365,7 @@ class AppTheme {
       ),
 
       // ─── Dialog ───
-      dialogTheme: DialogThemeData(
+      dialogTheme: DialogTheme(
         backgroundColor: HBotColors.surfaceElevatedDark,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
@@ -1408,7 +1443,7 @@ class AppTheme {
       ),
 
       // ─── Tab Bar ───
-      tabBarTheme: TabBarThemeData(
+      tabBarTheme: TabBarTheme(
         labelColor: HBotColors.primary,
         unselectedLabelColor: HBotColors.textSecondaryDark,
         labelStyle: const TextStyle(

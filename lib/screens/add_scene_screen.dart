@@ -10,6 +10,7 @@ import '../models/device.dart';
 import '../models/scene.dart';
 import '../models/scene_step.dart';
 import '../models/scene_trigger.dart';
+import '../utils/phosphor_icons.dart';
 
 class AddSceneScreen extends StatefulWidget {
   final String homeId;
@@ -30,7 +31,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   // Scene data
   final TextEditingController _nameController = TextEditingController();
-  IconData _selectedIcon = Icons.auto_awesome;
+  IconData _selectedIcon = HBotIcons.scenes;
   Color _selectedColor = HBotColors.primary;
   String _selectedTrigger = 'Manual';
   TimeOfDay? _selectedTime;
@@ -256,7 +257,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       case 'relay':
         return Icons.power;
       case 'dimmer':
-        return Icons.lightbulb_outline;
+        return HBotIcons.lightbulb;
       case 'shutter':
         return Icons.window;
       case 'sensor':
@@ -556,7 +557,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                         : null,
                   ),
                   child: isSelected
-                      ? const Icon(Icons.check, color: Colors.white, size: 24)
+                      ? Icon(HBotIcons.check, color: Colors.white, size: 24)
                       : null,
                 ),
               );
@@ -686,7 +687,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                           : Colors.transparent,
                     ),
                     child: _selectedTrigger == trigger
-                        ? Icon(Icons.check, size: 12, color: Colors.white)
+                        ? Icon(HBotIcons.check, size: 12, color: Colors.white)
                         : null,
                   ),
                 ),
@@ -839,14 +840,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     'Trigger Type',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: HBotSpacing.space2),
+                  SizedBox(height: HBotSpacing.space2),
                   Row(
                     children: [
                       Expanded(
                         child: _buildLocationTriggerTypeButton(
                           'arrive',
                           'When I Arrive',
-                          Icons.location_on,
+                          HBotIcons.room,
                         ),
                       ),
                       const SizedBox(width: HBotSpacing.space2),
@@ -897,7 +898,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       child: Row(
                         children: [
                           Icon(
-                            Icons.location_on,
+                            HBotIcons.room,
                             color: _selectedColor,
                             size: 20,
                           ),
@@ -1087,7 +1088,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      Icons.devices_outlined,
+                      HBotIcons.devices,
                       size: 64,
                       color: HBotColors.textTertiaryLight,
                     ),
@@ -1479,7 +1480,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       child: Row(
         children: [
           Icon(
-            Icons.info_outline,
+            HBotIcons.info,
             color: HBotColors.textTertiaryLight,
             size: 20,
           ),
@@ -1575,11 +1576,11 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: HBotSpacing.space4),
+                SizedBox(height: HBotSpacing.space4),
                 Row(
                   children: [
                     Icon(
-                      Icons.devices_outlined,
+                      HBotIcons.devices,
                       size: 16,
                       color: HBotColors.textSecondaryLight,
                     ),
@@ -2078,12 +2079,12 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Repeat', style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: HBotSpacing.space4),
+            SizedBox(height: HBotSpacing.space4),
             ..._repeatOptions.map(
               (option) => ListTile(
                 title: Text(option),
                 trailing: _selectedRepeat == option
-                    ? Icon(Icons.check, color: _selectedColor)
+                    ? Icon(HBotIcons.check, color: _selectedColor)
                     : null,
                 onTap: () {
                   setState(() {
@@ -2147,15 +2148,15 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   IconData _getTriggerIcon(String trigger) {
     switch (trigger) {
       case 'Manual':
-        return Icons.touch_app;
+        return HBotIcons.power;
       case 'Time Based':
-        return Icons.schedule;
+        return HBotIcons.accessTime;
       case 'Location Based':
-        return Icons.location_on;
+        return HBotIcons.room;
       case 'Sensor Triggered':
         return Icons.sensors;
       default:
-        return Icons.touch_app;
+        return HBotIcons.power;
     }
   }
 

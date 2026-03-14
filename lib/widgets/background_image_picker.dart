@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/background_image_service.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class BackgroundImagePicker extends StatelessWidget {
   final String? currentImageUrl;
@@ -60,7 +61,7 @@ class BackgroundImagePicker extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: isSelected ? HBotColors.primary : Colors.grey,
+                      color: isSelected ? HBotColors.primary : HBotColors.neutral400,
                       width: isSelected ? 3 : 1,
                     ),
                   ),
@@ -71,9 +72,9 @@ class BackgroundImagePicker extends StatelessWidget {
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          color: Colors.grey[800],
-                          child: const Center(
-                            child: Icon(Icons.image, color: Colors.grey),
+                          color: HBotColors.neutral800,
+                          child: Center(
+                            child: Icon(HBotIcons.image, color: HBotColors.neutral400),
                           ),
                         );
                       },
@@ -108,11 +109,11 @@ class BackgroundImagePicker extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8),
             Expanded(
               child: ElevatedButton.icon(
                 onPressed: () => _pickFromCamera(context),
-                icon: const Icon(Icons.camera_alt),
+                icon: Icon(HBotIcons.camera),
                 label: const Text('Camera'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primaryLight,
@@ -122,7 +123,7 @@ class BackgroundImagePicker extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
 
         // Remove background button (only if a background is selected)
         if (currentImageUrl != null && currentImageUrl!.isNotEmpty)
@@ -130,7 +131,7 @@ class BackgroundImagePicker extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () => _removeImage(context),
-              icon: const Icon(Icons.delete),
+              icon: Icon(HBotIcons.delete),
               label: const Text('Remove Background'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.error,
@@ -155,9 +156,9 @@ class BackgroundImagePicker extends StatelessWidget {
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
           return Container(
-            color: Colors.grey[800],
+            color: HBotColors.neutral800,
             child: const Center(
-              child: Icon(Icons.broken_image, color: Colors.grey, size: 48),
+              child: Icon(Icons.broken_image, color: HBotColors.neutral400, size: 48),
             ),
           );
         },
@@ -170,9 +171,9 @@ class BackgroundImagePicker extends StatelessWidget {
       fit: BoxFit.cover,
       errorBuilder: (context, error, stackTrace) {
         return Container(
-          color: Colors.grey[800],
+          color: HBotColors.neutral800,
           child: const Center(
-            child: Icon(Icons.broken_image, color: Colors.grey, size: 48),
+            child: Icon(Icons.broken_image, color: HBotColors.neutral400, size: 48),
           ),
         );
       },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Scene Card per design spec (03-COMPONENT-LIBRARY.md Section 2.2)
 /// 72px height, 16px padding, white bg, 1px border, 16px radius
@@ -55,7 +56,7 @@ class SceneCard extends StatelessWidget {
                       style: const TextStyle(fontSize: 24),
                     )
                   : Icon(
-                      scene['icon'] ?? Icons.auto_awesome,
+                      scene['icon'] ?? HBotIcons.scenes,
                       color: HBotColors.primary,
                       size: 24,
                     ),
@@ -114,13 +115,13 @@ class SceneCard extends StatelessWidget {
               child: Container(
                 width: 40,
                 height: 40,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: HBotColors.surfacePrimarySubtle,
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
                 child: Icon(
-                  isActive ? Icons.pause : Icons.play_arrow,
+                  isActive ? HBotIcons.pause : HBotIcons.play,
                   color: HBotColors.primary,
                   size: 24,
                 ),
@@ -135,11 +136,11 @@ class SceneCard extends StatelessWidget {
   // Keep legacy helper for backwards compatibility
   static IconData getTimeIcon(String time) {
     if (time.toLowerCase().contains('manual')) {
-      return Icons.touch_app;
+      return HBotIcons.power;
     } else if (time.toLowerCase().contains('location')) {
-      return Icons.location_on;
+      return HBotIcons.room;
     } else {
-      return Icons.schedule;
+      return HBotIcons.accessTime;
     }
   }
 }

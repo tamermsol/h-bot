@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -226,14 +227,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 color: HBotColors.textPrimaryLight,
               ),
             ),
-            const SizedBox(height: HBotSpacing.space4),
+            SizedBox(height: HBotSpacing.space4),
 
             // Email Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: _isSending ? null : _sendEmailFeedback,
-                icon: const Icon(Icons.email_outlined),
+                icon: Icon(HBotIcons.email),
                 label: const Text('Send via Email'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
@@ -285,7 +286,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
-                    Icons.info_outline,
+                    HBotIcons.info,
                     color: HBotColors.primary,
                     size: 24,
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Settings Tile per design spec (03-COMPONENT-LIBRARY.md Section 2.3)
 /// 56px height, 16px horizontal padding
@@ -80,8 +81,8 @@ class SettingsTile extends StatelessWidget {
                     ),
                   // Trailing widget or chevron (16px, neutral400)
                   trailing ??
-                      const Icon(
-                        Icons.chevron_right,
+                      Icon(
+                        HBotIcons.chevronRight,
                         color: HBotColors.neutral400,
                         size: 16,
                       ),

@@ -7,6 +7,7 @@ import '../models/device.dart';
 import '../models/device_share_invitation.dart';
 import '../repos/device_sharing_repo.dart';
 import '../repos/devices_repo.dart';
+import '../utils/phosphor_icons.dart';
 
 class MultiDeviceShareScreen extends StatefulWidget {
   final String homeId;
@@ -285,10 +286,10 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                             color: Colors.black87,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         TextButton.icon(
                           onPressed: _cancelQR,
-                          icon: const Icon(Icons.close),
+                          icon: Icon(HBotIcons.close),
                           label: const Text('Cancel QR Code'),
                         ),
                       ],
@@ -332,7 +333,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                             ),
                           ),
                           secondary: Icon(
-                            Icons.devices,
+                            HBotIcons.devices,
                             color: isSelected
                                 ? HBotColors.primary
                                 : HBotColors.textSecondaryLight,

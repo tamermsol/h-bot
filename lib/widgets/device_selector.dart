@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/smart_home_service.dart';
 import '../models/device.dart';
+import '../utils/phosphor_icons.dart';
 
 class DeviceSelector extends StatefulWidget {
   final List<Map<String, dynamic>> selectedDevices;
@@ -160,7 +161,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
     switch (deviceType) {
       case DeviceType.relay:
       case DeviceType.dimmer:
-        return Icons.lightbulb_outline;
+        return HBotIcons.lightbulb;
       case DeviceType.sensor:
         return Icons.thermostat;
       case DeviceType.shutter:
@@ -208,7 +209,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.error_outline, size: 64, color: HBotColors.textTertiaryLight),
+              Icon(HBotIcons.errorOutline, size: 64, color: HBotColors.textTertiaryLight),
               const SizedBox(height: HBotSpacing.space4),
               Text(
                 _errorMessage!,
@@ -217,10 +218,10 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: HBotSpacing.space4),
+              SizedBox(height: HBotSpacing.space4),
               ElevatedButton.icon(
                 onPressed: _loadDevices,
-                icon: const Icon(Icons.refresh),
+                icon: Icon(HBotIcons.refresh),
                 label: const Text('Retry'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: widget.accentColor,
@@ -291,7 +292,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
             ),
             child: Row(
               children: [
-                Icon(Icons.check_circle, color: widget.accentColor, size: 20),
+                Icon(HBotIcons.checkCircle, color: widget.accentColor, size: 20),
                 const SizedBox(width: HBotSpacing.space2),
                 Text(
                   '${widget.selectedDevices.length} devices selected',

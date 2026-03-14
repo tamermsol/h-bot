@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/theme_service.dart';
+import '../utils/phosphor_icons.dart';
 
 class AppearanceSettingsScreen extends StatefulWidget {
   const AppearanceSettingsScreen({super.key});
@@ -116,7 +117,7 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
             child: Row(
               children: [
                 Icon(
-                  Icons.info_outline,
+                  HBotIcons.info,
                   color: HBotColors.primary,
                   size: 20,
                 ),

@@ -6,6 +6,7 @@ import '../models/device_timer.dart';
 import '../theme/app_theme.dart';
 import '../services/mqtt_device_manager.dart';
 import 'add_timer_screen.dart';
+import '../utils/phosphor_icons.dart';
 
 class DeviceTimersScreen extends StatefulWidget {
   final Device device;
@@ -140,9 +141,9 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: HBotColors.cardLight,
-            title: const Row(
+            title: Row(
               children: [
-                Icon(Icons.warning, color: HBotColors.warning, size: 24),
+                Icon(HBotIcons.error, color: HBotColors.warning, size: 24),
                 SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -227,9 +228,9 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             context: context,
             builder: (context) => AlertDialog(
               backgroundColor: HBotColors.cardLight,
-              title: const Row(
+              title: Row(
                 children: [
-                  Icon(Icons.warning, color: HBotColors.warning, size: 24),
+                  Icon(HBotIcons.error, color: HBotColors.warning, size: 24),
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -614,7 +615,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             : HBotColors.backgroundLight,
         actions: [
           if (_isSyncingTime)
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Center(
                 child: SizedBox(
@@ -626,7 +627,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             ),
           if (hasSpace && !_isSyncingTime)
             IconButton(
-              icon: const Icon(Icons.add),
+              icon: Icon(HBotIcons.add),
               onPressed: _addTimer,
               tooltip: 'Add Timer',
             ),
@@ -641,7 +642,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
           ? FloatingActionButton(
               onPressed: _addTimer,
               backgroundColor: HBotColors.primary,
-              child: const Icon(Icons.add),
+              child: Icon(HBotIcons.add),
             )
           : null,
     );
@@ -730,7 +731,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
                       ? Icons.wb_sunny
                       : timer.mode == TimerMode.sunset
                       ? Icons.nights_stay
-                      : Icons.schedule,
+                      : HBotIcons.accessTime,
                   color: timer.enabled
                       ? HBotColors.primary
                       : HBotColors.textSecondaryLight,
@@ -828,7 +829,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
 
               // Delete Button
               IconButton(
-                icon: const Icon(Icons.delete_outline),
+                icon: Icon(HBotIcons.delete),
                 color: HBotColors.error,
                 onPressed: () => _deleteTimer(timer),
               ),

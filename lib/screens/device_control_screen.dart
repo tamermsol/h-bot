@@ -12,6 +12,7 @@ import 'shutter_calibration_screen.dart';
 import 'shutter_manual_calibration_screen.dart';
 import 'device_timers_screen.dart';
 import 'share_device_screen.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Dedicated screen for controlling a specific device
 class DeviceControlScreen extends StatefulWidget {
@@ -456,7 +457,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),
+          icon: Icon(HBotIcons.back, color: HBotColors.textPrimaryLight),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -473,8 +474,8 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           if (_currentDevice.deviceType == DeviceType.relay ||
               _currentDevice.deviceType == DeviceType.dimmer)
             IconButton(
-              icon: const Icon(
-                Icons.timer_outlined,
+              icon: Icon(
+                HBotIcons.timer,
                 color: HBotColors.iconDefault,
               ),
               onPressed: () {
@@ -491,13 +492,13 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               tooltip: 'Set Timers',
             ),
           IconButton(
-            icon: const Icon(Icons.settings_outlined, color: HBotColors.iconDefault),
+            icon: Icon(HBotIcons.settings, color: HBotColors.iconDefault),
             onPressed: _showDeviceOptions,
             tooltip: 'Device settings',
           ),
           IconButton(
-            icon: const Icon(
-              Icons.more_vert,
+            icon: Icon(
+              HBotIcons.more,
               color: HBotColors.iconDefault,
             ),
             onPressed: _showDeviceOptions,
@@ -598,7 +599,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           children: [
             if (power != null)
               SettingsTile(
-                icon: Icons.bolt,
+                icon: HBotIcons.bolt,
                 title: 'Power',
                 subtitle: power,
                 showDivider: todayEnergy != null || signalStrength != null || ipAddress != null || firmware != null,
@@ -606,7 +607,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               ),
             if (todayEnergy != null)
               SettingsTile(
-                icon: Icons.electric_meter_outlined,
+                icon: HBotIcons.meter,
                 title: 'Today',
                 subtitle: todayEnergy,
                 showDivider: signalStrength != null || ipAddress != null || firmware != null,
@@ -614,7 +615,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               ),
             if (signalStrength != null)
               SettingsTile(
-                icon: Icons.signal_wifi_4_bar,
+                icon: HBotIcons.wifi,
                 title: 'Signal',
                 subtitle: signalStrength,
                 showDivider: ipAddress != null || firmware != null,
@@ -622,7 +623,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               ),
             if (ipAddress != null)
               SettingsTile(
-                icon: Icons.lan_outlined,
+                icon: HBotIcons.lan,
                 title: 'IP Address',
                 subtitle: ipAddress,
                 showDivider: firmware != null,
@@ -630,7 +631,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               ),
             if (firmware != null)
               SettingsTile(
-                icon: Icons.system_update_outlined,
+                icon: HBotIcons.firmware,
                 title: 'Firmware',
                 subtitle: firmware,
                 showDivider: false,
@@ -671,7 +672,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   ),
                 ),
                 _buildBottomSheetTile(
-                  icon: Icons.edit_outlined,
+                  icon: HBotIcons.edit,
                   title: 'Rename Device',
                   onTap: () {
                     Navigator.pop(context);
@@ -679,7 +680,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   },
                 ),
                 _buildBottomSheetTile(
-                  icon: Icons.room_outlined,
+                  icon: HBotIcons.room,
                   title: 'Move to Room',
                   onTap: () {
                     Navigator.pop(context);
@@ -689,7 +690,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 // Shutter calibration options (only for shutter devices)
                 if (widget.device.deviceType == DeviceType.shutter) ...[
                   _buildBottomSheetTile(
-                    icon: Icons.tune,
+                    icon: HBotIcons.tune,
                     title: 'Auto Calibrate Shutter',
                     subtitle: 'Measure time automatically',
                     onTap: () {
@@ -698,7 +699,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                     },
                   ),
                   _buildBottomSheetTile(
-                    icon: Icons.timer_outlined,
+                    icon: HBotIcons.timer,
                     title: 'Manual Calibrate Shutter',
                     subtitle: 'Enter times directly',
                     onTap: () {
@@ -709,7 +710,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ],
                 // Share Device option
                 _buildBottomSheetTile(
-                  icon: Icons.share_outlined,
+                  icon: HBotIcons.share,
                   title: 'Share Device',
                   subtitle: 'Share with other users via QR code',
                   onTap: () {
@@ -724,7 +725,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   },
                 ),
                 _buildBottomSheetTile(
-                  icon: Icons.refresh,
+                  icon: HBotIcons.refresh,
                   title: 'Refresh Status',
                   onTap: () {
                     Navigator.pop(context);
@@ -732,7 +733,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   },
                 ),
                 _buildBottomSheetTile(
-                  icon: _showDebugInfo ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                  icon: _showDebugInfo ? HBotIcons.visibilityOff : HBotIcons.visibility,
                   title: _showDebugInfo ? 'Hide Device Info' : 'Show Device Info',
                   onTap: () {
                     Navigator.pop(context);
@@ -746,7 +747,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   child: Divider(color: HBotColors.neutral200, height: 1),
                 ),
                 _buildBottomSheetTile(
-                  icon: Icons.delete_outline,
+                  icon: HBotIcons.delete,
                   title: 'Remove Device',
                   titleColor: HBotColors.error,
                   iconColor: HBotColors.error,
@@ -867,25 +868,25 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       title: 'Device Information',
       children: [
         SettingsTile(
-          icon: Icons.business,
+          icon: HBotIcons.building,
           title: 'Manufacturer',
           subtitle: manufacturer,
           trailing: const SizedBox.shrink(),
         ),
         SettingsTile(
-          icon: Icons.devices,
+          icon: HBotIcons.devices,
           title: 'Device Model',
           subtitle: modelName,
           trailing: const SizedBox.shrink(),
         ),
         SettingsTile(
-          icon: Icons.memory,
+          icon: HBotIcons.memory,
           title: 'MAC Address',
           subtitle: macAddress ?? 'Unknown',
           trailing: const SizedBox.shrink(),
         ),
         SettingsTile(
-          icon: Icons.lan_outlined,
+          icon: HBotIcons.lan,
           title: 'IP Address',
           subtitle: ipAddress ?? 'Unknown',
           showDivider: false,
@@ -1004,7 +1005,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                         AnimatedSwitcher(
                           duration: HBotDurations.medium,
                           child: Icon(
-                            isLight ? Icons.lightbulb_outline : Icons.power_settings_new,
+                            isLight ? HBotIcons.lightbulb : HBotIcons.power,
                             key: ValueKey(isOn),
                             size: 48,
                             color: isOn ? HBotColors.primary : HBotColors.neutral400,
@@ -1043,7 +1044,6 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   : null,
               activeColor: HBotColors.primary,
               activeTrackColor: HBotColors.primary.withOpacity(0.3),
-              inactiveThumbColor: HBotColors.neutral400,
               inactiveTrackColor: HBotColors.toggleTrackOff,
             ),
           ),
@@ -1128,7 +1128,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               AnimatedSwitcher(
                 duration: HBotDurations.medium,
                 child: Icon(
-                  isLight ? Icons.lightbulb_outline : Icons.power_settings_new,
+                  isLight ? HBotIcons.lightbulb : HBotIcons.power,
                   key: ValueKey('$channel-$isOn'),
                   size: 28,
                   color: isOn ? HBotColors.primary : HBotColors.neutral400,
@@ -1176,7 +1176,6 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                           : null,
                       activeColor: HBotColors.primary,
                       activeTrackColor: HBotColors.primary.withOpacity(0.3),
-                      inactiveThumbColor: HBotColors.neutral400,
                       inactiveTrackColor: HBotColors.toggleTrackOff,
                     ),
                   ),
@@ -1301,7 +1300,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ),
               ),
               _buildBottomSheetTile(
-                icon: Icons.edit_outlined,
+                icon: HBotIcons.edit,
                 title: 'Rename Channel',
                 onTap: () {
                   Navigator.pop(context);
@@ -1328,7 +1327,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ),
               ),
               _buildBottomSheetTile(
-                icon: Icons.lightbulb_outline,
+                icon: HBotIcons.lightbulb,
                 title: 'Light',
                 iconColor: channelType == 'light' ? HBotColors.primary : HBotColors.iconDefault,
                 titleColor: channelType == 'light' ? HBotColors.primary : null,
@@ -1338,7 +1337,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 },
               ),
               _buildBottomSheetTile(
-                icon: Icons.power_settings_new,
+                icon: HBotIcons.power,
                 title: 'Switch',
                 iconColor: channelType == 'switch' ? HBotColors.primary : HBotColors.iconDefault,
                 titleColor: channelType == 'switch' ? HBotColors.primary : null,
@@ -1661,8 +1660,8 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                         children: [
                           // No room option
                           ListTile(
-                            leading: const Icon(
-                              Icons.home_outlined,
+                            leading: Icon(
+                              HBotIcons.home,
                               color: HBotColors.primary,
                             ),
                             title: Text(
@@ -1688,8 +1687,8 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                             const SizedBox(height: 8),
                             ...rooms.map(
                               (room) => ListTile(
-                                leading: const Icon(
-                                  Icons.room,
+                                leading: Icon(
+                                  HBotIcons.room,
                                   color: HBotColors.primary,
                                 ),
                                 title: Text(
@@ -1950,19 +1949,19 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
 
       // Determine error message and icon based on error type
       String errorMessage;
-      IconData errorIcon = Icons.error;
+      IconData errorIcon = HBotIcons.error;
 
       if (e.toString().contains('Device not found')) {
         errorMessage =
             'This device has already been deleted or no longer exists.';
-        errorIcon = Icons.info;
+        errorIcon = HBotIcons.info;
       } else if (e.toString().contains('Network error')) {
         errorMessage =
             'Unable to connect to the server. Please check your internet connection and try again.';
-        errorIcon = Icons.wifi_off;
+        errorIcon = HBotIcons.wifiOff;
       } else if (e.toString().contains('timeout')) {
         errorMessage = 'The operation timed out. Please try again.';
-        errorIcon = Icons.timer_off;
+        errorIcon = HBotIcons.timerOff;
       } else {
         errorMessage =
             'An unexpected error occurred while deleting the device. Please try again later.';

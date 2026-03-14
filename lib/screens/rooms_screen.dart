@@ -10,6 +10,7 @@ import '../widgets/background_image_picker.dart';
 import '../widgets/background_container.dart';
 import '../widgets/room_icon_picker.dart';
 import 'devices_screen.dart';
+import '../utils/phosphor_icons.dart';
 
 class RoomsScreen extends StatefulWidget {
   final Home home;
@@ -522,9 +523,9 @@ class _RoomsScreenState extends State<RoomsScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               ListTile(
-                leading: const Icon(Icons.edit_outlined, color: Color(0xFF5A6577)),
+                leading: Icon(HBotIcons.edit, color: Color(0xFF5A6577)),
                 title: const Text(
                   'Rename',
                   style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
@@ -535,7 +536,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.category_outlined, color: Color(0xFF5A6577)),
+                leading: Icon(HBotIcons.category, color: Color(0xFF5A6577)),
                 title: const Text(
                   'Change Icon',
                   style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
@@ -546,7 +547,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.image_outlined, color: Color(0xFF5A6577)),
+                leading: Icon(HBotIcons.image, color: Color(0xFF5A6577)),
                 title: const Text(
                   'Background Image',
                   style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
@@ -557,7 +558,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.delete_outline, color: Color(0xFFEF4444)),
+                leading: Icon(HBotIcons.delete, color: Color(0xFFEF4444)),
                 title: const Text(
                   'Delete',
                   style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFFEF4444)),
@@ -745,7 +746,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
     } else if (name.contains('garden') || name.contains('outdoor')) {
       return Icons.grass;
     } else {
-      return Icons.room;
+      return HBotIcons.room;
     }
   }
 
@@ -768,7 +769,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add, color: Color(0xFF0883FD)),
+            icon: Icon(HBotIcons.add, color: Color(0xFF0883FD)),
             onPressed: _showCreateRoomBottomSheet,
           ),
         ],
@@ -799,8 +800,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
                 color: Color(0xFFF0F2F5),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.home_outlined,
+              child: Icon(
+                HBotIcons.home,
                 size: 48,
                 color: Color(0xFFD1D7E0),
               ),
@@ -943,8 +944,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
                           ),
                         ),
                         // Chevron
-                        const Icon(
-                          Icons.chevron_right,
+                        Icon(
+                          HBotIcons.chevronRight,
                           size: 20,
                           color: Color(0xFFA0AAB8),
                         ),

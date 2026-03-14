@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:ui';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 import '../services/network_connectivity_service.dart';
 import '../widgets/connectivity_banner.dart';
+import '../widgets/design_system.dart';
 import 'home_dashboard_screen.dart';
 import 'profile_screen.dart';
 import 'scenes_screen.dart';
@@ -85,20 +88,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     gradient: HBotColors.primaryGradient,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(Icons.smart_toy, color: Colors.white, size: 22),
+                  child: Icon(HBotIcons.smartToy, color: Colors.white, size: 22),
                 ),
               ),
             ),
             const SizedBox(width: 10),
-            Text(
-              _currentIndex == 0 ? 'H-Bot' : _getAppBarTitle(),
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                color: HBotColors.textPrimaryLight,
-              ),
-            ),
+            _currentIndex == 0
+                ? AppTheme.hbotGradientText('H-Bot', fontSize: 20, fontWeight: FontWeight.w700)
+                : Text(
+                    _getAppBarTitle(),
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: HBotColors.textPrimaryLight,
+                    ),
+                  ),
           ],
         ),
         backgroundColor: HBotColors.backgroundLight,
@@ -110,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ConnectivityBanner(isOnline: _isOnline),
         ),
       ),
-      body: _buildBody(),
+      body: AmbientBackground(child: _buildBody()),
       bottomNavigationBar: _buildBottomNavigation(),
     );
   }
@@ -119,25 +124,25 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_currentIndex == 0) {
       return [
         IconButton(
-          icon: const Icon(Icons.notifications_outlined, size: 22),
+          icon: Icon(HBotIcons.notifications, size: 22),
           color: HBotColors.iconDefault,
           onPressed: () {
             // Notifications placeholder
           },
         ),
         IconButton(
-          icon: const Icon(Icons.settings_outlined, size: 22),
+          icon: Icon(HBotIcons.settings, size: 22),
           color: HBotColors.iconDefault,
           onPressed: () {
             setState(() => _currentIndex = 2);
           },
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
       ];
     } else if (_currentIndex == 1) {
       return [
         IconButton(
-          icon: const Icon(Icons.add, size: 22),
+          icon: Icon(HBotIcons.add, size: 22),
           color: HBotColors.iconDefault,
           onPressed: () {
             // Scene creation is handled by ScenesScreen internally
@@ -176,61 +181,66 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildBottomNavigation() {
-    return Container(
-      decoration: const BoxDecoration(
-        color: HBotColors.cardLight,
-        border: Border(
-          top: BorderSide(color: HBotColors.borderLight, width: 0.5),
-        ),
-      ),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: 64,
-          child: BottomNavigationBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: HBotColors.primary,
-            unselectedItemColor: HBotColors.neutral400,
-            selectedLabelStyle: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.2,
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+        child: Container(
+          decoration: BoxDecoration(
+            color: HBotColors.cardLight.withOpacity(0.85),
+            border: const Border(
+              top: BorderSide(color: HBotColors.borderLight, width: 0.5),
             ),
-            unselectedLabelStyle: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.2,
+          ),
+          child: SafeArea(
+            top: false,
+            child: SizedBox(
+              height: 64,
+              child: BottomNavigationBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: HBotColors.primary,
+                unselectedItemColor: HBotColors.neutral400,
+                selectedLabelStyle: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.2,
+                ),
+                unselectedLabelStyle: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: 0.2,
+                ),
+                selectedFontSize: 12,
+                unselectedFontSize: 12,
+                iconSize: 24,
+                currentIndex: _currentIndex,
+                onTap: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    icon: Icon(HBotIcons.home),
+                    activeIcon: Icon(HBotIcons.homeFilled),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(HBotIcons.scenes),
+                    activeIcon: Icon(HBotIcons.scenesFilled),
+                    label: 'Scenes',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(HBotIcons.profile),
+                    activeIcon: Icon(HBotIcons.profileFilled),
+                    label: 'Profile',
+                  ),
+                ],
+              ),
             ),
-            selectedFontSize: 12,
-            unselectedFontSize: 12,
-            iconSize: 24,
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.auto_awesome_outlined),
-                activeIcon: Icon(Icons.auto_awesome),
-                label: 'Scenes',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                activeIcon: Icon(Icons.person),
-                label: 'Profile',
-              ),
-            ],
           ),
         ),
       ),

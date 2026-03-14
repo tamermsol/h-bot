@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/auth_service.dart';
+import '../utils/phosphor_icons.dart';
 import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import 'sign_up_screen.dart';
@@ -163,13 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 bottomLeft: Radius.circular(32),
                 bottomRight: Radius.circular(32),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF0668CA).withOpacity(0.3),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
+              // No drop shadow per design spec — use border/blur for depth
             ),
             child: SafeArea(
               bottom: false,
@@ -210,7 +205,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               color: Colors.white.withOpacity(0.15),
                               borderRadius: BorderRadius.circular(19),
                             ),
-                            child: const Icon(Icons.smart_toy,
+                            child: Icon(HBotIcons.smartToy,
                                 color: Colors.white, size: 40),
                           ),
                         ),
@@ -258,7 +253,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const SizedBox(height: 32),
+                        SizedBox(height: 32),
 
                         // Email Field
                         SmartInputField(
@@ -266,7 +261,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           label: 'Email',
                           keyboardType: TextInputType.emailAddress,
                           prefixIcon:
-                              const Icon(Icons.email_outlined, size: 20),
+                              Icon(HBotIcons.email, size: 20),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
@@ -280,7 +275,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           },
                         ),
 
-                        const SizedBox(height: HBotSpacing.space4),
+                        SizedBox(height: HBotSpacing.space4),
 
                         // Password Field
                         SmartInputField(
@@ -288,12 +283,12 @@ class _SignInScreenState extends State<SignInScreen> {
                           label: 'Password',
                           obscureText: _obscurePassword,
                           prefixIcon:
-                              const Icon(Icons.lock_outline, size: 20),
+                              Icon(HBotIcons.lock, size: 20),
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscurePassword
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
+                                  ? HBotIcons.eye
+                                  : HBotIcons.eyeOff,
                               color: HBotColors.iconDefault,
                               size: 24,
                             ),
@@ -440,7 +435,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               height: 20,
                               width: 20,
                               errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.login,
+                                return Icon(HBotIcons.login,
                                     color: HBotColors.iconDefault, size: 20);
                               },
                             ),

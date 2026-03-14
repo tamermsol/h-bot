@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class EmailConfirmationScreen extends StatefulWidget {
   final String email;
@@ -48,7 +49,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: HBotTheme.textPrimary(context)),
+          icon: Icon(HBotIcons.back, color: HBotTheme.textPrimary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -69,8 +70,8 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                       color: HBotTheme.surfacePrimarySubtle(context),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
-                      Icons.email_outlined,
+                    child: Icon(
+                      HBotIcons.email,
                       size: 40,
                       color: HBotColors.primary,
                     ),

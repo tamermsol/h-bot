@@ -3,6 +3,7 @@ import '../services/auth_service.dart';
 import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import 'reset_password_screen.dart';
+import '../utils/phosphor_icons.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -62,7 +63,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: HBotTheme.textPrimary(context)),
+          icon: Icon(HBotIcons.back, color: HBotTheme.textPrimary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -125,14 +126,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       textAlign: TextAlign.center,
                     ),
 
-                    const SizedBox(height: HBotSpacing.space7),
+                    SizedBox(height: HBotSpacing.space7),
 
                     // Email Field
                     SmartInputField(
                       controller: _emailController,
                       label: 'Email',
                       keyboardType: TextInputType.emailAddress,
-                      prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                      prefixIcon: Icon(HBotIcons.email, size: 20),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class HelpCenterScreen extends StatelessWidget {
   const HelpCenterScreen({super.key});
@@ -109,7 +110,7 @@ class HelpCenterScreen extends StatelessWidget {
                   const Divider(height: 1, indent: 72),
                   _buildContactTile(
                     context,
-                    icon: Icons.email_outlined,
+                    icon: HBotIcons.email,
                     title: 'Email',
                     subtitle: 'support@h-bot.tech',
                     onTap: () => _launchUrl(
@@ -121,7 +122,7 @@ class HelpCenterScreen extends StatelessWidget {
                   const Divider(height: 1, indent: 72),
                   _buildContactTile(
                     context,
-                    icon: Icons.phone_outlined,
+                    icon: HBotIcons.phone,
                     title: 'Phone',
                     subtitle: '+20 12 81167100',
                     onTap: () =>
@@ -159,7 +160,7 @@ class HelpCenterScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(
-                    Icons.info_outline,
+                    HBotIcons.info,
                     color: HBotColors.primary,
                     size: 24,
                   ),

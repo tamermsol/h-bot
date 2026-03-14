@@ -16,6 +16,7 @@ import 'services/location_trigger_monitor.dart';
 import 'services/device_state_cache.dart';
 import 'services/scene_command_executor.dart';
 import 'services/theme_service.dart';
+import '../utils/phosphor_icons.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -214,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: Icon(HBotIcons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

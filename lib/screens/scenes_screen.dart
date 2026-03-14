@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
+import '../widgets/design_system.dart';
 import '../models/scene.dart';
 import '../services/smart_home_service.dart';
 import '../services/current_home_service.dart';
@@ -121,13 +123,13 @@ class _ScenesScreenState extends State<ScenesScreen>
             Container(
               width: 80,
               height: 80,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: HBotColors.neutral100,
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
-              child: const Icon(
-                Icons.home_outlined,
+              child: Icon(
+                HBotIcons.home,
                 size: 48,
                 color: HBotColors.neutral300,
               ),
@@ -172,13 +174,13 @@ class _ScenesScreenState extends State<ScenesScreen>
             Container(
               width: 80,
               height: 80,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: HBotColors.neutral100,
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
-              child: const Icon(
-                Icons.play_circle_outline,
+              child: Icon(
+                HBotIcons.play,
                 size: 48,
                 color: HBotColors.neutral300,
               ),
@@ -242,14 +244,14 @@ class _ScenesScreenState extends State<ScenesScreen>
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       itemCount: _scenes.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      separatorBuilder: (_, __) => SizedBox(height: 12),
       itemBuilder: (context, index) {
         final scene = _scenes[index];
 
         // Get icon from scene or use default
         final iconData = scene.iconCode != null
             ? IconData(scene.iconCode!, fontFamily: 'MaterialIcons')
-            : Icons.auto_awesome;
+            : HBotIcons.scenes;
 
         // Convert Scene model to map for SceneCard widget
         final sceneMap = <String, dynamic>{
@@ -275,80 +277,77 @@ class _ScenesScreenState extends State<ScenesScreen>
   void _showSceneContextMenu(Scene scene) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: HBotColors.cardLight,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(HBotRadius.xl),
-        ),
-      ),
-      builder: (context) => SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Handle bar
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: HBotColors.neutral300,
-                    borderRadius: BorderRadius.circular(2),
+      backgroundColor: Colors.transparent,
+      builder: (context) => GlassBottomSheet(
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle bar
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: HBotColors.neutral300,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              ListTile(
-                leading: const Icon(Icons.edit_outlined, color: HBotColors.iconDefault),
-                title: const Text(
-                  'Edit',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: HBotColors.textPrimaryLight,
+                SizedBox(height: 16),
+                ListTile(
+                  leading: Icon(HBotIcons.edit, color: HBotColors.iconDefault),
+                  title: const Text(
+                    'Edit',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: HBotColors.textPrimaryLight,
+                    ),
                   ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showEditSceneDialog(scene);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showEditSceneDialog(scene);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.copy_outlined, color: HBotColors.iconDefault),
-                title: const Text(
-                  'Duplicate',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: HBotColors.textPrimaryLight,
+                ListTile(
+                  leading: Icon(HBotIcons.copy, color: HBotColors.iconDefault),
+                  title: const Text(
+                    'Duplicate',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: HBotColors.textPrimaryLight,
+                    ),
                   ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    // Duplicate scene: navigate to add scene in create mode with pre-filled data
+                    _showEditSceneDialog(scene);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  // Duplicate scene: navigate to add scene in create mode with pre-filled data
-                  _showEditSceneDialog(scene);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.delete_outline, color: HBotColors.error),
-                title: const Text(
-                  'Delete',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: HBotColors.error,
+                ListTile(
+                  leading: Icon(HBotIcons.delete, color: HBotColors.error),
+                  title: const Text(
+                    'Delete',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: HBotColors.error,
+                    ),
                   ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showDeleteSceneDialog(scene);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showDeleteSceneDialog(scene);
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

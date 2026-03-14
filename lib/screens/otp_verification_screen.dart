@@ -3,6 +3,7 @@ import 'dart:async';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import 'home_screen.dart';
+import '../utils/phosphor_icons.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
@@ -146,7 +147,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: HBotTheme.textPrimary(context)),
+          icon: Icon(HBotIcons.back, color: HBotTheme.textPrimary(context)),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

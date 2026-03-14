@@ -3,7 +3,9 @@ import 'dart:async';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 import '../widgets/settings_tile.dart';
+import '../widgets/design_system.dart';
 import '../widgets/avatar_picker_dialog.dart';
 import '../services/auth_service.dart';
 import '../services/smart_home_service.dart';
@@ -260,7 +262,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SliverToBoxAdapter(child: _buildHeader()),
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
             SliverToBoxAdapter(child: _buildStatsRow()),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: SizedBox(height: 12)),
+            const SliverToBoxAdapter(child: GradientDivider(margin: EdgeInsets.symmetric(horizontal: 40))),
+            const SliverToBoxAdapter(child: SizedBox(height: 20)),
             SliverToBoxAdapter(child: _buildSettingsSection('Home', _buildHomeGroup())),
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
             SliverToBoxAdapter(child: _buildSettingsSection('App', _buildAppGroup())),
@@ -300,7 +304,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
               // Avatar
               GestureDetector(
                 onTap: _showAvatarPicker,
@@ -314,7 +318,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: Colors.white.withOpacity(0.2),
                       ),
                       child: _avatarPath == null
-                          ? const Icon(Icons.person, size: 40, color: Colors.white)
+                          ? Icon(HBotIcons.profile, size: 40, color: Colors.white)
                           : ClipOval(
                               child: _avatarService.isCustomAvatar(_avatarPath)
                                   ? Image.file(
@@ -345,10 +349,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             width: 1.5,
                           ),
                         ),
-                        child: const Icon(
-                          Icons.camera_alt,
+                        child: Icon(
+                          HBotIcons.camera,
                           size: 14,
-                          color: Color(0xFF0883FD),
+                          color: const Color(0xFF0883FD),
                         ),
                       ),
                     ),
@@ -424,14 +428,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       child: Column(
         children: [
-          Text(
+          AppTheme.hbotGradientText(
             count,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF0883FD),
-            ),
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
           ),
           const SizedBox(height: 4),
           Text(
@@ -481,7 +481,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<Widget> _buildHomeGroup() {
     return [
       SettingsTile(
-        icon: Icons.room_outlined,
+        icon: HBotIcons.room,
         title: 'Rooms',
         subtitle: '',
         onTap: () async {
@@ -500,7 +500,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
       SettingsTile(
-        icon: Icons.wifi_outlined,
+        icon: HBotIcons.wifi,
         title: 'WiFi Profiles',
         subtitle: '',
         onTap: () {
@@ -513,7 +513,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
       SettingsTile(
-        icon: Icons.share_outlined,
+        icon: HBotIcons.share,
         title: 'Device Sharing',
         subtitle: '',
         onTap: () {
@@ -535,7 +535,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return [
       SettingsTile(
-        icon: Icons.notifications_outlined,
+        icon: HBotIcons.notifications,
         title: 'Notifications',
         subtitle: '',
         onTap: () {
@@ -548,7 +548,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
       SettingsTile(
-        icon: Icons.palette_outlined,
+        icon: HBotIcons.palette,
         title: 'Appearance',
         subtitle: currentTheme,
         onTap: () {
@@ -561,7 +561,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
       SettingsTile(
-        icon: Icons.help_outline,
+        icon: HBotIcons.help,
         title: 'Help',
         subtitle: '',
         onTap: () {
@@ -574,7 +574,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
       SettingsTile(
-        icon: Icons.feedback_outlined,
+        icon: HBotIcons.feedback,
         title: 'Feedback',
         subtitle: '',
         onTap: () {
@@ -587,7 +587,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       ),
       SettingsTile(
-        icon: Icons.info_outline,
+        icon: HBotIcons.about,
         title: 'About',
         subtitle: '',
         onTap: _showAboutDialog,
@@ -599,13 +599,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<Widget> _buildAccountGroup() {
     return [
       SettingsTile(
-        icon: Icons.account_circle_outlined,
+        icon: HBotIcons.account,
         title: 'H-Bot Account',
         subtitle: '',
         onTap: _openHBOTAccountScreen,
       ),
       SettingsTile(
-        icon: Icons.logout,
+        icon: HBotIcons.signOut,
         title: 'Sign Out',
         subtitle: '',
         titleColor: HBotColors.error,

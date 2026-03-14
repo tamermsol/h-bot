@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../utils/error_handler.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Widget to display user-friendly error messages
 class ErrorMessageWidget extends StatelessWidget {
@@ -31,7 +32,7 @@ class ErrorMessageWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            isConnectivityIssue ? Icons.wifi_off : Icons.error_outline,
+            isConnectivityIssue ? HBotIcons.wifiOff : HBotIcons.errorOutline,
             size: 48,
             color: HBotColors.warning,
           ),
@@ -47,12 +48,12 @@ class ErrorMessageWidget extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           if (onRetry != null) ...[
-            const SizedBox(height: HBotSpacing.space4),
+            SizedBox(height: HBotSpacing.space4),
             Container(
               decoration: hbotPrimaryButtonDecoration(),
               child: ElevatedButton.icon(
                 onPressed: onRetry,
-                icon: const Icon(Icons.refresh),
+                icon: Icon(HBotIcons.refresh),
                 label: const Text('Try Again'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
@@ -86,7 +87,7 @@ class ErrorSnackBar {
         content: Row(
           children: [
             Icon(
-              isConnectivityIssue ? Icons.wifi_off : Icons.error_outline,
+              isConnectivityIssue ? HBotIcons.wifiOff : HBotIcons.errorOutline,
               color: HBotColors.textOnPrimary,
               size: 20,
             ),

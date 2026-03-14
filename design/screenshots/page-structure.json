@@ -1,0 +1,6714 @@
+[
+  {
+    "tag": "div",
+    "cls": "framer-rJLVm framer-UOI3b framer-13ocyde",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 13412,
+      "width": 1440
+    },
+    "bg": "rgb(1, 5, 16)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-oZuAa framer-1wy7u29 framer-v-1soo0gr",
+    "text": "",
+    "rect": {
+      "top": 40,
+      "height": 88,
+      "width": 1195
+    },
+    "bg": "rgba(255, 255, 255, 0.1)",
+    "shadow": "rgba(1, 5, 16, 0.4) 0px 4px 10px 0px",
+    "radius": "18px"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1vgzo81 framer-14dha6y",
+    "text": "Home",
+    "rect": {
+      "top": 40,
+      "height": 88,
+      "width": 65
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "38px 0px 0px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Home",
+    "rect": {
+      "top": 78,
+      "height": 17,
+      "width": 41
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-ssikyl framer-14dha6y",
+    "text": "Products",
+    "rect": {
+      "top": 40,
+      "height": 88,
+      "width": 84
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "38px 0px 0px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Products",
+    "rect": {
+      "top": 78,
+      "height": 17,
+      "width": 60
+    },
+    "color": "rgba(255, 255, 255, 0.5)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-uhcujl framer-14dha6y",
+    "text": "Partners",
+    "rect": {
+      "top": 40,
+      "height": 88,
+      "width": 80
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "38px 0px 0px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Partners",
+    "rect": {
+      "top": 78,
+      "height": 17,
+      "width": 56
+    },
+    "color": "rgba(255, 255, 255, 0.5)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1bnalw0 framer-14dha6y",
+    "text": "Services",
+    "rect": {
+      "top": 40,
+      "height": 88,
+      "width": 82
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "38px 0px 0px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Services",
+    "rect": {
+      "top": 78,
+      "height": 17,
+      "width": 58
+    },
+    "color": "rgba(255, 255, 255, 0.5)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-vu1qih framer-14dha6y",
+    "text": "Discover",
+    "rect": {
+      "top": 40,
+      "height": 88,
+      "width": 82
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "38px 0px 0px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Discover",
+    "rect": {
+      "top": 78,
+      "height": 17,
+      "width": 59
+    },
+    "color": "rgba(255, 255, 255, 0.5)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1e5gm5q framer-soii8d",
+    "text": "Contact us",
+    "rect": {
+      "top": 56,
+      "height": 55,
+      "width": 140
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "radius": "14px",
+    "padding": "18px 28px 18px 29px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Contact us",
+    "rect": {
+      "top": 74,
+      "height": 19,
+      "width": 83
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-rbb3k8",
+    "text": "",
+    "rect": {
+      "top": 40,
+      "height": 88,
+      "width": 1195
+    },
+    "gradient": "linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 100%)",
+    "radius": "12px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-rm6d6t",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 1440
+    },
+    "bg": "rgb(0, 0, 0)"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "The Future of Home",
+    "rect": {
+      "top": 272,
+      "height": 107,
+      "width": 893
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "89.3025px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "107.163px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Intelligence.",
+    "rect": {
+      "top": 379,
+      "height": 107,
+      "width": 893
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "89.3025px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "107.163px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Advanced AI-powered automation that adapts to your lifestyle, making your home smarter than ever bef",
+    "rect": {
+      "top": 509,
+      "height": 26,
+      "width": 893
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "17px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "25.5px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1ma7w9o",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1f0r279",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-so2snu",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-3bj291",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1gdz2jr",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-19qfm9a",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-8wblqo",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-17sao4g",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1fdrg3e",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1f457bm",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1peyzkv",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-17fzyuy",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-9ba1jj",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1xd65fn",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-e6k1ir",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-ddk6jp",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-rto4zv",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-5oj13j",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1rbid94",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1b0bc65",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1jjlex1",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-st4u97",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1opxawn",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-18l5a86",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-6g4bvq",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1ttv3uy",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-ih335p",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-yblt9n",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1vbnnq3",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-12kf5d4",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 72
+    },
+    "gradient": "linear-gradient(90deg, rgba(217, 217, 217, 0) 0%, rgb(0, 0, 0) 75.2252%, rgb(255, 255, 255) 100%)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-159k3vv",
+    "text": "",
+    "rect": {
+      "top": 0,
+      "height": 810,
+      "width": 1440
+    },
+    "gradient": "linear-gradient(rgb(1, 5, 16) 0%, rgba(1, 5, 16, 0) 22.7618%, rgba(1, 5, 16, 0) 71.6234%, rgb(1, 5, 16) 100%)"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Brands We Support",
+    "rect": {
+      "top": 850,
+      "height": 22,
+      "width": 168
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Categories",
+    "rect": {
+      "top": 1230,
+      "height": 22,
+      "width": 152
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Upgrade Your Space with",
+    "rect": {
+      "top": 1281,
+      "height": 72,
+      "width": 772
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "60px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "72px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Intelligent Solutions",
+    "rect": {
+      "top": 1363,
+      "height": 72,
+      "width": 611
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "60px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "72px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Explore a range of powerful products designed to enhance your everyday living.",
+    "rect": {
+      "top": 1451,
+      "height": 24,
+      "width": 1176
+    },
+    "color": "rgb(199, 201, 204)",
+    "fontSize": "16px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-bnkfep",
+    "text": "",
+    "rect": {
+      "top": 1539,
+      "height": 665,
+      "width": 1200
+    },
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "24px",
+    "padding": "60px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Advanced Smart Home Speakers",
+    "rect": {
+      "top": 2026,
+      "height": 44,
+      "width": 415
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "26px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "44.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1ben4g6 framer-rw1a2e",
+    "text": "Security Cam",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Security Cam",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-k8ayep framer-rw1a2e",
+    "text": "Smart LCD Panel",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 181
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart LCD Panel",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 151
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1j02u1c framer-rw1a2e",
+    "text": "Smart Thermostat",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Thermostat",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 161
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-15wtzpt framer-rw1a2e",
+    "text": "Video Doorbell",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Video Doorbell",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 136
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-15rl19t framer-rw1a2e",
+    "text": "Smart Leak Sensor",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Leak Sensor",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 169
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-15xt2d4 framer-rw1a2e",
+    "text": "Smart Gas Sensor",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Gas Sensor",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 159
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1ben4g6 framer-rw1a2e",
+    "text": "Security Cam",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Security Cam",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-k8ayep framer-rw1a2e",
+    "text": "Smart LCD Panel",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 181
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart LCD Panel",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 151
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1j02u1c framer-rw1a2e",
+    "text": "Smart Thermostat",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Thermostat",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 161
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-15wtzpt framer-rw1a2e",
+    "text": "Video Doorbell",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Video Doorbell",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 136
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-15rl19t framer-rw1a2e",
+    "text": "Smart Leak Sensor",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Leak Sensor",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 169
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-15xt2d4 framer-rw1a2e",
+    "text": "Smart Gas Sensor",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Gas Sensor",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 159
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1ben4g6 framer-rw1a2e",
+    "text": "Security Cam",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Security Cam",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-k8ayep framer-rw1a2e",
+    "text": "Smart LCD Panel",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 181
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart LCD Panel",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 151
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1j02u1c framer-rw1a2e",
+    "text": "Smart Thermostat",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Thermostat",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 161
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-15wtzpt framer-rw1a2e",
+    "text": "Video Doorbell",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Video Doorbell",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 136
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-15rl19t framer-rw1a2e",
+    "text": "Smart Leak Sensor",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Leak Sensor",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 169
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-15xt2d4 framer-rw1a2e",
+    "text": "Smart Gas Sensor",
+    "rect": {
+      "top": 1658,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Gas Sensor",
+    "rect": {
+      "top": 1830,
+      "height": 17,
+      "width": 159
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1icojgt framer-rw1a2e",
+    "text": "Smart Lighting",
+    "rect": {
+      "top": 1889,
+      "height": 195,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Lighting",
+    "rect": {
+      "top": 2059,
+      "height": 17,
+      "width": 135
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1ocgw8d framer-rw1a2e",
+    "text": "Smart Lock",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 181
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Lock",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 102
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-vv3b34 framer-rw1a2e",
+    "text": "Smart Door & Window",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Door & Window",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 202
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1k0k63x framer-rw1a2e",
+    "text": "Smart Dimmer Switch",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Dimmer Switch",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 198
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1fiw9ib framer-rw1a2e",
+    "text": "Smart Light Switch",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Light Switch",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 172
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1icojgt framer-rw1a2e",
+    "text": "Smart Lighting",
+    "rect": {
+      "top": 1889,
+      "height": 195,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Lighting",
+    "rect": {
+      "top": 2059,
+      "height": 17,
+      "width": 135
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1ocgw8d framer-rw1a2e",
+    "text": "Smart Lock",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 181
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Lock",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 102
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-vv3b34 framer-rw1a2e",
+    "text": "Smart Door & Window",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Door & Window",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 202
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1k0k63x framer-rw1a2e",
+    "text": "Smart Dimmer Switch",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Dimmer Switch",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 198
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1fiw9ib framer-rw1a2e",
+    "text": "Smart Light Switch",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Light Switch",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 172
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1icojgt framer-rw1a2e",
+    "text": "Smart Lighting",
+    "rect": {
+      "top": 1889,
+      "height": 195,
+      "width": 180
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Lighting",
+    "rect": {
+      "top": 2059,
+      "height": 17,
+      "width": 135
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1ocgw8d framer-rw1a2e",
+    "text": "Smart Lock",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 181
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Lock",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 102
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-vv3b34 framer-rw1a2e",
+    "text": "Smart Door & Window",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Door & Window",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 202
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1k0k63x framer-rw1a2e",
+    "text": "Smart Dimmer Switch",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Dimmer Switch",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 198
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1fiw9ib framer-rw1a2e",
+    "text": "Smart Light Switch",
+    "rect": {
+      "top": 1888,
+      "height": 197,
+      "width": 220
+    },
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "padding": "8px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Light Switch",
+    "rect": {
+      "top": 2060,
+      "height": 17,
+      "width": 172
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "16.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1p4mf74 hidden-l8osjg",
+    "text": "",
+    "rect": {
+      "top": 1567,
+      "height": 610,
+      "width": 610
+    },
+    "bg": "rgb(0, 123, 255)",
+    "radius": "100%",
+    "opacity": "0.1"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1cxbt68 hidden-l8osjg",
+    "text": "",
+    "rect": {
+      "top": 1567,
+      "height": 610,
+      "width": 610
+    },
+    "bg": "rgb(0, 123, 255)",
+    "radius": "100%",
+    "opacity": "0.1"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Our Products",
+    "rect": {
+      "top": 2484,
+      "height": 22,
+      "width": 114
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Explore the Power of",
+    "rect": {
+      "top": 2536,
+      "height": 86,
+      "width": 1176
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "H-BOT",
+    "rect": {
+      "top": 2622,
+      "height": 86,
+      "width": 260
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Products",
+    "rect": {
+      "top": 2622,
+      "height": 86,
+      "width": 319
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Bringing ease and intelligence to your home.",
+    "rect": {
+      "top": 2739,
+      "height": 27,
+      "width": 1176
+    },
+    "color": "rgb(199, 201, 204)",
+    "fontSize": "18px",
+    "fontWeight": "500",
+    "fontFamily": "Satoshi, \"Satoshi Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-led3oc framer-rw1a2e",
+    "text": "",
+    "rect": {
+      "top": 2814,
+      "height": 481,
+      "width": 588
+    },
+    "gradient": "linear-gradient(rgba(41, 41, 41, 0) 74%, rgb(40, 40, 40) 100%)",
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "radius": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Security Camera",
+    "rect": {
+      "top": 3172,
+      "height": 44,
+      "width": 292
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "26px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "44.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Freestanding Tabletop Model",
+    "rect": {
+      "top": 3217,
+      "height": 34,
+      "width": 292
+    },
+    "color": "rgb(216, 216, 216)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "34px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-s0y5im framer-rw1a2e",
+    "text": "",
+    "rect": {
+      "top": 2814,
+      "height": 481,
+      "width": 588
+    },
+    "gradient": "linear-gradient(rgba(41, 41, 41, 0) 74%, rgb(40, 40, 40) 100%)",
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "radius": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Video Doorbells",
+    "rect": {
+      "top": 3172,
+      "height": 44,
+      "width": 289
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "26px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "44.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Wall-Mounted Model",
+    "rect": {
+      "top": 3217,
+      "height": 34,
+      "width": 289
+    },
+    "color": "rgb(216, 216, 216)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "34px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1n8oxr0 framer-rw1a2e",
+    "text": "",
+    "rect": {
+      "top": 3319,
+      "height": 398,
+      "width": 384
+    },
+    "gradient": "linear-gradient(rgba(41, 41, 41, 0) 74%, rgb(40, 40, 40) 100%)",
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "radius": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Lighting",
+    "rect": {
+      "top": 3598,
+      "height": 44,
+      "width": 200
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "26px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "44.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Wall-Mounted Model",
+    "rect": {
+      "top": 3643,
+      "height": 34,
+      "width": 200
+    },
+    "color": "rgb(216, 216, 216)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "34px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-q4yb7y framer-rw1a2e",
+    "text": "",
+    "rect": {
+      "top": 3319,
+      "height": 398,
+      "width": 384
+    },
+    "gradient": "linear-gradient(rgba(41, 41, 41, 0) 74%, rgb(40, 40, 40) 100%)",
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "radius": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Curtains & Shutters",
+    "rect": {
+      "top": 3598,
+      "height": 44,
+      "width": 334
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "26px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "44.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Automated Light-Filtering System",
+    "rect": {
+      "top": 3643,
+      "height": 34,
+      "width": 334
+    },
+    "color": "rgb(216, 216, 216)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "34px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-l0st0t framer-rw1a2e",
+    "text": "",
+    "rect": {
+      "top": 3319,
+      "height": 398,
+      "width": 384
+    },
+    "gradient": "linear-gradient(rgba(41, 41, 41, 0) 74%, rgb(40, 40, 40) 100%)",
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "radius": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Motion Sensor",
+    "rect": {
+      "top": 3598,
+      "height": 44,
+      "width": 268
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "26px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "44.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Wall-Mounted Model",
+    "rect": {
+      "top": 3643,
+      "height": 34,
+      "width": 268
+    },
+    "color": "rgb(216, 216, 216)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "34px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Integration",
+    "rect": {
+      "top": 4055,
+      "height": 22,
+      "width": 101
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Pair and",
+    "rect": {
+      "top": 4088,
+      "height": 108,
+      "width": 294
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "108px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Play",
+    "rect": {
+      "top": 4099,
+      "height": 86,
+      "width": 150
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Automatically detects your home devices. Simply search for your brand, tap a button or two \u2014 and you",
+    "rect": {
+      "top": 4238,
+      "height": 300,
+      "width": 554
+    },
+    "color": "rgb(199, 201, 204)",
+    "fontSize": "40px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "60px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-11nev63",
+    "text": "",
+    "rect": {
+      "top": 4030,
+      "height": 533,
+      "width": 533
+    },
+    "gradient": "radial-gradient(70.7107% 70.7107%, rgba(10, 96, 151, 0) 50%, rgba(1, 18, 28, 0) 100%)",
+    "radius": "10000px",
+    "opacity": "0"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-12hz92u",
+    "text": "",
+    "rect": {
+      "top": 4226,
+      "height": 140,
+      "width": 140
+    },
+    "bg": "rgb(255, 255, 255)",
+    "radius": "100px",
+    "padding": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Tap",
+    "rect": {
+      "top": 4265,
+      "height": 62,
+      "width": 86
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "52px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "62.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Advantage",
+    "rect": {
+      "top": 4877,
+      "height": 22,
+      "width": 95
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Get to know",
+    "rect": {
+      "top": 4928,
+      "height": 86,
+      "width": 437
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "H-BOT",
+    "rect": {
+      "top": 4928,
+      "height": 86,
+      "width": 238
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Discover What Sets Us Apart in Smart Home Innovation",
+    "rect": {
+      "top": 5045,
+      "height": 27,
+      "width": 1176
+    },
+    "color": "rgb(199, 201, 204)",
+    "fontSize": "18px",
+    "fontWeight": "500",
+    "fontFamily": "Satoshi, \"Satoshi Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Comfort",
+    "rect": {
+      "top": 5192,
+      "height": 27,
+      "width": 338
+    },
+    "color": "rgba(255, 255, 255, 0.8)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Enjoy a",
+    "rect": {
+      "top": 5227,
+      "height": 59,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "lifestyle upgrade.",
+    "rect": {
+      "top": 5286,
+      "height": 118,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Innovation",
+    "rect": {
+      "top": 5192,
+      "height": 27,
+      "width": 338
+    },
+    "color": "rgba(255, 255, 255, 0.8)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "We bring intelligence to your space.",
+    "rect": {
+      "top": 5227,
+      "height": 176,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Connectivity",
+    "rect": {
+      "top": 5192,
+      "height": 27,
+      "width": 338
+    },
+    "color": "rgba(255, 255, 255, 0.8)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Every solution, one ecosystem.",
+    "rect": {
+      "top": 5227,
+      "height": 118,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Reliability",
+    "rect": {
+      "top": 5192,
+      "height": 27,
+      "width": 338
+    },
+    "color": "rgba(255, 255, 255, 0.8)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Stable. Seamless. Scalable.",
+    "rect": {
+      "top": 5227,
+      "height": 176,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Eco-Friendly",
+    "rect": {
+      "top": 5192,
+      "height": 27,
+      "width": 338
+    },
+    "color": "rgba(255, 255, 255, 0.8)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Sustainability made simple.",
+    "rect": {
+      "top": 5227,
+      "height": 118,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Flexibility",
+    "rect": {
+      "top": 5192,
+      "height": 27,
+      "width": 338
+    },
+    "color": "rgba(255, 255, 255, 0.8)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Versatility",
+    "rect": {
+      "top": 5227,
+      "height": 59,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "you can count on.",
+    "rect": {
+      "top": 5286,
+      "height": 118,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Performance",
+    "rect": {
+      "top": 5192,
+      "height": 27,
+      "width": 338
+    },
+    "color": "rgba(255, 255, 255, 0.8)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Powerful connectivity. Reliable performance.",
+    "rect": {
+      "top": 5227,
+      "height": 235,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Automation",
+    "rect": {
+      "top": 5184,
+      "height": 27,
+      "width": 354
+    },
+    "color": "rgba(255, 255, 255, 0.8)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smarter spaces, wherever you are.",
+    "rect": {
+      "top": 5219,
+      "height": 176,
+      "width": 354
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Convenience",
+    "rect": {
+      "top": 5192,
+      "height": 27,
+      "width": 338
+    },
+    "color": "rgba(255, 255, 255, 0.8)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Stay in sync with your world.",
+    "rect": {
+      "top": 5227,
+      "height": 176,
+      "width": 338
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "58.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "button",
+    "cls": "",
+    "text": "",
+    "rect": {
+      "top": 5486,
+      "height": 40,
+      "width": 40
+    },
+    "bg": "rgba(0, 0, 0, 0.2)",
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "radius": "40px",
+    "opacity": "0"
+  },
+  {
+    "tag": "button",
+    "cls": "",
+    "text": "",
+    "rect": {
+      "top": 5486,
+      "height": 40,
+      "width": 40
+    },
+    "bg": "rgba(0, 0, 0, 0.2)",
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "radius": "40px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-xf581x",
+    "text": "",
+    "rect": {
+      "top": 6160,
+      "height": 170,
+      "width": 168
+    },
+    "bg": "rgb(1, 18, 28)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1k1semj",
+    "text": "",
+    "rect": {
+      "top": 6159,
+      "height": 172,
+      "width": 170
+    },
+    "gradient": "linear-gradient(225deg, rgb(16, 112, 173) 0%, rgb(203, 217, 222) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Motion",
+    "rect": {
+      "top": 6261,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Sensor",
+    "rect": {
+      "top": 6285,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-ncdaww",
+    "text": "",
+    "rect": {
+      "top": 6160,
+      "height": 170,
+      "width": 168
+    },
+    "bg": "rgb(1, 18, 28)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-d0d1z6",
+    "text": "",
+    "rect": {
+      "top": 6159,
+      "height": 172,
+      "width": 170
+    },
+    "gradient": "linear-gradient(225deg, rgb(16, 112, 173) 0%, rgb(203, 217, 222) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Lock",
+    "rect": {
+      "top": 6285,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1qc9zt6",
+    "text": "",
+    "rect": {
+      "top": 6160,
+      "height": 170,
+      "width": 168
+    },
+    "bg": "rgb(1, 18, 28)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-174gajd",
+    "text": "",
+    "rect": {
+      "top": 6159,
+      "height": 172,
+      "width": 170
+    },
+    "gradient": "linear-gradient(225deg, rgb(16, 112, 173) 0%, rgb(203, 217, 222) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Shutters",
+    "rect": {
+      "top": 6261,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Control",
+    "rect": {
+      "top": 6285,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-a3kpd",
+    "text": "",
+    "rect": {
+      "top": 6361,
+      "height": 170,
+      "width": 168
+    },
+    "bg": "rgb(1, 18, 28)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-3n47sv",
+    "text": "",
+    "rect": {
+      "top": 6360,
+      "height": 172,
+      "width": 170
+    },
+    "gradient": "linear-gradient(225deg, rgb(16, 112, 173) 0%, rgb(203, 217, 222) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Security",
+    "rect": {
+      "top": 6462,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Cameras",
+    "rect": {
+      "top": 6486,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-ay3qoy",
+    "text": "",
+    "rect": {
+      "top": 6361,
+      "height": 170,
+      "width": 168
+    },
+    "bg": "rgb(1, 18, 28)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-7s0m7t",
+    "text": "",
+    "rect": {
+      "top": 6360,
+      "height": 172,
+      "width": 170
+    },
+    "gradient": "linear-gradient(225deg, rgb(16, 112, 173) 0%, rgb(203, 217, 222) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart",
+    "rect": {
+      "top": 6462,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Thermostat",
+    "rect": {
+      "top": 6486,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1n6j9of",
+    "text": "",
+    "rect": {
+      "top": 6380,
+      "height": 38,
+      "width": 38
+    },
+    "bg": "rgb(255, 110, 47)",
+    "radius": "100px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "21",
+    "rect": {
+      "top": 6388,
+      "height": 22,
+      "width": 20
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "0.36px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1hwzrvz",
+    "text": "",
+    "rect": {
+      "top": 6361,
+      "height": 170,
+      "width": 168
+    },
+    "bg": "rgb(1, 18, 28)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-539ngc",
+    "text": "",
+    "rect": {
+      "top": 6360,
+      "height": 172,
+      "width": 170
+    },
+    "gradient": "linear-gradient(225deg, rgb(16, 112, 173) 0%, rgb(203, 217, 222) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Sprinkler  Systems",
+    "rect": {
+      "top": 6462,
+      "height": 48,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1mde4ph",
+    "text": "",
+    "rect": {
+      "top": 6562,
+      "height": 170,
+      "width": 168
+    },
+    "bg": "rgb(1, 18, 28)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-q6rb1v",
+    "text": "",
+    "rect": {
+      "top": 6561,
+      "height": 172,
+      "width": 170
+    },
+    "gradient": "linear-gradient(225deg, rgb(16, 112, 173) 0%, rgb(203, 217, 222) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart light",
+    "rect": {
+      "top": 6687,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1qqbs4s",
+    "text": "",
+    "rect": {
+      "top": 6585,
+      "height": 35,
+      "width": 36
+    },
+    "bg": "rgba(113, 113, 113, 0.2)",
+    "radius": "20px",
+    "padding": "10px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-70fw0",
+    "text": "",
+    "rect": {
+      "top": 6590,
+      "height": 24,
+      "width": 24
+    },
+    "bg": "rgb(113, 113, 113)",
+    "radius": "100%"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-qo2l8 framer-x980mx",
+    "text": "",
+    "rect": {
+      "top": 6583,
+      "height": 34,
+      "width": 34
+    },
+    "bg": "rgb(255, 255, 255)"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1eqqksh",
+    "text": "",
+    "rect": {
+      "top": 6562,
+      "height": 170,
+      "width": 168
+    },
+    "bg": "rgb(1, 18, 28)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-ndoihq",
+    "text": "",
+    "rect": {
+      "top": 6561,
+      "height": 172,
+      "width": 170
+    },
+    "gradient": "linear-gradient(225deg, rgb(16, 112, 173) 0%, rgb(203, 217, 222) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Air",
+    "rect": {
+      "top": 6663,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Conditioners",
+    "rect": {
+      "top": 6687,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1txqiho",
+    "text": "",
+    "rect": {
+      "top": 6562,
+      "height": 170,
+      "width": 168
+    },
+    "bg": "rgb(1, 18, 28)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-yxr96l",
+    "text": "",
+    "rect": {
+      "top": 6561,
+      "height": 172,
+      "width": 170
+    },
+    "gradient": "linear-gradient(225deg, rgb(16, 112, 173) 0%, rgb(203, 217, 222) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "radius": "16px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Home",
+    "rect": {
+      "top": 6663,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Speaker",
+    "rect": {
+      "top": 6687,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Connected",
+    "rect": {
+      "top": 6197,
+      "height": 22,
+      "width": 95
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "One app.",
+    "rect": {
+      "top": 6231,
+      "height": 86,
+      "width": 624
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "700",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Total control.",
+    "rect": {
+      "top": 6325,
+      "height": 86,
+      "width": 624
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "72px",
+    "fontWeight": "700",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Control every device in your home with h-bot. no matter where you are. All it takes is one tap.",
+    "rect": {
+      "top": 6454,
+      "height": 240,
+      "width": 566
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "40px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "60px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1ewt8gs",
+    "text": "",
+    "rect": {
+      "top": 6039,
+      "height": 716,
+      "width": 716
+    },
+    "gradient": "linear-gradient(rgba(8, 73, 114, 0.2) 0%, rgba(1, 5, 16, 0.2) 100%)",
+    "radius": "432px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Our Partners",
+    "rect": {
+      "top": 7013,
+      "height": 22,
+      "width": 110
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Professional installation for your",
+    "rect": {
+      "top": 7064,
+      "height": 86,
+      "width": 1164
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart devices.",
+    "rect": {
+      "top": 7161,
+      "height": 86,
+      "width": 523
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Seamless installation. Reliable service.",
+    "rect": {
+      "top": 7277,
+      "height": 27,
+      "width": 1176
+    },
+    "color": "rgb(199, 201, 204)",
+    "fontSize": "18px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "We proudly collaborate with leading experts who ensure a seamless installation experience, bringing ",
+    "rect": {
+      "top": 7414,
+      "height": 238,
+      "width": 663
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "34px",
+    "fontWeight": "700",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "47.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Samrt Innovation",
+    "rect": {
+      "top": 7692,
+      "height": 34,
+      "width": 206
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "24px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "33.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1g72mqg",
+    "text": "",
+    "rect": {
+      "top": 7676,
+      "height": 65,
+      "width": 65
+    },
+    "bg": "rgb(44, 44, 44)",
+    "radius": "100px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Simply Smart",
+    "rect": {
+      "top": 7692,
+      "height": 34,
+      "width": 155
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "24px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "33.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "800+",
+    "rect": {
+      "top": 7889,
+      "height": 24,
+      "width": 457
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "42px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Over 800 users have already trusted our expert partners for smooth and reliable smart home installat",
+    "rect": {
+      "top": 7938,
+      "height": 81,
+      "width": 413
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "18px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-1yp8ddf framer-rw1a2e",
+    "text": "Request Service",
+    "rect": {
+      "top": 8055,
+      "height": 72,
+      "width": 250
+    },
+    "gradient": "linear-gradient(90deg, rgb(21, 31, 39) 0%, rgba(21, 31, 39, 0.5) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
+    "color": "rgb(0, 0, 238)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "sans-serif",
+    "lineHeight": "normal",
+    "letterSpacing": "normal",
+    "radius": "18px",
+    "padding": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Request Service",
+    "rect": {
+      "top": 8079,
+      "height": 24,
+      "width": 168
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Testimonials",
+    "rect": {
+      "top": 8349,
+      "height": 22,
+      "width": 108
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Trusted by innovators",
+    "rect": {
+      "top": 8401,
+      "height": 86,
+      "width": 784
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "worldwide",
+    "rect": {
+      "top": 8401,
+      "height": 86,
+      "width": 373
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Real Stories, Real Success: Hear from Our Satisfied Clients",
+    "rect": {
+      "top": 8517,
+      "height": 27,
+      "width": 1176
+    },
+    "color": "rgb(199, 201, 204)",
+    "fontSize": "18px",
+    "fontWeight": "500",
+    "fontFamily": "Satoshi, \"Satoshi Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-lvenf4",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I'm so glad I installed the gas leak sensor with H-bot. One night, it alerted me to a small leak in ",
+    "rect": {
+      "top": 8693,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Aly Essa",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Designer",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 68
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1js8r75",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I love that I can create personalized scenes for different activities, like movie nights or dinner p",
+    "rect": {
+      "top": 8705,
+      "height": 48,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Mona Rabie",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Marketer",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 68
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-amfvl7",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "My kids love the smart lighting! They can change the colors in their rooms, and it's made bedtime so",
+    "rect": {
+      "top": 8681,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Nour Adel",
+    "rect": {
+      "top": 8805,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Creative Director",
+    "rect": {
+      "top": 8833,
+      "height": 24,
+      "width": 129
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1atto6h",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "After my office was broken into, I was terrified. I contacted H-bot, and they installed a comprehens",
+    "rect": {
+      "top": 8681,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Ramy Homied",
+    "rect": {
+      "top": 8805,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Startup Founder",
+    "rect": {
+      "top": 8833,
+      "height": 24,
+      "width": 126
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-hqrohq",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "H-bot has transformed my home into a truly smart living space. I can't imagine life without it now.",
+    "rect": {
+      "top": 8705,
+      "height": 48,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Mayada Hussien",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Freelancer",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 81
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-11g28ry",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I travel a lot, and being able to control everything remotely lights, doors, cameras \u2014 has been a hu",
+    "rect": {
+      "top": 8693,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Marwan Maged",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Traveller Expert",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 118
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-lvenf4",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I'm so glad I installed the gas leak sensor with H-bot. One night, it alerted me to a small leak in ",
+    "rect": {
+      "top": 8693,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Aly Essa",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Designer",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 68
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1js8r75",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I love that I can create personalized scenes for different activities, like movie nights or dinner p",
+    "rect": {
+      "top": 8705,
+      "height": 48,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Mona Rabie",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Marketer",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 68
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-amfvl7",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "My kids love the smart lighting! They can change the colors in their rooms, and it's made bedtime so",
+    "rect": {
+      "top": 8681,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Nour Adel",
+    "rect": {
+      "top": 8805,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Creative Director",
+    "rect": {
+      "top": 8833,
+      "height": 24,
+      "width": 129
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1atto6h",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "After my office was broken into, I was terrified. I contacted H-bot, and they installed a comprehens",
+    "rect": {
+      "top": 8681,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Ramy Homied",
+    "rect": {
+      "top": 8805,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Startup Founder",
+    "rect": {
+      "top": 8833,
+      "height": 24,
+      "width": 126
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-hqrohq",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "H-bot has transformed my home into a truly smart living space. I can't imagine life without it now.",
+    "rect": {
+      "top": 8705,
+      "height": 48,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Mayada Hussien",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Freelancer",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 81
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-11g28ry",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I travel a lot, and being able to control everything remotely lights, doors, cameras \u2014 has been a hu",
+    "rect": {
+      "top": 8693,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Marwan Maged",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Traveller Expert",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 118
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-lvenf4",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I'm so glad I installed the gas leak sensor with H-bot. One night, it alerted me to a small leak in ",
+    "rect": {
+      "top": 8693,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Aly Essa",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Designer",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 68
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1js8r75",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I love that I can create personalized scenes for different activities, like movie nights or dinner p",
+    "rect": {
+      "top": 8705,
+      "height": 48,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Mona Rabie",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Marketer",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 68
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-amfvl7",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "My kids love the smart lighting! They can change the colors in their rooms, and it's made bedtime so",
+    "rect": {
+      "top": 8681,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Nour Adel",
+    "rect": {
+      "top": 8805,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Creative Director",
+    "rect": {
+      "top": 8833,
+      "height": 24,
+      "width": 129
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1atto6h",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "After my office was broken into, I was terrified. I contacted H-bot, and they installed a comprehens",
+    "rect": {
+      "top": 8681,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Ramy Homied",
+    "rect": {
+      "top": 8805,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Startup Founder",
+    "rect": {
+      "top": 8833,
+      "height": 24,
+      "width": 126
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-hqrohq",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "H-bot has transformed my home into a truly smart living space. I can't imagine life without it now.",
+    "rect": {
+      "top": 8705,
+      "height": 48,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Mayada Hussien",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Freelancer",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 81
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-11g28ry",
+    "text": "",
+    "rect": {
+      "top": 8582,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I travel a lot, and being able to control everything remotely lights, doors, cameras \u2014 has been a hu",
+    "rect": {
+      "top": 8693,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Marwan Maged",
+    "rect": {
+      "top": 8798,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Traveller Expert",
+    "rect": {
+      "top": 8826,
+      "height": 24,
+      "width": 118
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1hocct7",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I've discovered new ways to enjoy my home thanks to H-bot's smart features. I'm constantly finding n",
+    "rect": {
+      "top": 9043,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Karl George",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Architect",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 70
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-18zy6pr",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "When we moved into our new home, we were excited to make it smart \u2014 but the setup felt overwhelming.",
+    "rect": {
+      "top": 9031,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Rana Abd Elatif",
+    "rect": {
+      "top": 9155,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "HR Manager",
+    "rect": {
+      "top": 9183,
+      "height": 24,
+      "width": 94
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-ar8vmi",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Investing in H-bot was one of the best decisions I've made. It's made my home more comfortable, secu",
+    "rect": {
+      "top": 9043,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Qassem Obida",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Product Manager",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-13ittto",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "As a mom of three, I needed a way to keep an eye on the kids while juggling work. H-Bot installed sm",
+    "rect": {
+      "top": 9031,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Martina Morad",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Banker",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 54
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-187ufln",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I used to play a guessing game called \u2018Did I leave the lights on?\u2019 Not anymore. H-Bot fixed that.",
+    "rect": {
+      "top": 9055,
+      "height": 48,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Mohamed Edris",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Backend Engineer",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 139
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1hocct7",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I've discovered new ways to enjoy my home thanks to H-bot's smart features. I'm constantly finding n",
+    "rect": {
+      "top": 9043,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Karl George",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Architect",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 70
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-18zy6pr",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "When we moved into our new home, we were excited to make it smart \u2014 but the setup felt overwhelming.",
+    "rect": {
+      "top": 9031,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Rana Abd Elatif",
+    "rect": {
+      "top": 9155,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "HR Manager",
+    "rect": {
+      "top": 9183,
+      "height": 24,
+      "width": 94
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-ar8vmi",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Investing in H-bot was one of the best decisions I've made. It's made my home more comfortable, secu",
+    "rect": {
+      "top": 9043,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Qassem Obida",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Product Manager",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-13ittto",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "As a mom of three, I needed a way to keep an eye on the kids while juggling work. H-Bot installed sm",
+    "rect": {
+      "top": 9031,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Martina Morad",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Banker",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 54
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-187ufln",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I used to play a guessing game called \u2018Did I leave the lights on?\u2019 Not anymore. H-Bot fixed that.",
+    "rect": {
+      "top": 9055,
+      "height": 48,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Mohamed Edris",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Backend Engineer",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 139
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1hocct7",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I've discovered new ways to enjoy my home thanks to H-bot's smart features. I'm constantly finding n",
+    "rect": {
+      "top": 9043,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Karl George",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Architect",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 70
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-18zy6pr",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "When we moved into our new home, we were excited to make it smart \u2014 but the setup felt overwhelming.",
+    "rect": {
+      "top": 9031,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Rana Abd Elatif",
+    "rect": {
+      "top": 9155,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "HR Manager",
+    "rect": {
+      "top": 9183,
+      "height": 24,
+      "width": 94
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-ar8vmi",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Investing in H-bot was one of the best decisions I've made. It's made my home more comfortable, secu",
+    "rect": {
+      "top": 9043,
+      "height": 71,
+      "width": 399
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "14px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Qassem Obida",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Product Manager",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 132
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-13ittto",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "As a mom of three, I needed a way to keep an eye on the kids while juggling work. H-Bot installed sm",
+    "rect": {
+      "top": 9031,
+      "height": 95,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Martina Morad",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Banker",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 54
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-187ufln",
+    "text": "",
+    "rect": {
+      "top": 8932,
+      "height": 324,
+      "width": 491
+    },
+    "bg": "rgb(1, 5, 16)",
+    "shadow": "rgba(45, 62, 80, 0.15) 0px 0px 40px 0px inset",
+    "radius": "12px",
+    "padding": "40px 46px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "I used to play a guessing game called \u2018Did I leave the lights on?\u2019 Not anymore. H-Bot fixed that.",
+    "rect": {
+      "top": 9055,
+      "height": 48,
+      "width": 399
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "14px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "23.8px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Mohamed Edris",
+    "rect": {
+      "top": 9148,
+      "height": 24,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "20px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Backend Engineer",
+    "rect": {
+      "top": 9176,
+      "height": 24,
+      "width": 139
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "24px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-t9jxfe",
+    "text": "",
+    "rect": {
+      "top": 9494,
+      "height": 1184,
+      "width": 1440
+    },
+    "gradient": "radial-gradient(50% 50%, rgba(9, 73, 114, 0.3) 0%, rgba(1, 5, 16, 0.3) 100%)",
+    "padding": "120px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Features",
+    "rect": {
+      "top": 9544,
+      "height": 22,
+      "width": 77
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Everything you love about",
+    "rect": {
+      "top": 9596,
+      "height": 86,
+      "width": 948
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "H-bot",
+    "rect": {
+      "top": 9596,
+      "height": 86,
+      "width": 208
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "in one place.",
+    "rect": {
+      "top": 9692,
+      "height": 86,
+      "width": 450
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Control every room, scene, and device from one smart, streamlined hub.",
+    "rect": {
+      "top": 9808,
+      "height": 27,
+      "width": 1176
+    },
+    "color": "rgb(199, 201, 204)",
+    "fontSize": "18px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Dashboard",
+    "rect": {
+      "top": 9999,
+      "height": 74,
+      "width": 557
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "62px",
+    "fontWeight": "700",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "74.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "We harness the power of both wired and wireless communication protocols to ensure unmatched reliabil",
+    "rect": {
+      "top": 10115,
+      "height": 360,
+      "width": 557
+    },
+    "color": "rgb(215, 215, 215)",
+    "fontSize": "40px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "60px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Compatibility",
+    "rect": {
+      "top": 10848,
+      "height": 22,
+      "width": 116
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Works Seamlessly with Your",
+    "rect": {
+      "top": 10900,
+      "height": 86,
+      "width": 1026
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "600",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Favorite",
+    "rect": {
+      "top": 11000,
+      "height": 86,
+      "width": 300
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "700",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart Assistants",
+    "rect": {
+      "top": 11000,
+      "height": 86,
+      "width": 605
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "72px",
+    "fontWeight": "700",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Enjoy instant, voice-activated control over your entire home, directly from your smart panel.",
+    "rect": {
+      "top": 11117,
+      "height": 27,
+      "width": 1176
+    },
+    "color": "rgb(199, 201, 204)",
+    "fontSize": "18px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "27px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-xjskk framer-16wtx9l framer-v-16wtx9l",
+    "text": "",
+    "rect": {
+      "top": 11192,
+      "height": 56,
+      "width": 165
+    },
+    "gradient": "linear-gradient(90deg, rgb(8, 131, 253) 0%, rgb(133, 205, 251) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px, rgba(16, 112, 173, 0.7) 0px 0px 10px 0px",
+    "radius": "60px",
+    "padding": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Amazon Alexa",
+    "rect": {
+      "top": 11210,
+      "height": 20,
+      "width": 117
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "17px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "20.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-xjskk framer-16wtx9l framer-v-1b1cj0f",
+    "text": "",
+    "rect": {
+      "top": 11192,
+      "height": 56,
+      "width": 177
+    },
+    "bg": "rgb(26, 32, 43)",
+    "gradient": "linear-gradient(90deg, rgb(26, 32, 43) 0%, rgb(26, 32, 43) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px, rgba(16, 112, 173, 0.7) 0px 0px 10px 0px",
+    "radius": "60px",
+    "padding": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Google Assistant",
+    "rect": {
+      "top": 11210,
+      "height": 19,
+      "width": 129
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-xjskk framer-16wtx9l framer-v-1b1cj0f",
+    "text": "",
+    "rect": {
+      "top": 11192,
+      "height": 56,
+      "width": 208
+    },
+    "bg": "rgb(26, 32, 43)",
+    "gradient": "linear-gradient(90deg, rgb(26, 32, 43) 0%, rgb(26, 32, 43) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px, rgba(16, 112, 173, 0.7) 0px 0px 10px 0px",
+    "radius": "60px",
+    "padding": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Apple HomeKit & Siri",
+    "rect": {
+      "top": 11210,
+      "height": 19,
+      "width": 160
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-xjskk framer-16wtx9l framer-v-1b1cj0f",
+    "text": "",
+    "rect": {
+      "top": 11192,
+      "height": 56,
+      "width": 171
+    },
+    "bg": "rgb(26, 32, 43)",
+    "gradient": "linear-gradient(90deg, rgb(26, 32, 43) 0%, rgb(26, 32, 43) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px, rgba(16, 112, 173, 0.7) 0px 0px 10px 0px",
+    "radius": "60px",
+    "padding": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Samsung Bixby",
+    "rect": {
+      "top": 11210,
+      "height": 19,
+      "width": 123
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-xjskk framer-16wtx9l framer-v-1b1cj0f",
+    "text": "",
+    "rect": {
+      "top": 11192,
+      "height": 56,
+      "width": 192
+    },
+    "bg": "rgb(26, 32, 43)",
+    "gradient": "linear-gradient(90deg, rgb(26, 32, 43) 0%, rgb(26, 32, 43) 100%)",
+    "shadow": "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px, rgba(16, 112, 173, 0.7) 0px 0px 10px 0px",
+    "radius": "60px",
+    "padding": "24px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Our Smart Screens",
+    "rect": {
+      "top": 11210,
+      "height": 19,
+      "width": 144
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-1nyf32 hidden-2rzzcq",
+    "text": "",
+    "rect": {
+      "top": 11938,
+      "height": 854,
+      "width": 1440
+    },
+    "gradient": "linear-gradient(90deg, rgba(9, 73, 114, 0.2) 0%, rgba(1, 5, 16, 0.2) 100%)",
+    "padding": "120px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "FAQ",
+    "rect": {
+      "top": 12058,
+      "height": 22,
+      "width": 37
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "18px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "21.6px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Frequently Asked",
+    "rect": {
+      "top": 12122,
+      "height": 173,
+      "width": 425
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "72px",
+    "fontWeight": "700",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Questions",
+    "rect": {
+      "top": 12303,
+      "height": 86,
+      "width": 362
+    },
+    "color": "rgb(0, 0, 0)",
+    "fontSize": "72px",
+    "fontWeight": "700",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "86.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Everything You Need to Know About Working With Us",
+    "rect": {
+      "top": 12431,
+      "height": 240,
+      "width": 380
+    },
+    "color": "rgb(199, 201, 204)",
+    "fontSize": "40px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "60px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-EJG2x framer-affa11 framer-v-ldyc7q",
+    "text": "",
+    "rect": {
+      "top": 12112,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-16o5k7l",
+    "text": "",
+    "rect": {
+      "top": 12112,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px",
+    "padding": "26px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "What is H-Bot and how does it work?",
+    "rect": {
+      "top": 12143,
+      "height": 19,
+      "width": 617
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-aguza0",
+    "text": "",
+    "rect": {
+      "top": 12111,
+      "height": 84,
+      "width": 711
+    },
+    "gradient": "linear-gradient(77deg, rgb(203, 217, 222) -6%, rgb(16, 112, 173) 107%)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-EJG2x framer-affa11 framer-v-ldyc7q",
+    "text": "",
+    "rect": {
+      "top": 12218,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-16o5k7l",
+    "text": "",
+    "rect": {
+      "top": 12218,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px",
+    "padding": "26px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Is there a mobile app?",
+    "rect": {
+      "top": 12249,
+      "height": 19,
+      "width": 617
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-aguza0",
+    "text": "",
+    "rect": {
+      "top": 12217,
+      "height": 84,
+      "width": 711
+    },
+    "gradient": "linear-gradient(77deg, rgb(203, 217, 222) -6%, rgb(16, 112, 173) 107%)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-EJG2x framer-affa11 framer-v-ldyc7q",
+    "text": "",
+    "rect": {
+      "top": 12324,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-16o5k7l",
+    "text": "",
+    "rect": {
+      "top": 12324,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px",
+    "padding": "26px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Who will install the smart devices?",
+    "rect": {
+      "top": 12355,
+      "height": 19,
+      "width": 617
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-aguza0",
+    "text": "",
+    "rect": {
+      "top": 12323,
+      "height": 84,
+      "width": 711
+    },
+    "gradient": "linear-gradient(77deg, rgb(203, 217, 222) -6%, rgb(16, 112, 173) 107%)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-EJG2x framer-affa11 framer-v-ldyc7q",
+    "text": "",
+    "rect": {
+      "top": 12430,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-16o5k7l",
+    "text": "",
+    "rect": {
+      "top": 12430,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px",
+    "padding": "26px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Is H-Bot compatible with other smart home ecosystems?",
+    "rect": {
+      "top": 12461,
+      "height": 19,
+      "width": 617
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-aguza0",
+    "text": "",
+    "rect": {
+      "top": 12429,
+      "height": 84,
+      "width": 711
+    },
+    "gradient": "linear-gradient(77deg, rgb(203, 217, 222) -6%, rgb(16, 112, 173) 107%)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-EJG2x framer-affa11 framer-v-ldyc7q",
+    "text": "",
+    "rect": {
+      "top": 12536,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-16o5k7l",
+    "text": "",
+    "rect": {
+      "top": 12536,
+      "height": 82,
+      "width": 709
+    },
+    "bg": "rgb(1, 5, 16)",
+    "radius": "20px",
+    "padding": "26px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "How secure is H-bot?",
+    "rect": {
+      "top": 12567,
+      "height": 19,
+      "width": 617
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "16px",
+    "fontWeight": "500",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "19.2px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-aguza0",
+    "text": "",
+    "rect": {
+      "top": 12535,
+      "height": 84,
+      "width": 711
+    },
+    "gradient": "linear-gradient(77deg, rgb(203, 217, 222) -6%, rgb(16, 112, 173) 107%)",
+    "radius": "20px"
+  },
+  {
+    "tag": "div",
+    "cls": "framer-187rvap",
+    "text": "",
+    "rect": {
+      "top": 12951,
+      "height": 341,
+      "width": 1200
+    },
+    "shadow": "rgba(1, 5, 16, 0.4) 0px 4px 10px 0px",
+    "radius": "24px",
+    "padding": "80px 60px"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Smart home automation designed to",
+    "rect": {
+      "top": 13094,
+      "height": 22,
+      "width": 345
+    },
+    "color": "rgb(180, 180, 180)",
+    "fontSize": "16px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "22.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "simplify and elevate your lifestyle.",
+    "rect": {
+      "top": 13116,
+      "height": 22,
+      "width": 345
+    },
+    "color": "rgb(180, 180, 180)",
+    "fontSize": "16px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "22.4px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Home",
+    "rect": {
+      "top": 13031,
+      "height": 15,
+      "width": 120
+    },
+    "color": "rgb(180, 180, 180)",
+    "fontSize": "10px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "15px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-text framer-styles-preset-chu4q9",
+    "text": "Home",
+    "rect": {
+      "top": 13032,
+      "height": 13,
+      "width": 29
+    },
+    "color": "rgb(180, 180, 180)",
+    "fontSize": "10px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "15px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "About us",
+    "rect": {
+      "top": 13058,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-text framer-styles-preset-chu4q9",
+    "text": "About us",
+    "rect": {
+      "top": 13059,
+      "height": 15,
+      "width": 54
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Our Partners",
+    "rect": {
+      "top": 13088,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-text framer-styles-preset-chu4q9",
+    "text": "Our Partners",
+    "rect": {
+      "top": 13089,
+      "height": 15,
+      "width": 73
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "FAQS",
+    "rect": {
+      "top": 13118,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-text framer-styles-preset-chu4q9",
+    "text": "FAQS",
+    "rect": {
+      "top": 13119,
+      "height": 15,
+      "width": 30
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Services",
+    "rect": {
+      "top": 13031,
+      "height": 15,
+      "width": 120
+    },
+    "color": "rgb(180, 180, 180)",
+    "fontSize": "10px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "15px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "R&D",
+    "rect": {
+      "top": 13058,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-text framer-styles-preset-chu4q9",
+    "text": "R&D",
+    "rect": {
+      "top": 13059,
+      "height": 15,
+      "width": 26
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Hospitality",
+    "rect": {
+      "top": 13088,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "a",
+    "cls": "framer-text framer-styles-preset-chu4q9",
+    "text": "Hospitality",
+    "rect": {
+      "top": 13089,
+      "height": 15,
+      "width": 62
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Contact",
+    "rect": {
+      "top": 13031,
+      "height": 15,
+      "width": 120
+    },
+    "color": "rgb(180, 180, 180)",
+    "fontSize": "10px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "15px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "El Nozha, Egypt",
+    "rect": {
+      "top": 13058,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "support@hbot.com",
+    "rect": {
+      "top": 13088,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "+20 12 81167100",
+    "rect": {
+      "top": 13118,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Legal",
+    "rect": {
+      "top": 13031,
+      "height": 15,
+      "width": 120
+    },
+    "color": "rgb(180, 180, 180)",
+    "fontSize": "10px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "15px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Privacy Policy",
+    "rect": {
+      "top": 13058,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "Terms & conditions",
+    "rect": {
+      "top": 13088,
+      "height": 18,
+      "width": 120
+    },
+    "color": "rgb(255, 255, 255)",
+    "fontSize": "12px",
+    "fontWeight": "400",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "18px",
+    "letterSpacing": "normal"
+  },
+  {
+    "tag": "p",
+    "cls": "framer-text",
+    "text": "2025 \u00a9 MSOL.DEV All rights reserved.",
+    "rect": {
+      "top": 13197,
+      "height": 15,
+      "width": 180
+    },
+    "color": "rgb(180, 180, 180)",
+    "fontSize": "10px",
+    "fontWeight": "300",
+    "fontFamily": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+    "lineHeight": "15px",
+    "letterSpacing": "normal"
+  }
+]

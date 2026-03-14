@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/wifi_permission_service.dart';
 import '../services/platform_helper.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Widget that gates Wi-Fi functionality behind proper permissions
 class WiFiPermissionGate extends StatefulWidget {
@@ -177,7 +178,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
             Icon(
               _permissionStatus == WiFiPermissionStatus.locationServicesDisabled
                   ? Icons.location_off
-                  : Icons.wifi_off,
+                  : HBotIcons.wifiOff,
               size: 80,
               color: HBotColors.warning,
             ),
@@ -200,12 +201,12 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: HBotSpacing.space6),
+            SizedBox(height: HBotSpacing.space6),
             if (_permissionStatus ==
                 WiFiPermissionStatus.locationServicesDisabled) ...[
               ElevatedButton.icon(
                 onPressed: _openLocationSettings,
-                icon: const Icon(Icons.location_on),
+                icon: Icon(HBotIcons.room),
                 label: const Text('Turn On Location Services'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
@@ -220,7 +221,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
                 WiFiPermissionStatus.permanentlyDenied) ...[
               ElevatedButton.icon(
                 onPressed: _openAppSettings,
-                icon: const Icon(Icons.settings),
+                icon: Icon(HBotIcons.settings),
                 label: const Text('Open App Settings'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
@@ -234,7 +235,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
             ] else ...[
               ElevatedButton.icon(
                 onPressed: _requestPermissions,
-                icon: const Icon(Icons.check),
+                icon: Icon(HBotIcons.check),
                 label: const Text('Grant Permissions'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
@@ -246,10 +247,10 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
                 ),
               ),
             ],
-            const SizedBox(height: HBotSpacing.space4),
+            SizedBox(height: HBotSpacing.space4),
             TextButton.icon(
               onPressed: _checkPermissions,
-              icon: const Icon(Icons.refresh),
+              icon: Icon(HBotIcons.refresh),
               label: const Text('Check Again'),
               style: TextButton.styleFrom(
                 foregroundColor: HBotColors.primary,

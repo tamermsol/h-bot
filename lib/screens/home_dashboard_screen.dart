@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
+import '../widgets/design_system.dart';
 import '../models/home.dart';
 import '../models/room.dart';
 import '../models/device.dart';
@@ -211,9 +213,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Icon(Icons.check_circle, color: Colors.white, size: 20),
+                      Icon(HBotIcons.checkCircle, color: Colors.white, size: 20),
                       SizedBox(width: 8),
                       Text('MQTT connection restored'),
                     ],
@@ -242,9 +244,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Icon(Icons.error, color: Colors.white, size: 20),
+                      Icon(HBotIcons.error, color: Colors.white, size: 20),
                       SizedBox(width: 8),
                       Text('Failed to restore MQTT connection'),
                     ],
@@ -286,9 +288,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.warning, color: Colors.white, size: 20),
+                    Icon(HBotIcons.error, color: Colors.white, size: 20),
                     SizedBox(width: 8),
                     Text('Connection recovery error'),
                   ],
@@ -871,6 +873,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           children: [
             // Greeting section
             _buildGreetingSection(),
+            // Decorative gradient divider between sections
+            if (_homes.isNotEmpty)
+              const GradientDivider(
+                margin: EdgeInsets.symmetric(horizontal: 40, vertical: 4),
+              ),
             // Room tabs
             if (_homes.isNotEmpty && _rooms.isNotEmpty)
               Container(
@@ -891,13 +898,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 gradient: HBotColors.primaryGradient,
-                boxShadow: [
-                  BoxShadow(
-                    color: HBotColors.primary.withOpacity(0.35),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.15),
+                  width: 1,
+                ),
               ),
               child: Material(
                 color: Colors.transparent,
@@ -916,12 +920,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     );
                   },
                   borderRadius: BorderRadius.circular(16),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.add, color: Colors.white, size: 20),
+                        Icon(HBotIcons.add, color: Colors.white, size: 20),
                         SizedBox(width: 8),
                         Text(
                           'Add Device',
@@ -978,13 +982,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   stops: [0.0, 0.55, 1.0],
                 ),
                 borderRadius: BorderRadius.circular(HBotRadius.large),
-                boxShadow: [
-                  BoxShadow(
-                    color: HBotColors.primaryDark.withOpacity(0.25),
-                    blurRadius: 16,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
+                // No drop shadow per design spec — depth via gradient + border
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1004,7 +1002,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            Icons.home_outlined,
+                            HBotIcons.home,
                             color: Colors.white.withOpacity(0.9),
                             size: 14,
                           ),
@@ -1021,9 +1019,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const SizedBox(width: 2),
+                          SizedBox(width: 2),
                           Icon(
-                            Icons.keyboard_arrow_down,
+                            HBotIcons.chevronDown,
                             color: Colors.white.withOpacity(0.7),
                             size: 16,
                           ),
@@ -1080,7 +1078,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                         ),
                         const Spacer(),
                         Icon(
-                          Icons.devices_other,
+                          HBotIcons.devices,
                           color: Colors.white.withOpacity(0.3),
                           size: 32,
                         ),
@@ -1177,14 +1175,14 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     fontFamily: 'Inter',
                     color: HBotColors.textTertiaryLight,
                   ),
-                  prefixIcon: const Icon(
-                    Icons.search,
+                  prefixIcon: Icon(
+                    HBotIcons.search,
                     color: HBotColors.textTertiaryLight,
                   ),
                   suffixIcon: _searchQuery.isNotEmpty
                       ? IconButton(
-                          icon: const Icon(
-                            Icons.clear,
+                          icon: Icon(
+                            HBotIcons.close,
                             color: HBotColors.textTertiaryLight,
                           ),
                           onPressed: () {
@@ -1209,7 +1207,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
             ),
           ),
-          const SizedBox(width: HBotSpacing.space2),
+          SizedBox(width: HBotSpacing.space2),
           // Options menu button
           Container(
             decoration: BoxDecoration(
@@ -1218,7 +1216,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               border: Border.all(color: HBotColors.borderLight, width: 1),
             ),
             child: IconButton(
-              icon: const Icon(Icons.tune, color: HBotColors.textPrimaryLight),
+              icon: Icon(HBotIcons.tune, color: HBotColors.textPrimaryLight),
               onPressed: _showOptionsMenu,
               tooltip: 'Filter and sort options',
               padding: const EdgeInsets.all(HBotSpacing.space2),
@@ -1256,8 +1254,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   border: Border.all(color: HBotColors.borderLight, width: 1),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(
-                  Icons.add,
+                child: Icon(
+                  HBotIcons.add,
                   color: HBotColors.iconDefault,
                   size: 18,
                 ),
@@ -1357,7 +1355,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
     if (_homes.isEmpty) {
       return _buildEmptyState(
-        icon: Icons.home_outlined,
+        icon: HBotIcons.home,
         title: 'Your smart home awaits',
         subtitle: 'Add your first device to start controlling your home.',
         actionText: '+ Add Device',
@@ -1380,7 +1378,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       }
 
       return _buildEmptyState(
-        icon: Icons.home_outlined,
+        icon: HBotIcons.home,
         title: emptyTitle,
         subtitle: emptySubtitle,
         actionText: '+ Add Device',
@@ -1874,7 +1872,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     width: 32,
                     height: 32,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_downward),
+                      icon: Icon(HBotIcons.arrowDown),
                       onPressed:
                           isControllable &&
                               _mqttConnected &&
@@ -1892,13 +1890,13 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       iconSize: 16,
                     ),
                   ),
-                  const SizedBox(width: 2),
+                  SizedBox(width: 2),
                   // Stop button
                   SizedBox(
                     width: 32,
                     height: 32,
                     child: IconButton(
-                      icon: const Icon(Icons.stop),
+                      icon: Icon(HBotIcons.stop),
                       onPressed: isControllable && _mqttConnected && isOnline
                           ? () => _controlShutter(device, 'stop')
                           : null,
@@ -1910,13 +1908,13 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       iconSize: 16,
                     ),
                   ),
-                  const SizedBox(width: 2),
+                  SizedBox(width: 2),
                   // Open button (dimmed at 100%)
                   SizedBox(
                     width: 32,
                     height: 32,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_upward),
+                      icon: Icon(HBotIcons.arrowUp),
                       onPressed:
                           isControllable &&
                               _mqttConnected &&
@@ -2000,19 +1998,19 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     }
   }
 
-  /// Get icon for device type
+  /// Get icon for device type (Phosphor line icons per design spec)
   IconData _getDeviceIcon(DeviceType deviceType) {
     switch (deviceType) {
       case DeviceType.relay:
-        return Icons.power_settings_new;
+        return HBotIcons.toggleRight;
       case DeviceType.dimmer:
-        return Icons.lightbulb_outline;
+        return HBotIcons.lightbulb;
       case DeviceType.shutter:
-        return Icons.window;
+        return HBotIcons.shutter;
       case DeviceType.sensor:
-        return Icons.sensors;
+        return HBotIcons.thermometer;
       case DeviceType.other:
-        return Icons.device_unknown;
+        return HBotIcons.deviceUnknown;
     }
   }
 
@@ -2041,14 +2039,14 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             color: HBotColors.primary,
           ),
         ),
-        const SizedBox(height: HBotSpacing.space2),
+        SizedBox(height: HBotSpacing.space2),
 
         // Control buttons row
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.arrow_downward, size: 20),
+              icon: Icon(HBotIcons.arrowDown, size: 20),
               onPressed: canControl && position > 0
                   ? () => _controlShutter(device, 'close')
                   : null,
@@ -2061,9 +2059,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               padding: const EdgeInsets.all(HBotSpacing.space1),
               constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             ),
-            const SizedBox(width: HBotSpacing.space1),
+            SizedBox(width: HBotSpacing.space1),
             IconButton(
-              icon: const Icon(Icons.stop, size: 20),
+              icon: Icon(HBotIcons.stop, size: 20),
               onPressed: canControl
                   ? () => _controlShutter(device, 'stop')
                   : null,
@@ -2072,9 +2070,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               padding: const EdgeInsets.all(HBotSpacing.space1),
               constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             ),
-            const SizedBox(width: HBotSpacing.space1),
+            SizedBox(width: HBotSpacing.space1),
             IconButton(
-              icon: const Icon(Icons.arrow_upward, size: 20),
+              icon: Icon(HBotIcons.arrowUp, size: 20),
               onPressed: canControl && position < 100
                   ? () => _controlShutter(device, 'open')
                   : null,
@@ -2098,10 +2096,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     try {
       if (!_mqttConnected) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Row(
               children: [
-                Icon(Icons.wifi_off, color: Colors.white),
+                Icon(HBotIcons.wifiOff, color: Colors.white),
                 SizedBox(width: 8),
                 Text('Connection lost. Please check your network.'),
               ],
@@ -2161,9 +2159,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       if (!_mqttConnected) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
-                Icon(Icons.wifi_off, color: Colors.white),
+                Icon(HBotIcons.wifiOff, color: Colors.white),
                 SizedBox(width: 8),
                 Text('Connection lost. Please check your network.'),
               ],
@@ -2241,20 +2239,20 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     color: HBotColors.textPrimaryLight,
                   ),
                 ),
-                const SizedBox(height: HBotSpacing.space4),
+                SizedBox(height: HBotSpacing.space4),
 
                 // Dashboard Background option
                 if (_selectedHome != null) ...[
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: hbotCircleIcon(
-                      icon: Icons.image_outlined,
+                      icon: HBotIcons.image,
                       backgroundColor: HBotColors.primarySurface,
                       iconColor: HBotColors.primary,
                     ),
                     title: const Text('Dashboard Background'),
                     subtitle: const Text('Set background image'),
-                    trailing: const Icon(Icons.chevron_right, color: HBotColors.textTertiaryLight),
+                    trailing: Icon(HBotIcons.chevronRight, color: HBotColors.textTertiaryLight),
                     onTap: () {
                       Navigator.pop(context);
                       _showHomeBackgroundDialog();
@@ -2267,7 +2265,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(
-                    _isGridView ? Icons.grid_view : Icons.view_list,
+                    _isGridView ? HBotIcons.gridView : HBotIcons.listView,
                     color: HBotColors.primary,
                   ),
                   title: const Text('View Mode'),
@@ -2295,8 +2293,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 // Hide offline devices toggle
                 ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.visibility_off,
+                  leading: Icon(
+                    HBotIcons.visibilityOff,
                     color: HBotColors.primaryLight,
                   ),
                   title: const Text('Hide Offline Devices'),
@@ -2330,13 +2328,13 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   ),
                 ),
 
-                _buildSortOption('Name (A-Z)', 'name', Icons.sort_by_alpha),
-                _buildSortOption('Recently Added', 'recent', Icons.access_time),
-                _buildSortOption('Room', 'room', Icons.room_outlined),
+                _buildSortOption('Name (A-Z)', 'name', HBotIcons.sortAlpha),
+                _buildSortOption('Recently Added', 'recent', HBotIcons.accessTime),
+                _buildSortOption('Room', 'room', HBotIcons.room),
                 _buildSortOption(
                   'Device Type',
                   'type',
-                  Icons.category_outlined,
+                  HBotIcons.category,
                 ),
 
                 const SizedBox(height: HBotSpacing.space4),
@@ -2369,7 +2367,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         ),
       ),
       trailing: isSelected
-          ? const Icon(Icons.check, color: HBotColors.primary)
+          ? Icon(HBotIcons.check, color: HBotColors.primary)
           : null,
       onTap: () {
         setState(() {
@@ -2405,12 +2403,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   color: HBotColors.textPrimaryLight,
                 ),
               ),
-              const SizedBox(height: HBotSpacing.space4),
+              SizedBox(height: HBotSpacing.space4),
               ..._homes.map(
                 (home) => ListTile(
                   title: Text(home.name),
                   trailing: _selectedHome?.id == home.id
-                      ? const Icon(Icons.check, color: HBotColors.primary)
+                      ? Icon(HBotIcons.check, color: HBotColors.primary)
                       : null,
                   onTap: () {
                     Navigator.pop(context);
@@ -2537,14 +2535,14 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 color: HBotColors.textPrimaryLight,
               ),
             ),
-            const SizedBox(height: HBotSpacing.space6),
+            SizedBox(height: HBotSpacing.space6),
 
             // Show different options based on current state
             if (_homes.isEmpty) ...[
               // No homes exist - prioritize home creation
               ListTile(
                 leading: hbotCircleIcon(
-                  icon: Icons.home_work_outlined,
+                  icon: HBotIcons.building,
                   backgroundColor: HBotColors.primarySurface,
                   iconColor: HBotColors.primary,
                   size: 44,
@@ -2584,9 +2582,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       color: HBotColors.warning.withOpacity(0.3),
                     ),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.info_outline, color: HBotColors.warningDark),
+                      Icon(HBotIcons.info, color: HBotColors.warningDark),
                       SizedBox(width: HBotSpacing.space2),
                       Expanded(
                         child: Text(
@@ -2604,7 +2602,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
               ListTile(
                 leading: hbotCircleIcon(
-                  icon: Icons.devices_outlined,
+                  icon: HBotIcons.devices,
                   backgroundColor: HBotColors.primarySurface,
                   iconColor: HBotColors.primaryLight,
                   size: 44,
@@ -2622,10 +2620,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   _showAddDeviceDialog();
                 },
               ),
-              const SizedBox(height: HBotSpacing.space2),
+              SizedBox(height: HBotSpacing.space2),
               ListTile(
                 leading: hbotCircleIcon(
-                  icon: Icons.home_work_outlined,
+                  icon: HBotIcons.building,
                   backgroundColor: HBotColors.primarySurface,
                   iconColor: HBotColors.primary,
                   size: 44,
@@ -2704,7 +2702,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.wifi, color: HBotColors.primary),
+                leading: Icon(HBotIcons.wifi, color: HBotColors.primary),
                 title: const Text('HBOT Device'),
                 subtitle: const Text('Add HBOT device via Wi-Fi'),
                 onTap: () {
@@ -2714,7 +2712,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Divider(),
               ListTile(
-                leading: const Icon(Icons.device_hub, color: HBotColors.textTertiaryLight),
+                leading: Icon(HBotIcons.deviceHub, color: HBotColors.textTertiaryLight),
                 title: const Text('Other Device'),
                 subtitle: const Text('Coming soon...'),
                 enabled: false,
@@ -2805,10 +2803,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   'Existing Homes:',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 ..._homes.map(
                   (home) => ListTile(
-                    leading: const Icon(Icons.home),
+                    leading: Icon(HBotIcons.home),
                     title: Text(home.name),
                     onTap: () {
                       debugPrint('User selected home: ${home.name}');
@@ -2827,7 +2825,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 const Divider(),
               ],
               ListTile(
-                leading: const Icon(Icons.add_home),
+                leading: Icon(HBotIcons.add),
                 title: const Text('Create New Home'),
                 subtitle: const Text('Create a new home first'),
                 onTap: () async {
@@ -2871,7 +2869,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               hbotCircleIcon(
-                icon: Icons.home_outlined,
+                icon: HBotIcons.home,
                 backgroundColor: HBotColors.primarySurface,
                 iconColor: HBotColors.primary,
                 size: 64,
@@ -2938,7 +2936,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           title: Row(
             children: [
               Icon(
-                _mqttConnected ? Icons.wifi : Icons.wifi_off,
+                _mqttConnected ? HBotIcons.wifi : HBotIcons.wifiOff,
                 color: _mqttConnected ? HBotColors.success : HBotColors.error,
               ),
               const SizedBox(width: HBotSpacing.space2),

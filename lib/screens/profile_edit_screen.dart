@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../widgets/smart_input_field.dart';
 import '../services/auth_service.dart';
 import '../models/profile.dart';
+import '../utils/phosphor_icons.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   final Profile? initialProfile;
@@ -139,7 +140,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.info_outline,
+                      HBotIcons.info,
                       color: HBotColors.primary,
                       size: 20,
                     ),

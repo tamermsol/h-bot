@@ -8,6 +8,7 @@ import '../models/device_share_invitation.dart';
 import '../models/device_share_request.dart';
 import '../models/shared_device.dart';
 import '../repos/device_sharing_repo.dart';
+import '../utils/phosphor_icons.dart';
 
 class ShareDeviceScreen extends StatefulWidget {
   final Device device;
@@ -183,8 +184,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                 onTap: () => Navigator.pop(context, 'biometric'),
               ),
             ListTile(
-              leading: const Icon(
-                Icons.lock,
+              leading: Icon(
+                HBotIcons.lock,
                 color: HBotColors.primary,
                 size: 32,
               ),
@@ -259,8 +260,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(
-                Icons.visibility,
+              leading: Icon(
+                HBotIcons.visibility,
                 color: HBotColors.primary,
               ),
               title: const Text('View Only'),
@@ -268,8 +269,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
               onTap: () => Navigator.pop(context, PermissionLevel.view),
             ),
             ListTile(
-              leading: const Icon(
-                Icons.touch_app,
+              leading: Icon(
+                HBotIcons.power,
                 color: HBotColors.primary,
               ),
               title: const Text('Control'),
@@ -297,7 +298,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
             : HBotColors.backgroundLight,
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: Icon(HBotIcons.refresh),
             onPressed: _loadData,
             tooltip: 'Refresh',
           ),
@@ -323,7 +324,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                       child: Row(
                         children: [
                           Icon(
-                            Icons.devices,
+                            HBotIcons.devices,
                             color: HBotColors.primary,
                             size: 32,
                           ),
@@ -429,13 +430,13 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                                 color: Colors.grey,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            SizedBox(height: 8),
                             TextButton.icon(
                               onPressed: () async {
                                 await _repo.deleteInvitation(_invitation!.id);
                                 setState(() => _invitation = null);
                               },
-                              icon: const Icon(Icons.close),
+                              icon: Icon(HBotIcons.close),
                               label: const Text('Cancel QR Code'),
                             ),
                           ],
@@ -459,9 +460,9 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                           color: HBotColors.cardLight,
                           margin: const EdgeInsets.only(bottom: 8),
                           child: ListTile(
-                            leading: const CircleAvatar(
+                            leading: CircleAvatar(
                               backgroundColor: HBotColors.primary,
-                              child: Icon(Icons.person, color: Colors.white),
+                              child: Icon(HBotIcons.person, color: Colors.white),
                             ),
                             title: Text(
                               request.requesterName ?? request.requesterEmail,
@@ -479,15 +480,15 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 IconButton(
-                                  icon: const Icon(
-                                    Icons.check,
+                                  icon: Icon(
+                                    HBotIcons.check,
                                     color: HBotColors.success,
                                   ),
                                   onPressed: () => _approveRequest(request),
                                 ),
                                 IconButton(
-                                  icon: const Icon(
-                                    Icons.close,
+                                  icon: Icon(
+                                    HBotIcons.close,
                                     color: HBotColors.error,
                                   ),
                                   onPressed: () => _rejectRequest(request),
@@ -516,9 +517,9 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                           color: HBotColors.cardLight,
                           margin: const EdgeInsets.only(bottom: 8),
                           child: ListTile(
-                            leading: const CircleAvatar(
+                            leading: CircleAvatar(
                               backgroundColor: HBotColors.primary,
-                              child: Icon(Icons.person, color: Colors.white),
+                              child: Icon(HBotIcons.person, color: Colors.white),
                             ),
                             title: Text(
                               shared.ownerEmail ?? 'User',
@@ -533,7 +534,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                               ),
                             ),
                             trailing: IconButton(
-                              icon: const Icon(Icons.delete, color: HBotColors.error),
+                              icon: Icon(HBotIcons.delete, color: HBotColors.error),
                               onPressed: () async {
                                 final confirm = await showDialog<bool>(
                                   context: context,

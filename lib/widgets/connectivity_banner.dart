@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Connectivity Banner per design spec
 /// Slim banner: 40px height
@@ -34,7 +35,7 @@ class ConnectivityBanner extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                isOnline ? Icons.wifi : Icons.wifi_off,
+                isOnline ? HBotIcons.wifi : HBotIcons.wifiOff,
                 size: 16,
                 color: Colors.white,
               ),

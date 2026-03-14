@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class NotificationsSettingsScreen extends StatefulWidget {
   const NotificationsSettingsScreen({super.key});
@@ -272,7 +273,7 @@ class _NotificationsSettingsScreenState
                       child: Row(
                         children: [
                           Icon(
-                            Icons.info_outline,
+                            HBotIcons.info,
                             color: HBotColors.warning,
                             size: 24,
                           ),
@@ -314,7 +315,7 @@ class _NotificationsSettingsScreenState
                       color: HBotColors.textPrimaryLight,
                     ),
                   ),
-                  const SizedBox(height: HBotSpacing.space4),
+                  SizedBox(height: HBotSpacing.space4),
                   Container(
                     decoration: BoxDecoration(
                       color: HBotColors.cardLight,
@@ -325,14 +326,14 @@ class _NotificationsSettingsScreenState
                     child: Column(
                       children: [
                         _buildNotificationTypeItem(
-                          icon: Icons.power_settings_new,
+                          icon: HBotIcons.power,
                           title: 'Device Status',
                           description:
                               'Get notified when devices go online or offline',
                         ),
                         const Divider(height: 1, indent: 72),
                         _buildNotificationTypeItem(
-                          icon: Icons.auto_awesome,
+                          icon: HBotIcons.scenes,
                           title: 'Automation Alerts',
                           description:
                               'Notifications when scenes and automations run',

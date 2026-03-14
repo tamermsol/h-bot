@@ -4,6 +4,7 @@ import '../services/auth_service.dart';
 import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import 'sign_in_screen.dart';
+import '../utils/phosphor_icons.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String email;
@@ -187,8 +188,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
+          icon: Icon(
+            HBotIcons.back,
             color: HBotColors.textPrimaryLight,
           ),
           onPressed: () => Navigator.of(context).pop(),
@@ -350,15 +351,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           controller: _newPasswordController,
                           label: 'New Password',
                           obscureText: _obscureNewPassword,
-                          prefixIcon: const Icon(
-                            Icons.lock_outline,
+                          prefixIcon: Icon(
+                            HBotIcons.lock,
                             size: 20,
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscureNewPassword
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
+                                  ? HBotIcons.visibility
+                                  : HBotIcons.visibilityOff,
                               color: HBotColors.iconDefault,
                               size: 20,
                             ),
@@ -377,15 +378,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           controller: _confirmPasswordController,
                           label: 'Confirm Password',
                           obscureText: _obscureConfirmPassword,
-                          prefixIcon: const Icon(
-                            Icons.lock_outline,
+                          prefixIcon: Icon(
+                            HBotIcons.lock,
                             size: 20,
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscureConfirmPassword
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
+                                  ? HBotIcons.visibility
+                                  : HBotIcons.visibilityOff,
                               color: HBotColors.iconDefault,
                               size: 20,
                             ),

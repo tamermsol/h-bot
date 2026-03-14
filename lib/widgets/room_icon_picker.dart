@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class RoomIconPicker extends StatelessWidget {
   final String? currentIconName;
@@ -61,11 +62,11 @@ class RoomIconPicker extends StatelessWidget {
     {'name': 'stairs', 'icon': Icons.stairs, 'label': 'Hallway'},
     {'name': 'door_sliding', 'icon': Icons.door_sliding, 'label': 'Entrance'},
     {'name': 'meeting_room', 'icon': Icons.meeting_room, 'label': 'Conference'},
-    {'name': 'room', 'icon': Icons.room, 'label': 'General Room'},
+    {'name': 'room', 'icon': HBotIcons.room, 'label': 'General Room'},
   ];
 
   static IconData getIconData(String? iconName) {
-    if (iconName == null) return Icons.room;
+    if (iconName == null) return HBotIcons.room;
     try {
       final iconMap = roomIcons.firstWhere(
         (icon) => icon['name'] == iconName,
@@ -73,7 +74,7 @@ class RoomIconPicker extends StatelessWidget {
       );
       return iconMap['icon'] as IconData;
     } catch (e) {
-      return Icons.room;
+      return HBotIcons.room;
     }
   }
 

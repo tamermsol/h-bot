@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../services/figma_service.dart';
+import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 class FigmaDevScreen extends StatefulWidget {
   const FigmaDevScreen({super.key});
@@ -172,7 +174,7 @@ class _FigmaDevScreenState extends State<FigmaDevScreen> {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.copy),
+                  icon: Icon(HBotIcons.copy),
                   onPressed: () {
                     Clipboard.setData(
                       ClipboardData(text: _formatJson(_devFileDetails!)),
@@ -308,7 +310,7 @@ class _FigmaDevScreenState extends State<FigmaDevScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.error, color: HBotColors.errorDark),
+                  Icon(HBotIcons.error, color: HBotColors.errorDark),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(

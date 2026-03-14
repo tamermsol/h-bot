@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../models/shared_device.dart';
 import '../repos/device_sharing_repo.dart';
 import 'scan_device_qr_screen.dart';
+import '../utils/phosphor_icons.dart';
 
 class SharedDevicesScreen extends StatefulWidget {
   const SharedDevicesScreen({super.key});
@@ -123,13 +124,13 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                               color: HBotColors.textSecondaryLight,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          SizedBox(height: 4),
                           Row(
                             children: [
                               Icon(
                                 shared.canControl
-                                    ? Icons.touch_app
-                                    : Icons.visibility,
+                                    ? HBotIcons.power
+                                    : HBotIcons.visibility,
                                 size: 14,
                                 color: shared.canControl
                                     ? Colors.green
@@ -166,7 +167,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.share_outlined,
+              HBotIcons.share,
               size: 80,
               color: HBotColors.textTertiaryLight,
             ),
@@ -231,13 +232,13 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
   IconData _getDeviceIcon(String type) {
     switch (type.toLowerCase()) {
       case 'light':
-        return Icons.lightbulb_outline;
+        return HBotIcons.lightbulb;
       case 'shutter':
         return Icons.blinds;
       case 'switch':
-        return Icons.power_settings_new;
+        return HBotIcons.power;
       default:
-        return Icons.devices;
+        return HBotIcons.devices;
     }
   }
 }

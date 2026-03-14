@@ -8,6 +8,7 @@ import '../widgets/mqtt_debug_sheet.dart';
 import '../widgets/shutter_control_widget.dart';
 import '../theme/app_theme.dart';
 import '../utils/channel_detection_utils.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Enhanced widget for controlling devices with the new MQTT device manager
 class EnhancedDeviceControlWidget extends StatefulWidget {
@@ -434,8 +435,8 @@ class _EnhancedDeviceControlWidgetState
               children: [
                 Icon(
                   _channelTypes[i] == 'light'
-                      ? Icons.lightbulb
-                      : Icons.power_settings_new,
+                      ? HBotIcons.lightbulb
+                      : HBotIcons.power,
                   size: 20,
                   color: (_channelStates[i] ?? false)
                       ? HBotColors.primary
@@ -486,13 +487,13 @@ class _EnhancedDeviceControlWidgetState
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: HBotSpacing.space2),
+          SizedBox(height: HBotSpacing.space2),
           Row(
             children: [
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: isConnected ? _turnAllOn : null,
-                  icon: const Icon(Icons.power_settings_new, size: 18),
+                  icon: Icon(HBotIcons.power, size: 18),
                   label: const Text('All ON'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: HBotColors.successDark,
@@ -534,9 +535,9 @@ class _EnhancedDeviceControlWidgetState
   IconData _getDeviceIcon() {
     switch (widget.device.deviceType) {
       case DeviceType.relay:
-        return Icons.power_settings_new;
+        return HBotIcons.power;
       case DeviceType.dimmer:
-        return Icons.lightbulb_outline;
+        return HBotIcons.lightbulb;
       case DeviceType.shutter:
         return Icons.window;
       case DeviceType.sensor:

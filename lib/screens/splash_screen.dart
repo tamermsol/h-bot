@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 import 'auth_wrapper.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -136,7 +137,7 @@ class _SplashScreenState extends State<SplashScreen>
                               width: 1,
                             ),
                           ),
-                          child: const Icon(Icons.smart_toy,
+                          child: Icon(HBotIcons.smartToy,
                               color: Colors.white, size: 56),
                         ),
                       ),

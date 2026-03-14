@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../theme/app_theme.dart';
+import '../utils/phosphor_icons.dart';
 
 /// Widget for controlling shutter devices with slider and buttons
 class ShutterControlWidget extends StatefulWidget {
@@ -686,7 +687,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                   ? Icons.window
                   : _animationStyle == 'curtain'
                   ? Icons.curtains
-                  : Icons.visibility_off,
+                  : HBotIcons.visibilityOff,
               size: 20,
               color: HBotColors.iconDefault,
             ),
@@ -714,7 +715,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 child: Row(
                   children: [
                     Icon(Icons.curtains, size: 20, color: _animationStyle == 'curtain' ? HBotColors.primary : HBotColors.iconDefault),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Text('Curtain', style: TextStyle(fontFamily: 'Inter', color: _animationStyle == 'curtain' ? HBotColors.primary : HBotColors.textPrimaryLight)),
                   ],
                 ),
@@ -723,7 +724,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 value: 'none',
                 child: Row(
                   children: [
-                    Icon(Icons.visibility_off, size: 20, color: _animationStyle == 'none' ? HBotColors.primary : HBotColors.iconDefault),
+                    Icon(HBotIcons.visibilityOff, size: 20, color: _animationStyle == 'none' ? HBotColors.primary : HBotColors.iconDefault),
                     const SizedBox(width: 8),
                     Text('None', style: TextStyle(fontFamily: 'Inter', color: _animationStyle == 'none' ? HBotColors.primary : HBotColors.textPrimaryLight)),
                   ],
@@ -956,11 +957,11 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
           isHighlighted: isOpening,
         ),
 
-        const SizedBox(width: HBotSpacing.space7),
+        SizedBox(width: HBotSpacing.space7),
 
         // Stop button (red icon per design spec)
         _buildControlButton(
-          icon: Icons.stop,
+          icon: HBotIcons.stop,
           onPressed: _isConnected ? _stopShutter : null,
           isStop: true,
         ),
