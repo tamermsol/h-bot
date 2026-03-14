@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
-import '../widgets/design_system.dart';
 import '../models/scene.dart';
 import '../services/smart_home_service.dart';
 import '../services/current_home_service.dart';
 import '../utils/error_handler.dart';
 import '../widgets/error_message_widget.dart';
-import '../widgets/scene_card.dart';
 import 'add_scene_screen.dart';
 
 class ScenesScreen extends StatefulWidget {
@@ -26,6 +23,7 @@ class _ScenesScreenState extends State<ScenesScreen>
   bool _isLoading = true;
   String? _currentHomeId;
   String? _errorMessage;
+  String? _runningSceneId;
 
   @override
   bool get wantKeepAlive => false; // Don't keep state alive, reload each time
@@ -85,6 +83,21 @@ class _ScenesScreenState extends State<ScenesScreen>
     }
   }
 
+  // ── Icon mapping for scene icon codes ──
+  IconData _getSceneIcon(Scene scene) {
+    if (scene.iconCode != null) {
+      return IconData(scene.iconCode!, fontFamily: 'MaterialIcons');
+    }
+    return Icons.play_arrow;
+  }
+
+  Color _getSceneColor(Scene scene) {
+    if (scene.colorValue != null) {
+      return Color(scene.colorValue!);
+    }
+    return const Color(0xFFF59E0B); // Default amber
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context); // Required for AutomaticKeepAliveClientMixin
@@ -106,11 +119,80 @@ class _ScenesScreenState extends State<ScenesScreen>
       );
     }
 
-    return _currentHomeId == null
-        ? _buildNoHomeState()
-        : _scenes.isEmpty
-        ? _buildEmptyState()
-        : _buildScenesList();
+    return Stack(
+      children: [
+        Column(
+          children: [
+            // Appbar
+            Container(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 12),
+              decoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6), width: 1)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Scenes',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF1F2937),
+                    ),
+                  ),
+                  Text(
+                    '${_scenes.length} scene${_scenes.length != 1 ? 's' : ''}',
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF9CA3AF),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Content
+            Expanded(
+              child: _currentHomeId == null
+                  ? _buildNoHomeState()
+                  : _scenes.isEmpty
+                      ? _buildEmptyState()
+                      : _buildScenesList(),
+            ),
+          ],
+        ),
+        // FAB
+        Positioned(
+          bottom: 88,
+          right: 20,
+          child: GestureDetector(
+            onTap: _showCreateSceneDialog,
+            child: Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x610883FD), // rgba(8,131,253,0.38)
+                    blurRadius: 24,
+                    offset: Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: const Icon(Icons.add, color: Colors.white, size: 22),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildNoHomeState() {
@@ -121,41 +203,33 @@ class _ScenesScreenState extends State<ScenesScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 80,
-              height: 80,
+              width: 64,
+              height: 64,
               decoration: BoxDecoration(
-                color: HBotColors.neutral100,
+                color: const Color(0xFFF5F7FA),
                 shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
               ),
               alignment: Alignment.center,
-              child: Icon(
-                HBotIcons.home,
-                size: 48,
-                color: HBotColors.neutral300,
-              ),
+              child: const Icon(Icons.home_outlined, size: 28, color: Color(0xFFD1D5DB)),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             const Text(
               'No Home Selected',
               style: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1F2937),
               ),
             ),
-            const SizedBox(height: 8),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 260),
-              child: Text(
-                'Please select a home from the dashboard to view and manage scenes',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: HBotColors.textSecondaryLight,
-                ),
-                textAlign: TextAlign.center,
+            const SizedBox(height: 4),
+            const Text(
+              'Select a home from the dashboard',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 13,
+                color: Color(0xFF9CA3AF),
               ),
             ),
           ],
@@ -167,66 +241,59 @@ class _ScenesScreenState extends State<ScenesScreen>
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.only(bottom: 64),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Sparkles icon in circle
             Container(
-              width: 80,
-              height: 80,
+              width: 64,
+              height: 64,
               decoration: BoxDecoration(
-                color: HBotColors.neutral100,
+                color: const Color(0xFFF5F7FA),
                 shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
               ),
               alignment: Alignment.center,
-              child: Icon(
-                HBotIcons.play,
-                size: 48,
-                color: HBotColors.neutral300,
-              ),
+              child: const Icon(Icons.auto_awesome, size: 28, color: Color(0xFFD1D5DB)),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             const Text(
               'No scenes yet',
               style: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1F2937),
               ),
             ),
-            const SizedBox(height: 8),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 260),
-              child: Text(
-                'Create scenes to control multiple devices with a single tap.',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: HBotColors.textSecondaryLight,
-                ),
-                textAlign: TextAlign.center,
+            const SizedBox(height: 4),
+            const Text(
+              'Automate your home with custom scenes',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 13,
+                color: Color(0xFF9CA3AF),
               ),
             ),
-            const SizedBox(height: 24),
-            InkWell(
+            const SizedBox(height: 16),
+            GestureDetector(
               onTap: _showCreateSceneDialog,
-              borderRadius: BorderRadius.circular(12),
-              child: Ink(
+              child: Container(
+                height: 44,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 decoration: BoxDecoration(
-                  gradient: HBotColors.primaryGradient,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                  ),
                 ),
-                child: Container(
-                  height: 52,
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    '+ Create Scene',
+                child: const Center(
+                  child: Text(
+                    'Create Your First Scene',
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      fontSize: 16,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
@@ -242,32 +309,164 @@ class _ScenesScreenState extends State<ScenesScreen>
 
   Widget _buildScenesList() {
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 112),
       itemCount: _scenes.length,
-      separatorBuilder: (_, __) => SizedBox(height: 12),
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final scene = _scenes[index];
+        final iconData = _getSceneIcon(scene);
+        final color = _getSceneColor(scene);
+        final isRunning = _runningSceneId == scene.id;
 
-        // Get icon from scene or use default
-        final iconData = scene.iconCode != null
-            ? IconData(scene.iconCode!, fontFamily: 'MaterialIcons')
-            : HBotIcons.scenes;
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF5F7FA),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isRunning ? const Color(0xFF0883FD) : const Color(0xFFE5E7EB),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              // Icon circle with gradient
+              Opacity(
+                opacity: scene.isEnabled ? 1.0 : 0.45,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [color, color.withOpacity(0.73)], // color + colorBB
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                  child: Icon(iconData, color: Colors.white, size: 22),
+                ),
+              ),
+              const SizedBox(width: 14),
 
-        // Convert Scene model to map for SceneCard widget
-        final sceneMap = <String, dynamic>{
-          'name': scene.name,
-          'isActive': scene.isEnabled,
-          'icon': iconData,
-          'description': scene.isEnabled ? 'Enabled' : 'Disabled',
-        };
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            scene.name,
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF1F2937),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (!scene.isEnabled) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE5E7EB),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: const Text(
+                              'OFF',
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF9CA3AF),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    // Description line -- placeholder since Scene model may not have description
+                    const SizedBox(height: 2),
+                    Text(
+                      scene.isEnabled ? 'Active' : 'Disabled',
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        color: Color(0xFF9CA3AF),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    // Actions count + trigger
+                    Text(
+                      '${scene.isEnabled ? "Enabled" : "Disabled"}',
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 11,
+                        color: Color(0xFFC9CDD6),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-        return GestureDetector(
-          onLongPress: () => _showSceneContextMenu(scene),
-          child: SceneCard(
-            scene: sceneMap,
-            onToggle: (value) => _toggleScene(scene),
-            onTap: () => _showSceneDetails(scene),
-            onPlay: () => _runScene(scene),
+              const SizedBox(width: 8),
+
+              // Play button
+              GestureDetector(
+                onTap: scene.isEnabled && !isRunning ? () => _runScene(scene) : null,
+                child: Opacity(
+                  opacity: (!scene.isEnabled || isRunning) ? 0.4 : 1.0,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isRunning
+                          ? const Color(0xFF0883FD)
+                          : color.withOpacity(0.18),
+                      border: isRunning
+                          ? null
+                          : Border.all(color: color.withOpacity(0.4), width: 1.5),
+                    ),
+                    alignment: Alignment.center,
+                    child: isRunning
+                        ? SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : Icon(Icons.play_arrow, size: 15, color: color),
+                  ),
+                ),
+              ),
+
+              const SizedBox(width: 4),
+
+              // More menu button
+              GestureDetector(
+                onTap: () => _showSceneContextMenu(scene),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.more_vert, size: 16, color: Color(0xFF9CA3AF)),
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -278,76 +477,138 @@ class _ScenesScreenState extends State<ScenesScreen>
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => GlassBottomSheet(
+      barrierColor: Colors.black.withOpacity(0.4),
+      builder: (context) => _SceneCardMenu(
+        scene: scene,
+        onEnable: () {
+          Navigator.pop(context);
+          _toggleScene(scene);
+        },
+        onEdit: () {
+          Navigator.pop(context);
+          _showEditSceneDialog(scene);
+        },
+        onDelete: () {
+          Navigator.pop(context);
+          _showDeleteConfirmSheet(scene);
+        },
+        onClose: () => Navigator.pop(context),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmSheet(Scene scene) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withOpacity(0.4),
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          boxShadow: [BoxShadow(color: Color(0x1F000000), blurRadius: 40, offset: Offset(0, -8))],
+        ),
+        padding: const EdgeInsets.all(20),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Handle bar
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: HBotColors.neutral300,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle bar
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE5E7EB),
+                  borderRadius: BorderRadius.circular(999),
                 ),
-                SizedBox(height: 16),
-                ListTile(
-                  leading: Icon(HBotIcons.edit, color: HBotColors.iconDefault),
-                  title: const Text(
-                    'Edit',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: HBotColors.textPrimaryLight,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _showEditSceneDialog(scene);
-                  },
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Delete Scene?',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1F2937),
                 ),
-                ListTile(
-                  leading: Icon(HBotIcons.copy, color: HBotColors.iconDefault),
-                  title: const Text(
-                    'Duplicate',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: HBotColors.textPrimaryLight,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    // Duplicate scene: navigate to add scene in create mode with pre-filled data
-                    _showEditSceneDialog(scene);
-                  },
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '"${scene.name}" will be permanently deleted.',
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 13,
+                  color: Color(0xFF9CA3AF),
                 ),
-                ListTile(
-                  leading: Icon(HBotIcons.delete, color: HBotColors.error),
-                  title: const Text(
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              // Delete button
+              GestureDetector(
+                onTap: () async {
+                  Navigator.pop(context);
+                  try {
+                    await _service.deleteScene(scene.id);
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Scene "${scene.name}" deleted successfully!'),
+                          backgroundColor: HBotColors.primary,
+                        ),
+                      );
+                    }
+                    await _loadScenes();
+                  } catch (e) {
+                    ErrorHandler.logError(e, context: 'ScenesScreen._deleteScene');
+                    if (mounted) {
+                      ErrorSnackBar.show(context, e);
+                    }
+                  }
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEF4444),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
                     'Delete',
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: HBotColors.error,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
                     ),
                   ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _showDeleteSceneDialog(scene);
-                  },
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 12),
+              // Cancel button
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Cancel',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF4B5563),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -361,13 +622,14 @@ class _ScenesScreenState extends State<ScenesScreen>
 
   Future<void> _runScene(Scene scene) async {
     try {
-      // Execute scene silently without showing notifications
+      setState(() => _runningSceneId = scene.id);
       await _service.runScene(scene.id);
+      // Show running state for 1.8 seconds like v0
+      await Future.delayed(const Duration(milliseconds: 1800));
+      if (mounted) setState(() => _runningSceneId = null);
     } catch (e) {
-      // Log error for debugging
+      if (mounted) setState(() => _runningSceneId = null);
       ErrorHandler.logError(e, context: 'ScenesScreen._runScene');
-
-      // Show user-friendly error message
       if (mounted) {
         ErrorSnackBar.show(context, e);
       }
@@ -389,9 +651,7 @@ class _ScenesScreenState extends State<ScenesScreen>
         );
       }
     } catch (e) {
-      // Log error for debugging
       ErrorHandler.logError(e, context: 'ScenesScreen._toggleScene');
-
       if (mounted) {
         ErrorSnackBar.show(context, e);
       }
@@ -424,61 +684,6 @@ class _ScenesScreenState extends State<ScenesScreen>
     }
   }
 
-  void _showDeleteSceneDialog(Scene scene) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: HBotTheme.card(context),
-          title: const Text('Delete Scene'),
-          content: Text(
-            'Are you sure you want to delete "${scene.name}"? This action cannot be undone.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  await _service.deleteScene(scene.id);
-
-                  if (context.mounted) {
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Scene "${scene.name}" deleted successfully!',
-                        ),
-                        backgroundColor: HBotColors.primary,
-                      ),
-                    );
-                  }
-
-                  await _loadScenes();
-                } catch (e) {
-                  // Log error for debugging
-                  ErrorHandler.logError(
-                    e,
-                    context: 'ScenesScreen._deleteScene',
-                  );
-
-                  if (context.mounted) {
-                    Navigator.pop(context);
-                    ErrorSnackBar.show(context, e);
-                  }
-                }
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: HBotColors.error),
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _showCreateSceneDialog() async {
     debugPrint('ScenesScreen: _showCreateSceneDialog called');
     debugPrint('ScenesScreen: _currentHomeId = $_currentHomeId');
@@ -509,5 +714,149 @@ class _ScenesScreenState extends State<ScenesScreen>
       debugPrint('ScenesScreen: Scene created successfully, reloading scenes');
       await _loadScenes();
     }
+  }
+}
+
+// ── Scene Card Menu (bottom sheet) ──
+class _SceneCardMenu extends StatelessWidget {
+  final Scene scene;
+  final VoidCallback onEnable;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+  final VoidCallback onClose;
+
+  const _SceneCardMenu({
+    required this.scene,
+    required this.onEnable,
+    required this.onEdit,
+    required this.onDelete,
+    required this.onClose,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [BoxShadow(color: Color(0x1F000000), blurRadius: 40, offset: Offset(0, -8))],
+      ),
+      padding: const EdgeInsets.only(top: 20, bottom: 32),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Handle bar
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE5E7EB),
+                borderRadius: BorderRadius.circular(999),
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Scene name
+            Text(
+              scene.name,
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF9CA3AF),
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // Enable/Disable
+            _MenuOption(
+              icon: Icons.power_settings_new,
+              label: scene.isEnabled ? 'Disable Scene' : 'Enable Scene',
+              color: const Color(0xFF1F2937),
+              iconBg: const Color(0xFFF5F7FA),
+              onTap: onEnable,
+              showTopBorder: false,
+            ),
+            // Edit
+            _MenuOption(
+              icon: Icons.edit,
+              label: 'Edit Scene',
+              color: const Color(0xFF1F2937),
+              iconBg: const Color(0xFFF5F7FA),
+              onTap: onEdit,
+              showTopBorder: true,
+            ),
+            // Delete
+            _MenuOption(
+              icon: Icons.delete_outline,
+              label: 'Delete Scene',
+              color: const Color(0xFFEF4444),
+              iconBg: const Color(0xFFFFF1F2),
+              onTap: onDelete,
+              showTopBorder: true,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MenuOption extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final Color iconBg;
+  final VoidCallback onTap;
+  final bool showTopBorder;
+
+  const _MenuOption({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.iconBg,
+    required this.onTap,
+    required this.showTopBorder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        decoration: BoxDecoration(
+          border: showTopBorder
+              ? const Border(top: BorderSide(color: Color(0xFFF3F4F6), width: 1))
+              : null,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: iconBg,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: Icon(icon, size: 16, color: color),
+            ),
+            const SizedBox(width: 16),
+            Text(
+              label,
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

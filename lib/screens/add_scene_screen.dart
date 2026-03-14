@@ -10,7 +10,6 @@ import '../models/device.dart';
 import '../models/scene.dart';
 import '../models/scene_step.dart';
 import '../models/scene_trigger.dart';
-import '../utils/phosphor_icons.dart';
 
 class AddSceneScreen extends StatefulWidget {
   final String homeId;
@@ -31,8 +30,9 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   // Scene data
   final TextEditingController _nameController = TextEditingController();
-  IconData _selectedIcon = HBotIcons.scenes;
-  Color _selectedColor = HBotColors.primary;
+  final TextEditingController _descriptionController = TextEditingController();
+  IconData _selectedIcon = Icons.wb_sunny;
+  Color _selectedColor = const Color(0xFFF59E0B);
   String _selectedTrigger = 'Manual';
   TimeOfDay? _selectedTime;
 
@@ -54,26 +54,40 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   List<SceneStep>? _existingSteps;
   List<SceneTrigger>? _existingTriggers;
 
-  final List<Color> _availableColors = [
-    Color(0xFF2196F3), // Blue
-    Color(0xFF4CAF50), // Green
-    Color(0xFF1976D2), // Dark Blue (replaced orange)
-    Color(0xFF9C27B0), // Purple
-    Color(0xFFE91E63), // Pink
-    Color(0xFF607D8B), // Blue Grey
-    Color(0xFFF44336), // Red
-    Color(0xFF795548), // Brown
+  // v0 scene colors
+  final List<Color> _availableColors = const [
+    Color(0xFFF59E0B), // Amber
+    Color(0xFFEF4444), // Red
+    Color(0xFF0883FD), // Blue
+    Color(0xFF10B981), // Green
+    Color(0xFF8B5CF6), // Purple
+    Color(0xFFF97316), // Orange
+    Color(0xFFEC4899), // Pink
+    Color(0xFF14B8A6), // Teal
   ];
 
-  final List<String> _triggerTypes = [
-    'Manual',
-    'Time Based',
-    'Location Based',
-    'Sensor Triggered',
+  // v0 icon keys -> Material Icons
+  final List<_SceneIconOption> _iconOptions = [
+    _SceneIconOption('sun', Icons.wb_sunny),
+    _SceneIconOption('film', Icons.movie),
+    _SceneIconOption('shield', Icons.shield),
+    _SceneIconOption('moon', Icons.dark_mode),
+    _SceneIconOption('star', Icons.star),
+    _SceneIconOption('zap', Icons.flash_on),
+    _SceneIconOption('home', Icons.home),
+    _SceneIconOption('coffee', Icons.coffee),
   ];
 
-  String _selectedRepeat = 'Once only'; // Repeat option for time-based triggers
-  List<int> _customDays = []; // Custom days selection (empty for "Once only")
+  String _selectedIconKey = 'sun';
+
+  // v0 trigger types (3 options)
+  final List<String> _triggerTypes = ['Manual', 'Scheduled', 'Location'];
+
+  String _selectedRepeat = 'Once only';
+  List<int> _customDays = [];
+  // Scheduled time as string for v0 style
+  String _scheduledTimeStr = '08:00';
+  List<String> _scheduledDays = [];
 
   final List<String> _repeatOptions = [
     'Once only',
@@ -82,6 +96,10 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     'Weekend',
     'Custom',
   ];
+
+  static const List<String> _dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  final List<String> _stepTitles = ['Basic Info', 'Appearance', 'Trigger', 'Devices', 'Device Actions', 'Review'];
 
   @override
   void initState() {
@@ -109,6 +127,13 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       // Load icon and color if available
       if (scene.iconCode != null) {
         _selectedIcon = IconData(scene.iconCode!, fontFamily: 'MaterialIcons');
+        // Try to find matching key
+        for (final opt in _iconOptions) {
+          if (opt.icon.codePoint == scene.iconCode) {
+            _selectedIconKey = opt.key;
+            break;
+          }
+        }
       }
       if (scene.colorValue != null) {
         _selectedColor = Color(scene.colorValue!);
@@ -124,43 +149,30 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
       // Populate trigger information
       if (triggers.isNotEmpty) {
-        final trigger = triggers.first; // Use first trigger
+        final trigger = triggers.first;
         if (trigger.kind == TriggerKind.schedule) {
-          _selectedTrigger = 'Time Based';
+          _selectedTrigger = 'Scheduled';
           final configJson = trigger.configJson;
 
-          // IMPORTANT: Stored time is in UTC, convert back to Egypt time for display
           final utcHour = configJson['hour'] as int?;
           final utcMinute = configJson['minute'] as int?;
 
           if (utcHour != null && utcMinute != null) {
             final timezoneService = TimezoneService();
-            final egyptTime = timezoneService.utcHourMinuteToEgypt(
-              utcHour,
-              utcMinute,
-            );
-            _selectedTime = TimeOfDay(
-              hour: egyptTime['hour']!,
-              minute: egyptTime['minute']!,
-            );
-
-            debugPrint(
-              '🕐 Loaded trigger: UTC $utcHour:$utcMinute -> Egypt ${egyptTime['hour']}:${egyptTime['minute']}',
-            );
+            final egyptTime = timezoneService.utcHourMinuteToEgypt(utcHour, utcMinute);
+            _selectedTime = TimeOfDay(hour: egyptTime['hour']!, minute: egyptTime['minute']!);
+            _scheduledTimeStr = '${egyptTime['hour']!.toString().padLeft(2, '0')}:${egyptTime['minute']!.toString().padLeft(2, '0')}';
           }
 
-          // Load repeat option from days array
-          final days =
-              (configJson['days'] as List?)?.cast<int>() ??
-              [1, 2, 3, 4, 5, 6, 7];
+          final days = (configJson['days'] as List?)?.cast<int>() ?? [1, 2, 3, 4, 5, 6, 7];
           _selectedRepeat = _getRepeatOptionFromDays(days);
           if (_selectedRepeat == 'Custom') {
             _customDays = List<int>.from(days);
           }
-
-          debugPrint('🕐 Loaded repeat: $_selectedRepeat, Days: $days');
+          // Convert days to day name strings
+          _scheduledDays = days.map((d) => _dayNames[d - 1]).toList();
         } else if (trigger.kind == TriggerKind.geo) {
-          _selectedTrigger = 'Location Based';
+          _selectedTrigger = 'Location';
           final configJson = trigger.configJson;
           _selectedLocationTriggerType = configJson['trigger_type'] as String?;
           _selectedLatitude = (configJson['latitude'] as num?)?.toDouble();
@@ -173,212 +185,190 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       // Load all devices to match device IDs with device objects
       final devices = await _service.getDevicesByHome(widget.homeId);
 
-      // Clear existing selections
       _selectedDevices.clear();
       _deviceActions.clear();
 
-      // Populate device actions from scene steps
       for (final step in steps) {
         final actionJson = step.actionJson;
         final deviceId = actionJson['device_id'] as String?;
 
         if (deviceId != null) {
-          // Find the device
           try {
             final device = devices.firstWhere((d) => d.id == deviceId);
-
-            // Add to selected devices with full device object (matching DeviceSelector format)
             _selectedDevices.add({
               'id': device.id,
               'name': device.name,
               'deviceName': device.name,
               'type': device.deviceType.name,
-              'room': 'Unknown', // Room name would need to be fetched
+              'room': 'Unknown',
               'icon': _getDeviceIcon(device.deviceType.name),
               'isOnline': device.online ?? false,
-              'device': device, // ✅ Include full device object
+              'device': device,
             });
-
-            // Populate device action (make a deep copy to avoid reference issues)
             _deviceActions[deviceId] = Map<String, dynamic>.from(actionJson);
-
-            debugPrint(
-              '🔧 Loaded device action for $deviceId: ${actionJson['type'] ?? actionJson['action_type']}',
-            );
           } catch (e) {
-            debugPrint('⚠️ Device not found: $deviceId - $e');
+            debugPrint('Device not found: $deviceId - $e');
           }
         }
       }
 
       setState(() => _isLoading = false);
-
-      debugPrint(
-        '✅ Scene loaded: ${_selectedDevices.length} devices, ${_deviceActions.length} actions',
-      );
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to load scene data: $e'),
-            backgroundColor: HBotColors.error,
-          ),
+          SnackBar(content: Text('Failed to load scene data: $e'), backgroundColor: HBotColors.error),
         );
       }
-      debugPrint('❌ Error loading scene: $e');
     }
   }
 
-  /// Get repeat option from days array
   String _getRepeatOptionFromDays(List<int> days) {
-    // Sort for comparison
     final sortedDays = List<int>.from(days)..sort();
-
-    if (sortedDays.length == 7) {
-      return 'Every day';
-    } else if (sortedDays.length == 5 &&
-        sortedDays[0] == 1 &&
-        sortedDays[4] == 5) {
-      return 'Monday to Friday';
-    } else if (sortedDays.length == 2 &&
-        sortedDays[0] == 6 &&
-        sortedDays[1] == 7) {
-      return 'Weekend';
-    } else if (sortedDays.length == 1) {
-      return 'Once only';
-    } else {
-      return 'Custom';
-    }
+    if (sortedDays.length == 7) return 'Every day';
+    if (sortedDays.length == 5 && sortedDays[0] == 1 && sortedDays[4] == 5) return 'Monday to Friday';
+    if (sortedDays.length == 2 && sortedDays[0] == 6 && sortedDays[1] == 7) return 'Weekend';
+    if (sortedDays.length == 1) return 'Once only';
+    return 'Custom';
   }
 
   IconData _getDeviceIcon(String deviceType) {
     switch (deviceType.toLowerCase()) {
-      case 'relay':
-        return Icons.power;
-      case 'dimmer':
-        return HBotIcons.lightbulb;
-      case 'shutter':
-        return Icons.window;
-      case 'sensor':
-        return Icons.sensors;
-      default:
-        return Icons.device_unknown;
+      case 'relay': return Icons.power;
+      case 'dimmer': return Icons.lightbulb;
+      case 'shutter': return Icons.window;
+      case 'sensor': return Icons.sensors;
+      default: return Icons.device_unknown;
     }
   }
 
-  /// Sync device actions with selected devices
-  /// Removes actions for devices that are no longer selected
   void _syncDeviceActions() {
-    // Get list of currently selected device IDs
     final selectedDeviceIds = _selectedDevices
         .map((deviceMap) => deviceMap['id'] as String?)
         .where((id) => id != null)
         .cast<String>()
         .toSet();
-
-    // Remove actions for devices that are no longer selected
-    _deviceActions.removeWhere((deviceId, action) {
-      final isRemoved = !selectedDeviceIds.contains(deviceId);
-      if (isRemoved) {
-        debugPrint('🗑️ Removed action for device: $deviceId');
-      }
-      return isRemoved;
-    });
-
-    debugPrint(
-      '✅ Synced device actions: ${_deviceActions.length} actions for ${selectedDeviceIds.length} devices',
-    );
+    _deviceActions.removeWhere((deviceId, action) => !selectedDeviceIds.contains(deviceId));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
-      appBar: AppBar(
-        title: Text(
-          _isEditMode ? 'Edit Scene' : 'New Scene',
-          style: const TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: HBotColors.textPrimaryLight,
-          ),
-        ),
-        backgroundColor: HBotColors.backgroundLight,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        iconTheme: const IconThemeData(color: HBotColors.textPrimaryLight),
-        actions: [
-          TextButton(
-            onPressed: (_canProceed() && !_isCreating && _currentStep == 5)
-                ? _createScene
-                : null,
-            child: Text(
-              'Save',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: (_canProceed() && !_isCreating && _currentStep == 5)
-                    ? HBotColors.primary
-                    : HBotColors.neutral300,
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary),
-              ),
-            )
-          : Column(
-              children: [
-                // Progress indicator
-                _buildProgressIndicator(),
-
-                // Content
-                Expanded(
-                  child: PageView(
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      _buildBasicInfoStep(),
-                      _buildAppearanceStep(),
-                      _buildTriggerStep(),
-                      _buildDevicesStep(),
-                      _buildDeviceActionsStep(),
-                      _buildReviewStep(),
-                    ],
-                  ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0883FD)),
                 ),
-
-                // Bottom navigation - STICKY at bottom
-                _buildBottomNavigation(),
-              ],
-            ),
+              )
+            : Column(
+                children: [
+                  // Header
+                  _buildHeader(),
+                  // Step dots
+                  _buildStepDots(),
+                  // Content
+                  Expanded(
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        _buildBasicInfoStep(),
+                        _buildAppearanceStep(),
+                        _buildTriggerStep(),
+                        _buildDevicesStep(),
+                        _buildDeviceActionsStep(),
+                        _buildReviewStep(),
+                      ],
+                    ),
+                  ),
+                  // Footer CTA
+                  _buildFooterCTA(),
+                ],
+              ),
+      ),
     );
   }
 
-  Widget _buildProgressIndicator() {
+  Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 12),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6), width: 1)),
+      ),
       child: Row(
-        children: List.generate(6, (index) {
-          final isActive = index <= _currentStep;
-
-          return Expanded(
+        children: [
+          // Back/Close button
+          GestureDetector(
+            onTap: _currentStep == 0
+                ? () => Navigator.pop(context)
+                : _previousStep,
             child: Container(
-              margin: EdgeInsets.only(right: index < 5 ? 8 : 0),
-              height: 4,
+              width: 36,
+              height: 36,
               decoration: BoxDecoration(
-                color: isActive
-                    ? HBotColors.primary
-                    : HBotColors.borderLight,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(12),
               ),
+              alignment: Alignment.center,
+              child: Icon(
+                _currentStep == 0 ? Icons.close : Icons.arrow_back,
+                size: 19,
+                color: _currentStep == 0 ? const Color(0xFF4B5563) : const Color(0xFF1F2937),
+              ),
+            ),
+          ),
+          // Title
+          Expanded(
+            child: Column(
+              children: [
+                Text(
+                  _isEditMode ? 'Edit Scene' : 'New Scene',
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1F2937),
+                  ),
+                ),
+                Text(
+                  _stepTitles[_currentStep],
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 11,
+                    color: Color(0xFF9CA3AF),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Spacer to balance
+          const SizedBox(width: 36),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStepDots() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6), width: 1)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(6, (i) {
+          return Container(
+            margin: EdgeInsets.only(right: i < 5 ? 6 : 0),
+            width: i == _currentStep ? 20 : 6,
+            height: 6,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(999),
+              color: i == _currentStep
+                  ? const Color(0xFF0883FD)
+                  : i < _currentStep
+                      ? const Color(0xFF93C5FD)
+                      : const Color(0xFFE5E7EB),
             ),
           );
         }),
@@ -386,218 +376,269 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     );
   }
 
+  Widget _buildFooterCTA() {
+    final isLastStep = _currentStep == 5;
+    final canProceed = _canProceed();
+
+    return Container(
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 24, top: 12),
+      decoration: const BoxDecoration(
+        border: Border(top: BorderSide(color: Color(0xFFF3F4F6), width: 1)),
+      ),
+      child: GestureDetector(
+        onTap: (canProceed && !_isCreating) ? _nextStep : null,
+        child: Opacity(
+          opacity: (canProceed && !_isCreating) ? 1.0 : 0.4,
+          child: Container(
+            width: double.infinity,
+            height: 48,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: const LinearGradient(
+                colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+              ),
+            ),
+            alignment: Alignment.center,
+            child: _isCreating
+                ? const SizedBox(
+                    width: 20, height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation(Colors.white)),
+                  )
+                : Text(
+                    isLastStep ? (_isEditMode ? 'Update Scene' : 'Create Scene') : 'Continue',
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── Step 0: Basic Info ──
   Widget _buildBasicInfoStep() {
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
+      onTap: () => FocusScope.of(context).unfocus(),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Section label
-            Text(
-              'SCENE NAME',
+            // Scene Name
+            const Text(
+              'SCENE NAME *',
               style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: HBotColors.textSecondaryLight,
-                letterSpacing: 0.5,
+                fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600,
+                color: Color(0xFF4B5563), letterSpacing: 0.5,
               ),
             ),
-            const SizedBox(height: 8),
-            // Text input
+            const SizedBox(height: 6),
             Container(
-              height: 52,
+              height: 48,
               decoration: BoxDecoration(
-                color: HBotColors.cardLight,
+                color: const Color(0xFFF5F7FA),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: HBotColors.borderLight, width: 1.5),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
               ),
               child: TextField(
                 controller: _nameController,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  color: HBotColors.textPrimaryLight,
-                ),
+                autofocus: !_isEditMode,
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 15, color: Color(0xFF1F2937)),
                 decoration: const InputDecoration(
-                  hintText: 'Scene name (e.g., Movie Night)',
-                  hintStyle: TextStyle(
-                    fontFamily: 'Inter',
-                    color: HBotColors.textTertiaryLight,
-                  ),
+                  hintText: 'e.g. Movie Night',
+                  hintStyle: TextStyle(fontFamily: 'Inter', color: Color(0xFFC9CDD6)),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                onChanged: (value) => setState(() {}),
+                onChanged: (_) => setState(() {}),
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-            // Preview card
-            if (_nameController.text.isNotEmpty)
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: HBotColors.cardLight,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: HBotColors.borderLight, width: 1),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: const BoxDecoration(
-                        color: HBotColors.surfacePrimarySubtle,
-                        shape: BoxShape.circle,
-                      ),
-                      alignment: Alignment.center,
-                      child: Icon(
-                        _selectedIcon,
-                        color: HBotColors.primary,
-                        size: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        _nameController.text,
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: HBotColors.textPrimaryLight,
-                        ),
-                      ),
-                    ),
-                  ],
+            // Description
+            const Text(
+              'DESCRIPTION',
+              style: TextStyle(
+                fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600,
+                color: Color(0xFF4B5563), letterSpacing: 0.5,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Container(
+              height: 48,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
+              ),
+              child: TextField(
+                controller: _descriptionController,
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 15, color: Color(0xFF1F2937)),
+                decoration: const InputDecoration(
+                  hintText: 'Short description (optional)',
+                  hintStyle: TextStyle(fontFamily: 'Inter', color: Color(0xFFC9CDD6)),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),
+            ),
           ],
         ),
       ),
     );
   }
 
+  // ── Step 1: Appearance ──
   Widget _buildAppearanceStep() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Icon section
-          Text(
+          // Icon grid
+          const Text(
             'ICON',
             style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: HBotColors.textSecondaryLight,
-              letterSpacing: 0.5,
+              fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600,
+              color: Color(0xFF4B5563), letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 8),
-          SceneIconSelector(
-            selectedIcon: _selectedIcon,
-            onIconSelected: (icon) {
-              setState(() {
-                _selectedIcon = icon;
-              });
-            },
+          const SizedBox(height: 12),
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 4,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
+            childAspectRatio: 0.85,
+            children: _iconOptions.map((opt) {
+              final active = _selectedIconKey == opt.key;
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _selectedIconKey = opt.key;
+                    _selectedIcon = opt.icon;
+                  });
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: active ? _selectedColor : const Color(0xFFE5E7EB),
+                      width: 2,
+                    ),
+                    color: active
+                        ? _selectedColor.withOpacity(0.12)
+                        : const Color(0xFFF5F7FA),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(opt.icon, size: 22, color: active ? _selectedColor : const Color(0xFF9CA3AF)),
+                      const SizedBox(height: 6),
+                      Text(
+                        opt.key,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 10,
+                          color: active ? _selectedColor : const Color(0xFF9CA3AF),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
           ),
 
           const SizedBox(height: 24),
 
-          // Color section
-          Text(
+          // Color picker
+          const Text(
             'COLOR',
             style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: HBotColors.textSecondaryLight,
-              letterSpacing: 0.5,
+              fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600,
+              color: Color(0xFF4B5563), letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: HBotSpacing.space4),
+          const SizedBox(height: 12),
           Wrap(
-            spacing: HBotSpacing.space2,
-            runSpacing: HBotSpacing.space2,
-            children: _availableColors.map((color) {
-              final isSelected = color == _selectedColor;
+            spacing: 12,
+            runSpacing: 12,
+            children: _availableColors.map((c) {
+              final isSelected = c.value == _selectedColor.value;
               return GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _selectedColor = color;
-                  });
-                },
+                onTap: () => setState(() => _selectedColor = c),
                 child: Container(
-                  width: 50,
-                  height: 50,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    color: color,
+                    color: c,
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: isSelected ? Colors.white : Colors.transparent,
-                      width: 3,
-                    ),
                     boxShadow: isSelected
                         ? [
-                            BoxShadow(
-                              color: color.withOpacity(0.5),
-                              blurRadius: 8,
-                              spreadRadius: 2,
-                            ),
+                            BoxShadow(color: Colors.white, spreadRadius: 3),
+                            BoxShadow(color: c, spreadRadius: 5),
                           ]
                         : null,
                   ),
+                  alignment: Alignment.center,
                   child: isSelected
-                      ? Icon(HBotIcons.check, color: Colors.white, size: 24)
+                      ? const Icon(Icons.check, size: 16, color: Colors.white)
                       : null,
                 ),
               );
             }).toList(),
           ),
 
-          const SizedBox(height: HBotSpacing.space4),
+          const SizedBox(height: 24),
 
-          // Preview
+          // Preview card
           Container(
-            padding: const EdgeInsets.all(HBotSpacing.space4),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: HBotColors.cardLight,
-              borderRadius: BorderRadius.circular(HBotRadius.medium),
-              border: Border.all(color: _selectedColor.withOpacity(0.3)),
+              color: const Color(0xFFF5F7FA),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFE5E7EB)),
             ),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  width: 56,
+                  height: 56,
                   decoration: BoxDecoration(
-                    color: _selectedColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(HBotRadius.small),
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [_selectedColor, _selectedColor.withOpacity(0.73)],
+                    ),
                   ),
-                  child: Icon(_selectedIcon, color: _selectedColor, size: 24),
+                  alignment: Alignment.center,
+                  child: Icon(_selectedIcon, size: 26, color: Colors.white),
                 ),
-                const SizedBox(width: HBotSpacing.space4),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _nameController.text.isNotEmpty
-                            ? _nameController.text
-                            : 'Scene Preview',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
+                const SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _nameController.text.isNotEmpty ? _nameController.text : 'Scene Name',
+                      style: const TextStyle(
+                        fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.w700,
+                        color: Color(0xFF1F2937),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 2),
+                    const Text(
+                      'Preview',
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: Color(0xFF9CA3AF)),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -607,131 +648,116 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     );
   }
 
+  // ── Step 2: Trigger ──
   Widget _buildTriggerStep() {
+    final triggerIcons = {
+      'Manual': Icons.play_arrow,
+      'Scheduled': Icons.access_time,
+      'Location': Icons.location_on,
+    };
+    final triggerDescs = {
+      'Manual': 'Run this scene manually by tapping the play button',
+      'Scheduled': 'Run automatically at a set time and days',
+      'Location': 'Coming soon - trigger based on location',
+    };
+
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Trigger',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: HBotSpacing.space2),
-          Text(
-            'How should this scene be activated?',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: HBotColors.textSecondaryLight,
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space6),
-
-          // Trigger type selection
-          ..._triggerTypes.map((trigger) {
-            final isSelected = trigger == _selectedTrigger;
-            return Container(
-              margin: const EdgeInsets.only(bottom: HBotSpacing.space2),
-              child: ListTile(
-                leading: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? _selectedColor.withOpacity(0.2)
-                        : HBotColors.cardLight,
-                    borderRadius: BorderRadius.circular(HBotRadius.small),
-                  ),
-                  child: Icon(
-                    _getTriggerIcon(trigger),
-                    color: isSelected
-                        ? _selectedColor
-                        : HBotColors.textSecondaryLight,
-                    size: 20,
-                  ),
-                ),
-                title: Text(
-                  trigger,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: isSelected
-                        ? HBotColors.textPrimaryLight
-                        : HBotColors.textSecondaryLight,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  ),
-                ),
-                subtitle: Text(
-                  _getTriggerDescription(trigger),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: HBotColors.textTertiaryLight,
-                  ),
-                ),
-                trailing: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedTrigger = trigger;
-                    });
-                  },
+          // Trigger type cards
+          ...['Manual', 'Scheduled', 'Location'].map((t) {
+            final active = _selectedTrigger == t;
+            final disabled = t == 'Location';
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: GestureDetector(
+                onTap: disabled ? null : () => setState(() => _selectedTrigger = t),
+                child: Opacity(
+                  opacity: disabled ? 0.5 : 1.0,
                   child: Container(
-                    width: 20,
-                    height: 20,
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: _selectedTrigger == trigger
-                            ? _selectedColor
-                            : Colors.grey,
+                        color: active ? const Color(0xFF0883FD) : const Color(0xFFE5E7EB),
                         width: 2,
                       ),
-                      color: _selectedTrigger == trigger
-                          ? _selectedColor
-                          : Colors.transparent,
+                      color: active ? const Color(0xFFEFF6FF) : const Color(0xFFF5F7FA),
                     ),
-                    child: _selectedTrigger == trigger
-                        ? Icon(HBotIcons.check, size: 12, color: Colors.white)
-                        : null,
-                  ),
-                ),
-                onTap: () {
-                  setState(() {
-                    _selectedTrigger = trigger;
-                  });
-                },
-                tileColor: isSelected
-                    ? _selectedColor.withOpacity(0.1)
-                    : HBotColors.cardLight,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(HBotRadius.medium),
-                  side: BorderSide(
-                    color: isSelected
-                        ? _selectedColor.withOpacity(0.5)
-                        : Colors.transparent,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: active ? const Color(0xFF0883FD) : const Color(0xFFE5E7EB),
+                          ),
+                          alignment: Alignment.center,
+                          child: Icon(
+                            triggerIcons[t],
+                            size: 18,
+                            color: active ? Colors.white : const Color(0xFF9CA3AF),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                t,
+                                style: TextStyle(
+                                  fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w700,
+                                  color: active ? const Color(0xFF0883FD) : const Color(0xFF1F2937),
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                triggerDescs[t] ?? '',
+                                style: const TextStyle(
+                                  fontFamily: 'Inter', fontSize: 12, color: Color(0xFF9CA3AF),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (active)
+                          const Icon(Icons.check, size: 16, color: Color(0xFF0883FD)),
+                      ],
+                    ),
                   ),
                 ),
               ),
             );
           }),
 
-          // Time picker for time-based triggers
-          if (_selectedTrigger == 'Time Based') ...[
-            const SizedBox(height: HBotSpacing.space4),
+          // Scheduled options
+          if (_selectedTrigger == 'Scheduled') ...[
+            const SizedBox(height: 4),
             Container(
-              padding: const EdgeInsets.all(HBotSpacing.space4),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
-                border: Border.all(
-                  color: _selectedColor.withOpacity(0.3),
-                ),
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Activation Time',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  // Time
+                  const Text(
+                    'TIME',
+                    style: TextStyle(
+                      fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600,
+                      color: Color(0xFF4B5563), letterSpacing: 0.5,
+                    ),
                   ),
-                  TextButton(
-                    onPressed: () async {
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    onTap: () async {
                       final time = await showTimePicker(
                         context: context,
                         initialTime: _selectedTime ?? TimeOfDay.now(),
@@ -739,276 +765,80 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       if (time != null) {
                         setState(() {
                           _selectedTime = time;
+                          _scheduledTimeStr = '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
                         });
                       }
                     },
-                    child: Text(
-                      _selectedTime?.format(context) ?? 'Select Time',
-                      style: TextStyle(color: _selectedColor),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Repeat option
-            const SizedBox(height: HBotSpacing.space4),
-            Container(
-              padding: const EdgeInsets.all(HBotSpacing.space4),
-              decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
-                border: Border.all(
-                  color: _selectedColor.withOpacity(0.3),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Repeat',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  TextButton(
-                    onPressed: () => _showRepeatOptions(),
-                    child: Text(
-                      _selectedRepeat,
-                      style: TextStyle(color: _selectedColor),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Custom days selector (only show if Custom is selected)
-            if (_selectedRepeat == 'Custom') ...[
-              const SizedBox(height: HBotSpacing.space4),
-              Container(
-                padding: const EdgeInsets.all(HBotSpacing.space4),
-                decoration: BoxDecoration(
-                  color: HBotColors.cardLight,
-                  borderRadius: BorderRadius.circular(HBotRadius.medium),
-                  border: Border.all(
-                    color: _selectedColor.withOpacity(0.3),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Select Days',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: HBotSpacing.space2),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        _buildDayChip('Mon', 1),
-                        _buildDayChip('Tue', 2),
-                        _buildDayChip('Wed', 3),
-                        _buildDayChip('Thu', 4),
-                        _buildDayChip('Fri', 5),
-                        _buildDayChip('Sat', 6),
-                        _buildDayChip('Sun', 7),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ],
-
-          // Location configuration for location-based triggers
-          if (_selectedTrigger == 'Location Based') ...[
-            const SizedBox(height: HBotSpacing.space4),
-
-            // Trigger type selection (Arrive/Leave)
-            Container(
-              padding: const EdgeInsets.all(HBotSpacing.space4),
-              decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
-                border: Border.all(
-                  color: _selectedColor.withOpacity(0.3),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Trigger Type',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  SizedBox(height: HBotSpacing.space2),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildLocationTriggerTypeButton(
-                          'arrive',
-                          'When I Arrive',
-                          HBotIcons.room,
-                        ),
-                      ),
-                      const SizedBox(width: HBotSpacing.space2),
-                      Expanded(
-                        child: _buildLocationTriggerTypeButton(
-                          'leave',
-                          'When I Leave',
-                          Icons.location_off,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: HBotSpacing.space4),
-
-            // Location detection
-            Container(
-              padding: const EdgeInsets.all(HBotSpacing.space4),
-              decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
-                border: Border.all(
-                  color: _selectedColor.withOpacity(0.3),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Location',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: HBotSpacing.space2),
-
-                  if (_selectedLatitude != null &&
-                      _selectedLongitude != null) ...[
-                    Container(
-                      padding: const EdgeInsets.all(HBotSpacing.space2),
+                    child: Container(
+                      width: double.infinity,
+                      height: 48,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       decoration: BoxDecoration(
-                        color: _selectedColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(
-                          HBotRadius.small,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        _selectedTime != null ? _scheduledTimeStr : 'Select Time',
+                        style: TextStyle(
+                          fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.w600,
+                          color: _selectedTime != null ? const Color(0xFF1F2937) : const Color(0xFF9CA3AF),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            HBotIcons.room,
-                            color: _selectedColor,
-                            size: 20,
-                          ),
-                          const SizedBox(width: HBotSpacing.space2),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (_selectedLocationAddress != null)
-                                  Text(
-                                    _selectedLocationAddress!,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyMedium,
-                                  ),
-                                Text(
-                                  'Lat: ${_selectedLatitude!.toStringAsFixed(6)}, '
-                                  'Lng: ${_selectedLongitude!.toStringAsFixed(6)}',
-                                  style: Theme.of(context).textTheme.bodySmall
-                                      ?.copyWith(
-                                        color: HBotColors.textSecondaryLight,
-                                      ),
-                                ),
-                              ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Repeat (day circles)
+                  const Text(
+                    'REPEAT',
+                    style: TextStyle(
+                      fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600,
+                      color: Color(0xFF4B5563), letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _dayNames.map((d) {
+                      final active = _scheduledDays.contains(d);
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (active) {
+                              _scheduledDays.remove(d);
+                            } else {
+                              _scheduledDays.add(d);
+                            }
+                          });
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: active ? const Color(0xFF0883FD) : Colors.white,
+                            border: Border.all(
+                              color: active ? const Color(0xFF0883FD) : const Color(0xFFE5E7EB),
+                              width: 1.5,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: HBotSpacing.space2),
-                  ],
-
-                  ElevatedButton.icon(
-                    onPressed: _isDetectingLocation
-                        ? null
-                        : _detectCurrentLocation,
-                    icon: _isDetectingLocation
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.my_location),
-                    label: Text(
-                      _isDetectingLocation
-                          ? 'Detecting Location...'
-                          : _selectedLatitude != null
-                          ? 'Update Location'
-                          : 'Use Current Location',
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _selectedColor,
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 48),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: HBotSpacing.space4),
-
-            // Radius selection
-            Container(
-              padding: const EdgeInsets.all(HBotSpacing.space4),
-              decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
-                border: Border.all(
-                  color: _selectedColor.withOpacity(0.3),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Radius',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Text(
-                        '${_selectedRadius.toInt()} meters',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: _selectedColor,
-                          fontWeight: FontWeight.bold,
+                          alignment: Alignment.center,
+                          child: Text(
+                            d.substring(0, 2),
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: active ? Colors.white : const Color(0xFF6B7280),
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: HBotSpacing.space2),
-                  Slider(
-                    value: _selectedRadius,
-                    min: 50,
-                    max: 1000,
-                    divisions: 19,
-                    activeColor: _selectedColor,
-                    label: '${_selectedRadius.toInt()}m',
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedRadius = value;
-                      });
-                    },
-                  ),
-                  Text(
-                    'Scene will trigger when you are within this distance',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: HBotColors.textSecondaryLight,
-                    ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
@@ -1019,35 +849,25 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     );
   }
 
+  // ── Step 3: Devices ──
   Widget _buildDevicesStep() {
     debugPrint('AddSceneScreen: _buildDevicesStep - homeId = ${widget.homeId}');
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Select Devices',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+          const Text(
+            'Select devices to include in this scene',
+            style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: Color(0xFF9CA3AF)),
           ),
-          const SizedBox(height: HBotSpacing.space2),
-          Text(
-            'Choose which devices this scene will control',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: HBotColors.textSecondaryLight,
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space6),
-
+          const SizedBox(height: 12),
           DeviceSelector(
             selectedDevices: _selectedDevices,
             onDevicesChanged: (devices) {
               setState(() {
                 _selectedDevices = devices;
-                // Clean up device actions for removed devices
                 _syncDeviceActions();
               });
             },
@@ -1059,78 +879,34 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     );
   }
 
+  // ── Step 4: Device Actions ──
   Widget _buildDeviceActionsStep() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Configure Device Actions',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: HBotSpacing.space2),
-          Text(
-            'Set what each device should do when this scene is activated',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: HBotColors.textSecondaryLight,
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space6),
-
           if (_selectedDevices.isEmpty)
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(HBotSpacing.space6),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      HBotIcons.devices,
-                      size: 64,
-                      color: HBotColors.textTertiaryLight,
-                    ),
-                    const SizedBox(height: HBotSpacing.space4),
-                    Text(
-                      'No devices selected',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: HBotColors.textSecondaryLight,
-                      ),
-                    ),
-                    const SizedBox(height: HBotSpacing.space2),
-                    Text(
-                      'Go back and select devices first',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: HBotColors.textTertiaryLight,
-                      ),
-                    ),
-                  ],
+            Padding(
+              padding: const EdgeInsets.only(top: 32),
+              child: Center(
+                child: Text(
+                  'No devices selected',
+                  style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF9CA3AF)),
                 ),
               ),
             )
           else
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _selectedDevices.length,
-              itemBuilder: (context, index) {
-                final deviceMap = _selectedDevices[index];
-                final device = deviceMap['device'] as Device?;
+            ..._selectedDevices.map((deviceMap) {
+              final device = deviceMap['device'] as Device?;
+              if (device == null) return const SizedBox.shrink();
 
-                if (device == null) {
-                  return const SizedBox.shrink();
-                }
+              if (!_deviceActions.containsKey(device.id)) {
+                _deviceActions[device.id] = _getDefaultAction(device);
+              }
 
-                // Initialize device action if not exists
-                if (!_deviceActions.containsKey(device.id)) {
-                  _deviceActions[device.id] = _getDefaultAction(device);
-                }
-
-                return _buildDeviceActionCard(device, deviceMap);
-              },
-            ),
+              return _buildV0DeviceActionCard(device, deviceMap);
+            }),
         ],
       ),
     );
@@ -1140,32 +916,27 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     switch (device.deviceType) {
       case DeviceType.relay:
       case DeviceType.dimmer:
-        return {
-          'type': 'power',
-          'channels': [1], // Default to channel 1
-          'state': true, // Default to ON
-        };
+        return {'type': 'power', 'channels': [1], 'state': true};
       case DeviceType.shutter:
-        return {
-          'type': 'shutter',
-          'position': 50, // Default to 50%
-        };
+        return {'type': 'shutter', 'position': 50};
       case DeviceType.sensor:
       case DeviceType.other:
         return {'type': 'none'};
     }
   }
 
-  Widget _buildDeviceActionCard(Device device, Map<String, dynamic> deviceMap) {
+  Widget _buildV0DeviceActionCard(Device device, Map<String, dynamic> deviceMap) {
     final action = _deviceActions[device.id]!;
+    final deviceType = device.deviceType.name.toLowerCase();
+    final color = _getDeviceTypeColor(deviceType);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: HBotSpacing.space4),
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: HBotColors.cardLight,
-        borderRadius: BorderRadius.circular(HBotRadius.medium),
-        border: Border.all(color: _selectedColor.withOpacity(0.3)),
+        color: const Color(0xFFF5F7FA),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1174,638 +945,358 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
-                  color: _selectedColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(HBotRadius.small),
+                  shape: BoxShape.circle,
+                  color: color.withOpacity(0.12),
                 ),
+                alignment: Alignment.center,
                 child: Icon(
                   deviceMap['icon'] as IconData? ?? Icons.device_unknown,
-                  color: _selectedColor,
-                  size: 20,
+                  size: 16, color: color,
                 ),
               ),
-              const SizedBox(width: HBotSpacing.space4),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      device.deviceName,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      deviceMap['room'] as String? ?? 'No Room',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: HBotColors.textTertiaryLight,
-                      ),
-                    ),
-                  ],
-                ),
+              const SizedBox(width: 12),
+              Text(
+                device.deviceName,
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
               ),
             ],
           ),
-          const SizedBox(height: HBotSpacing.space4),
-          const Divider(height: 1),
-          const SizedBox(height: HBotSpacing.space4),
+          const SizedBox(height: 16),
 
-          // Action configuration based on device type
-          if (device.deviceType == DeviceType.relay ||
-              device.deviceType == DeviceType.dimmer)
-            _buildRelayDimmerAction(device, action)
-          else if (device.deviceType == DeviceType.shutter)
-            _buildShutterAction(device, action)
-          else
-            _buildNoActionAvailable(),
+          // Channel actions with ON/OFF buttons
+          if (device.deviceType == DeviceType.relay || device.deviceType == DeviceType.dimmer)
+            _buildRelayDimmerActionV0(device, action),
+          if (device.deviceType == DeviceType.shutter)
+            _buildShutterActionV0(device, action),
         ],
       ),
     );
   }
 
-  Widget _buildRelayDimmerAction(Device device, Map<String, dynamic> action) {
-    final channels = device.effectiveChannels;
-    final selectedChannels = List<int>.from(action['channels'] ?? [1]);
+  Color _getDeviceTypeColor(String type) {
+    switch (type) {
+      case 'relay': return const Color(0xFF3B82F6);
+      case 'dimmer': return const Color(0xFFF59E0B);
+      case 'sensor': return const Color(0xFF10B981);
+      case 'shutter': return const Color(0xFF8B5CF6);
+      default: return const Color(0xFF3B82F6);
+    }
+  }
+
+  Widget _buildRelayDimmerActionV0(Device device, Map<String, dynamic> action) {
     final state = action['state'] as bool? ?? true;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final channels = device.effectiveChannels;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Action',
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: HBotColors.textPrimaryLight,
-          ),
-        ),
-        const SizedBox(height: HBotSpacing.space2),
+        // For each channel
+        ...List.generate(channels > 4 ? 1 : channels, (i) {
+          final channelName = channels > 1 ? 'Channel ${i + 1}' : 'Channel 1';
+          final isOn = state; // Simplified: all channels same state
 
-        // Power state toggle
-        Container(
-          padding: const EdgeInsets.all(HBotSpacing.space4),
-          decoration: BoxDecoration(
-            color: isDark ? HBotColors.surfaceLight : Colors.white,
-            borderRadius: BorderRadius.circular(HBotRadius.small),
-            border: isDark ? null : Border.all(color: HBotColors.borderLight),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          return Column(
             children: [
-              Text(
-                'Turn ${state ? "ON" : "OFF"}',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-              ),
-              Switch(
-                value: state,
-                onChanged: (value) {
-                  setState(() {
-                    _deviceActions[device.id]!['state'] = value;
-                  });
-                },
-                activeTrackColor: _selectedColor,
-              ),
-            ],
-          ),
-        ),
-
-        if (channels > 1) ...[
-          const SizedBox(height: HBotSpacing.space4),
-          Text(
-            'Channels',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: HBotColors.textPrimaryLight,
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space2),
-          Wrap(
-            spacing: HBotSpacing.space2,
-            runSpacing: HBotSpacing.space2,
-            children: [
-              // All channels option
-              FilterChip(
-                label: const Text('All Channels'),
-                selected: selectedChannels.length == channels,
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      _deviceActions[device.id]!['channels'] = List.generate(
-                        channels,
-                        (i) => i + 1,
-                      );
-                    } else {
-                      _deviceActions[device.id]!['channels'] = [1];
-                    }
-                  });
-                },
-                selectedColor: _selectedColor.withOpacity(0.2),
-                checkmarkColor: _selectedColor,
-                labelStyle: TextStyle(
-                  color: selectedChannels.length == channels
-                      ? _selectedColor
-                      : HBotColors.textSecondaryLight,
-                ),
-              ),
-              // Individual channel options
-              ...List.generate(channels, (i) {
-                final channelNum = i + 1;
-                final isSelected = selectedChannels.contains(channelNum);
-                return FilterChip(
-                  label: Text('Channel $channelNum'),
-                  selected: isSelected,
-                  onSelected: (selected) {
-                    setState(() {
-                      final currentChannels = List<int>.from(
-                        _deviceActions[device.id]!['channels'],
-                      );
-                      if (selected) {
-                        if (!currentChannels.contains(channelNum)) {
-                          currentChannels.add(channelNum);
-                        }
-                      } else {
-                        currentChannels.remove(channelNum);
-                      }
-                      // Ensure at least one channel is selected
-                      if (currentChannels.isEmpty) {
-                        currentChannels.add(1);
-                      }
-                      _deviceActions[device.id]!['channels'] = currentChannels;
-                    });
-                  },
-                  selectedColor: _selectedColor.withOpacity(0.2),
-                  checkmarkColor: _selectedColor,
-                  labelStyle: TextStyle(
-                    color: isSelected
-                        ? _selectedColor
-                        : HBotColors.textSecondaryLight,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    channelName,
+                    style: const TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF4B5563)),
                   ),
-                );
-              }),
+                  Row(
+                    children: [
+                      _buildActionButton('ON', isOn, () {
+                        setState(() => _deviceActions[device.id]!['state'] = true);
+                      }),
+                      const SizedBox(width: 8),
+                      _buildActionButton('OFF', !isOn, () {
+                        setState(() => _deviceActions[device.id]!['state'] = false);
+                      }, isOff: true),
+                    ],
+                  ),
+                ],
+              ),
+
+              // Brightness slider for dimmer when ON
+              if (device.deviceType == DeviceType.dimmer && isOn) ...[
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Brightness', style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: Color(0xFF4B5563))),
+                    Text(
+                      '${(action['brightness'] as int?) ?? 80}%',
+                      style: const TextStyle(fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                SliderTheme(
+                  data: SliderThemeData(
+                    activeTrackColor: const Color(0xFFF59E0B),
+                    inactiveTrackColor: const Color(0xFFE5E7EB),
+                    thumbColor: const Color(0xFFF59E0B),
+                    overlayColor: const Color(0xFFF59E0B).withOpacity(0.2),
+                    trackHeight: 4,
+                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                  ),
+                  child: Slider(
+                    value: ((action['brightness'] as int?) ?? 80).toDouble(),
+                    min: 0, max: 100,
+                    onChanged: (v) {
+                      setState(() => _deviceActions[device.id]!['brightness'] = v.toInt());
+                    },
+                  ),
+                ),
+              ],
+              const SizedBox(height: 12),
             ],
-          ),
-        ],
+          );
+        }),
       ],
     );
   }
 
-  Widget _buildShutterAction(Device device, Map<String, dynamic> action) {
-    final position = action['position'] as int? ?? 50;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(HBotSpacing.space4),
-          decoration: BoxDecoration(
-            color: isDark ? HBotColors.surfaceLight : Colors.white,
-            borderRadius: BorderRadius.circular(HBotRadius.small),
-            border: isDark ? null : Border.all(color: HBotColors.borderLight),
-          ),
-          child: Column(
-            children: [
-              // Percentage display centered
-              Text(
-                '$position%',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: _selectedColor,
-                ),
-              ),
-              const SizedBox(height: HBotSpacing.space2),
-              Slider(
-                value: position.toDouble(),
-                min: 0,
-                max: 100,
-                divisions: 20,
-                label: '$position%',
-                activeColor: _selectedColor,
-                onChanged: (value) {
-                  setState(() {
-                    _deviceActions[device.id]!['position'] = value.toInt();
-                  });
-                },
-              ),
-            ],
+  Widget _buildActionButton(String label, bool active, VoidCallback onTap, {bool isOff = false}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(999),
+          color: active
+              ? (isOff ? const Color(0xFFEF4444) : const Color(0xFF0883FD))
+              : const Color(0xFFE5E7EB),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            color: active ? Colors.white : const Color(0xFF6B7280),
           ),
         ),
+      ),
+    );
+  }
 
-        const SizedBox(height: HBotSpacing.space4),
+  Widget _buildShutterActionV0(Device device, Map<String, dynamic> action) {
+    final position = (action['position'] as int?) ?? 50;
 
-        // Quick position buttons
+    return Column(
+      children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {
-                  setState(() {
-                    _deviceActions[device.id]!['position'] = 0;
-                  });
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: position == 0
-                      ? _selectedColor
-                      : HBotColors.textSecondaryLight,
-                  side: BorderSide(
-                    color: position == 0
-                        ? _selectedColor
-                        : HBotColors.textTertiaryLight.withOpacity(0.3),
-                  ),
-                ),
-                child: const Text('0%'),
-              ),
-            ),
-            const SizedBox(width: HBotSpacing.space2),
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {
-                  setState(() {
-                    _deviceActions[device.id]!['position'] = 50;
-                  });
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: position == 50
-                      ? _selectedColor
-                      : HBotColors.textSecondaryLight,
-                  side: BorderSide(
-                    color: position == 50
-                        ? _selectedColor
-                        : HBotColors.textTertiaryLight.withOpacity(0.3),
-                  ),
-                ),
-                child: const Text('50%'),
-              ),
-            ),
-            const SizedBox(width: HBotSpacing.space2),
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {
-                  setState(() {
-                    _deviceActions[device.id]!['position'] = 100;
-                  });
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: position == 100
-                      ? _selectedColor
-                      : HBotColors.textSecondaryLight,
-                  side: BorderSide(
-                    color: position == 100
-                        ? _selectedColor
-                        : HBotColors.textTertiaryLight.withOpacity(0.3),
-                  ),
-                ),
-                child: const Text('100%'),
-              ),
+            const Text('Position', style: TextStyle(fontFamily: 'Inter', fontSize: 12, color: Color(0xFF4B5563))),
+            Text(
+              '$position%',
+              style: const TextStyle(fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF8B5CF6)),
             ),
           ],
         ),
+        const SizedBox(height: 6),
+        SliderTheme(
+          data: SliderThemeData(
+            activeTrackColor: const Color(0xFF8B5CF6),
+            inactiveTrackColor: const Color(0xFFE5E7EB),
+            thumbColor: const Color(0xFF8B5CF6),
+            overlayColor: const Color(0xFF8B5CF6).withOpacity(0.2),
+            trackHeight: 4,
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+          ),
+          child: Slider(
+            value: position.toDouble(),
+            min: 0, max: 100,
+            onChanged: (v) {
+              setState(() => _deviceActions[device.id]!['position'] = v.toInt());
+            },
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildNoActionAvailable() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      decoration: BoxDecoration(
-        color: isDark ? HBotColors.surfaceLight : Colors.white,
-        borderRadius: BorderRadius.circular(HBotRadius.small),
-        border: isDark ? null : Border.all(color: HBotColors.borderLight),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            HBotIcons.info,
-            color: HBotColors.textTertiaryLight,
-            size: 20,
-          ),
-          const SizedBox(width: HBotSpacing.space2),
-          Expanded(
-            child: Text(
-              'No actions available for this device type',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: HBotColors.textTertiaryLight,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
+  // ── Step 5: Review ──
   Widget _buildReviewStep() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Review Scene',
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: HBotSpacing.space2),
-          Text(
-            'Review your scene configuration before creating',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: HBotColors.textSecondaryLight,
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space6),
-
           // Scene preview card
           Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(HBotSpacing.space6),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: HBotColors.cardLight,
-              borderRadius: BorderRadius.circular(HBotRadius.medium),
-              gradient: isDark
-                  ? LinearGradient(
+              color: const Color(0xFFF5F7FA),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: const Color(0xFFE5E7EB)),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        _selectedColor.withOpacity(0.2),
-                        HBotColors.cardLight,
-                      ],
-                    )
-                  : null,
-              border: isDark
-                  ? null
-                  : Border.all(color: HBotColors.borderLight),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: _selectedColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(
-                          HBotRadius.small,
-                        ),
-                      ),
-                      child: Icon(
-                        _selectedIcon,
-                        color: _selectedColor,
-                        size: 28,
-                      ),
+                      colors: [_selectedColor, _selectedColor.withOpacity(0.73)],
                     ),
-                    const SizedBox(width: HBotSpacing.space4),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _nameController.text,
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
+                  alignment: Alignment.center,
+                  child: Icon(_selectedIcon, size: 26, color: Colors.white),
                 ),
-                SizedBox(height: HBotSpacing.space4),
-                Row(
-                  children: [
-                    Icon(
-                      HBotIcons.devices,
-                      size: 16,
-                      color: HBotColors.textSecondaryLight,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${_selectedDevices.length} devices',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: HBotColors.textSecondaryLight,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _nameController.text,
+                        style: const TextStyle(fontFamily: 'Inter', fontSize: 17, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                    Icon(
-                      _getTriggerIcon(_selectedTrigger),
-                      size: 16,
-                      color: HBotColors.textSecondaryLight,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      _selectedTrigger == 'Time Based' && _selectedTime != null
-                          ? _selectedTime!.format(context)
-                          : _selectedTrigger == 'Location Based' &&
-                                _selectedLocationTriggerType != null
-                          ? '${_selectedLocationTriggerType == 'arrive' ? 'Arrive' : 'Leave'} (${_selectedRadius.toInt()}m)'
-                          : _selectedTrigger,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: HBotColors.textSecondaryLight,
-                      ),
-                    ),
-                  ],
+                      if (_descriptionController.text.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          _descriptionController.text,
+                          style: const TextStyle(fontFamily: 'Inter', fontSize: 12, color: Color(0xFF9CA3AF)),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: HBotSpacing.space4),
+          const SizedBox(height: 16),
 
-          // Configuration summary
-          _buildSummarySection('Basic Info', ['Name: ${_nameController.text}']),
+          // Summary rows
+          _buildSummaryRow('Trigger', _selectedTrigger == 'Scheduled' && _scheduledTimeStr.isNotEmpty
+              ? 'Scheduled at $_scheduledTimeStr'
+              : _selectedTrigger),
+          _buildSummaryRow('Repeat', _selectedTrigger == 'Scheduled' && _scheduledDays.isNotEmpty
+              ? _scheduledDays.join(', ')
+              : _selectedTrigger == 'Scheduled' ? 'Once' : '\u2014'),
+          _buildSummaryRow('Devices', '${_selectedDevices.length} device${_selectedDevices.length != 1 ? 's' : ''}'),
+          _buildSummaryRow('Actions', '${_deviceActions.length} action${_deviceActions.length != 1 ? 's' : ''}', isLast: true),
 
-          const SizedBox(height: HBotSpacing.space2),
+          const SizedBox(height: 16),
 
-          _buildSummarySection('Trigger', [
-            'Type: $_selectedTrigger',
-            if (_selectedTrigger == 'Time Based' && _selectedTime != null)
-              'Time: ${_selectedTime!.format(context)}',
-            if (_selectedTrigger == 'Location Based') ...[
-              if (_selectedLocationTriggerType != null)
-                'When: ${_selectedLocationTriggerType == 'arrive' ? 'I Arrive' : 'I Leave'}',
-              if (_selectedLatitude != null && _selectedLongitude != null)
-                'Location: ${_selectedLatitude!.toStringAsFixed(6)}, ${_selectedLongitude!.toStringAsFixed(6)}',
-              'Radius: ${_selectedRadius.toInt()}m',
-            ],
-          ]),
-
-          const SizedBox(height: HBotSpacing.space2),
-
-          _buildSummarySection('Devices', [
-            '${_selectedDevices.length} devices selected',
-            ..._selectedDevices.map((device) => '• ${device['name']}'),
-          ]),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummarySection(String title, List<String> items) {
-    return Container(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      decoration: BoxDecoration(
-        color: HBotColors.cardLight,
-        borderRadius: BorderRadius.circular(HBotRadius.medium),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: HBotSpacing.space2),
-          ...items.map(
-            (item) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Text(
-                item,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: HBotColors.textSecondaryLight,
-                ),
+          // Actions summary
+          if (_deviceActions.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavigation() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: HBotColors.cardLight,
-        border: const Border(
-          top: BorderSide(color: HBotColors.borderLight, width: 1),
-        ),
-      ),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          children: [
-            if (_currentStep > 0)
-              Expanded(
-                child: Container(
-                  height: 52,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: HBotColors.borderLight, width: 1.5),
-                  ),
-                  child: TextButton(
-                    onPressed: _isCreating ? null : _previousStep,
-                    style: TextButton.styleFrom(
-                      foregroundColor: HBotColors.textPrimaryLight,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Previous',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'ACTIONS',
+                    style: TextStyle(
+                      fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600,
+                      color: Color(0xFF4B5563), letterSpacing: 0.5,
                     ),
                   ),
-                ),
-              ),
-            if (_currentStep > 0) const SizedBox(width: 12),
-            Expanded(
-              child: InkWell(
-                onTap: (_canProceed() && !_isCreating) ? _nextStep : null,
-                borderRadius: BorderRadius.circular(12),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: (_canProceed() && !_isCreating)
-                        ? HBotColors.primaryGradient
-                        : null,
-                    color: (_canProceed() && !_isCreating)
-                        ? null
-                        : HBotColors.neutral300,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    height: 52,
-                    alignment: Alignment.center,
-                    child: _isCreating
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
+                  const SizedBox(height: 12),
+                  ..._deviceActions.entries.map((entry) {
+                    final deviceMap = _selectedDevices.firstWhere(
+                      (d) => d['id'] == entry.key,
+                      orElse: () => {'name': 'Unknown'},
+                    );
+                    final action = entry.value;
+                    final isOn = action['state'] == true;
+                    final actionLabel = action['type'] == 'shutter'
+                        ? 'Position ${action['position']}%'
+                        : isOn ? 'ON' : 'OFF';
+
+                    return Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      decoration: const BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Color(0xFFEBEDF0), width: 1)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            deviceMap['name'] ?? 'Unknown',
+                            style: const TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF1F2937)),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(999),
+                              color: isOn ? const Color(0xFFEFF6FF) : const Color(0xFFFFF1F2),
+                            ),
+                            child: Text(
+                              actionLabel,
+                              style: TextStyle(
+                                fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w700,
+                                color: isOn ? const Color(0xFF0883FD) : const Color(0xFFEF4444),
                               ),
                             ),
-                          )
-                        : Text(
-                            _currentStep == 5
-                                ? (_isEditMode ? 'Update Scene' : 'Create Scene')
-                                : 'Next',
-                            style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
                           ),
-                  ),
-                ),
+                        ],
+                      ),
+                    );
+                  }),
+                ],
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
 
+  Widget _buildSummaryRow(String label, String value, {bool isLast = false}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        border: isLast ? null : const Border(bottom: BorderSide(color: Color(0xFFF3F4F6), width: 1)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF9CA3AF))),
+          Text(value, style: const TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1F2937))),
+        ],
+      ),
+    );
+  }
+
+  // ── Navigation ──
   bool _canProceed() {
     switch (_currentStep) {
-      case 0:
-        return _nameController.text.isNotEmpty;
-      case 1:
-        return true; // Icon and color always have defaults
+      case 0: return _nameController.text.trim().isNotEmpty;
+      case 1: return true;
       case 2:
-        // Validate trigger configuration
-        if (_selectedTrigger == 'Time Based') {
-          return _selectedTime != null;
-        } else if (_selectedTrigger == 'Location Based') {
-          return _selectedLocationTriggerType != null &&
-              _selectedLatitude != null &&
-              _selectedLongitude != null;
+        if (_selectedTrigger == 'Scheduled') return _selectedTime != null;
+        if (_selectedTrigger == 'Location') {
+          return _selectedLocationTriggerType != null && _selectedLatitude != null && _selectedLongitude != null;
         }
         return true;
-      case 3:
-        return _selectedDevices.isNotEmpty;
-      case 4:
-        return true;
-      default:
-        return false;
+      case 3: return _selectedDevices.isNotEmpty;
+      case 4: return true;
+      case 5: return true;
+      default: return false;
     }
   }
 
   void _nextStep() {
-    // Dismiss keyboard before navigating
     FocusScope.of(context).unfocus();
-
-    if (_currentStep < 4) {
-      setState(() {
-        _currentStep++;
-      });
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+    if (_currentStep < 5) {
+      setState(() => _currentStep++);
+      _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
     } else {
       _createScene();
     }
@@ -1813,57 +1304,36 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   void _previousStep() {
     if (_currentStep > 0) {
-      setState(() {
-        _currentStep--;
-      });
-      _pageController.previousPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
+      setState(() => _currentStep--);
+      _pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
     }
   }
 
   Future<void> _createScene() async {
     if (_nameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a scene name'),
-          backgroundColor: HBotColors.error,
-        ),
+        const SnackBar(content: Text('Please enter a scene name'), backgroundColor: HBotColors.error),
       );
       return;
     }
 
-    // Validate time-based trigger has a time selected
-    if (_selectedTrigger == 'Time Based' && _selectedTime == null) {
+    if (_selectedTrigger == 'Scheduled' && _selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Please select an activation time for time-based trigger',
-          ),
-          backgroundColor: HBotColors.error,
-        ),
+        const SnackBar(content: Text('Please select an activation time'), backgroundColor: HBotColors.error),
       );
       return;
     }
 
-    // Validate location-based trigger has all required fields
-    if (_selectedTrigger == 'Location Based') {
+    if (_selectedTrigger == 'Location') {
       if (_selectedLocationTriggerType == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select when to trigger (arrive or leave)'),
-            backgroundColor: HBotColors.error,
-          ),
+          const SnackBar(content: Text('Please select when to trigger (arrive or leave)'), backgroundColor: HBotColors.error),
         );
         return;
       }
       if (_selectedLatitude == null || _selectedLongitude == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please detect your current location'),
-            backgroundColor: HBotColors.error,
-          ),
+          const SnackBar(content: Text('Please detect your current location'), backgroundColor: HBotColors.error),
         );
         return;
       }
@@ -1873,9 +1343,6 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
     try {
       if (_isEditMode) {
-        // UPDATE MODE: Update existing scene and its steps
-
-        // Update scene name, icon, and color
         await _service.updateScene(
           widget.sceneId!,
           name: _nameController.text.trim(),
@@ -1883,48 +1350,29 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           colorValue: _selectedColor.value,
         );
 
-        // Delete all existing scene steps
         await _service.deleteSceneSteps(widget.sceneId!);
 
-        // Create new scene steps for each device action
         int stepOrder = 0;
         for (final entry in _deviceActions.entries) {
           final deviceId = entry.key;
           final action = entry.value;
-
-          // Build action JSON based on device type
-          final actionJson = {
-            'device_id': deviceId,
-            'action_type': action['type'],
-            ...action,
-          };
-
-          await _service.createSceneStep(
-            widget.sceneId!,
-            stepOrder,
-            actionJson,
-          );
+          final actionJson = {'device_id': deviceId, 'action_type': action['type'], ...action};
+          await _service.createSceneStep(widget.sceneId!, stepOrder, actionJson);
           stepOrder++;
         }
 
-        // Update scene triggers
         await _updateSceneTriggers(widget.sceneId!);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                'Scene "${_nameController.text.trim()}" updated with ${_deviceActions.length} device action${_deviceActions.length != 1 ? 's' : ''}!',
-              ),
+              content: Text('Scene "${_nameController.text.trim()}" updated!'),
               backgroundColor: HBotColors.primary,
             ),
           );
           Navigator.pop(context, true);
         }
       } else {
-        // CREATE MODE: Create new scene
-
-        // Create the scene in Supabase with icon and color
         final scene = await _service.createScene(
           widget.homeId,
           _nameController.text.trim(),
@@ -1933,32 +1381,21 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           colorValue: _selectedColor.value,
         );
 
-        // Create scene steps for each device action
         int stepOrder = 0;
         for (final entry in _deviceActions.entries) {
           final deviceId = entry.key;
           final action = entry.value;
-
-          // Build action JSON based on device type
-          final actionJson = {
-            'device_id': deviceId,
-            'action_type': action['type'],
-            ...action,
-          };
-
+          final actionJson = {'device_id': deviceId, 'action_type': action['type'], ...action};
           await _service.createSceneStep(scene.id, stepOrder, actionJson);
           stepOrder++;
         }
 
-        // Create scene trigger if not manual
         await _createSceneTrigger(scene.id);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                'Scene "${_nameController.text.trim()}" created with ${_deviceActions.length} device action${_deviceActions.length != 1 ? 's' : ''}!',
-              ),
+              content: Text('Scene "${_nameController.text.trim()}" created!'),
               backgroundColor: HBotColors.primary,
             ),
           );
@@ -1970,11 +1407,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              _isEditMode
-                  ? 'Failed to update scene: $e'
-                  : 'Failed to create scene: $e',
-            ),
+            content: Text(_isEditMode ? 'Failed to update scene: $e' : 'Failed to create scene: $e'),
             backgroundColor: HBotColors.error,
           ),
         );
@@ -1982,294 +1415,76 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     }
   }
 
-  /// Create scene trigger based on selected trigger type
   Future<void> _createSceneTrigger(String sceneId) async {
-    if (_selectedTrigger == 'Time Based' && _selectedTime != null) {
-      // IMPORTANT: Convert Egypt local time to UTC before storing
-      // The user selects time in Egypt timezone, but we store UTC in database
-      // so the edge function can match correctly regardless of timezone
-
+    if (_selectedTrigger == 'Scheduled' && _selectedTime != null) {
       final timezoneService = TimezoneService();
-
-      // Get days based on repeat option
-      final days = _getDaysFromRepeatOption();
-
-      // Convert selected Egypt time to UTC hour/minute
+      final days = _getDaysFromScheduledDays();
       final utcHourMinute = await timezoneService.buildTriggerUtcHourMinute(
-        _selectedTime!.hour,
-        _selectedTime!.minute,
-        days,
+        _selectedTime!.hour, _selectedTime!.minute, days,
       );
 
-      // Store UTC hour/minute in database
       final configJson = {
         'hour': utcHourMinute['hour'],
         'minute': utcHourMinute['minute'],
         'days': days,
       };
 
-      debugPrint(
-        '🕐 Creating trigger: Egypt ${_selectedTime!.hour}:${_selectedTime!.minute} -> UTC ${utcHourMinute['hour']}:${utcHourMinute['minute']}, Days: $days, Repeat: $_selectedRepeat',
-      );
-
-      await _service.createSceneTrigger(
-        sceneId,
-        TriggerKind.schedule,
-        configJson,
-        isEnabled: true,
-      );
-    } else if (_selectedTrigger == 'Location Based' &&
+      await _service.createSceneTrigger(sceneId, TriggerKind.schedule, configJson, isEnabled: true);
+    } else if (_selectedTrigger == 'Location' &&
         _selectedLocationTriggerType != null &&
         _selectedLatitude != null &&
         _selectedLongitude != null) {
-      // Create location-based trigger
       final configJson = {
-        'trigger_type': _selectedLocationTriggerType, // 'arrive' or 'leave'
+        'trigger_type': _selectedLocationTriggerType,
         'latitude': _selectedLatitude,
         'longitude': _selectedLongitude,
         'radius': _selectedRadius,
-        if (_selectedLocationAddress != null)
-          'address': _selectedLocationAddress,
+        if (_selectedLocationAddress != null) 'address': _selectedLocationAddress,
       };
-
-      await _service.createSceneTrigger(
-        sceneId,
-        TriggerKind.geo,
-        configJson,
-        isEnabled: true,
-      );
-    }
-    // Note: Other trigger types (Sensor Triggered) can be implemented here
-    // For now, Manual trigger doesn't need a database entry
-  }
-
-  /// Get days array based on selected repeat option
-  List<int> _getDaysFromRepeatOption() {
-    switch (_selectedRepeat) {
-      case 'Once only':
-        // For once only, we still need to specify a day
-        // Use the next occurrence day
-        final now = DateTime.now();
-        return [now.weekday];
-      case 'Every day':
-        return [1, 2, 3, 4, 5, 6, 7]; // All days
-      case 'Monday to Friday':
-        return [1, 2, 3, 4, 5]; // Weekdays
-      case 'Weekend':
-        return [6, 7]; // Saturday, Sunday
-      case 'Custom':
-        return _customDays;
-      default:
-        return [1, 2, 3, 4, 5, 6, 7]; // Default to every day
+      await _service.createSceneTrigger(sceneId, TriggerKind.geo, configJson, isEnabled: true);
     }
   }
 
-  /// Show repeat options dialog
-  void _showRepeatOptions() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: HBotColors.cardLight,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(HBotSpacing.space6),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Repeat', style: Theme.of(context).textTheme.headlineSmall),
-            SizedBox(height: HBotSpacing.space4),
-            ..._repeatOptions.map(
-              (option) => ListTile(
-                title: Text(option),
-                trailing: _selectedRepeat == option
-                    ? Icon(HBotIcons.check, color: _selectedColor)
-                    : null,
-                onTap: () {
-                  setState(() {
-                    _selectedRepeat = option;
-                    // Reset custom days if switching away from custom
-                    if (option != 'Custom') {
-                      _customDays = [1, 2, 3, 4, 5, 6, 7];
-                    }
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  List<int> _getDaysFromScheduledDays() {
+    if (_scheduledDays.isEmpty) {
+      final now = DateTime.now();
+      return [now.weekday];
+    }
+    return _scheduledDays.map((d) {
+      final idx = _dayNames.indexOf(d);
+      return idx >= 0 ? idx + 1 : 1;
+    }).toList();
   }
 
-  /// Build day chip for custom day selection
-  Widget _buildDayChip(String label, int day) {
-    final isSelected = _customDays.contains(day);
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (selected) {
-        setState(() {
-          if (selected) {
-            _customDays.add(day);
-            _customDays.sort();
-          } else {
-            // Don't allow deselecting all days
-            if (_customDays.length > 1) {
-              _customDays.remove(day);
-            }
-          }
-        });
-      },
-      selectedColor: _selectedColor.withOpacity(0.3),
-      checkmarkColor: _selectedColor,
-      labelStyle: TextStyle(
-        color: isSelected ? _selectedColor : HBotColors.textSecondaryLight,
-      ),
-    );
-  }
-
-  /// Update scene triggers (delete old ones and create new ones)
   Future<void> _updateSceneTriggers(String sceneId) async {
-    // Get existing triggers
     final existingTriggers = await _service.getSceneTriggers(sceneId);
-
-    // Delete all existing triggers
     for (final trigger in existingTriggers) {
       await _service.deleteSceneTrigger(trigger.id);
     }
-
-    // Create new trigger based on current selection
     await _createSceneTrigger(sceneId);
   }
 
-  IconData _getTriggerIcon(String trigger) {
-    switch (trigger) {
-      case 'Manual':
-        return HBotIcons.power;
-      case 'Time Based':
-        return HBotIcons.accessTime;
-      case 'Location Based':
-        return HBotIcons.room;
-      case 'Sensor Triggered':
-        return Icons.sensors;
-      default:
-        return HBotIcons.power;
-    }
-  }
-
-  String _getTriggerDescription(String trigger) {
-    switch (trigger) {
-      case 'Manual':
-        return 'Activate manually when needed';
-      case 'Time Based':
-        return 'Activate at a specific time';
-      case 'Location Based':
-        return 'Activate based on your location';
-      case 'Sensor Triggered':
-        return 'Activate when sensors detect changes';
-      default:
-        return '';
-    }
-  }
-
-  /// Build location trigger type button (Arrive/Leave)
-  /// Build location trigger type button (Arrive/Leave)
-  Widget _buildLocationTriggerTypeButton(
-    String type,
-    String label,
-    IconData icon,
-  ) {
-    final isSelected = _selectedLocationTriggerType == type;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedLocationTriggerType = type;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: HBotSpacing.space4,
-          horizontal: HBotSpacing.space2,
-        ),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? _selectedColor.withOpacity(0.2)
-              : (isDark ? HBotColors.surfaceLight : Colors.white),
-          borderRadius: BorderRadius.circular(HBotRadius.small),
-          border: Border.all(
-            color: isSelected
-                ? _selectedColor
-                : (isDark
-                      ? Colors.grey.withOpacity(0.3)
-                      : HBotColors.borderLight),
-            width: 2,
-          ),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              color: isSelected
-                  ? _selectedColor
-                  : HBotColors.textSecondaryLight,
-              size: 32,
-            ),
-            const SizedBox(height: HBotSpacing.space2),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: isSelected
-                    ? _selectedColor
-                    : HBotColors.textSecondaryLight,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Detect current location using geolocator
   Future<void> _detectCurrentLocation() async {
-    setState(() {
-      _isDetectingLocation = true;
-    });
+    setState(() => _isDetectingLocation = true);
 
     try {
-      // Check if location services are enabled
       final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Location services are disabled. Please enable them.',
-              ),
-              backgroundColor: HBotColors.error,
-            ),
+            const SnackBar(content: Text('Location services are disabled'), backgroundColor: HBotColors.error),
           );
         }
         return;
       }
 
-      // Check location permissions
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Location permissions are denied'),
-                backgroundColor: HBotColors.error,
-              ),
+              const SnackBar(content: Text('Location permissions denied'), backgroundColor: HBotColors.error),
             );
           }
           return;
@@ -2279,22 +1494,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       if (permission == LocationPermission.deniedForever) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Location permissions are permanently denied. Please enable them in settings.',
-              ),
-              backgroundColor: HBotColors.error,
-            ),
+            const SnackBar(content: Text('Location permissions permanently denied'), backgroundColor: HBotColors.error),
           );
         }
         return;
       }
 
-      // Get current position
       final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
       );
 
       setState(() {
@@ -2302,39 +1509,28 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         _selectedLongitude = position.longitude;
         _selectedLocationAddress = 'Current Location';
       });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Location detected: ${position.latitude.toStringAsFixed(6)}, ${position.longitude.toStringAsFixed(6)}',
-            ),
-            backgroundColor: HBotColors.primary,
-          ),
-        );
-      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to detect location: $e'),
-            backgroundColor: HBotColors.error,
-          ),
+          SnackBar(content: Text('Failed to detect location: $e'), backgroundColor: HBotColors.error),
         );
       }
     } finally {
-      if (mounted) {
-        setState(() {
-          _isDetectingLocation = false;
-        });
-      }
+      if (mounted) setState(() => _isDetectingLocation = false);
     }
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _descriptionController.dispose();
     _pageController.dispose();
     super.dispose();
   }
+}
+
+class _SceneIconOption {
+  final String key;
+  final IconData icon;
+  const _SceneIconOption(this.key, this.icon);
 }

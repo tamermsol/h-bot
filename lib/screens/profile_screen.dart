@@ -3,10 +3,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
-import '../widgets/settings_tile.dart';
-import '../widgets/design_system.dart';
-import '../widgets/avatar_picker_dialog.dart';
 import '../services/auth_service.dart';
 import '../services/smart_home_service.dart';
 import '../services/current_home_service.dart';
@@ -14,7 +10,7 @@ import '../services/avatar_service.dart';
 import '../services/theme_service.dart';
 import '../models/profile.dart';
 import '../utils/error_handler.dart';
-import '../core/supabase_client.dart';
+import '../widgets/avatar_picker_dialog.dart';
 import 'sign_in_screen.dart';
 import 'profile_edit_screen.dart';
 import 'homes_screen.dart';
@@ -23,8 +19,6 @@ import 'notifications_settings_screen.dart';
 import 'feedback_screen.dart';
 import 'hbot_account_screen.dart';
 import 'shared_devices_screen.dart';
-import 'rooms_screen.dart';
-import 'wifi_profile_screen.dart';
 import 'appearance_settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -79,7 +73,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final user = _authService.currentUser;
       if (user != null) {
-        // Get basic user info from auth
         if (mounted) {
           setState(() {
             _userEmail = user.email;
@@ -87,12 +80,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         }
 
-        // Try to get full profile from database with timeout
         try {
           final profile = await _authService.getCurrentProfile().timeout(
             const Duration(seconds: 10),
             onTimeout: () {
-              // Return null on timeout, use basic auth data
               return null;
             },
           );
@@ -105,15 +96,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             });
           }
         } catch (profileError) {
-          // Profile loading failed, but we still have basic auth info
-          // Silently continue with auth data only
           ErrorHandler.logError(
             profileError,
             context: 'ProfileScreen._loadUserData',
           );
         }
       } else {
-        // No user signed in
         if (mounted) {
           setState(() {
             _userEmail = null;
@@ -123,7 +111,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       }
     } catch (e) {
-      // Handle error - show fallback data
       ErrorHandler.logError(e, context: 'ProfileScreen._loadUserData');
       if (mounted) {
         setState(() {
@@ -166,7 +153,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         }
       } else {
-        // Default avatar selected
         await _avatarService.setDefaultAvatar(result);
         if (mounted) {
           setState(() {
@@ -185,7 +171,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
 
-      // Get all homes for the current user
       final homes = await _smartHomeService.getMyHomes();
 
       int homeCount = homes.length;
@@ -193,18 +178,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       int roomCount = 0;
       int sceneCount = 0;
 
-      // Aggregate statistics across all homes
       for (final home in homes) {
         try {
-          // Count devices in this home
           final devices = await _smartHomeService.getDevicesByHome(home.id);
           deviceCount += devices.length;
 
-          // Count rooms in this home
           final rooms = await _smartHomeService.getRooms(home.id);
           roomCount += rooms.length;
 
-          // Count scenes in this home
           final scenes = await _smartHomeService.getScenes(home.id);
           sceneCount += scenes.length;
         } catch (e) {
@@ -212,7 +193,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             e,
             context: 'ProfileScreen._loadStatistics.home',
           );
-          // Continue with other homes even if one fails
         }
       }
 
@@ -230,7 +210,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) {
         setState(() {
           _isLoadingStats = false;
-          // Keep default values (0) on error
         });
       }
     }
@@ -244,68 +223,277 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
 
-    // Refresh profile data if updated
     if (result != null) {
       _loadUserData();
-      _loadStatistics(); // Also refresh statistics
+      _loadStatistics();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
-      body: SafeArea(
-        top: false,
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(child: _buildHeader()),
-            const SliverToBoxAdapter(child: SizedBox(height: 24)),
-            SliverToBoxAdapter(child: _buildStatsRow()),
-            const SliverToBoxAdapter(child: SizedBox(height: 12)),
-            const SliverToBoxAdapter(child: GradientDivider(margin: EdgeInsets.symmetric(horizontal: 40))),
-            const SliverToBoxAdapter(child: SizedBox(height: 20)),
-            SliverToBoxAdapter(child: _buildSettingsSection('Home', _buildHomeGroup())),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
-            SliverToBoxAdapter(child: _buildSettingsSection('App', _buildAppGroup())),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
-            SliverToBoxAdapter(child: _buildSettingsSection('Account', _buildAccountGroup())),
-            const SliverToBoxAdapter(child: SizedBox(height: 40)),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // --- v0: Gradient header: linear-gradient(180deg, #E0F2FE 0%, #FFFFFF 100%) ---
+          _buildHeader(),
+
+          // --- v0: Scrollable body px-4 pb-28 ---
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // v0: Stats grid 4 columns, gap-2, mb-5, mt-1
+                const SizedBox(height: 4),
+                _buildStatsGrid(),
+                const SizedBox(height: 20),
+
+                // v0: Settings section
+                _buildSectionTitle('Settings'),
+                const SizedBox(height: 8),
+                _buildSectionCard([
+                  _buildSettingsRow(
+                    icon: Icons.palette_outlined,
+                    iconBg: const Color(0xFFFFF7ED),
+                    iconColor: const Color(0xFFF97316),
+                    label: 'Appearance',
+                    subtitle: 'Choose light or dark theme',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AppearanceSettingsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildSettingsRow(
+                    icon: Icons.apartment,
+                    iconBg: const Color(0xFFF5F3FF),
+                    iconColor: const Color(0xFF8B5CF6),
+                    label: 'Manage Homes',
+                    showDivider: true,
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomesScreen(
+                            onHomeChanged: () {
+                              _loadStatistics();
+                            },
+                          ),
+                        ),
+                      );
+                      _loadStatistics();
+                    },
+                  ),
+                  _buildSettingsRow(
+                    icon: Icons.notifications_outlined,
+                    iconBg: const Color(0xFFEFF6FF),
+                    iconColor: const Color(0xFF3B82F6),
+                    label: 'Notifications',
+                    showDivider: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationsSettingsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ]),
+
+                const SizedBox(height: 16),
+
+                // v0: Account section
+                _buildSectionTitle('Account'),
+                const SizedBox(height: 8),
+                _buildSectionCard([
+                  _buildSettingsRow(
+                    icon: Icons.person_outline,
+                    iconBg: const Color(0xFFECFDF5),
+                    iconColor: const Color(0xFF10B981),
+                    label: 'Personal Information',
+                    onTap: _openEditProfile,
+                  ),
+                  _buildSettingsRow(
+                    icon: Icons.lock_outline,
+                    iconBg: const Color(0xFFEFF6FF),
+                    iconColor: const Color(0xFF3B82F6),
+                    label: 'Change Password',
+                    showDivider: true,
+                    onTap: () {
+                      // TODO: navigate to change password
+                    },
+                  ),
+                  _buildSettingsRow(
+                    icon: Icons.share_outlined,
+                    iconBg: const Color(0xFFFFF7ED),
+                    iconColor: const Color(0xFFF59E0B),
+                    label: 'Share My Devices',
+                    showDivider: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SharedDevicesScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildSettingsRow(
+                    icon: Icons.people_outline,
+                    iconBg: const Color(0xFFF5F3FF),
+                    iconColor: const Color(0xFF8B5CF6),
+                    label: 'Shared with Me',
+                    showDivider: true,
+                    onTap: () {
+                      // TODO: navigate to shared with me
+                    },
+                  ),
+                  _buildSettingsRow(
+                    icon: Icons.smartphone,
+                    iconBg: const Color(0xFFF0FDF4),
+                    iconColor: const Color(0xFF22C55E),
+                    label: 'HBOT Account',
+                    showDivider: true,
+                    onTap: _openHBOTAccountScreen,
+                  ),
+                ]),
+
+                const SizedBox(height: 16),
+
+                // v0: Support section
+                _buildSectionTitle('Support'),
+                const SizedBox(height: 8),
+                _buildSectionCard([
+                  _buildSettingsRow(
+                    icon: Icons.help_outline,
+                    iconBg: const Color(0xFFEFF6FF),
+                    iconColor: const Color(0xFF3B82F6),
+                    label: 'Help Center',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HelpCenterScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildSettingsRow(
+                    icon: Icons.chat_bubble_outline,
+                    iconBg: const Color(0xFFF5F3FF),
+                    iconColor: const Color(0xFF8B5CF6),
+                    label: 'Send Feedback',
+                    showDivider: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const FeedbackScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ]),
+
+                const SizedBox(height: 16),
+
+                // v0: Sign Out row — red, LogOut icon in #FFF1F2 bg
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: _showSignOutDialog,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        child: Row(
+                          children: [
+                            // v0: 32x32 rounded-xl icon container bg #FFF1F2
+                            Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFF1F2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.logout,
+                                  size: 15,
+                                  color: Color(0xFFEF4444),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            const Expanded(
+                              child: Text(
+                                'Sign Out',
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFFEF4444),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // v0: Version text "H-Bot v2.1.0" 11px #C7C9CF centered
+                const Center(
+                  child: Text(
+                    'H-Bot v2.1.0',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 11,
+                      color: Color(0xFFC7C9CF),
+                    ),
+                  ),
+                ),
+
+                // Bottom padding to account for bottom nav
+                const SizedBox(height: 112),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
+  // --- v0: Gradient header ---
   Widget _buildHeader() {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xFFE0F2FE), Color(0xFFFFFFFF)],
         ),
       ),
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
+          padding: const EdgeInsets.fromLTRB(20, 32, 20, 24),
           child: Column(
             children: [
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Profile',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(height: 24),
-              // Avatar
+              // v0: Avatar 80x80 circle with gradient bg, edit button
               GestureDetector(
                 onTap: _showAvatarPicker,
                 child: Stack(
@@ -315,10 +503,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       height: 80,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(0.2),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: _avatarPath == null
-                          ? Icon(HBotIcons.profile, size: 40, color: Colors.white)
+                          ? const _UserSilhouette()
                           : ClipOval(
                               child: _avatarService.isCustomAvatar(_avatarPath)
                                   ? Image.file(
@@ -335,6 +534,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ),
                             ),
                     ),
+                    // v0: pencil edit button at bottom-right
                     Positioned(
                       bottom: 0,
                       right: 0,
@@ -345,42 +545,67 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: Colors.white,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFFE8ECF1),
-                            width: 1.5,
+                            color: const Color(0xFFE5E7EB),
+                            width: 2,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 4,
+                            ),
+                          ],
                         ),
-                        child: Icon(
-                          HBotIcons.camera,
-                          size: 14,
-                          color: const Color(0xFF0883FD),
+                        child: const Center(
+                          child: Icon(
+                            Icons.edit,
+                            size: 10,
+                            color: Color(0xFF6B7280),
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
+
               const SizedBox(height: 12),
-              // Name
+
+              // v0: Name 18px bold
               Text(
                 _userName ?? 'Loading...',
                 style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1F2937),
+                  height: 1.2,
                 ),
               ),
-              const SizedBox(height: 4),
-              // Email
+
+              const SizedBox(height: 2),
+
+              // v0: Email 13px #6B7280
               Text(
                 _userEmail ?? 'Loading...',
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white.withOpacity(0.8),
+                  fontSize: 13,
+                  color: Color(0xFF6B7280),
                 ),
               ),
+
+              // v0: Phone 12px #9CA3AF
+              if (_userPhone != null) ...[
+                const SizedBox(height: 2),
+                Text(
+                  _userPhone!,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 12,
+                    color: Color(0xFF9CA3AF),
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -388,266 +613,205 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildStatsRow() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildStatCard(
-              _isLoadingStats ? '...' : '$_totalDevices',
-              'Devices',
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _buildStatCard(
-              _isLoadingStats ? '...' : '$_totalRooms',
-              'Rooms',
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _buildStatCard(
-              _isLoadingStats ? '...' : '$_totalScenes',
-              'Scenes',
-            ),
-          ),
-        ],
+  // --- v0: Stats grid: 4 columns ---
+  Widget _buildStatsGrid() {
+    final stats = [
+      _StatData(
+        icon: Icons.memory,
+        iconColor: const Color(0xFF3B82F6),
+        bg: const Color(0xFFEFF6FF),
+        label: 'Devices',
+        value: _isLoadingStats ? '...' : '$_totalDevices',
       ),
-    );
-  }
+      _StatData(
+        icon: Icons.home_outlined,
+        iconColor: const Color(0xFF0EA5E9),
+        bg: const Color(0xFFF0F9FF),
+        label: 'Rooms',
+        value: _isLoadingStats ? '...' : '$_totalRooms',
+      ),
+      _StatData(
+        icon: Icons.apartment,
+        iconColor: const Color(0xFF8B5CF6),
+        bg: const Color(0xFFF5F3FF),
+        label: 'Homes',
+        value: _isLoadingStats ? '...' : '$_totalHomes',
+      ),
+      _StatData(
+        icon: Icons.auto_awesome,
+        iconColor: const Color(0xFFF59E0B),
+        bg: const Color(0xFFFFFBEB),
+        label: 'Scenes',
+        value: _isLoadingStats ? '...' : '$_totalScenes',
+      ),
+    ];
 
-  Widget _buildStatCard(String count, String label) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE8ECF1)),
-      ),
-      child: Column(
-        children: [
-          AppTheme.hbotGradientText(
-            count,
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 12,
-              color: Color(0xFF5A6577),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSettingsSection(String title, List<Widget> tiles) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title.toUpperCase(),
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 1.0,
-              color: Color(0xFF5A6577),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8ECF1)),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(children: tiles),
-          ),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> _buildHomeGroup() {
-    return [
-      SettingsTile(
-        icon: HBotIcons.room,
-        title: 'Rooms',
-        subtitle: '',
-        onTap: () async {
-          // Navigate to homes screen to pick a home, then rooms
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomesScreen(
-                onHomeChanged: () {
-                  _loadStatistics();
-                },
+    return Row(
+      children: stats.map((stat) {
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xFFE5E7EB)),
+              ),
+              child: Column(
+                children: [
+                  // v0: 32x32 circle icon container
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: stat.bg,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Icon(stat.icon, size: 15, color: stat.iconColor),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // v0: 15px bold value
+                  Text(
+                    stat.value,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF1F2937),
+                      height: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // v0: 10px label
+                  Text(
+                    stat.label,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF9CA3AF),
+                    ),
+                  ),
+                ],
               ),
             ),
-          );
-          _loadStatistics();
-        },
-      ),
-      SettingsTile(
-        icon: HBotIcons.wifi,
-        title: 'WiFi Profiles',
-        subtitle: '',
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const WiFiProfileScreen(),
-            ),
-          );
-        },
-      ),
-      SettingsTile(
-        icon: HBotIcons.share,
-        title: 'Device Sharing',
-        subtitle: '',
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SharedDevicesScreen(),
-            ),
-          );
-        },
-        showDivider: false,
-      ),
-    ];
+          ),
+        );
+      }).toList(),
+    );
   }
 
-  List<Widget> _buildAppGroup() {
-    final themeService = Provider.of<ThemeService>(context, listen: false);
-    final currentTheme = themeService.themeMode == ThemeMode.dark ? 'Dark' : 'Light';
-
-    return [
-      SettingsTile(
-        icon: HBotIcons.notifications,
-        title: 'Notifications',
-        subtitle: '',
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NotificationsSettingsScreen(),
-            ),
-          );
-        },
+  // v0: Section title: 11px bold uppercase #9CA3AF tracking-wider px-1 mb-2
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4),
+      child: Text(
+        title.toUpperCase(),
+        style: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: Color(0xFF9CA3AF),
+          letterSpacing: 1.2,
+        ),
       ),
-      SettingsTile(
-        icon: HBotIcons.palette,
-        title: 'Appearance',
-        subtitle: currentTheme,
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AppearanceSettingsScreen(),
-            ),
-          );
-        },
-      ),
-      SettingsTile(
-        icon: HBotIcons.help,
-        title: 'Help',
-        subtitle: '',
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HelpCenterScreen(),
-            ),
-          );
-        },
-      ),
-      SettingsTile(
-        icon: HBotIcons.feedback,
-        title: 'Feedback',
-        subtitle: '',
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const FeedbackScreen(),
-            ),
-          );
-        },
-      ),
-      SettingsTile(
-        icon: HBotIcons.about,
-        title: 'About',
-        subtitle: '',
-        onTap: _showAboutDialog,
-        showDivider: false,
-      ),
-    ];
+    );
   }
 
-  List<Widget> _buildAccountGroup() {
-    return [
-      SettingsTile(
-        icon: HBotIcons.account,
-        title: 'H-Bot Account',
-        subtitle: '',
-        onTap: _openHBOTAccountScreen,
+  // v0: Section card: #F5F7FA bg, rounded-2xl, border #E5E7EB
+  Widget _buildSectionCard(List<Widget> rows) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F7FA),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
       ),
-      SettingsTile(
-        icon: HBotIcons.signOut,
-        title: 'Sign Out',
-        subtitle: '',
-        titleColor: HBotColors.error,
-        trailing: const SizedBox.shrink(),
-        onTap: _showSignOutDialog,
-        showDivider: false,
-      ),
-    ];
+      clipBehavior: Clip.antiAlias,
+      child: Column(children: rows),
+    );
   }
 
-  void _showAboutDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        title: const Text(
-          'About H-Bot',
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF0A1628),
+  // v0: Settings row: 32x32 rounded-xl icon, 14px medium label, optional subtitle, ChevronRight
+  Widget _buildSettingsRow({
+    required IconData icon,
+    required Color iconBg,
+    required Color iconColor,
+    required String label,
+    String? subtitle,
+    bool showDivider = false,
+    VoidCallback? onTap,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (showDivider)
+          Container(
+            height: 1,
+            color: const Color(0xFFEBEDF0),
+          ),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  // v0: 32x32 rounded-xl icon container
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: iconBg,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Center(
+                      child: Icon(icon, size: 15, color: iconColor),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF1F2937),
+                            height: 1.2,
+                          ),
+                        ),
+                        if (subtitle != null) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            subtitle,
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 11,
+                              color: Color(0xFF9CA3AF),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  const Icon(
+                    Icons.chevron_right,
+                    size: 16,
+                    color: Color(0xFFC7C9CF),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-        content: const Text(
-          'H-Bot Smart Home\nVersion 1.0.0',
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 14,
-            color: Color(0xFF5A6577),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -660,7 +824,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           userName: _userName,
           userPhone: _userPhone,
           onAccountDeleted: () {
-            // Navigate to sign-in screen after account deletion
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const SignInScreen()),
               (route) => false,
@@ -676,7 +839,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -686,7 +849,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               fontFamily: 'Inter',
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF0A1628),
+              color: Color(0xFF1F2937),
             ),
           ),
           content: const Text(
@@ -694,7 +857,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: TextStyle(
               fontFamily: 'Inter',
               fontSize: 14,
-              color: Color(0xFF5A6577),
+              color: Color(0xFF6B7280),
             ),
           ),
           actions: [
@@ -702,20 +865,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(
                   fontFamily: 'Inter',
-                  color: HBotTheme.textSecondary(context),
+                  color: Color(0xFF6B7280),
                 ),
               ),
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop(); // Close dialog first
+                Navigator.of(context).pop();
                 await _handleSignOut();
               },
-              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
+              style: TextButton.styleFrom(foregroundColor: const Color(0xFFEF4444)),
               child: const Text(
                 'Sign Out',
                 style: TextStyle(fontFamily: 'Inter'),
@@ -729,7 +892,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _handleSignOut() async {
     try {
-      // Show loading indicator
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -753,10 +915,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       }
 
-      // Perform sign out
       await AuthService().signOut();
 
-      // Navigate to sign-in screen and clear navigation stack
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const SignInScreen()),
@@ -764,7 +924,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       }
     } catch (e) {
-      // Handle sign out error
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -776,4 +935,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
   }
+}
+
+/// v0: White user silhouette SVG inside gradient avatar
+/// Since we can't use inline SVG in Flutter, approximate with Icon
+class _UserSilhouette extends StatelessWidget {
+  const _UserSilhouette();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Icon(
+        Icons.person,
+        size: 42,
+        color: Colors.white,
+      ),
+    );
+  }
+}
+
+class _StatData {
+  final IconData icon;
+  final Color iconColor;
+  final Color bg;
+  final String label;
+  final String value;
+
+  const _StatData({
+    required this.icon,
+    required this.iconColor,
+    required this.bg,
+    required this.label,
+    required this.value,
+  });
 }

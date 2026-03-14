@@ -356,55 +356,25 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     }
   }
 
-  /// Step indicator widget
+  /// Step indicator widget - v0 progress dots
   Widget _buildStepIndicator() {
-    final steps = ['WiFi', 'Find', 'Connect', 'Done'];
-    final currentIndex = _currentStep.index;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: HBotSpacing.space6,
-        vertical: HBotSpacing.space3,
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
-        children: List.generate(steps.length * 2 - 1, (i) {
-          if (i.isOdd) {
-            // Connector line
-            final stepIndex = i ~/ 2;
-            final isCompleted = stepIndex < currentIndex;
-            return Expanded(
-              child: Container(
-                height: 2,
-                color: isCompleted ? HBotColors.primary : HBotColors.neutral200,
-              ),
-            );
-          }
-          // Dot
-          final stepIndex = i ~/ 2;
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(4, (i) {
+          final stepIndex = i;
+          final currentIndex = _currentStep.index;
           final isActive = stepIndex == currentIndex;
-          final isCompleted = stepIndex < currentIndex;
           return Container(
-            width: isActive ? 32 : 24,
-            height: isActive ? 32 : 24,
+            margin: EdgeInsets.only(right: i < 3 ? 8 : 0),
+            width: isActive ? 20 : 8,
+            height: 8,
             decoration: BoxDecoration(
-              gradient: (isActive || isCompleted) ? HBotColors.primaryGradient : null,
-              color: (isActive || isCompleted) ? null : HBotColors.neutral200,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: isCompleted
-                  ? Icon(HBotIcons.check, size: 14, color: HBotColors.textOnPrimary)
-                  : Text(
-                      '${stepIndex + 1}',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: isActive ? 14 : 12,
-                        fontWeight: FontWeight.w600,
-                        color: (isActive || isCompleted)
-                            ? HBotColors.textOnPrimary
-                            : HBotColors.textTertiaryLight,
-                      ),
-                    ),
+              borderRadius: BorderRadius.circular(999),
+              color: stepIndex <= currentIndex
+                  ? const Color(0xFF0883FD)
+                  : const Color(0xFFE5E7EB),
             ),
           );
         }),
@@ -421,53 +391,64 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
       ],
     );
 
-    final appBar = AppBar(
-      backgroundColor: HBotColors.backgroundLight,
-      elevation: 0,
-      scrolledUnderElevation: 0,
-      leading: IconButton(
-        icon: Icon(HBotIcons.back, color: HBotColors.textPrimaryLight),
-        onPressed: () => Navigator.pop(context),
+    // v0 style AppBar
+    final appBarWidget = Container(
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6), width: 1)),
       ),
-      title: const Text(
-        'Add Device',
-        style: TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: HBotColors.textPrimaryLight,
-        ),
-      ),
-      actions: [
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.only(right: HBotSpacing.space2),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+              alignment: Alignment.center,
+              child: const Icon(Icons.arrow_back, size: 20, color: Color(0xFF1F2937)),
+            ),
+          ),
+          const Expanded(
             child: Text(
-              'Step ${_currentStep.index + 1} of 4',
-              style: const TextStyle(
+              'Add Device',
+              textAlign: TextAlign.center,
+              style: TextStyle(
                 fontFamily: 'Inter',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: HBotColors.textSecondaryLight,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1F2937),
               ),
             ),
           ),
+          GestureDetector(
+            onTap: _showDebugLog,
+            child: Container(
+              width: 36,
+              height: 36,
+              alignment: Alignment.center,
+              child: Icon(HBotIcons.bug, size: 18, color: const Color(0xFF9CA3AF)),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    final scaffold = Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            appBarWidget,
+            Expanded(child: body),
+          ],
         ),
-        IconButton(
-          icon: Icon(HBotIcons.bug, size: 20, color: HBotColors.iconDefault),
-          onPressed: _showDebugLog,
-          tooltip: 'Debug Log',
-        ),
-      ],
+      ),
     );
 
     // iOS: Skip permission gate
     if (isIOS) {
-      return Scaffold(
-        backgroundColor: HBotColors.backgroundLight,
-        appBar: appBar,
-        body: body,
-      );
+      return scaffold;
     }
 
     // Android: Keep permission gate
@@ -481,11 +462,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           _startDeviceDiscovery();
         }
       },
-      child: Scaffold(
-        backgroundColor: HBotColors.backgroundLight,
-        appBar: appBar,
-        body: body,
-      ),
+      child: scaffold,
     );
   }
 
@@ -502,334 +479,247 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     }
   }
 
-  // Step 1: Wi-Fi Setup
+  // Step 1: Wi-Fi Setup - v0 design
   Widget _buildWiFiSetupStep() {
     return SingleChildScrollView(
       padding: EdgeInsets.only(
-        left: HBotSpacing.space5,
-        right: HBotSpacing.space5,
-        top: HBotSpacing.space4,
-        bottom:
-            HBotSpacing.space6 + MediaQuery.of(context).viewInsets.bottom,
+        left: 20, right: 20, top: 24,
+        bottom: 32 + MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Select WiFi network',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-              color: HBotColors.textPrimaryLight,
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space1),
-          const Text(
-            'The device will connect to this 2.4GHz network',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: HBotColors.textSecondaryLight,
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space5),
-
-          // 2.4GHz indicator
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: HBotSpacing.space3,
-              vertical: HBotSpacing.space2,
-            ),
-            decoration: BoxDecoration(
-              color: HBotColors.successLight,
-              borderRadius: HBotRadius.smallRadius,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(HBotIcons.checkCircle, color: HBotColors.success, size: 16),
-                const SizedBox(width: HBotSpacing.space1),
-                const Text(
-                  '2.4GHz required',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: HBotColors.successDark,
-                  ),
+            children: [
+              // WiFi icon
+              Container(
+                width: 64,
+                height: 64,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFEFF6FF),
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space5),
-
-          // Wi-Fi SSID input - auto-detected or manual
-          if (_currentSSID != null && !_manualSSIDEntry && _ssidFromLiveDetection)
-            // Auto-detected SSID (live from WiFi)
-            Container(
-              padding: const EdgeInsets.all(HBotSpacing.space4),
-              decoration: BoxDecoration(
-                color: HBotColors.surfacePrimarySubtle,
-                border: Border.all(color: HBotColors.primary.withOpacity(0.3)),
-                borderRadius: HBotRadius.mediumRadius,
+                alignment: Alignment.center,
+                child: const Icon(Icons.wifi, size: 30, color: Color(0xFF0883FD)),
               ),
-              child: Row(
-                children: [
-                  Icon(HBotIcons.wifi, color: HBotColors.primary, size: 24),
-                  const SizedBox(width: HBotSpacing.space3),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _currentSSID!,
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: HBotColors.textPrimaryLight,
+              const SizedBox(height: 20),
+              const Text(
+                'Set Up WiFi',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Choose a saved profile or enter credentials manually',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF6B7280)),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 28),
+
+              // SSID field
+              if (_currentSSID != null && !_manualSSIDEntry && _ssidFromLiveDetection)
+                // Auto-detected SSID
+                Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 50,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F7FA),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFF0883FD)),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _currentSSID!,
+                              style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _safeSetState(() {
+                                _manualSSIDEntry = true;
+                                _ssidController.text = _currentSSID ?? '';
+                              });
+                            },
+                            child: const Text(
+                              'Enter manually instead',
+                              style: TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                )
+              else
+                // Manual entry
+                Column(
+                  children: [
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F7FA),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                      ),
+                      child: TextField(
+                        controller: _ssidController,
+                        style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                        decoration: const InputDecoration(
+                          hintText: 'WiFi Network Name (SSID)',
+                          hintStyle: TextStyle(fontFamily: 'Inter', color: Color(0xFF9CA3AF)),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F7FA),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                      ),
+                      child: TextField(
+                        controller: _wifiPasswordController,
+                        obscureText: !_passwordVisible,
+                        style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          hintStyle: const TextStyle(fontFamily: 'Inter', color: Color(0xFF9CA3AF)),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                              color: const Color(0xFF9CA3AF), size: 20,
+                            ),
+                            onPressed: () => _safeSetState(() => _passwordVisible = !_passwordVisible),
                           ),
                         ),
-                        const Text(
-                          'Auto-detected',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 12,
-                            color: HBotColors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    // Auto-detect or toggle link
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: _isDetectingSSID ? null : _refreshCurrentSSID,
+                          child: Text(
+                            _isDetectingSSID ? 'Detecting...' : 'Auto-detect WiFi',
+                            style: const TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      _safeSetState(() {
-                        _manualSSIDEntry = true;
-                        _ssidController.text = _currentSSID ?? '';
-                      });
-                    },
-                    child: const Text(
-                      'Edit',
-                      style: TextStyle(color: HBotColors.primary),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          else
-            // Manual SSID entry
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  controller: _ssidController,
-                  style: const TextStyle(fontFamily: 'Inter', color: HBotColors.textPrimaryLight),
-                  decoration: InputDecoration(
-                    labelText: 'Wi-Fi Network Name (SSID)',
-                    hintText: 'Enter your 2.4GHz Wi-Fi name',
-                    filled: true,
-                    fillColor: HBotColors.neutral50,
-                    border: OutlineInputBorder(
-                      borderRadius: HBotRadius.mediumRadius,
-                      borderSide: const BorderSide(color: HBotColors.borderLight, width: 1.5),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: HBotRadius.mediumRadius,
-                      borderSide: const BorderSide(color: HBotColors.borderLight, width: 1.5),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: HBotRadius.mediumRadius,
-                      borderSide: const BorderSide(color: HBotColors.borderFocused, width: 2),
-                    ),
-                    prefixIcon: Icon(HBotIcons.wifi, color: HBotColors.iconDefault),
-                  ),
-                ),
-                const SizedBox(height: HBotSpacing.space3),
-                Container(
-                  padding: const EdgeInsets.all(HBotSpacing.space3),
-                  decoration: BoxDecoration(
-                    color: HBotColors.surfacePrimarySubtle,
-                    borderRadius: HBotRadius.smallRadius,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        HBotIcons.info,
-                        size: 16,
-                        color: HBotColors.primary,
-                      ),
-                      const SizedBox(width: HBotSpacing.space2),
-                      const Expanded(
+                    if (_detectMessage != null) ...[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
                         child: Text(
-                          'If your router uses the same name for 2.4GHz and 5GHz, make sure you\'re connected to the 2.4GHz band.',
+                          _detectMessage!,
                           style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 12,
-                            color: HBotColors.textSecondaryLight,
+                            fontFamily: 'Inter', fontSize: 13,
+                            color: _detectMessage!.startsWith('✅') ? HBotColors.successDark :
+                                   _detectMessage!.startsWith('⚠️') ? HBotColors.warningDark :
+                                   _detectMessage!.startsWith('❌') ? HBotColors.errorDark : HBotColors.textSecondaryLight,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
+                      if (!_detectMessage!.startsWith('✅'))
+                        TextButton.icon(
+                          onPressed: () async {
+                            try { await Geolocator.openAppSettings(); } catch (_) { await Geolocator.openLocationSettings(); }
+                          },
+                          icon: const Icon(Icons.settings, size: 16),
+                          label: const Text('Open App Settings'),
+                          style: TextButton.styleFrom(foregroundColor: const Color(0xFF0883FD)),
+                        ),
                     ],
-                  ),
+                  ],
                 ),
-                const SizedBox(height: HBotSpacing.space3),
-                SizedBox(
-                  width: double.infinity,
-                  height: 44,
-                  child: OutlinedButton.icon(
-                    onPressed: _isDetectingSSID ? null : _refreshCurrentSSID,
-                    icon: _isDetectingSSID
-                      ? SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: HBotColors.primary))
-                      : Icon(HBotIcons.wifiFind, size: 18),
-                    label: Text(
-                      _isDetectingSSID ? 'Detecting...' : (_currentSSID == null ? 'Auto-detect WiFi' : 'Re-detect WiFi'),
-                      style: const TextStyle(fontFamily: 'Inter'),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: HBotColors.primary,
-                      side: const BorderSide(color: HBotColors.primary, width: 1.5),
-                      shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
-                    ),
+
+              // Password field for auto-detected SSID
+              if (_currentSSID != null && !_manualSSIDEntry && _ssidFromLiveDetection) ...[
+                Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
                   ),
-                ),
-                if (_detectMessage != null) ...[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(
-                      _detectMessage!,
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 13,
-                        color: _detectMessage!.startsWith('✅') ? HBotColors.successDark :
-                               _detectMessage!.startsWith('⚠️') ? HBotColors.warningDark :
-                               _detectMessage!.startsWith('❌') ? HBotColors.errorDark : HBotColors.textSecondaryLight,
+                  child: TextField(
+                    controller: _wifiPasswordController,
+                    obscureText: !_passwordVisible,
+                    style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      hintStyle: const TextStyle(fontFamily: 'Inter', color: Color(0xFF9CA3AF)),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _passwordVisible ? Icons.visibility_off : Icons.visibility,
+                          color: const Color(0xFF9CA3AF), size: 20,
+                        ),
+                        onPressed: () => _safeSetState(() => _passwordVisible = !_passwordVisible),
                       ),
                     ),
                   ),
-                  if (!_detectMessage!.startsWith('✅'))
-                    TextButton.icon(
-                      onPressed: () async {
-                        try {
-                          await Geolocator.openAppSettings();
-                        } catch (_) {
-                          await Geolocator.openLocationSettings();
-                        }
-                      },
-                      icon: Icon(HBotIcons.settings, size: 16),
-                      label: const Text('Open App Settings'),
-                      style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
-                    ),
-                ],
+                ),
+                const SizedBox(height: 12),
               ],
-            ),
-          const SizedBox(height: HBotSpacing.space4),
 
-          // Password field
-          TextField(
-            controller: _wifiPasswordController,
-            obscureText: !_passwordVisible,
-            style: const TextStyle(fontFamily: 'Inter', color: HBotColors.textPrimaryLight),
-            decoration: InputDecoration(
-              labelText: 'Wi-Fi Password',
-              hintText: 'Enter WiFi password',
-              filled: true,
-              fillColor: HBotColors.neutral50,
-              border: OutlineInputBorder(
-                borderRadius: HBotRadius.mediumRadius,
-                borderSide: const BorderSide(color: HBotColors.borderLight, width: 1.5),
+              // Remember password
+              Row(
+                children: [
+                  SizedBox(
+                    width: 24, height: 24,
+                    child: Checkbox(
+                      value: _rememberPassword,
+                      onChanged: (v) => _safeSetState(() => _rememberPassword = v ?? true),
+                      activeColor: const Color(0xFF0883FD),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text('Save WiFi for future devices', style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF6B7280))),
+                ],
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: HBotRadius.mediumRadius,
-                borderSide: const BorderSide(color: HBotColors.borderLight, width: 1.5),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: HBotRadius.mediumRadius,
-                borderSide: const BorderSide(color: HBotColors.borderFocused, width: 2),
-              ),
-              prefixIcon: Icon(HBotIcons.lock, color: HBotColors.iconDefault),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _passwordVisible ? HBotIcons.visibilityOff : HBotIcons.visibility,
-                  color: HBotColors.iconDefault,
-                ),
-                onPressed: () {
-                  _safeSetState(() {
-                    _passwordVisible = !_passwordVisible;
-                  });
-                },
-              ),
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space3),
 
-          // Remember password checkbox
-          Row(
-            children: [
-              SizedBox(
-                width: 24,
-                height: 24,
-                child: Checkbox(
-                  value: _rememberPassword,
-                  onChanged: (value) {
-                    _safeSetState(() {
-                      _rememberPassword = value ?? true;
-                    });
-                  },
-                  activeColor: HBotColors.primary,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                ),
-              ),
-              const SizedBox(width: HBotSpacing.space2),
-              const Text(
-                'Save WiFi for future devices',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  color: HBotColors.textSecondaryLight,
+              const SizedBox(height: 32),
+
+              // Continue button
+              GestureDetector(
+                onTap: _canProceedFromWiFiSetup() ? _proceedToDeviceDiscovery : null,
+                child: Opacity(
+                  opacity: _canProceedFromWiFiSetup() ? 1.0 : 0.4,
+                  child: Container(
+                    width: double.infinity,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
+                    ),
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
-
-          const SizedBox(height: HBotSpacing.space7),
-
-          // Continue button - gradient per design spec
-          Container(
-            width: double.infinity,
-            height: 52,
-            decoration: hbotPrimaryButtonDecoration(
-              enabled: _canProceedFromWiFiSetup(),
-            ),
-            child: ElevatedButton(
-              onPressed: _canProceedFromWiFiSetup()
-                  ? _proceedToDeviceDiscovery
-                  : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: HBotRadius.mediumRadius,
-                ),
-              ),
-              child: const Text(
-                'Continue',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
-    ),),);
+    );
   }
 
   bool _canProceedFromWiFiSetup() {
@@ -900,7 +790,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     _startDeviceDiscovery();
   }
 
-  // Step 2: Device Discovery (like competitor's 4.jpeg - "Searching for devices...")
+  // Step 2: Device Discovery — v0 StepConnect design
   Widget _buildDeviceDiscoveryStep() {
     // iOS: Show scanning UI with instructions to put device in pairing mode
     // We'll auto-connect using NEHotspotConfigurationManager when device AP is detected
@@ -912,320 +802,403 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
       return _buildIOSAutoDiscoveryView();
     }
 
-    // Android can scan and connect automatically
-    return Padding(
-      padding: const EdgeInsets.all(HBotSpacing.space6),
+    // v0 StepConnect layout
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 24, bottom: 32),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
-        children: [
-          const SizedBox(height: HBotSpacing.space6 * 2),
-
-          // Searching animation
-          Container(
-            width: 200,
-            height: 200,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
-                colors: [
-                  HBotColors.primary.withOpacity(0.3),
-                  HBotColors.primary.withOpacity(0.1),
-                  Colors.transparent,
-                ],
-              ),
-            ),
-            child: Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: HBotColors.primary.withOpacity(0.2),
-                ),
-                child: Icon(
-                  HBotIcons.wifiFind,
-                  size: 50,
-                  color: HBotColors.primary,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: HBotSpacing.space6),
-
-          Text(
-            _isConnectedToDevice
-                ? 'Device Connected!'
-                : 'Searching for devices...',
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: HBotColors.textPrimaryLight,
-            ),
-          ),
-
-          const SizedBox(height: HBotSpacing.space4),
-
-          Text(
-            _statusMessage.isNotEmpty
-                ? _statusMessage
-                : 'Please set the device in pairing mode based on the user manual.',
-            style: const TextStyle(fontSize: 16, color: HBotColors.textSecondaryLight),
-            textAlign: TextAlign.center,
-          ),
-
-          if (_availableDeviceAPs.isNotEmpty) ...[
-            const SizedBox(height: HBotSpacing.space6),
-            Text(
-              'Found ${_availableDeviceAPs.length} device${_availableDeviceAPs.length == 1 ? '' : 's'}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: HBotColors.textPrimaryLight,
-              ),
-            ),
-            SizedBox(height: HBotSpacing.space4),
-            ...(_availableDeviceAPs.map(
-              (ap) => Card(
-                child: ListTile(
-                  leading: Icon(HBotIcons.wifi),
-                  title: Text(ap),
-                  trailing: _selectedDeviceAP == ap
-                      ? Icon(HBotIcons.checkCircle, color: HBotColors.success)
-                      : null,
-                  onTap: () => _connectToDeviceAP(ap),
-                ),
-              ),
-            )),
-          ],
-
-          const Spacer(),
-
-          if (_isLoading) ...[
-            const CircularProgressIndicator(),
-            SizedBox(height: HBotSpacing.space4),
-          ],
-
-          // Refresh button only
-          Center(
-            child: TextButton.icon(
-              onPressed: _isLoading ? null : _startDeviceDiscovery,
-              icon: Icon(HBotIcons.refresh),
-              label: const Text('Refresh'),
-              style: TextButton.styleFrom(
-                foregroundColor: HBotColors.primary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),),);
-  }
-
-  /// iOS auto-discovery view - scans for device AP and connects automatically
-  Widget _buildIOSAutoDiscoveryView() {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 600),
-        child: Padding(
-          padding: const EdgeInsets.all(HBotSpacing.space6),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: HBotSpacing.space4),
-
-              // Step indicator pill
+              // WiFi icon in circle
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: HBotColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  'Connect to Device',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: HBotColors.primary,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // WiFi icon with pulse effect
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
+                width: 64,
+                height: 64,
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: RadialGradient(
-                    colors: [
-                      HBotColors.primary.withOpacity(0.2),
-                      HBotColors.primary.withOpacity(0.05),
-                      Colors.transparent,
-                    ],
-                  ),
+                  color: Color(0xFFEFF6FF),
                 ),
-                child: Center(
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: HBotColors.primary.withOpacity(0.15),
-                    ),
-                    child: Icon(
-                      _isLoading ? HBotIcons.wifi : HBotIcons.wifiFind,
-                      size: 32,
-                      color: HBotColors.primary,
-                    ),
-                  ),
-                ),
+                alignment: Alignment.center,
+                child: const Icon(Icons.wifi, size: 30, color: Color(0xFF0883FD)),
               ),
-
-              const SizedBox(height: 16),
-
-              // Status text
-              Text(
-                _isLoading
-                    ? 'Waiting for device connection...'
-                    : 'Connect to your device\'s WiFi',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF333333),
-                ),
+              const SizedBox(height: 20),
+              const Text(
+                'Connect to Your Device',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Follow these steps on your phone',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF6B7280)),
                 textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 24),
 
-              const SizedBox(height: HBotSpacing.space4),
-
-              // Instructions
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+              // 3-step instruction card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F7FA),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                ),
                 child: Column(
                   children: [
-                    _buildInstructionStep(
-                      number: '1',
-                      text: 'Make sure your device is in pairing mode',
-                      subtitle: 'LED should be blinking rapidly',
-                    ),
-                    const SizedBox(height: 12),
-                    _buildInstructionStep(
-                      number: '2',
-                      text: 'Tap "Open WiFi Settings" below',
-                    ),
-                    const SizedBox(height: 12),
-                    _buildInstructionStep(
-                      number: '3',
-                      text: 'Connect to the network starting with "hbot-"',
-                      subtitle: 'If asked about no internet, tap "Use Without Internet"',
-                    ),
-                    const SizedBox(height: 12),
-                    _buildInstructionStep(
-                      number: '4',
-                      text: 'Return to this app',
-                      subtitle: 'It will detect the connection automatically',
-                    ),
+                    _buildInstructionRow(1, 'Open your phone\'s WiFi settings'),
+                    const SizedBox(height: 16),
+                    _buildInstructionRow(2, 'Connect to the network starting with ', highlight: 'hbot-'),
+                    const SizedBox(height: 16),
+                    _buildInstructionRow(3, 'Return to this app to continue'),
                   ],
                 ),
               ),
+              const SizedBox(height: 20),
 
-              const SizedBox(height: HBotSpacing.space6),
-
-              // Main action button — Open WiFi Settings (always tappable)
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    _addDebugLog('Opening WiFi settings for manual device AP connection');
-                    // Start detection timer if not already running
-                    if (_apDetectionTimer == null || !_apDetectionTimer!.isActive) {
-                      _startApDetectionTimer();
-                    }
-                    _safeSetState(() {
-                      _isLoading = true;
-                      _statusMessage = 'Waiting for you to connect...';
-                    });
-                    // Open iOS WiFi settings
+              // Open WiFi Settings button
+              GestureDetector(
+                onTap: () async {
+                  _addDebugLog('Opening WiFi settings for manual device AP connection');
+                  if (_apDetectionTimer == null || !_apDetectionTimer!.isActive) {
+                    _startApDetectionTimer();
+                  }
+                  _safeSetState(() {
+                    _isLoading = true;
+                    _statusMessage = 'Waiting for you to connect...';
+                  });
+                  if (isIOS) {
                     final url = Uri.parse('App-Prefs:root=WIFI');
                     if (await canLaunchUrl(url)) {
                       await launchUrl(url);
                     } else {
-                      // Fallback to general settings
                       await launchUrl(Uri.parse('app-settings:'));
                     }
-                  },
-                  icon: Icon(HBotIcons.settings, size: 22),
-                  label: const Text(
-                    'Open WiFi Settings',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 2,
-                  ),
-                ),
-              ),
-
-              if (_isLoading) ...[
-                const SizedBox(height: HBotSpacing.space4),
-                Container(
-                  padding: const EdgeInsets.all(12),
+                  } else {
+                    await PlatformService.openWiFiSettings();
+                  }
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
                   decoration: BoxDecoration(
-                    color: HBotColors.primary.withOpacity(0.08),
+                    color: const Color(0xFFF5F7FA),
                     borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: HBotColors.primary.withOpacity(0.6),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const Flexible(
-                        child: Text(
-                          'Waiting for device connection...\nReturn here after connecting to hbot-xxx',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xFF555555),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+                    children: const [
+                      Icon(Icons.open_in_new, size: 16, color: Color(0xFF4B5563)),
+                      SizedBox(width: 8),
+                      Text(
+                        'Open WiFi Settings',
+                        style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF1F2937)),
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
+              const SizedBox(height: 16),
 
-              const Spacer(),
+              // Waiting for connection... spinner
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(
+                    width: 16, height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF0883FD)),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Waiting for connection...',
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF6B7280)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
 
-              // Fallback: manual entry (collapsed by default)
-              TextButton(
-                onPressed: () {
+              // Scan QR Code Instead button
+              GestureDetector(
+                onTap: () {
+                  // Fallback: show manual entry
                   _safeSetState(() {
                     _availableDeviceAPs = ['manual'];
                   });
                 },
-                child: const Text(
-                  'Having trouble? Enter device name manually',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF888888),
-                    decoration: TextDecoration.underline,
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.qr_code, size: 16, color: Color(0xFF4B5563)),
+                      SizedBox(width: 8),
+                      Text(
+                        'Scan QR Code Instead',
+                        style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF4B5563)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // "I'm Connected" gradient button
+              GestureDetector(
+                onTap: () {
+                  // Proceed to provisioning
+                  _safeSetState(() {
+                    _isLoading = true;
+                    _statusMessage = 'Checking device connection...';
+                  });
+                  if (isIOS) {
+                    _checkIOSDeviceConnection();
+                  } else {
+                    _handleDeviceConnectionWithTimeout();
+                  }
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'I\'m Connected',
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                  ),
+                ),
+              ),
+
+              // Show found device APs if any (Android auto-scan results)
+              if (_availableDeviceAPs.isNotEmpty && _availableDeviceAPs.first != 'manual') ...[
+                const SizedBox(height: 24),
+                Text(
+                  'Found ${_availableDeviceAPs.length} device${_availableDeviceAPs.length == 1 ? '' : 's'}',
+                  style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+                ),
+                const SizedBox(height: 8),
+                ...(_availableDeviceAPs.map(
+                  (ap) => GestureDetector(
+                    onTap: () => _connectToDeviceAP(ap),
+                    child: Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: _selectedDeviceAP == ap ? const Color(0xFFEFF6FF) : const Color(0xFFF5F7FA),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _selectedDeviceAP == ap ? const Color(0xFF0883FD) : const Color(0xFFE5E7EB),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.wifi, size: 20, color: Color(0xFF0883FD)),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              ap,
+                              style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                            ),
+                          ),
+                          if (_selectedDeviceAP == ap)
+                            const Icon(Icons.check_circle, size: 20, color: Color(0xFF10B981)),
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
+              ],
+
+              // Refresh button
+              if (!_isLoading)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: GestureDetector(
+                    onTap: _startDeviceDiscovery,
+                    child: const Text(
+                      'Refresh',
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// iOS auto-discovery view — v0 StepConnect design (same as Android)
+  Widget _buildIOSAutoDiscoveryView() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 24, bottom: 32),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: Column(
+            children: [
+              // WiFi icon in circle
+              Container(
+                width: 64,
+                height: 64,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFEFF6FF),
+                ),
+                alignment: Alignment.center,
+                child: const Icon(Icons.wifi, size: 30, color: Color(0xFF0883FD)),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Connect to Your Device',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Follow these steps on your phone',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF6B7280)),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+
+              // 3-step instruction card
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F7FA),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                ),
+                child: Column(
+                  children: [
+                    _buildInstructionRow(1, 'Open your phone\'s WiFi settings'),
+                    const SizedBox(height: 16),
+                    _buildInstructionRow(2, 'Connect to the network starting with ', highlight: 'hbot-'),
+                    const SizedBox(height: 16),
+                    _buildInstructionRow(3, 'Return to this app to continue'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Open WiFi Settings button
+              GestureDetector(
+                onTap: () async {
+                  _addDebugLog('Opening WiFi settings for manual device AP connection');
+                  if (_apDetectionTimer == null || !_apDetectionTimer!.isActive) {
+                    _startApDetectionTimer();
+                  }
+                  _safeSetState(() {
+                    _isLoading = true;
+                    _statusMessage = 'Waiting for you to connect...';
+                  });
+                  final url = Uri.parse('App-Prefs:root=WIFI');
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  } else {
+                    await launchUrl(Uri.parse('app-settings:'));
+                  }
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.open_in_new, size: 16, color: Color(0xFF4B5563)),
+                      SizedBox(width: 8),
+                      Text(
+                        'Open WiFi Settings',
+                        style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF1F2937)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Waiting for connection... spinner
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(
+                    width: 16, height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF0883FD)),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Waiting for connection...',
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF6B7280)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+
+              // Scan QR Code Instead button
+              GestureDetector(
+                onTap: () {
+                  _safeSetState(() {
+                    _availableDeviceAPs = ['manual'];
+                  });
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.qr_code, size: 16, color: Color(0xFF4B5563)),
+                      SizedBox(width: 8),
+                      Text(
+                        'Scan QR Code Instead',
+                        style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF4B5563)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // "I'm Connected" gradient button
+              GestureDetector(
+                onTap: () {
+                  _safeSetState(() {
+                    _isLoading = true;
+                    _statusMessage = 'Checking device connection...';
+                  });
+                  _checkIOSDeviceConnection();
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'I\'m Connected',
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                 ),
               ),
@@ -1236,56 +1209,43 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     );
   }
 
-  /// Build a numbered instruction step for iOS discovery
-  Widget _buildInstructionStep({
-    required String number,
-    required String text,
-    String? subtitle,
-  }) {
+  /// Build a numbered instruction row for v0 StepConnect card
+  Widget _buildInstructionRow(int number, String text, {String? highlight}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 28,
-          height: 28,
-          decoration: BoxDecoration(
+          width: 24,
+          height: 24,
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
-            color: HBotColors.primary.withOpacity(0.15),
+            color: Color(0xFFEFF6FF),
           ),
-          child: Center(
-            child: Text(
-              number,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: HBotColors.primary,
-              ),
-            ),
+          alignment: Alignment.center,
+          child: Text(
+            '$number',
+            style: const TextStyle(fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF0883FD)),
           ),
         ),
         const SizedBox(width: 12),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF333333),
-                ),
-              ),
-              if (subtitle != null)
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF888888),
+          child: highlight != null
+              ? Text.rich(
+                  TextSpan(
+                    style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937), height: 1.4),
+                    children: [
+                      TextSpan(text: text),
+                      TextSpan(
+                        text: highlight,
+                        style: const TextStyle(fontFamily: 'monospace', fontWeight: FontWeight.w700, color: Color(0xFF0883FD)),
+                      ),
+                    ],
                   ),
+                )
+              : Text(
+                  text,
+                  style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937), height: 1.4),
                 ),
-            ],
-          ),
         ),
       ],
     );
@@ -1366,286 +1326,131 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     }
   }
 
-  // iOS-specific manual connection guide (fallback)
+  // iOS-specific manual connection guide (fallback) — v0 StepConnect design
   Widget _buildIOSManualConnectionGuide() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(HBotSpacing.space6),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 24, bottom: 32),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: HBotSpacing.space4),
-
-          // Header
-          Center(
-            child: Column(
-              children: [
-                Icon(HBotIcons.wifiFind, size: 80, color: HBotColors.primary),
-                const SizedBox(height: HBotSpacing.space4),
-                const Text(
-                  'Connect to Your Device',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: HBotColors.textPrimaryLight,
-                  ),
-                  textAlign: TextAlign.center,
+            children: [
+              // WiFi icon in circle
+              Container(
+                width: 64,
+                height: 64,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFEFF6FF),
                 ),
-                const SizedBox(height: HBotSpacing.space2),
-                const Text(
-                  'We\'ll automatically detect when you connect',
-                  style: TextStyle(fontSize: 16, color: HBotColors.textSecondaryLight),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
+                alignment: Alignment.center,
+                child: const Icon(Icons.wifi, size: 30, color: Color(0xFF0883FD)),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Connect to Your Device',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Follow these steps on your phone',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF6B7280)),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
 
-          const SizedBox(height: HBotSpacing.space6),
-
-          // Auto-detection status
-          Container(
-            padding: const EdgeInsets.all(HBotSpacing.space4),
-            decoration: BoxDecoration(
-              color: HBotColors.primarySurface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: HBotColors.primaryLight, width: 2),
-            ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      Colors.blue.shade700,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: HBotSpacing.space4),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Auto-detecting device...',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: HBotColors.primaryDark,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _statusMessage.isNotEmpty
-                            ? _statusMessage
-                            : 'Connect to your device and we\'ll detect it automatically',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: HBotColors.primaryDark,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: HBotSpacing.space6),
-
-          // Simplified steps
-          const Text(
-            'Quick Steps:',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: HBotSpacing.space4),
-
-          _buildIOSStep(
-            1,
-            'Put device in pairing mode',
-            'Press and hold button until LED blinks rapidly',
-            HBotIcons.power,
-          ),
-          _buildIOSStep(
-            2,
-            'Open Settings → WiFi',
-            'Go to iPhone Settings and tap WiFi',
-            HBotIcons.settings,
-          ),
-          _buildIOSStep(
-            3,
-            'Connect to "hbot-XXXX"',
-            'Tap the hbot network (no password needed)',
-            HBotIcons.wifi,
-          ),
-          _buildIOSStep(
-            4,
-            'Return here',
-            'We\'ll automatically detect and continue!',
-            HBotIcons.checkCircle,
-          ),
-
-          const SizedBox(height: HBotSpacing.space6),
-
-          // Important notes
-          Container(
-            padding: const EdgeInsets.all(HBotSpacing.space4),
-            decoration: BoxDecoration(
-              color: HBotColors.warningLight,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: HBotColors.warningLight),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  HBotIcons.info,
-                  color: HBotColors.warningDark,
-                  size: 20,
-                ),
-                const SizedBox(width: HBotSpacing.space2),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'iOS may ask for "Local Network" permission',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: HBotColors.warningDark,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Please tap "OK" when prompted to allow device communication',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: HBotColors.warningDark,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: HBotSpacing.space6),
-
-          // Manual check button (optional, if auto-detection not working)
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: SizedBox(
+              // 3-step instruction card
+              Container(
                 width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: _isLoading ? null : _checkIOSDeviceConnection,
-                  icon: Icon(HBotIcons.refresh, size: 20),
-                  label: const Text('Check Connection Now'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: HBotSpacing.space4,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F7FA),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
                 ),
-              ),
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space2),
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: SizedBox(
-                width: double.infinity,
-                child: TextButton.icon(
-                  onPressed: () async {
-                    await WiFiPermissionService.openAppSettings();
-                  },
-                  icon: Icon(HBotIcons.openInNew, size: 18),
-                  label: const Text('Open WiFi Settings'),
-                ),
-              ),
-            ),
-          ),
-
-          if (_isLoading) ...[
-            const SizedBox(height: HBotSpacing.space4),
-            const Center(child: CircularProgressIndicator()),
-          ],
-        ],
-      ),
-    ),),);
-  }
-
-  Widget _buildIOSStep(
-    int number,
-    String title,
-    String description,
-    IconData icon,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: HBotSpacing.space4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: HBotColors.primary,
-            ),
-            child: Center(
-              child: Text(
-                '$number',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: HBotSpacing.space4),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+                child: Column(
                   children: [
-                    Icon(icon, size: 20, color: HBotColors.primary),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
+                    _buildInstructionRow(1, 'Open your phone\'s WiFi settings'),
+                    const SizedBox(height: 16),
+                    _buildInstructionRow(2, 'Connect to the network starting with ', highlight: 'hbot-'),
+                    const SizedBox(height: 16),
+                    _buildInstructionRow(3, 'Return to this app to continue'),
                   ],
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: HBotColors.textSecondaryLight,
+              ),
+              const SizedBox(height: 20),
+
+              // Open WiFi Settings button
+              GestureDetector(
+                onTap: () async {
+                  _addDebugLog('Opening WiFi settings');
+                  final url = Uri.parse('App-Prefs:root=WIFI');
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  } else {
+                    await launchUrl(Uri.parse('app-settings:'));
+                  }
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.open_in_new, size: 16, color: Color(0xFF4B5563)),
+                      SizedBox(width: 8),
+                      Text(
+                        'Open WiFi Settings',
+                        style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF1F2937)),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 16),
+
+              // Waiting for connection... spinner
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(
+                    width: 16, height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF0883FD)),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Waiting for connection...',
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF6B7280)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // "I'm Connected" gradient button
+              GestureDetector(
+                onTap: _isLoading ? null : _checkIOSDeviceConnection,
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'I\'m Connected',
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -1775,413 +1580,335 @@ Troubleshooting:
     }
   }
 
-  // Step 3: Provisioning
+  // Step 3: Provisioning — v0 StepSetup design
   Widget _buildProvisioningStep() {
     final hasError = _statusMessage.contains('Retry') ||
         _statusMessage.contains('error') ||
         _statusMessage.contains('failed');
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+    // Build setup step checklist from status message
+    final List<Map<String, String>> setupSteps = [
+      {'label': 'Connected to device', 'id': 'connected'},
+      {'label': 'Sending credentials', 'id': 'credentials'},
+      {'label': 'Restarting device', 'id': 'restarting'},
+      {'label': 'Verifying connection', 'id': 'verifying'},
+      {'label': 'Registering device', 'id': 'registering'},
+    ];
+
+    // Determine step progress from status message
+    int completedSteps = 0;
+    int activeStep = 0;
+    final msg = _statusMessage.toLowerCase();
+    if (msg.contains('registering') || msg.contains('creating device')) {
+      completedSteps = 4; activeStep = 4;
+    } else if (msg.contains('verifying') || msg.contains('internet')) {
+      completedSteps = 3; activeStep = 3;
+    } else if (msg.contains('restarting') || msg.contains('restart')) {
+      completedSteps = 2; activeStep = 2;
+    } else if (msg.contains('sending') || msg.contains('credentials') || msg.contains('provisioning')) {
+      completedSteps = 1; activeStep = 1;
+    } else if (msg.contains('checking') || msg.contains('fetching') || msg.contains('connected')) {
+      completedSteps = 0; activeStep = 0;
+    }
+
+    final double progress = setupSteps.isEmpty ? 0 : (completedSteps / setupSteps.length) * 100;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 24, bottom: 32),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
-        children: [
-          const SizedBox(height: HBotSpacing.space8),
+            children: [
+              // Icon: spinning loader or error
+              if (!hasError)
+                Container(
+                  width: 64,
+                  height: 64,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFEFF6FF),
+                  ),
+                  alignment: Alignment.center,
+                  child: const SizedBox(
+                    width: 30, height: 30,
+                    child: CircularProgressIndicator(strokeWidth: 3, color: Color(0xFF0883FD)),
+                  ),
+                )
+              else
+                Container(
+                  width: 64,
+                  height: 64,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFFEF2F2),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.error_outline, size: 32, color: Color(0xFFEF4444)),
+                ),
+              const SizedBox(height: 20),
 
-          if (!hasError)
-            const SizedBox(
-              width: 48,
-              height: 48,
-              child: CircularProgressIndicator(
-                color: HBotColors.primary,
-                strokeWidth: 3,
+              // Title
+              Text(
+                hasError ? 'Configuration Failed' : 'Setting Up...',
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
               ),
-            )
-          else
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: HBotColors.surfaceDestructiveSubtle,
-                shape: BoxShape.circle,
+              const SizedBox(height: 4),
+              Text(
+                hasError
+                    ? _statusMessage
+                    : 'Please keep this screen open',
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF6B7280)),
+                textAlign: TextAlign.center,
               ),
-              child: Icon(HBotIcons.errorOutline, size: 32, color: HBotColors.error),
-            ),
+              const SizedBox(height: 24),
 
-          const SizedBox(height: HBotSpacing.space6),
-
-          Text(
-            hasError ? 'Configuration Failed' : 'Configuring Device...',
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-              color: HBotColors.textPrimaryLight,
-            ),
-          ),
-
-          const SizedBox(height: HBotSpacing.space2),
-
-          Text(
-            _statusMessage.isNotEmpty
-                ? _statusMessage
-                : 'Sending Wi-Fi credentials to your device.',
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: HBotColors.textSecondaryLight,
-            ),
-            textAlign: TextAlign.center,
-          ),
-
-          if (_discoveredDevice != null) ...[
-            const SizedBox(height: HBotSpacing.space5),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(HBotSpacing.space4),
-              decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: HBotRadius.largeRadius,
-                border: Border.all(color: HBotColors.borderLight, width: 1),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'DEVICE INFORMATION',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.0,
-                      color: HBotColors.textTertiaryLight,
+              // Progress bar with gradient fill
+              if (!hasError) ...[
+                Container(
+                  width: double.infinity,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE5E7EB),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: progress / 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(999),
+                        gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: HBotSpacing.space2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Name',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 14,
-                          color: HBotColors.textSecondaryLight,
-                        ),
-                      ),
-                      Text(
-                        _discoveredDevice!.module,
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: HBotColors.textPrimaryLight,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: HBotSpacing.space1),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Channels',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 14,
-                          color: HBotColors.textSecondaryLight,
-                        ),
-                      ),
-                      Text(
-                        '${_discoveredDevice!.channels}',
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: HBotColors.textPrimaryLight,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-
-          const Spacer(),
-
-          // Show retry button if there's an error or timeout
-          if (hasError) ...[
-            Container(
-              width: double.infinity,
-              height: 52,
-              decoration: hbotPrimaryButtonDecoration(),
-              child: ElevatedButton(
-                onPressed: () async {
-                  if (_pendingDeviceData != null) {
-                    await _createDeviceImmediately();
-                  } else {
-                    await _provisionDevice();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
                 ),
-                child: const Text(
-                  'Retry',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                const SizedBox(height: 28),
+
+                // Step checklist
+                ...List.generate(setupSteps.length, (i) {
+                  final isComplete = i < completedSteps;
+                  final isActive = i == activeStep;
+                  final isPending = i > activeStep;
+
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Row(
+                      children: [
+                        if (isComplete)
+                          const Icon(Icons.check_circle, size: 22, color: Color(0xFF10B981))
+                        else if (isActive)
+                          const SizedBox(
+                            width: 22, height: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2.5, color: Color(0xFF0883FD)),
+                          )
+                        else
+                          const Icon(Icons.circle_outlined, size: 22, color: Color(0xFFE5E7EB)),
+                        const SizedBox(width: 12),
+                        Text(
+                          setupSteps[i]['label']!,
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 14,
+                            fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                            color: isComplete
+                                ? const Color(0xFF1F2937)
+                                : isActive
+                                    ? const Color(0xFF0883FD)
+                                    : const Color(0xFF9CA3AF),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+
+              // Retry button if error
+              if (hasError) ...[
+                const SizedBox(height: 24),
+                GestureDetector(
+                  onTap: () async {
+                    if (_pendingDeviceData != null) {
+                      await _createDeviceImmediately();
+                    } else {
+                      await _provisionDevice();
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
+                    ),
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Retry',
+                      style: TextStyle(fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: HBotSpacing.space4),
-          ],
-
-          // Debug log (for development)
-          if (_debugLog.isNotEmpty) ...[
-            Container(
-              height: 100,
-              padding: const EdgeInsets.all(HBotSpacing.space2),
-              decoration: BoxDecoration(
-                color: HBotColors.neutral50,
-                borderRadius: HBotRadius.smallRadius,
-                border: Border.all(color: HBotColors.borderLight, width: 1),
-              ),
-              child: SingleChildScrollView(
-                child: Text(
-                  _debugLog,
-                  style: const TextStyle(fontSize: 12, fontFamily: 'monospace', color: HBotColors.textSecondaryLight),
-                ),
-              ),
-            ),
-          ],
-          const SizedBox(height: HBotSpacing.space6),
-        ],
+              ],
+            ],
+          ),
+        ),
       ),
-    ),),);
+    );
   }
 
-  // Step 4: Success
+  // Step 4: Success — v0 StepDone design
   Widget _buildSuccessStep() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 24, bottom: 32),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
-        children: [
-          SizedBox(height: HBotSpacing.space8),
-
-          // Success icon in circle
-          Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-              color: HBotColors.successLight,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(HBotIcons.check, size: 40, color: HBotColors.success),
-          ),
-
-          const SizedBox(height: HBotSpacing.space6),
-
-          hbotGradientText(
-            'Device Added!',
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-          ),
-
-          const SizedBox(height: HBotSpacing.space2),
-
-          const Text(
-            'Your device is connected and ready to use.',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: HBotColors.textSecondaryLight,
-            ),
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: HBotSpacing.space6),
-
-          // Device control widget
-          if (_createdDevice != null) ...[
-            EnhancedDeviceControlWidget(
-              device: _createdDevice!,
-              mqttManager: _mqttManager,
-              showBulkControls: false,
-            ),
-
-            const SizedBox(height: HBotSpacing.space4),
-
-            // Device rename and room selection in card group
-            Container(
-              decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: HBotRadius.largeRadius,
-                border: Border.all(color: HBotColors.borderLight, width: 1),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  // Rename device
-                  InkWell(
-                    onTap: _editDeviceName,
-                    child: Container(
-                      height: 56,
-                      padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
-                      child: Row(
-                        children: [
-                          Icon(HBotIcons.edit, color: HBotColors.iconDefault, size: 24),
-                          const SizedBox(width: HBotSpacing.space3),
-                          Expanded(
-                            child: Text(
-                              'Rename Device',
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 16,
-                                color: HBotColors.textPrimaryLight,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            _createdDevice!.deviceName,
-                            style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 14,
-                              color: HBotColors.textSecondaryLight,
-                            ),
-                          ),
-                          SizedBox(width: HBotSpacing.space2),
-                          Icon(HBotIcons.chevronRight, color: HBotColors.neutral400, size: 16),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 56),
-                    child: Container(height: 1, color: HBotColors.neutral100),
-                  ),
-                  // Choose room
-                  InkWell(
-                    onTap: _showRoomSelection,
-                    child: Container(
-                      height: 56,
-                      padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
-                      child: Row(
-                        children: [
-                          Icon(HBotIcons.room, color: HBotColors.iconDefault, size: 24),
-                          const SizedBox(width: HBotSpacing.space3),
-                          Expanded(
-                            child: Text(
-                              'Choose Room',
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 16,
-                                color: HBotColors.textPrimaryLight,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            _selectedRoom?.name ?? 'No room',
-                            style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 14,
-                              color: HBotColors.textSecondaryLight,
-                            ),
-                          ),
-                          SizedBox(width: HBotSpacing.space2),
-                          Icon(HBotIcons.chevronRight, color: HBotColors.neutral400, size: 16),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-
-          const SizedBox(height: HBotSpacing.space7),
-
-          // Action buttons
-          Column(
             children: [
+              // Green check icon in #ECFDF5 circle
               Container(
-                width: double.infinity,
-                height: 52,
-                decoration: hbotPrimaryButtonDecoration(),
-                child: ElevatedButton(
-                  onPressed: _finishPairing,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: HBotRadius.mediumRadius,
-                    ),
-                  ),
-                  child: const Text(
-                    'Done',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                width: 64,
+                height: 64,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xFFECFDF5),
+                ),
+                alignment: Alignment.center,
+                child: const Icon(Icons.check_circle, size: 36, color: Color(0xFF10B981)),
+              ),
+              const SizedBox(height: 20),
+
+              // Title
+              const Text(
+                'Device Connected!',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Give your device a name and assign it to a room',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: Color(0xFF6B7280)),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 28),
+
+              // Device name input
+              Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF5F7FA),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                ),
+                child: TextField(
+                  controller: _deviceNameController,
+                  style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: Color(0xFF1F2937)),
+                  decoration: const InputDecoration(
+                    hintText: 'Device Name (e.g. Hallway Light)',
+                    hintStyle: TextStyle(fontFamily: 'Inter', color: Color(0xFF9CA3AF)),
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   ),
                 ),
               ),
-              const SizedBox(height: HBotSpacing.space3),
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: OutlinedButton(
-                  onPressed: () {
-                    // Add another device
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddDeviceFlowScreen(
-                          home: widget.home,
-                          room: widget.room,
-                          onDeviceAdded: widget.onDeviceAdded,
+              const SizedBox(height: 12),
+
+              // Room dropdown
+              GestureDetector(
+                onTap: _showRoomSelection,
+                child: Container(
+                  width: double.infinity,
+                  height: 50,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _selectedRoom?.name ?? 'Select Room',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 14,
+                            color: _selectedRoom != null ? const Color(0xFF1F2937) : const Color(0xFF9CA3AF),
+                          ),
                         ),
                       ),
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: HBotColors.primary,
-                    side: const BorderSide(color: HBotColors.primary, width: 1.5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: HBotRadius.mediumRadius,
-                    ),
+                      const Icon(Icons.keyboard_arrow_down, size: 17, color: Color(0xFF9CA3AF)),
+                    ],
                   ),
+                ),
+              ),
+              const SizedBox(height: 32),
+
+              // Device control widget (if created)
+              if (_createdDevice != null) ...[
+                EnhancedDeviceControlWidget(
+                  device: _createdDevice!,
+                  mqttManager: _mqttManager,
+                  showBulkControls: false,
+                ),
+                const SizedBox(height: 24),
+              ],
+
+              // "Go to Dashboard" gradient button
+              GestureDetector(
+                onTap: _finishPairing,
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Go to Dashboard',
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // "Add Another Device" outlined button
+              GestureDetector(
+                onTap: () {
+                  // Save device name if changed before leaving
+                  _updateDeviceName();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddDeviceFlowScreen(
+                        home: widget.home,
+                        room: widget.room,
+                        onDeviceAdded: widget.onDeviceAdded,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  alignment: Alignment.center,
                   child: const Text(
                     'Add Another Device',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontFamily: 'Inter', fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: HBotSpacing.space8),
-        ],
+        ),
       ),
-    ),),);
+    );
   }
 
   // Device discovery and connection methods

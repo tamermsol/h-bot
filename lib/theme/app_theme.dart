@@ -74,19 +74,19 @@ class HBotColors {
   static const Color info = Color(0xFF0883FD);
   static const Color infoLight = Color(0xFFEBF5FF);
 
-  // ─── Neutral Palette (blue-tinted per design tokens) ───
+  // ─── Neutral Palette (v0 design tokens) ───
   static const Color neutral0 = Color(0xFFFFFFFF);
   static const Color neutral50 = Color(0xFFF8F9FB);
-  static const Color neutral100 = Color(0xFFF0F2F5);
-  static const Color neutral200 = Color(0xFFE8ECF1);
-  static const Color neutral300 = Color(0xFFD1D7E0);
-  static const Color neutral400 = Color(0xFFA0AAB8);
-  static const Color neutral500 = Color(0xFF7A8494);
-  static const Color neutral600 = Color(0xFF5A6577);
-  static const Color neutral700 = Color(0xFF3D4A5C);
-  static const Color neutral800 = Color(0xFF1A202B);
-  static const Color neutral900 = Color(0xFF0A1628);
-  static const Color neutral950 = Color(0xFF010510);
+  static const Color neutral100 = Color(0xFFF5F7FA); // v0 card/input bg
+  static const Color neutral200 = Color(0xFFE5E7EB); // v0 border
+  static const Color neutral300 = Color(0xFFD1D5DB); // v0 toggle OFF
+  static const Color neutral400 = Color(0xFF9CA3AF); // v0 text muted
+  static const Color neutral500 = Color(0xFF6B7280); // v0 text secondary
+  static const Color neutral600 = Color(0xFF4B5563);
+  static const Color neutral700 = Color(0xFF374151);
+  static const Color neutral800 = Color(0xFF1F2937); // v0 text primary
+  static const Color neutral900 = Color(0xFF111827);
+  static const Color neutral950 = Color(0xFF030712);
 
   // ─── Decorative Neutrals ───
   static const Color silver = Color(0xFFCBD9DE);
@@ -95,7 +95,7 @@ class HBotColors {
   // ─── Semantic Surface Tokens — Light Mode ───
   static const Color surfacePrimarySubtle = Color(0xFFF0F7FF);
   static const Color surfaceDestructiveSubtle = Color(0xFFFEE2E2);
-  static const Color surfaceCardHover = Color(0xFFF0F2F5);
+  static const Color surfaceCardHover = Color(0xFFEFF6FF); // v0 active bg on press
 
   // ─── Semantic Surface Tokens — Dark Mode ───
   static const Color surfacePrimarySubtleDark = Color(0x1F0883FD); // rgba(8,131,253,0.12)
@@ -105,31 +105,40 @@ class HBotColors {
   static const Color borderError = Color(0xFFEF4444);
   static const Color borderSuccess = Color(0xFF22C55E);
 
-  // ─── Toggle Tokens ───
-  static const Color toggleTrackOff = Color(0xFFD1D7E0);
+  // ─── Toggle Tokens (v0: ON=#0883FD, OFF=#D1D5DB) ───
+  static const Color toggleTrackOff = Color(0xFFD1D5DB);
   static const Color toggleThumb = Color(0xFFFFFFFF);
 
   // ─── Primary Disabled ───
   static const Color primaryDisabled = Color(0xFFD1D7E0);
 
-  // ─── Device Type Colors (Rule of Blue — all shades of blue only) ───
-  static const Color deviceSwitch = Color(0xFF0883FD);  // Primary blue
-  static const Color deviceDimmer = Color(0xFF2FB8EC);   // Bright cyan blue
-  static const Color deviceSensor = Color(0xFF1070AD);   // Mid teal blue
-  static const Color deviceShutter = Color(0xFF5BBDF7);  // Light sky blue
-  static const Color devicePower = Color(0xFF094972);     // Deep navy blue
+  // ─── Device Type Colors (v0 design tokens) ───
+  static const Color deviceRelay = Color(0xFF3B82F6);     // v0 relay blue
+  static const Color deviceRelayBg = Color(0xFFEFF6FF);   // v0 relay bg
+  static const Color deviceDimmer = Color(0xFFF59E0B);    // v0 dimmer amber
+  static const Color deviceDimmerBg = Color(0xFFFFFBEB);  // v0 dimmer bg
+  static const Color deviceSensor = Color(0xFF10B981);    // v0 sensor green
+  static const Color deviceSensorBg = Color(0xFFECFDF5);  // v0 sensor bg
+  static const Color deviceShutter = Color(0xFF8B5CF6);   // v0 shutter purple
+  static const Color deviceShutterBg = Color(0xFFF5F3FF); // v0 shutter bg
+  // Legacy aliases
+  static const Color deviceSwitch = deviceRelay;
+  static const Color devicePower = Color(0xFF094972);
 
-  // ─── Light Mode Surfaces ───
-  static const Color backgroundLight = Color(0xFFF8F9FB);
+  // ─── Light Mode Surfaces (v0 tokens) ───
+  static const Color backgroundLight = Color(0xFFFFFFFF); // v0: white page bg
   static const Color surfaceLight = Color(0xFFFFFFFF);
-  static const Color cardLight = Color(0xFFFFFFFF);
-  static const Color borderLight = Color(0xFFE8ECF1);
-  static const Color dividerLight = Color(0xFFF0F2F5);
+  static const Color cardLight = Color(0xFFF5F7FA);       // v0: card/input bg
+  static const Color cardLightWhite = Color(0xFFFFFFFF);   // pure white for auth etc.
+  static const Color borderLight = Color(0xFFE5E7EB);     // v0: border
+  static const Color borderLighter = Color(0xFFF3F4F6);   // v0: lighter border (nav, appbar)
+  static const Color dividerLight = Color(0xFFF3F4F6);    // v0: lighter border
 
-  // ─── Light Mode Text ───
-  static const Color textPrimaryLight = Color(0xFF0A1628);
-  static const Color textSecondaryLight = Color(0xFF5A6577);
-  static const Color textTertiaryLight = Color(0xFF7A8494);
+  // ─── Light Mode Text (v0 tokens) ───
+  static const Color textPrimaryLight = Color(0xFF1F2937);   // v0: text primary
+  static const Color textSecondaryLight = Color(0xFF6B7280); // v0: text secondary
+  static const Color textTertiaryLight = Color(0xFF9CA3AF);  // v0: text muted
+  static const Color textPlaceholder = Color(0xFFC9CDD6);   // v0: placeholder
   static const Color textOnPrimary = Color(0xFFFFFFFF);
 
   // ─── Dark Mode Surfaces (from h-bot.tech website / design tokens) ───
@@ -154,11 +163,27 @@ class HBotColors {
   static const Color iconOnPrimary = Color(0xFFFFFFFF);
   static const Color iconDisabled = Color(0xFFD1D5DB);
 
-  // ─── State Colors ───
-  static const Color deviceOnBackground = Color(0xFFEBF5FF);
-  static const Color deviceOffBackground = Color(0xFFFFFFFF);
-  static const Color onlineIndicator = Color(0xFF22C55E);
-  static const Color offlineIndicator = Color(0xFF9CA3AF);
+  // ─── State Colors (v0 tokens) ───
+  static const Color deviceOnBackground = Color(0xFFEFF6FF); // v0 active bg
+  static const Color deviceOffBackground = Color(0xFFF5F7FA);
+  static const Color onlineIndicator = Color(0xFF10B981);  // v0 online green
+  static const Color offlineIndicator = Color(0xFFEF4444); // v0 offline red
+
+  // ─── v0 Button Shadows ───
+  static const List<BoxShadow> buttonShadow = [
+    BoxShadow(
+      color: Color(0x590883FD), // rgba(8,131,253,0.35)
+      blurRadius: 20,
+      offset: Offset(0, 6),
+    ),
+  ];
+  static const List<BoxShadow> fabShadow = [
+    BoxShadow(
+      color: Color(0x610883FD), // rgba(8,131,253,0.38)
+      blurRadius: 24,
+      offset: Offset(0, 8),
+    ),
+  ];
 }
 
 class HBotSpacing {
@@ -784,9 +809,9 @@ class AppTheme {
       // ─── Scaffold ───
       scaffoldBackgroundColor: HBotColors.backgroundLight,
 
-      // ─── AppBar ───
+      // ─── AppBar (v0: white bg, 18px bold title, border-b #F3F4F6) ───
       appBarTheme: const AppBarTheme(
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: Colors.white,
         foregroundColor: HBotColors.textPrimaryLight,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -794,14 +819,14 @@ class AppTheme {
         centerTitle: false,
         titleTextStyle: TextStyle(
           fontFamily: 'Inter',
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
           color: HBotColors.textPrimaryLight,
-          letterSpacing: -0.3,
-          height: 1.27,
+          letterSpacing: 0,
+          height: 1.33,
         ),
         iconTheme: IconThemeData(
-          color: HBotColors.iconDefault,
+          color: HBotColors.textPrimaryLight,
           size: 24,
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -811,22 +836,20 @@ class AppTheme {
         ),
       ),
 
-      // ─── Bottom Navigation ───
+      // ─── Bottom Navigation (v0: 72px, white bg, border-t #F3F4F6) ───
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: HBotColors.surfaceLight,
+        backgroundColor: Colors.white,
         selectedItemColor: HBotColors.primary,
-        unselectedItemColor: HBotColors.neutral400,
+        unselectedItemColor: HBotColors.textTertiaryLight,
         selectedLabelStyle: TextStyle(
           fontFamily: 'Inter',
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0.2,
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
         ),
         unselectedLabelStyle: TextStyle(
           fontFamily: 'Inter',
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          letterSpacing: 0.2,
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
         ),
         type: BottomNavigationBarType.fixed,
         elevation: 0,

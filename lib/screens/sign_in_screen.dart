@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/auth_service.dart';
-import '../utils/phosphor_icons.dart';
-import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import 'sign_up_screen.dart';
 import 'home_screen.dart';
@@ -143,125 +140,100 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
-      body: Column(
-        children: [
-          // Gradient header with logo
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF0A1628),
-                  Color(0xFF0668CA),
-                  Color(0xFF0883FD),
-                ],
-                stops: [0.0, 0.5, 1.0],
-              ),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(32),
-                bottomRight: Radius.circular(32),
-              ),
-              // No drop shadow per design spec — use border/blur for depth
-            ),
-            child: SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 28, bottom: 36),
-                child: Column(
-                  children: [
-                    // Logo with white ring
-                    Container(
-                      width: 88,
-                      height: 88,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(22),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.25),
-                          width: 2.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.white.withOpacity(0.12),
-                            blurRadius: 24,
-                            spreadRadius: 4,
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(19),
-                        child: Image.asset(
-                          'assets/images/branding/hbot_app_icon.png',
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.15),
-                              borderRadius: BorderRadius.circular(19),
-                            ),
-                            child: Icon(HBotIcons.smartToy,
-                                color: Colors.white, size: 40),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Welcome back',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Sign in to your smart home',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // Form section
-          Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints:
-                    const BoxConstraints(maxWidth: HBotSpacing.tabletMaxWidth),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: HBotSpacing.screenPadding,
-                  ),
-                  child: Form(
-                    key: _formKey,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        SizedBox(height: 32),
+                        const SizedBox(height: 32),
 
-                        // Email Field
-                        SmartInputField(
+                        // --- Logo ---
+                        // v0: 72x72 rounded-[20px] gradient box, centered, mb-4 shadow-lg
+                        Center(
+                          child: Container(
+                            width: 72,
+                            height: 72,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.15),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                'assets/images/branding/hbot_app_icon.png',
+                                width: 72,
+                                height: 72,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(Icons.smart_toy, color: Colors.white, size: 36),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // v0: "H-Bot" 32px bold #1F2937 tracking-tight leading-none
+                        const Center(
+                          child: Text(
+                            'H-Bot',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 32,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF1F2937),
+                              letterSpacing: -0.5,
+                              height: 1.0,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        // v0: "Smart Home Simplified" 13px #6B7280 font-medium tracking-wide
+                        const Center(
+                          child: Text(
+                            'Smart Home Simplified',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF6B7280),
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 40),
+
+                        // --- Fields: gap-3 (12px) ---
+
+                        // v0: Email field 50px, #F5F7FA bg, #E5E7EB border, rounded-xl, Mail icon
+                        _buildV0InputField(
                           controller: _emailController,
-                          label: 'Email',
+                          hintText: 'Email address',
                           keyboardType: TextInputType.emailAddress,
-                          prefixIcon:
-                              Icon(HBotIcons.email, size: 20),
+                          prefixIcon: Icons.mail_outline,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
@@ -275,27 +247,28 @@ class _SignInScreenState extends State<SignInScreen> {
                           },
                         ),
 
-                        SizedBox(height: HBotSpacing.space4),
+                        const SizedBox(height: 12),
 
-                        // Password Field
-                        SmartInputField(
+                        // v0: Password field, Lock icon, Eye/EyeOff toggle
+                        _buildV0InputField(
                           controller: _passwordController,
-                          label: 'Password',
+                          hintText: 'Password',
                           obscureText: _obscurePassword,
-                          prefixIcon:
-                              Icon(HBotIcons.lock, size: 20),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? HBotIcons.eye
-                                  : HBotIcons.eyeOff,
-                              color: HBotColors.iconDefault,
-                              size: 24,
-                            ),
-                            onPressed: () {
-                              setState(
-                                  () => _obscurePassword = !_obscurePassword);
+                          prefixIcon: Icons.lock_outline,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() => _obscurePassword = !_obscurePassword);
                             },
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 16),
+                              child: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                color: const Color(0xFF9CA3AF),
+                                size: 17,
+                              ),
+                            ),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -308,13 +281,13 @@ class _SignInScreenState extends State<SignInScreen> {
                           },
                         ),
 
-                        const SizedBox(height: HBotSpacing.space2),
+                        const SizedBox(height: 12),
 
-                        // Forgot Password
+                        // v0: "Forgot Password?" right-aligned, 13px #0883FD font-medium
                         Align(
                           alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
+                          child: GestureDetector(
+                            onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) =>
@@ -322,184 +295,252 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ),
                               );
                             },
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: HBotSpacing.space2,
-                                vertical: HBotSpacing.space1,
-                              ),
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
                             child: const Text(
                               'Forgot Password?',
                               style: TextStyle(
                                 fontFamily: 'Inter',
-                                color: HBotColors.primary,
-                                fontSize: 14,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w500,
+                                color: Color(0xFF0883FD),
                               ),
                             ),
                           ),
                         ),
 
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 16),
 
-                        // Sign In button
+                        // v0: Sign In button h-12 (48px) rounded-xl gradient, shadow
                         Container(
-                          height: 52,
-                          decoration:
-                              hbotPrimaryButtonDecoration(enabled: !_isLoading),
-                          child: ElevatedButton(
-                            onPressed: _isLoading ? null : _signInWithEmail,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: HBotRadius.mediumRadius,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            gradient: const LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                            ),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0x590883FD), // rgba(8,131,253,0.35)
+                                blurRadius: 20,
+                                offset: Offset(0, 6),
+                              ),
+                            ],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: _isLoading ? null : _signInWithEmail,
+                              borderRadius: BorderRadius.circular(12),
+                              child: Center(
+                                child: _isLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(Colors.white),
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Sign In',
+                                        style: TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ),
                             ),
-                            child: _isLoading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor:
-                                          AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                : const Text(
-                                    'Sign In',
-                                    style: TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
                           ),
                         ),
 
-                        const SizedBox(height: 28),
+                        const SizedBox(height: 20),
 
-                        // Divider
+                        // v0: "or" divider with lines, 12px #9CA3AF font-medium
                         Row(
                           children: [
                             Expanded(
-                                child: Container(
-                                    height: 1,
-                                    color: HBotColors.borderLight)),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: HBotSpacing.space4),
+                              child: Container(height: 1, color: const Color(0xFFE5E7EB)),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12),
                               child: Text(
-                                'or continue with',
+                                'or',
                                 style: TextStyle(
                                   fontFamily: 'Inter',
-                                  color: HBotColors.textTertiaryLight,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF9CA3AF),
                                 ),
                               ),
                             ),
                             Expanded(
-                                child: Container(
-                                    height: 1,
-                                    color: HBotColors.borderLight)),
+                              child: Container(height: 1, color: const Color(0xFFE5E7EB)),
+                            ),
                           ],
                         ),
 
-                        const SizedBox(height: HBotSpacing.space4),
+                        const SizedBox(height: 12),
 
-                        // Google button
+                        // v0: Google button h-12 rounded-xl border #E5E7EB white bg, 14px medium
                         SizedBox(
-                          height: 52,
-                          child: OutlinedButton.icon(
+                          height: 48,
+                          child: OutlinedButton(
                             onPressed: _isLoading ? null : _signInWithGoogle,
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: HBotColors.textPrimaryLight,
-                              backgroundColor: HBotColors.surfaceLight,
+                              backgroundColor: Colors.white,
+                              foregroundColor: const Color(0xFF1F2937),
                               side: const BorderSide(
-                                color: HBotColors.borderLight,
+                                color: Color(0xFFE5E7EB),
                                 width: 1,
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: HBotRadius.mediumRadius,
+                                borderRadius: BorderRadius.circular(12),
                               ),
                               elevation: 0,
                             ),
-                            icon: Image.asset(
-                              'assets/images/google_logo.png',
-                              height: 20,
-                              width: 20,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Icon(HBotIcons.login,
-                                    color: HBotColors.iconDefault, size: 20);
-                              },
-                            ),
-                            label: const Text(
-                              'Continue with Google',
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/images/google_logo.png',
+                                  height: 18,
+                                  width: 18,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(Icons.login,
+                                        color: Color(0xFF6B7280), size: 18);
+                                  },
+                                ),
+                                const SizedBox(width: 10),
+                                const Text(
+                                  'Continue with Google',
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF1F2937),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
 
-                        const SizedBox(height: 32),
+                        // v0: "Don't have an account? Sign Up" at bottom, mt-auto pt-8
+                        const Spacer(),
 
-                        // Sign up link
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Don't have an account? ",
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                color: HBotColors.textSecondaryLight,
-                                fontSize: 14,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => const SignUpScreen(),
-                                  ),
-                                );
-                              },
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: Size.zero,
-                                tapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              child: const Text(
-                                'Sign Up',
+                        Padding(
+                          padding: const EdgeInsets.only(top: 32, bottom: 32),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Don't have an account? ",
                                 style: TextStyle(
                                   fontFamily: 'Inter',
-                                  color: HBotColors.primary,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  color: Color(0xFF6B7280),
                                 ),
                               ),
-                            ),
-                          ],
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => const SignUpScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFF0883FD),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-
-                        const SizedBox(height: 24),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  /// v0 input field: 50px height, #F5F7FA bg, rounded-xl, border #E5E7EB
+  /// prefix icon 17px #9CA3AF, text 15px #1F2937, placeholder #9CA3AF
+  Widget _buildV0InputField({
+    required TextEditingController controller,
+    required String hintText,
+    bool obscureText = false,
+    TextInputType? keyboardType,
+    IconData? prefixIcon,
+    Widget? suffixIcon,
+    String? Function(String?)? validator,
+  }) {
+    return SizedBox(
+      height: 50,
+      child: TextFormField(
+        controller: controller,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        style: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 15,
+          color: Color(0xFF1F2937),
+        ),
+        validator: validator,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 15,
+            color: Color(0xFF9CA3AF),
+          ),
+          prefixIcon: prefixIcon != null
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 12),
+                  child: Icon(prefixIcon, color: const Color(0xFF9CA3AF), size: 17),
+                )
+              : null,
+          prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+          suffixIcon: suffixIcon,
+          suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+          filled: true,
+          fillColor: const Color(0xFFF5F7FA),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Color(0xFF0883FD), width: 1.5),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+          ),
+        ),
       ),
     );
   }

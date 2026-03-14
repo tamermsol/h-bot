@@ -871,32 +871,42 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       children: [
         Column(
           children: [
-            // Greeting section
-            _buildGreetingSection(),
-            // Room tabs
+            // v0: Search bar (px-4 pt-3 pb-2)
+            _buildSearchBar(),
+            const SizedBox(height: 4),
+            // v0: Room tabs (flex gap-2 px-4 pb-3)
             if (_homes.isNotEmpty && _rooms.isNotEmpty)
               Container(
                 key: ValueKey('tabs_${_rooms.map((r) => r.id).join("_")}'),
                 child: _buildTabBar(),
               ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 4),
             // Main content
             Expanded(child: _buildContent()),
           ],
         ),
-        // Floating Add Device button
+        // v0 FAB: 52x52 rounded-full, gradient 135deg, positioned bottom-[88px] right-5
         if (_selectedHome != null)
           Positioned(
             right: 20,
-            bottom: 20,
+            bottom: 88,
             child: Container(
+              width: 52,
+              height: 52,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                gradient: HBotColors.primaryGradient,
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.15),
-                  width: 1,
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
                 ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x610883FD), // rgba(8,131,253,0.38)
+                    blurRadius: 24,
+                    offset: Offset(0, 8),
+                  ),
+                ],
               ),
               child: Material(
                 color: Colors.transparent,
@@ -914,26 +924,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       ),
                     );
                   },
-                  borderRadius: BorderRadius.circular(16),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(HBotIcons.add, color: Colors.white, size: 20),
-                        SizedBox(width: 8),
-                        Text(
-                          'Add Device',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  customBorder: const CircleBorder(),
+                  child: const Icon(Icons.add, color: Colors.white, size: 24),
                 ),
               ),
             ),
@@ -942,111 +934,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     );
   }
 
-  Widget _buildGreetingSection() {
-    // Count online devices for status line
-    final onlineCount = _devices.where((d) {
-      final state = _mqttManager.getDeviceState(d.id);
-      if (state == null) return false;
-      final online = state['online'];
-      if (online is bool) return online;
-      if (online is String) {
-        return online.toLowerCase() == 'online' || online.toLowerCase() == 'true';
-      }
-      return false;
-    }).length;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (_homes.isNotEmpty) ...[
-            // Home selector pill
-            GestureDetector(
-              onTap: _showHomeSelector,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: HBotColors.surfacePrimarySubtle,
-                  borderRadius: BorderRadius.circular(HBotRadius.full),
-                  border: Border.all(
-                    color: HBotColors.primary.withOpacity(0.15),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      HBotIcons.home,
-                      color: HBotColors.primary,
-                      size: 14,
-                    ),
-                    const SizedBox(width: 6),
-                    Flexible(
-                      child: Text(
-                        _selectedHome?.name ?? 'Select Home',
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: HBotColors.primary,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      HBotIcons.chevronDown,
-                      color: HBotColors.primary.withOpacity(0.6),
-                      size: 16,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            // Greeting — $titleLarge (18px/600), $textPrimary
-            Text(
-              '${_getGreeting()} ${_getGreetingEmoji()}',
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
-                letterSpacing: -0.2,
-              ),
-            ),
-            const SizedBox(height: 4),
-            // Online device count — $bodyMedium (14px/400), count in $primary
-            RichText(
-              text: TextSpan(
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: HBotColors.textSecondaryLight,
-                ),
-                children: [
-                  TextSpan(
-                    text: '$onlineCount',
-                    style: const TextStyle(
-                      color: HBotColors.primary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  TextSpan(
-                    text: ' device${onlineCount == 1 ? '' : 's'} online',
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
-        ],
-      ),
-    );
-  }
+  // Greeting section removed per v0 design. Home selection moved to 3-dot menu.
+  // Keeping _getGreeting and _getGreetingEmoji for potential future use.
 
   void _showHomeBackgroundDialog() {
     if (_selectedHome == null) return;
@@ -1104,80 +993,63 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   Widget _buildSearchBar() {
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: HBotSpacing.screenPadding,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: HBotColors.cardLight,
-                borderRadius: HBotRadius.mediumRadius,
-                border: Border.all(color: HBotColors.borderLight, width: 1),
-              ),
-              child: TextField(
-                controller: _searchController,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  color: HBotColors.textPrimaryLight,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Search devices...',
-                  hintStyle: const TextStyle(
-                    fontFamily: 'Inter',
-                    color: HBotColors.textTertiaryLight,
-                  ),
-                  prefixIcon: Icon(
-                    HBotIcons.search,
-                    color: HBotColors.textTertiaryLight,
-                  ),
-                  suffixIcon: _searchQuery.isNotEmpty
-                      ? IconButton(
-                          icon: Icon(
-                            HBotIcons.close,
-                            color: HBotColors.textTertiaryLight,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _searchController.clear();
-                              _searchQuery = '';
-                            });
-                          },
-                        )
-                      : null,
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: HBotSpacing.space4,
-                    vertical: HBotSpacing.space2,
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
-                },
-              ),
-            ),
+    // v0: px-4 pt-3 pb-2, bg-[#F5F7FA] border border-[#E5E7EB] rounded-xl, h-10
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+      child: Container(
+        height: 40,
+        decoration: BoxDecoration(
+          color: const Color(0xFFF5F7FA),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+        ),
+        child: TextField(
+          controller: _searchController,
+          style: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 14,
+            color: Color(0xFF1F2937),
           ),
-          SizedBox(width: HBotSpacing.space2),
-          // Options menu button
-          Container(
-            decoration: BoxDecoration(
-              color: HBotColors.cardLight,
-              borderRadius: HBotRadius.mediumRadius,
-              border: Border.all(color: HBotColors.borderLight, width: 1),
+          decoration: InputDecoration(
+            hintText: 'Search devices...',
+            hintStyle: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 14,
+              color: Color(0xFFC9CDD6), // v0 placeholder
             ),
-            child: IconButton(
-              icon: Icon(HBotIcons.tune, color: HBotColors.textPrimaryLight),
-              onPressed: _showOptionsMenu,
-              tooltip: 'Filter and sort options',
-              padding: const EdgeInsets.all(HBotSpacing.space2),
-              constraints: const BoxConstraints(),
+            prefixIcon: const Icon(
+              Icons.search,
+              color: Color(0xFF9CA3AF),
+              size: 20,
             ),
+            suffixIcon: _searchQuery.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(
+                      Icons.close,
+                      color: Color(0xFF9CA3AF),
+                      size: 18,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _searchController.clear();
+                        _searchQuery = '';
+                      });
+                    },
+                  )
+                : null,
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
+            isDense: true,
           ),
-        ],
+          onChanged: (value) {
+            setState(() {
+              _searchQuery = value;
+            });
+          },
+        ),
       ),
     );
   }
@@ -1187,36 +1059,16 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
     final tabs = ['All', ..._rooms.map((room) => room.name)];
 
+    // v0: flex gap-2 px-4 pb-3
     return Container(
       key: ValueKey(_rooms.map((r) => r.name).join(',')),
-      height: 40,
-      padding: const EdgeInsets.only(left: 20),
+      height: 36,
+      padding: const EdgeInsets.only(left: 16),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        itemCount: tabs.length + 1, // +1 for the add room button
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        itemCount: tabs.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 8), // gap-2
         itemBuilder: (context, index) {
-          // Last item is the add room button
-          if (index == tabs.length) {
-            return GestureDetector(
-              onTap: _showAddMenu,
-              child: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: HBotColors.borderLight, width: 1),
-                ),
-                alignment: Alignment.center,
-                child: Icon(
-                  HBotIcons.add,
-                  color: HBotColors.iconDefault,
-                  size: 18,
-                ),
-              ),
-            );
-          }
-
           final isSelected = _tabController!.index == index;
           return GestureDetector(
             onTap: () {
@@ -1226,24 +1078,30 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               });
             },
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
+              duration: const Duration(milliseconds: 200),
               curve: Curves.easeInOut,
               height: 36,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: isSelected ? HBotColors.primary : Colors.transparent,
+                // v0: active=#0883FD white text, inactive=bg-[#F5F7FA] border-[#E5E7EB] text #6B7280
+                color: isSelected
+                    ? const Color(0xFF0883FD)
+                    : const Color(0xFFF5F7FA),
                 borderRadius: BorderRadius.circular(999),
+                border: isSelected
+                    ? null
+                    : Border.all(color: const Color(0xFFE5E7EB), width: 1),
               ),
               alignment: Alignment.center,
               child: Text(
                 tabs[index],
                 style: TextStyle(
                   fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  fontSize: 13, // v0: 13px medium
+                  fontWeight: FontWeight.w500,
                   color: isSelected
                       ? Colors.white
-                      : HBotColors.textSecondaryLight,
+                      : const Color(0xFF6B7280),
                 ),
               ),
             ),
@@ -1284,7 +1142,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   /// Build skeleton loading cards (4 cards in 2x2 grid) with shimmer
   Widget _buildSkeletonLoading() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -1292,7 +1150,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          mainAxisExtent: 140,
+          mainAxisExtent: 152,
         ),
         itemCount: 4,
         itemBuilder: (context, index) {
@@ -1363,16 +1221,17 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   Widget _buildDeviceGrid() {
+    // v0: px-4 pb-28 (112px), 2-col grid gap-3 (12px)
     return RefreshIndicator(
       onRefresh: _loadData,
-      color: HBotColors.primary,
+      color: const Color(0xFF0883FD),
       child: GridView.builder(
-        padding: const EdgeInsets.only(left: 20, right: 20, bottom: 80),
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 112),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          mainAxisExtent: 140,
+          mainAxisExtent: 152, // taller to fit v0 card layout
         ),
         itemCount: _filteredDevices.length,
         itemBuilder: (context, index) {
@@ -1646,6 +1505,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             isOn: isOn,
             value: stateValue,
             roomName: roomName,
+            deviceType: device.deviceType,
             isLoading: waitingForInitialState,
             onToggle: (value) {
               if (device.deviceType == DeviceType.shutter) {
@@ -1659,79 +1519,24 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           );
         }
 
-        // List view fallback
-        return Container(
-          margin: const EdgeInsets.symmetric(
-            horizontal: HBotSpacing.screenPadding,
-            vertical: HBotSpacing.space1,
-          ),
-          decoration: hbotDeviceCardDecoration(isOn: isOn),
-          child: InkWell(
-            onTap: () => _navigateToDeviceControl(device),
-            borderRadius: HBotRadius.largeRadius,
-            child: Padding(
-              padding: const EdgeInsets.all(HBotSpacing.space2),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      device.deviceName,
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        color: HBotColors.textPrimaryLight,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  device.deviceType == DeviceType.shutter
-                      ? _buildShutterControls(
-                          device,
-                          shutterPosition,
-                          shutterDirection,
-                          isControllable,
-                          isOnline,
-                        )
-                      : Column(
-                          children: [
-                            if (!isControllable)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Text(
-                                  'No realtime (no topic)',
-                                  style: const TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: 12,
-                                    color: HBotColors.warning,
-                                  ),
-                                ),
-                              ),
-                            if (waitingForInitialState)
-                              const SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    HBotColors.primary,
-                                  ),
-                                ),
-                              )
-                            else
-                              Switch(
-                                value: deviceState,
-                                onChanged:
-                                    isControllable && _mqttConnected && isOnline
-                                        ? (value) => _toggleDevice(device, value)
-                                        : null,
-                              ),
-                          ],
-                        ),
-                ],
-              ),
-            ),
-          ),
+        // List view — v0 DeviceCardList style
+        return DeviceCardList(
+          title: device.deviceName,
+          icon: _getDeviceIcon(device.deviceType),
+          isOnline: isOnline,
+          isOn: isOn,
+          value: stateValue,
+          roomName: roomName,
+          deviceType: device.deviceType,
+          isLoading: waitingForInitialState,
+          onToggle: (value) {
+            if (device.deviceType == DeviceType.shutter) {
+              _controlShutter(device, value ? 'open' : 'close');
+            } else {
+              _toggleDevice(device, value);
+            }
+          },
+          onTap: () => _navigateToDeviceControl(device),
         );
       },
     );
@@ -3085,53 +2890,53 @@ class _ShimmerSkeletonCardState extends State<_ShimmerSkeletonCard>
       ),
       child: Container(
         decoration: BoxDecoration(
-          color: HBotColors.cardLight,
+          color: const Color(0xFFF5F7FA),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: HBotColors.borderLight, width: 1),
+          border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
         ),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Skeleton icon (32x32)
+            // Skeleton icon circle (40x40)
             Container(
-              width: 32,
-              height: 32,
+              width: 40,
+              height: 40,
               decoration: BoxDecoration(
-                color: HBotColors.neutral100,
-                borderRadius: BorderRadius.circular(8),
+                color: const Color(0xFFE5E7EB),
+                shape: BoxShape.circle,
               ),
             ),
-            const SizedBox(height: 12),
-            // Skeleton title (100x14)
+            const SizedBox(height: 10),
+            // Skeleton title (80x13)
             Container(
-              width: 100,
-              height: 14,
+              width: 80,
+              height: 13,
               decoration: BoxDecoration(
-                color: HBotColors.neutral200,
+                color: const Color(0xFFE5E7EB),
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-            const SizedBox(height: 8),
-            // Skeleton subtitle (40x12)
+            const SizedBox(height: 6),
+            // Skeleton subtitle (50x11)
             Container(
-              width: 40,
-              height: 12,
+              width: 50,
+              height: 11,
               decoration: BoxDecoration(
-                color: HBotColors.neutral100,
+                color: const Color(0xFFF3F4F6),
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
             const Spacer(),
-            // Skeleton toggle (52x28) bottom-right
+            // Skeleton toggle (44x24) bottom-right
             Align(
               alignment: Alignment.bottomRight,
               child: Container(
-                width: 52,
-                height: 28,
+                width: 44,
+                height: 24,
                 decoration: BoxDecoration(
-                  color: HBotColors.neutral100,
-                  borderRadius: BorderRadius.circular(14),
+                  color: const Color(0xFFE5E7EB),
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
             ),
