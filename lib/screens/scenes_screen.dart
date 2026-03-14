@@ -143,7 +143,7 @@ class _ScenesScreenState extends State<ScenesScreen>
               ),
             ),
             const SizedBox(height: 8),
-            const ConstrainedBox(
+            ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 260),
               child: Text(
                 'Please select a home from the dashboard to view and manage scenes',
@@ -194,7 +194,7 @@ class _ScenesScreenState extends State<ScenesScreen>
               ),
             ),
             const SizedBox(height: 8),
-            const ConstrainedBox(
+            ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 260),
               child: Text(
                 'Create scenes to control multiple devices with a single tap.',
