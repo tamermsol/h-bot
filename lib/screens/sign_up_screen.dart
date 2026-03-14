@@ -183,25 +183,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     const SizedBox(height: HBotSpacing.space4),
 
-                    // Logo area: 64px gradient rounded rect with "H"
+                    // H-Bot logo
                     Center(
-                      child: Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          gradient: HBotColors.primaryGradient,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'H',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                            height: 1,
-                          ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.asset(
+                          'assets/images/branding/hbot_app_icon.png',
+                          width: 64,
+                          height: 64,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),

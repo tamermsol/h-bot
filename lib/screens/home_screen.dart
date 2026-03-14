@@ -6,6 +6,7 @@ import '../widgets/connectivity_banner.dart';
 import 'home_dashboard_screen.dart';
 import 'profile_screen.dart';
 import 'scenes_screen.dart';
+import 'add_device_flow_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final String? homeName;
@@ -68,14 +69,28 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
-        title: Text(
-          _getAppBarTitle(),
-          style: const TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: HBotColors.textPrimaryLight,
-          ),
+        title: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                'assets/images/branding/hbot_app_icon.png',
+                width: 32,
+                height: 32,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              _getAppBarTitle(),
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: HBotColors.textPrimaryLight,
+              ),
+            ),
+          ],
         ),
         backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
@@ -86,6 +101,20 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ConnectivityBanner(isOnline: _isOnline),
         ),
       ),
+      floatingActionButton: _currentIndex == 0
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AddDeviceFlowScreen(),
+                  ),
+                );
+              },
+              backgroundColor: HBotColors.primary,
+              child: const Icon(Icons.add, color: Colors.white),
+            )
+          : null,
       body: _buildBody(),
       bottomNavigationBar: _buildBottomNavigation(),
     );
@@ -152,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBody() {
     switch (_currentIndex) {
       case 0:
-        return HomeDashboardScreen(onHomeNameChanged: _updateHomeName);
+        return SafeArea(child: HomeDashboardScreen(onHomeNameChanged: _updateHomeName));
       case 1:
         return SafeArea(child: const ScenesScreen());
       case 2:

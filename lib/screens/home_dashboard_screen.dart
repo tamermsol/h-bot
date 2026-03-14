@@ -1211,7 +1211,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          childAspectRatio: 0.85,
+          childAspectRatio: 1.3,
         ),
         itemCount: 4,
         itemBuilder: (context, index) {
@@ -1291,7 +1291,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          childAspectRatio: 0.85,
+          childAspectRatio: 1.3,
         ),
         itemCount: _filteredDevices.length,
         itemBuilder: (context, index) {

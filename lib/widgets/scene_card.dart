@@ -28,7 +28,7 @@ class SceneCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 72,
+        constraints: const BoxConstraints(minHeight: 72),
         padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
           color: HBotColors.cardLight,

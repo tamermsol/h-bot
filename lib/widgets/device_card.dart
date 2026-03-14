@@ -63,7 +63,7 @@ class _DeviceCardState extends State<DeviceCard> {
         child: AnimatedContainer(
           duration: HBotDurations.fast,
           curve: HBotCurves.standard,
-          constraints: const BoxConstraints(minHeight: 140),
+          constraints: const BoxConstraints(minHeight: 120),
           decoration: BoxDecoration(
             color: _isPressed
                 ? HBotColors.surfaceCardHover
@@ -107,91 +107,89 @@ class _DeviceCardState extends State<DeviceCard> {
                       ),
                     ),
 
-                  // Card content with 16px padding
+                  // Card content with 12px padding
                   Padding(
-                    padding: const EdgeInsets.all(HBotSpacing.space4),
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Header: icon + name row
+                        // Header: icon + device name on same row
                         Row(
                           children: [
-                            // Device type icon (32px per spec)
                             Icon(
                               widget.icon,
                               color: widget.isOn
                                   ? HBotColors.iconActive
                                   : HBotColors.iconDefault,
-                              size: 32,
+                              size: 28,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                widget.title,
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: HBotColors.textPrimaryLight,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ],
                         ),
 
-                        const SizedBox(height: HBotSpacing.space2),
-
-                        // Device name ($titleMedium 16/600, max 2 lines)
-                        Text(
-                          widget.title,
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: HBotColors.textPrimaryLight,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-
-                        // Room label ($bodySmall 12/400, textSecondary)
-                        if (widget.roomName != null) ...[
-                          const SizedBox(height: 2),
-                          Text(
-                            widget.roomName!,
-                            style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: HBotColors.textSecondaryLight,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-
-                        const SizedBox(height: HBotSpacing.space2),
-
-                        // State text ($bodyMedium 14/400)
-                        if (widget.isLoading)
-                          Container(
-                            width: 40,
-                            height: 12,
-                            decoration: BoxDecoration(
-                              color: HBotColors.neutral100,
-                              borderRadius: HBotRadius.smallRadius,
-                            ),
-                          )
-                        else
-                          Text(
-                            widget.value ?? (widget.isOn ? 'ON' : 'OFF'),
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: widget.isOn
-                                  ? HBotColors.primary
-                                  : HBotColors.textSecondaryLight,
+                        // Room label
+                        if (widget.roomName != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Text(
+                              widget.roomName!,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400,
+                                color: HBotColors.textSecondaryLight,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
 
-                        const SizedBox(height: HBotSpacing.space3),
+                        const SizedBox(height: 8),
 
-                        // Toggle at bottom — custom gradient toggle
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: _GradientToggle(
-                            value: widget.isOn,
-                            onChanged: unreachable ? null : widget.onToggle,
-                          ),
+                        // State text + toggle row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (widget.isLoading)
+                              Container(
+                                width: 40,
+                                height: 12,
+                                decoration: BoxDecoration(
+                                  color: HBotColors.neutral100,
+                                  borderRadius: HBotRadius.smallRadius,
+                                ),
+                              )
+                            else
+                              Text(
+                                widget.value ?? (widget.isOn ? 'ON' : 'OFF'),
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  color: widget.isOn
+                                      ? HBotColors.primary
+                                      : HBotColors.textSecondaryLight,
+                                ),
+                              ),
+                            _GradientToggle(
+                              value: widget.isOn,
+                              onChanged: unreachable ? null : widget.onToggle,
+                            ),
+                          ],
                         ),
                       ],
                     ),
