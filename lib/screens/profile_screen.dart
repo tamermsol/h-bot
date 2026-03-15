@@ -466,12 +466,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: HBotSpacing.space3),
             Text(
               _userName ?? 'Loading...',
-              style: const TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight),
+              style: const TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight),
             ),
             const SizedBox(height: HBotSpacing.space1),
             Text(
               _userEmail ?? '',
-              style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400, color: HBotColors.textSecondaryLight),
+              style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w400, color: HBotColors.textSecondaryLight),
             ),
           ],
         ),

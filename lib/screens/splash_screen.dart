@@ -151,7 +151,7 @@ class _SplashScreenState extends State<SplashScreen>
                   const Text(
                     'H-Bot',
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'DM Sans',
                       fontSize: 36,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -165,7 +165,7 @@ class _SplashScreenState extends State<SplashScreen>
                   Text(
                     'Smart Home, Simplified',
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'DM Sans',
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
                       color: Colors.white.withOpacity(0.7),

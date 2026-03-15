@@ -64,7 +64,7 @@ class _SmartInputFieldState extends State<SmartInputField> {
           Text(
             widget.label!,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'DM Sans',
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: HBotColors.textSecondaryLight,
@@ -87,7 +87,7 @@ class _SmartInputFieldState extends State<SmartInputField> {
             maxLines: widget.maxLines,
             autofocus: widget.autofocus,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'DM Sans',
               fontSize: 16,
               fontWeight: FontWeight.w400,
               color: HBotColors.textPrimaryLight,

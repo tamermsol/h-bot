@@ -885,7 +885,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               Text(
                 isOn ? 'ON' : 'OFF',
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'DM Sans',
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: isOn ? HBotColors.primary : HBotColors.textSecondaryLight,

@@ -58,7 +58,7 @@ class SettingsTile extends StatelessWidget {
                       Text(
                         title,
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'DM Sans',
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
                           color: titleColor ?? HBotColors.textPrimaryLight,
@@ -69,7 +69,7 @@ class SettingsTile extends StatelessWidget {
                         Text(
                           subtitle!,
                           style: const TextStyle(
-                            fontFamily: 'Inter',
+                            fontFamily: 'DM Sans',
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: HBotColors.textTertiaryLight,
@@ -84,7 +84,7 @@ class SettingsTile extends StatelessWidget {
                   Text(
                     value!,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'DM Sans',
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       color: HBotColors.textSecondaryLight,
@@ -146,7 +146,7 @@ class SettingsGroup extends StatelessWidget {
             child: Text(
               label!.toUpperCase(),
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'DM Sans',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.0,

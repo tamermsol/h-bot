@@ -258,7 +258,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           : const Text(
                               'Sign In',
                               style: TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'DM Sans',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -330,7 +330,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: const Text(
                         'Sign Up',
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'DM Sans',
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: HBotColors.primary,

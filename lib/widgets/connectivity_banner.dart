@@ -20,7 +20,7 @@ class ConnectivityBanner extends StatelessWidget {
               child: Text(
                 'No internet connection',
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'DM Sans',
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,

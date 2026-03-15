@@ -155,7 +155,7 @@ class _BulkButton extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'DM Sans',
                   fontSize: compact ? 12 : 14,
                   fontWeight: FontWeight.w600,
                   color: isPrimary

@@ -332,7 +332,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           : const Text(
                               'Create Account',
                               style: TextStyle(
-                                fontFamily: 'Inter',
+                                fontFamily: 'DM Sans',
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -393,7 +393,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: const Text(
                         'Sign In',
                         style: TextStyle(
-                          fontFamily: 'Inter',
+                          fontFamily: 'DM Sans',
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: HBotColors.primary,

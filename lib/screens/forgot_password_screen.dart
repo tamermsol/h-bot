@@ -92,7 +92,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           const Text(
             'Reset password',
             style: TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'DM Sans',
               fontSize: 24,
               fontWeight: FontWeight.w700,
               color: HBotColors.textPrimaryLight,
@@ -108,7 +108,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Text(
               "Enter your email and we'll send you a link to reset your password",
               style: TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'DM Sans',
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 color: HBotColors.textSecondaryLight,
@@ -155,7 +155,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         height: 20, width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
                       )
-                    : const Text('Send Reset Link', style: TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w500)),
+                    : const Text('Send Reset Link', style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
               ),
             ),
           ),
@@ -184,7 +184,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
         const Text(
           'Check your email',
-          style: TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+          style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
           textAlign: TextAlign.center,
         ),
 
@@ -192,7 +192,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
         Text(
           "We've sent a reset link to\n${_emailController.text}",
-          style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: HBotColors.textSecondaryLight),
+          style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight),
           textAlign: TextAlign.center,
         ),
       ],

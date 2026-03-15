@@ -79,7 +79,7 @@ class _SceneCardState extends State<SceneCard> {
                   Text(
                     widget.name,
                     style: const TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'DM Sans',
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: HBotColors.textPrimaryLight,
@@ -92,7 +92,7 @@ class _SceneCardState extends State<SceneCard> {
                     Text(
                       widget.subtitle,
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'DM Sans',
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: HBotColors.textSecondaryLight,

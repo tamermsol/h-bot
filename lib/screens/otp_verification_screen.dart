@@ -111,7 +111,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Verify Email', style: TextStyle(fontFamily: 'Inter', fontSize: 17, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
+        title: const Text('Verify Email', style: TextStyle(fontFamily: 'DM Sans', fontSize: 17, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -134,15 +134,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               const SizedBox(height: HBotSpacing.space5),
 
               const Text('Verify Your Email',
-                style: TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+                style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
                 textAlign: TextAlign.center,
               ),
 
               const SizedBox(height: HBotSpacing.space3),
 
-              const Text('We sent a code to', style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: HBotColors.textSecondaryLight), textAlign: TextAlign.center),
+              const Text('We sent a code to', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight), textAlign: TextAlign.center),
               const SizedBox(height: 4),
-              Text(widget.email, style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary), textAlign: TextAlign.center),
+              Text(widget.email, style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary), textAlign: TextAlign.center),
 
               const SizedBox(height: HBotSpacing.space7),
 
@@ -157,7 +157,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
                     maxLength: 1,
-                    style: const TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+                    style: const TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
                     decoration: InputDecoration(
                       counterText: '',
                       filled: true,
@@ -192,7 +192,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                     child: _isVerifying
                         ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
-                        : const Text('Verify Email', style: TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w500)),
+                        : const Text('Verify Email', style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
                   ),
                 ),
               ),
@@ -203,12 +203,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               Center(
                 child: _resendCountdown > 0
                     ? Text('Resend code in 0:${_resendCountdown.toString().padLeft(2, '0')}',
-                        style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: HBotColors.textSecondaryLight))
+                        style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight))
                     : TextButton(
                         onPressed: _isResending ? null : _resendOtp,
                         child: _isResending
                             ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary)))
-                            : const Text('Resend Code', style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary)),
+                            : const Text('Resend Code', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary)),
                       ),
               ),
 
@@ -220,7 +220,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   onPressed: () => Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false,
                   ),
-                  child: const Text('Skip for now', style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: HBotColors.textSecondaryLight)),
+                  child: const Text('Skip for now', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight)),
                 ),
               ),
             ],

@@ -251,7 +251,7 @@ Widget hbotSectionHeader(String title) {
     child: Text(
       title.toUpperCase(),
       style: const TextStyle(
-        fontFamily: 'Inter',
+        fontFamily: 'DM Sans',
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.0,
@@ -292,7 +292,7 @@ class AppTheme {
   static const double radiusLarge = HBotRadius.large;
 
   static final TextStyle priceTextStyle = const TextStyle(
-    fontFamily: 'Inter',
+    fontFamily: 'DM Sans',
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: HBotColors.textPrimaryLight,
@@ -326,7 +326,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      fontFamily: 'Inter',
+      fontFamily: 'DM Sans',
       scaffoldBackgroundColor: HBotColors.backgroundLight,
       colorScheme: const ColorScheme.light(
         primary: HBotColors.primary,
@@ -339,7 +339,7 @@ class AppTheme {
       ),
       textTheme: const TextTheme(
         displayLarge: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 32,
           fontWeight: FontWeight.w700,
           height: 1.25,
@@ -347,7 +347,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         displayMedium: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 28,
           fontWeight: FontWeight.w700,
           height: 1.29,
@@ -355,7 +355,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         headlineLarge: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 24,
           fontWeight: FontWeight.w700,
           height: 1.33,
@@ -363,7 +363,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         headlineMedium: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 22,
           fontWeight: FontWeight.w600,
           height: 1.27,
@@ -371,7 +371,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         headlineSmall: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 20,
           fontWeight: FontWeight.w600,
           height: 1.30,
@@ -379,7 +379,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         titleLarge: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 18,
           fontWeight: FontWeight.w600,
           height: 1.33,
@@ -387,35 +387,35 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         titleMedium: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 16,
           fontWeight: FontWeight.w600,
           height: 1.38,
           color: HBotColors.textPrimaryLight,
         ),
         titleSmall: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 14,
           fontWeight: FontWeight.w600,
           height: 1.43,
           color: HBotColors.textPrimaryLight,
         ),
         bodyLarge: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 16,
           fontWeight: FontWeight.w400,
           height: 1.50,
           color: HBotColors.textPrimaryLight,
         ),
         bodyMedium: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 14,
           fontWeight: FontWeight.w400,
           height: 1.43,
           color: HBotColors.textSecondaryLight,
         ),
         bodySmall: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 12,
           fontWeight: FontWeight.w400,
           height: 1.33,
@@ -423,14 +423,14 @@ class AppTheme {
           color: HBotColors.textSecondaryLight,
         ),
         labelLarge: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 16,
           fontWeight: FontWeight.w500,
           height: 1.38,
           color: HBotColors.textPrimaryLight,
         ),
         labelMedium: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 14,
           fontWeight: FontWeight.w500,
           height: 1.43,
@@ -438,7 +438,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         labelSmall: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 12,
           fontWeight: FontWeight.w500,
           height: 1.33,
@@ -452,7 +452,7 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         titleTextStyle: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 22,
           fontWeight: FontWeight.w600,
           height: 1.27,
@@ -501,19 +501,19 @@ class AppTheme {
           borderSide: const BorderSide(color: HBotColors.error, width: 2),
         ),
         hintStyle: const TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 16,
           fontWeight: FontWeight.w400,
           color: HBotColors.textTertiaryLight,
         ),
         labelStyle: const TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 14,
           fontWeight: FontWeight.w500,
           color: HBotColors.textSecondaryLight,
         ),
         errorStyle: const TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 12,
           fontWeight: FontWeight.w400,
           color: HBotColors.error,
@@ -525,7 +525,7 @@ class AppTheme {
           backgroundColor: HBotColors.primary,
           foregroundColor: HBotColors.textOnPrimary,
           textStyle: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'DM Sans',
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -544,7 +544,7 @@ class AppTheme {
           minimumSize: const Size(120, 52),
           foregroundColor: HBotColors.primary,
           textStyle: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'DM Sans',
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -563,7 +563,7 @@ class AppTheme {
           minimumSize: const Size(0, 44),
           foregroundColor: HBotColors.primary,
           textStyle: const TextStyle(
-            fontFamily: 'Inter',
+            fontFamily: 'DM Sans',
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -587,12 +587,12 @@ class AppTheme {
         selectedItemColor: HBotColors.primary,
         unselectedItemColor: HBotColors.neutral400,
         selectedLabelStyle: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
         unselectedLabelStyle: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 12,
           fontWeight: FontWeight.w400,
         ),
@@ -605,13 +605,13 @@ class AppTheme {
           borderRadius: HBotRadius.xlRadius,
         ),
         titleTextStyle: const TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: HBotColors.textPrimaryLight,
         ),
         contentTextStyle: const TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: HBotColors.textSecondaryLight,
@@ -632,7 +632,7 @@ class AppTheme {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: HBotColors.neutral800,
         contentTextStyle: const TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: 'DM Sans',
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: HBotColors.textOnPrimary,

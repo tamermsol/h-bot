@@ -926,7 +926,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     Text(
                       _selectedHome?.name ?? 'My Home',
                       style: const TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'DM Sans',
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
                         color: HBotColors.textPrimaryLight,
@@ -993,7 +993,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               Text(
                 _greeting,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'DM Sans',
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
                   color: HBotColors.textSecondaryLight,
@@ -1001,9 +1001,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (107)',
+                'v1.0.0 (108)',
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'DM Sans',
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
                   color: HBotColors.textTertiaryLight,
@@ -1019,7 +1019,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             RichText(
               text: TextSpan(
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'DM Sans',
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: HBotColors.textSecondaryLight,
@@ -1113,14 +1113,14 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             child: TextField(
               controller: _searchController,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'DM Sans',
                 fontSize: 14,
                 color: HBotColors.textPrimaryLight,
               ),
               decoration: InputDecoration(
                 hintText: 'Search devices...',
                 hintStyle: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'DM Sans',
                   fontSize: 14,
                   color: HBotColors.textTertiaryLight,
                 ),
@@ -1176,8 +1176,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         borderRadius: HBotRadius.fullRadius,
       ),
       dividerHeight: 0,
-      labelStyle: const TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w500, fontSize: 14),
-      unselectedLabelStyle: const TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w400, fontSize: 14),
+      labelStyle: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w500, fontSize: 14),
+      unselectedLabelStyle: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w400, fontSize: 14),
       padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
       labelPadding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
       tabAlignment: TabAlignment.start,
@@ -1326,7 +1326,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             Text(
               title,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'DM Sans',
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: HBotColors.textPrimaryLight,
@@ -1336,7 +1336,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             Text(
               subtitle,
               style: const TextStyle(
-                fontFamily: 'Inter',
+                fontFamily: 'DM Sans',
                 fontSize: 14,
                 color: HBotColors.textSecondaryLight,
               ),
@@ -1684,7 +1684,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           child: Text(
             device.deviceName,
             style: const TextStyle(
-              fontFamily: 'Inter',
+              fontFamily: 'DM Sans',
               color: HBotColors.textPrimaryLight,
               fontSize: 13,
               fontWeight: FontWeight.w600,

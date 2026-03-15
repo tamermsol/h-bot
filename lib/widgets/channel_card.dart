@@ -84,7 +84,7 @@ class ChannelCard extends StatelessWidget {
               Text(
                 channelName,
                 style: const TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'DM Sans',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: HBotColors.textPrimaryLight,
@@ -99,7 +99,7 @@ class ChannelCard extends StatelessWidget {
               Text(
                 isOn ? 'ON' : 'OFF',
                 style: TextStyle(
-                  fontFamily: 'Inter',
+                  fontFamily: 'DM Sans',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                   color: isOn
