@@ -297,433 +297,188 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Profile Header
+          const SizedBox(height: HBotSpacing.space4),
+
+          // Profile Header — centered avatar + name + email
           _buildProfileHeader(),
-          const SizedBox(height: AppTheme.paddingLarge),
 
-          // Home Information
-          _buildHomeInfoSection(),
-          const SizedBox(height: AppTheme.paddingLarge),
-
-          // Settings Section
-          _buildSettingsSection(),
-          const SizedBox(height: AppTheme.paddingLarge),
-
-          // Account Section
-          _buildAccountSection(),
-          const SizedBox(height: AppTheme.paddingLarge),
-
-          // Support Section
-          _buildSupportSection(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileHeader() {
-    final cardColor = AppTheme.getCardColor(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      padding: const EdgeInsets.all(AppTheme.paddingLarge),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [AppTheme.primaryColor.withOpacity(0.1), cardColor]
-              : [AppTheme.lightGradientStart, AppTheme.lightGradientEnd],
-        ),
-      ),
-      child: Row(
-        children: [
-          // Profile Avatar with edit button
-          GestureDetector(
-            onTap: _showAvatarPicker,
-            child: Stack(
-              children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: _avatarPath == null
-                        ? const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              AppTheme.primaryColor,
-                              AppTheme.secondaryColor,
-                            ],
-                          )
-                        : null,
-                  ),
-                  child: _avatarPath == null
-                      ? const Icon(Icons.person, size: 40, color: Colors.white)
-                      : ClipOval(
-                          child: _avatarService.isCustomAvatar(_avatarPath)
-                              ? Image.file(
-                                  File(_avatarPath!),
-                                  fit: BoxFit.cover,
-                                  width: 80,
-                                  height: 80,
-                                )
-                              : Image.asset(
-                                  _avatarPath!,
-                                  fit: BoxFit.cover,
-                                  width: 80,
-                                  height: 80,
-                                ),
-                        ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: const BoxDecoration(
-                      color: AppTheme.primaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.edit,
-                      size: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: AppTheme.paddingMedium),
-
-          // Profile Info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _userName ?? 'Loading...',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  _userEmail ?? 'Loading...',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppTheme.textSecondary,
-                  ),
-                ),
-                if (_userPhone != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    _userPhone!,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.textSecondary,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHomeInfoSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Home Information',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: AppTheme.paddingMedium),
-        Row(
-          children: [
-            Expanded(
-              child: ProfileCard(
-                title: 'Devices',
-                value: _isLoadingStats ? '...' : '$_totalDevices',
-                icon: Icons.devices_outlined,
-                color: AppTheme.primaryColor,
-              ),
-            ),
-            const SizedBox(width: AppTheme.paddingMedium),
-            Expanded(
-              child: ProfileCard(
-                title: 'Rooms',
-                value: _isLoadingStats ? '...' : '$_totalRooms',
-                icon: Icons.home_outlined,
-                color: AppTheme.secondaryColor,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: AppTheme.paddingMedium),
-        Row(
-          children: [
-            Expanded(
-              child: ProfileCard(
-                title: 'Homes',
-                value: _isLoadingStats ? '...' : '$_totalHomes',
-                icon: Icons.home_work_outlined,
-                color: AppTheme.accentColor,
-              ),
-            ),
-            const SizedBox(width: AppTheme.paddingMedium),
-            Expanded(
-              child: ProfileCard(
-                title: 'Scenes',
-                value: _isLoadingStats ? '...' : '$_totalScenes',
-                icon: Icons.auto_awesome_outlined,
-                color: AppTheme.warningColor,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSettingsSection() {
-    final cardColor = AppTheme.getCardColor(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Settings',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: AppTheme.paddingMedium),
-        Container(
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          ),
-          child: Column(
+          // Home section
+          SettingsGroup(
+            label: 'Home',
             children: [
               SettingsTile(
-                icon: Icons.palette_outlined,
-                title: 'Appearance',
-                subtitle: 'Choose light or dark theme',
-                onTap: _showAppearanceDialog,
+                icon: Icons.meeting_room_outlined,
+                title: 'Rooms',
+                onTap: () {},
               ),
               SettingsTile(
-                icon: Icons.home_work_outlined,
-                title: 'Manage Homes',
-                subtitle: 'Add, edit, and manage your homes',
-                onTap: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomesScreen(
-                        onHomeChanged: () {
-                          // Refresh statistics when home changes
-                          _loadStatistics();
-                        },
-                      ),
-                    ),
-                  );
-                  // Also refresh when returning from the screen
-                  _loadStatistics();
-                },
-              ),
-              SettingsTile(
-                icon: Icons.notifications_outlined,
-                title: 'Notifications',
-                subtitle: 'Manage your notification preferences',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NotificationsSettingsScreen(),
-                    ),
-                  );
-                },
+                icon: Icons.wifi_outlined,
+                title: 'WiFi Profiles',
+                onTap: () {},
                 showDivider: false,
               ),
             ],
           ),
-        ),
-      ],
-    );
-  }
 
-  Widget _buildAccountSection() {
-    // Check if user can change password (email auth only)
-    final canChangePassword = _authService.canChangePassword();
-    final cardColor = AppTheme.getCardColor(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Account',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: AppTheme.paddingMedium),
-        Container(
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          // App section
+          SettingsGroup(
+            label: 'App',
+            children: [
+              SettingsTile(
+                icon: Icons.notifications_outlined,
+                title: 'Notifications',
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
+              ),
+              SettingsTile(
+                icon: Icons.palette_outlined,
+                title: 'Appearance',
+                value: 'Light',
+                onTap: _showAppearanceDialog,
+              ),
+              SettingsTile(
+                icon: Icons.info_outline,
+                title: 'About',
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const HelpCenterScreen())),
+                showDivider: false,
+              ),
+            ],
           ),
-          child: Column(
+
+          // Account section
+          SettingsGroup(
+            label: 'Account',
             children: [
               SettingsTile(
                 icon: Icons.person_outline,
                 title: 'Personal Information',
-                subtitle: 'Update your profile details',
                 onTap: _openEditProfile,
               ),
-              if (canChangePassword)
+              if (_authService.canChangePassword())
                 SettingsTile(
                   icon: Icons.lock_outline,
                   title: 'Change Password',
-                  subtitle: 'Update your account password',
                   onTap: _showChangePasswordDialog,
                 ),
-              // Device Sharing Section
+              SettingsTile(
+                icon: Icons.home_work_outlined,
+                title: 'Manage Homes',
+                onTap: () async {
+                  await Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => HomesScreen(onHomeChanged: () => _loadStatistics())));
+                  _loadStatistics();
+                },
+              ),
               SettingsTile(
                 icon: Icons.share_outlined,
-                title: 'Share My Devices',
-                subtitle: 'Share devices with others',
+                title: 'Share Devices',
                 onTap: () async {
-                  // Get current home ID
-                  final homes = await supabase
-                      .from('homes')
-                      .select('id')
-                      .limit(1);
+                  final homes = await supabase.from('homes').select('id').limit(1);
                   if (homes.isEmpty) {
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please create a home first'),
-                          backgroundColor: Colors.orange,
-                        ),
+                        const SnackBar(content: Text('Please create a home first'), backgroundColor: HBotColors.warning),
                       );
                     }
                     return;
                   }
-                  final homeId = homes.first['id'] as String;
-
                   if (mounted) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            MultiDeviceShareScreen(homeId: homeId),
-                      ),
-                    );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => MultiDeviceShareScreen(homeId: homes.first['id'])));
                   }
                 },
               ),
               SettingsTile(
                 icon: Icons.people_outline,
                 title: 'Shared with Me',
-                subtitle: 'View devices shared by others',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SharedDevicesScreen(),
-                    ),
-                  );
-                },
-              ),
-              // HBOT Account section
-              SettingsTile(
-                icon: Icons.account_circle_outlined,
-                title: 'HBOT Account',
-                subtitle: 'Manage your account data',
-                onTap: _openHBOTAccountScreen,
-                showDivider: false,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSupportSection() {
-    final cardColor = AppTheme.getCardColor(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Support',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: AppTheme.paddingMedium),
-        Container(
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          ),
-          child: Column(
-            children: [
-              SettingsTile(
-                icon: Icons.help_outline,
-                title: 'Help Center',
-                subtitle: 'Get help and support',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HelpCenterScreen(),
-                    ),
-                  );
-                },
-              ),
-              SettingsTile(
-                icon: Icons.feedback_outlined,
-                title: 'Send Feedback',
-                subtitle: 'Share your thoughts with us',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const FeedbackScreen(),
-                    ),
-                  );
-                },
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const SharedDevicesScreen())),
               ),
               SettingsTile(
                 icon: Icons.logout,
                 title: 'Sign Out',
-                subtitle: 'Sign out of your account',
-                titleColor: AppTheme.errorColor,
-                trailing: const SizedBox.shrink(), // No arrow for action items
-                onTap: () {
-                  _showSignOutDialog();
-                },
+                titleColor: HBotColors.error,
+                iconColor: HBotColors.error,
+                showChevron: false,
+                onTap: _showSignOutDialog,
                 showDivider: false,
               ),
             ],
           ),
-        ),
-      ],
+
+          const SizedBox(height: HBotSpacing.space7),
+        ],
+      ),
     );
   }
+
+  Widget _buildProfileHeader() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: HBotSpacing.space6,
+          bottom: HBotSpacing.space2,
+        ),
+        child: Column(
+          children: [
+            // Avatar — 80px circle
+            GestureDetector(
+              onTap: _showAvatarPicker,
+              child: Stack(
+                children: [
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: const BoxDecoration(
+                      color: HBotColors.primarySurface,
+                      shape: BoxShape.circle,
+                    ),
+                    child: _avatarPath == null
+                        ? const Center(child: Text('😀', style: TextStyle(fontSize: 40)))
+                        : ClipOval(
+                            child: _avatarService.isCustomAvatar(_avatarPath)
+                                ? Image.file(File(_avatarPath!), fit: BoxFit.cover, width: 80, height: 80)
+                                : Image.asset(_avatarPath!, fit: BoxFit.cover, width: 80, height: 80),
+                          ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: HBotColors.primary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: const Icon(Icons.edit, size: 14, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: HBotSpacing.space3),
+            Text(
+              _userName ?? 'Loading...',
+              style: const TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight),
+            ),
+            const SizedBox(height: HBotSpacing.space1),
+            Text(
+              _userEmail ?? '',
+              style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400, color: HBotColors.textSecondaryLight),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Legacy section builders removed — now using SettingsGroup pattern above
 
   void _openHBOTAccountScreen() {
     Navigator.push(
