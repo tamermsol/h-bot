@@ -1,0 +1,3574 @@
+{
+  "texts": [
+    {
+      "tag": "A",
+      "text": "Home",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Home",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Products",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Products",
+      "color": "rgba(255, 255, 255, 0.5)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Partners",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Partners",
+      "color": "rgba(255, 255, 255, 0.5)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Services",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Services",
+      "color": "rgba(255, 255, 255, 0.5)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Discover",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Discover",
+      "color": "rgba(255, 255, 255, 0.5)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Contact us",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Contact us",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "The Future of Home",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "89.3025px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Intelligence.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "89.3025px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Advanced AI-powered automation that adapts to your lifestyle, making your home smarter than ever bef",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "17px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Brands We Support",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Categories",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Upgrade Your Space with",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "60px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Intelligent Solutions",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "60px",
+      "weight": "600"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Intelligent Solutions",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "60px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Explore a range of powerful products designed to enhance your everyday living.",
+      "color": "rgb(199, 201, 204)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Advanced Smart Home Speakers",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "26px",
+      "weight": "500"
+    },
+    {
+      "tag": "LI",
+      "text": "Security Cam",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Security Cam",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Security Cam",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart LCD Panel",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart LCD Panel",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart LCD Panel",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Thermostat",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Thermostat",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Thermostat",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Video Doorbell",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Video Doorbell",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Video Doorbell",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Leak Sensor",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Leak Sensor",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Leak Sensor",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Gas Sensor",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Gas Sensor",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Gas Sensor",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Security Cam",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Security Cam",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Security Cam",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart LCD Panel",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart LCD Panel",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart LCD Panel",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Thermostat",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Thermostat",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Thermostat",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Video Doorbell",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Video Doorbell",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Video Doorbell",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Leak Sensor",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Leak Sensor",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Leak Sensor",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Gas Sensor",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Gas Sensor",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Gas Sensor",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Security Cam",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Security Cam",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Security Cam",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart LCD Panel",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart LCD Panel",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart LCD Panel",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Thermostat",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Thermostat",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Thermostat",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Video Doorbell",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Video Doorbell",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Video Doorbell",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Leak Sensor",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Leak Sensor",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Leak Sensor",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Gas Sensor",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Gas Sensor",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Gas Sensor",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Lighting",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Lighting",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Lighting",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Lock",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Lock",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Lock",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Door & Window",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Door & Window",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Door & Window",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Dimmer Switch",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Dimmer Switch",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Dimmer Switch",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Light Switch",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Light Switch",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Light Switch",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Lighting",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Lighting",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Lighting",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Lock",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Lock",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Lock",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Door & Window",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Door & Window",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Door & Window",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Dimmer Switch",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Dimmer Switch",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Dimmer Switch",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Light Switch",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Light Switch",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Light Switch",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Lighting",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Lighting",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Lighting",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Lock",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Lock",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Lock",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Door & Window",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Door & Window",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Door & Window",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Dimmer Switch",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Dimmer Switch",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Dimmer Switch",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "Smart Light Switch",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Smart Light Switch",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Light Switch",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Our Products",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Explore the Power of",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "H-BOT",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Products",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Products",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Bringing ease and intelligence to your home.",
+      "color": "rgb(199, 201, 204)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "Satoshi, \"Satoshi Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Security Camera",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "26px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Freestanding Tabletop Model",
+      "color": "rgb(216, 216, 216)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Video Doorbells",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "26px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Wall-Mounted Model",
+      "color": "rgb(216, 216, 216)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Lighting",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "26px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Wall-Mounted Model",
+      "color": "rgb(216, 216, 216)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Curtains & Shutters",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "26px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Automated Light-Filtering System",
+      "color": "rgb(216, 216, 216)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Motion Sensor",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "26px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Wall-Mounted Model",
+      "color": "rgb(216, 216, 216)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Integration",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Pair and",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Play",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Play",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Automatically detects your home devices. Simply search for your brand, tap a button or two \u2014 and you",
+      "color": "rgb(199, 201, 204)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "40px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Tap",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "52px",
+      "weight": "400"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Tap",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "52px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Advantage",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Get to know",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "H-BOT",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "SPAN",
+      "text": "H-BOT",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Discover What Sets Us Apart in Smart Home Innovation",
+      "color": "rgb(199, 201, 204)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "Satoshi, \"Satoshi Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "500"
+    },
+    {
+      "tag": "LI",
+      "text": "ComfortEnjoy a lifestyle upgrade.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Comfort",
+      "color": "rgba(255, 255, 255, 0.8)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Enjoy a",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "lifestyle upgrade.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "InnovationWe bring intelligence to your space.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Innovation",
+      "color": "rgba(255, 255, 255, 0.8)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "We bring intelligence to your space.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "ConnectivityEvery solution, one ecosystem.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Connectivity",
+      "color": "rgba(255, 255, 255, 0.8)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Every solution, one ecosystem.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "ReliabilityStable. Seamless. Scalable.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Reliability",
+      "color": "rgba(255, 255, 255, 0.8)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Stable. Seamless. Scalable.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "500"
+    },
+    {
+      "tag": "LI",
+      "text": "Eco-FriendlySustainability made simple.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Eco-Friendly",
+      "color": "rgba(255, 255, 255, 0.8)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Sustainability made simple.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "500"
+    },
+    {
+      "tag": "LI",
+      "text": "FlexibilityVersatility you can count on.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Flexibility",
+      "color": "rgba(255, 255, 255, 0.8)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Versatility",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "you can count on.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "500"
+    },
+    {
+      "tag": "LI",
+      "text": "PerformancePowerful connectivity. Reliable performance.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Performance",
+      "color": "rgba(255, 255, 255, 0.8)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Powerful connectivity. Reliable performance.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "AutomationSmarter spaces, wherever you are.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Automation",
+      "color": "rgba(255, 255, 255, 0.8)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smarter spaces, wherever you are.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "600"
+    },
+    {
+      "tag": "LI",
+      "text": "ConvenienceStay in sync with your world.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Convenience",
+      "color": "rgba(255, 255, 255, 0.8)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Stay in sync with your world.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Motion",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Sensor",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Lock",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Shutters",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Control",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Security",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Cameras",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Thermostat",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "21",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Sprinkler  Systems",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Smart light",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Air",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Conditioners",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Home",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Speaker",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Connected",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "One app.",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "700"
+    },
+    {
+      "tag": "P",
+      "text": "Total control.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "700"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Total control.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "700"
+    },
+    {
+      "tag": "P",
+      "text": "Control every device in your home with h-bot. no matter where you are. All it takes is one tap.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "40px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Our Partners",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Professional installation for your",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Smart devices.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Smart devices.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Seamless installation. Reliable service.",
+      "color": "rgb(199, 201, 204)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "We proudly collaborate with leading experts who ensure a seamless installation experience, bringing ",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "34px",
+      "weight": "700"
+    },
+    {
+      "tag": "P",
+      "text": "Samrt Innovation",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "24px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Simply Smart",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "24px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "800+",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "42px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Over 800 users have already trusted our expert partners for smooth and reliable smart home installat",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "500"
+    },
+    {
+      "tag": "A",
+      "text": "Request Service",
+      "color": "rgb(0, 0, 238)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Request Service",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Testimonials",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Trusted by innovators",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "worldwide",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "SPAN",
+      "text": "worldwide",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Real Stories, Real Success: Hear from Our Satisfied Clients",
+      "color": "rgb(199, 201, 204)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "Satoshi, \"Satoshi Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "I'm so glad I installed the gas leak sensor with H-bot. One night, it alerted me to a small leak in ",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Aly Essa",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Designer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I love that I can create personalized scenes for different activities, like movie nights or dinner p",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Mona Rabie",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Marketer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "My kids love the smart lighting! They can change the colors in their rooms, and it's made bedtime so",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Nour Adel",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Creative Director",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Ramy Homied",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Startup Founder",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "H-bot has transformed my home into a truly smart living space. I can't imagine life without it now.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Mayada Hussien",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Freelancer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I travel a lot, and being able to control everything remotely lights, doors, cameras \u2014 has been a hu",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Marwan Maged",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Traveller Expert",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I'm so glad I installed the gas leak sensor with H-bot. One night, it alerted me to a small leak in ",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Aly Essa",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Designer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I love that I can create personalized scenes for different activities, like movie nights or dinner p",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Mona Rabie",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Marketer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "My kids love the smart lighting! They can change the colors in their rooms, and it's made bedtime so",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Nour Adel",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Creative Director",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Ramy Homied",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Startup Founder",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "H-bot has transformed my home into a truly smart living space. I can't imagine life without it now.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Mayada Hussien",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Freelancer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I travel a lot, and being able to control everything remotely lights, doors, cameras \u2014 has been a hu",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Marwan Maged",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Traveller Expert",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I'm so glad I installed the gas leak sensor with H-bot. One night, it alerted me to a small leak in ",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Aly Essa",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Designer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I love that I can create personalized scenes for different activities, like movie nights or dinner p",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Mona Rabie",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Marketer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "My kids love the smart lighting! They can change the colors in their rooms, and it's made bedtime so",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Nour Adel",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Creative Director",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Ramy Homied",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Startup Founder",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "H-bot has transformed my home into a truly smart living space. I can't imagine life without it now.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Mayada Hussien",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Freelancer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I travel a lot, and being able to control everything remotely lights, doors, cameras \u2014 has been a hu",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Marwan Maged",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Traveller Expert",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I've discovered new ways to enjoy my home thanks to H-bot's smart features. I'm constantly finding n",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Karl George",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Architect",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "When we moved into our new home, we were excited to make it smart \u2014 but the setup felt overwhelming.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Rana Abd Elatif",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "HR Manager",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Investing in H-bot was one of the best decisions I've made. It's made my home more comfortable, secu",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Qassem Obida",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Product Manager",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Martina Morad",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Banker",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I used to play a guessing game called \u2018Did I leave the lights on?\u2019 Not anymore. H-Bot fixed that.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Mohamed Edris",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Backend Engineer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I've discovered new ways to enjoy my home thanks to H-bot's smart features. I'm constantly finding n",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Karl George",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Architect",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "When we moved into our new home, we were excited to make it smart \u2014 but the setup felt overwhelming.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Rana Abd Elatif",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "HR Manager",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Investing in H-bot was one of the best decisions I've made. It's made my home more comfortable, secu",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Qassem Obida",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Product Manager",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Martina Morad",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Banker",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I used to play a guessing game called \u2018Did I leave the lights on?\u2019 Not anymore. H-Bot fixed that.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Mohamed Edris",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Backend Engineer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I've discovered new ways to enjoy my home thanks to H-bot's smart features. I'm constantly finding n",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Karl George",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Architect",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "When we moved into our new home, we were excited to make it smart \u2014 but the setup felt overwhelming.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Rana Abd Elatif",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "HR Manager",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Investing in H-bot was one of the best decisions I've made. It's made my home more comfortable, secu",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Qassem Obida",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Product Manager",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Martina Morad",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Banker",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "I used to play a guessing game called \u2018Did I leave the lights on?\u2019 Not anymore. H-Bot fixed that.",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "14px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Mohamed Edris",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "20px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Backend Engineer",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Features",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Everything you love about",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "H-bot",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "in one place.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "SPAN",
+      "text": "in one place.",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Control every room, scene, and device from one smart, streamlined hub.",
+      "color": "rgb(199, 201, 204)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Dashboard",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "62px",
+      "weight": "700"
+    },
+    {
+      "tag": "P",
+      "text": "We harness the power of both wired and wireless communication protocols to ensure unmatched reliabil",
+      "color": "rgb(215, 215, 215)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "40px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Compatibility",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Works Seamlessly with Your",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "600"
+    },
+    {
+      "tag": "P",
+      "text": "Favorite",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "700"
+    },
+    {
+      "tag": "P",
+      "text": "Smart Assistants",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "700"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Smart Assistants",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "700"
+    },
+    {
+      "tag": "P",
+      "text": "Enjoy instant, voice-activated control over your entire home, directly from your smart panel.",
+      "color": "rgb(199, 201, 204)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Amazon Alexa",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "17px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Google Assistant",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Apple HomeKit & Siri",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Samsung Bixby",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Our Smart Screens",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "FAQ",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "18px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Frequently Asked",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "700"
+    },
+    {
+      "tag": "P",
+      "text": "Questions",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "700"
+    },
+    {
+      "tag": "SPAN",
+      "text": "Questions",
+      "color": "rgb(0, 0, 0)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "72px",
+      "weight": "700"
+    },
+    {
+      "tag": "P",
+      "text": "Everything You Need to Know About Working With Us",
+      "color": "rgb(199, 201, 204)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "40px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "What is H-Bot and how does it work?",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Is there a mobile app?",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Who will install the smart devices?",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Is H-Bot compatible with other smart home ecosystems?",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "How secure is H-bot?",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "500"
+    },
+    {
+      "tag": "P",
+      "text": "Smart home automation designed to",
+      "color": "rgb(180, 180, 180)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "simplify and elevate your lifestyle.",
+      "color": "rgb(180, 180, 180)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "16px",
+      "weight": "300"
+    },
+    {
+      "tag": "P",
+      "text": "Home",
+      "color": "rgb(180, 180, 180)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "10px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Home",
+      "color": "rgb(180, 180, 180)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "10px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "About us",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "About us",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Our Partners",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Our Partners",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "FAQS",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "FAQS",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Services",
+      "color": "rgb(180, 180, 180)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "10px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "R&D",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "R&D",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Hospitality",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "A",
+      "text": "Hospitality",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Contact",
+      "color": "rgb(180, 180, 180)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "10px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "El Nozha, Egypt",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "support@hbot.com",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "+20 12 81167100",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Legal",
+      "color": "rgb(180, 180, 180)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "10px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Privacy Policy",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "Terms & conditions",
+      "color": "rgb(255, 255, 255)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "12px",
+      "weight": "400"
+    },
+    {
+      "tag": "P",
+      "text": "2025 \u00a9 MSOL.DEV All rights reserved.",
+      "color": "rgb(180, 180, 180)",
+      "bg": "rgba(0, 0, 0, 0)",
+      "font": "\"Readex Pro\", \"Readex Pro Placeholder\", sans-serif",
+      "size": "10px",
+      "weight": "300"
+    }
+  ],
+  "colors": {},
+  "fonts": {},
+  "buttons": [
+    {
+      "text": "Home",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "38px 0px 0px"
+    },
+    {
+      "text": "Contact us",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "14px",
+      "padding": "18px 28px 18px 29px"
+    },
+    {
+      "text": "Security Cam",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart LCD Panel",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Thermostat",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Video Doorbell",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Leak Sensor",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Gas Sensor",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Security Cam",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart LCD Panel",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Thermostat",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Video Doorbell",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Leak Sensor",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Gas Sensor",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Security Cam",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart LCD Panel",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Thermostat",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Video Doorbell",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Leak Sensor",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Gas Sensor",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Lighting",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Lock",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Door & Window",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Dimmer Switch",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Light Switch",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Lighting",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Lock",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Door & Window",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Dimmer Switch",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Light Switch",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Lighting",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Lock",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Door & Window",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Dimmer Switch",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Smart Light Switch",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "0px",
+      "padding": "8px"
+    },
+    {
+      "text": "Request Service",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(0, 0, 238)",
+      "radius": "18px",
+      "padding": "24px"
+    },
+    {
+      "text": "Home",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(180, 180, 180)",
+      "radius": "0px",
+      "padding": "0px"
+    },
+    {
+      "text": "About us",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(255, 255, 255)",
+      "radius": "0px",
+      "padding": "0px"
+    },
+    {
+      "text": "Our Partners",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(255, 255, 255)",
+      "radius": "0px",
+      "padding": "0px"
+    },
+    {
+      "text": "FAQS",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(255, 255, 255)",
+      "radius": "0px",
+      "padding": "0px"
+    },
+    {
+      "text": "R&D",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(255, 255, 255)",
+      "radius": "0px",
+      "padding": "0px"
+    },
+    {
+      "text": "Hospitality",
+      "bg": "rgba(0, 0, 0, 0)",
+      "color": "rgb(255, 255, 255)",
+      "radius": "0px",
+      "padding": "0px"
+    }
+  ],
+  "sections": [],
+  "uniqueColors": [
+    "rgb(0, 0, 0)",
+    "rgb(1, 5, 16)",
+    "rgba(255, 255, 255, 0.1)",
+    "rgb(0, 0, 238)",
+    "rgb(255, 255, 255)",
+    "rgba(255, 255, 255, 0.5)",
+    "rgb(199, 201, 204)",
+    "rgb(0, 123, 255)",
+    "rgb(216, 216, 216)",
+    "rgba(255, 255, 255, 0.8)",
+    "rgba(0, 0, 0, 0.2)",
+    "rgb(1, 18, 28)",
+    "rgb(255, 110, 47)",
+    "rgba(113, 113, 113, 0.2)",
+    "rgb(113, 113, 113)",
+    "rgb(215, 215, 215)",
+    "rgb(44, 44, 44)",
+    "rgb(26, 32, 43)",
+    "rgb(180, 180, 180)"
+  ],
+  "svgCount": 169
+}

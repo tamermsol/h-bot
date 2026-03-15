@@ -1,113 +1,115 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
+/// Smart Input Field — consistent form input following design tokens
+/// Design: 03-COMPONENT-LIBRARY.md §3.1
 class SmartInputField extends StatefulWidget {
-  final TextEditingController controller;
-  final String hintText;
   final String? label;
-  final Function(String)? onChanged;
-  final Function(String)? onSubmitted;
-  final String? Function(String?)? validator;
-  final IconData? prefixIcon;
-  final Widget? suffixIcon;
-  final VoidCallback? onSuffixIconPressed;
+  final String? hint;
+  final String? errorText;
+  final TextEditingController? controller;
   final bool obscureText;
-  final TextInputType keyboardType;
-  final int maxLines;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onEditingComplete;
+  final FormFieldValidator<String>? validator;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final bool enabled;
+  final FocusNode? focusNode;
+  final int? maxLines;
+  final bool autofocus;
 
   const SmartInputField({
     super.key,
-    required this.controller,
-    String? hintText,
     this.label,
+    this.hint,
+    this.errorText,
+    this.controller,
+    this.obscureText = false,
+    this.keyboardType,
+    this.textInputAction,
     this.onChanged,
-    this.onSubmitted,
+    this.onEditingComplete,
     this.validator,
     this.prefixIcon,
     this.suffixIcon,
-    this.onSuffixIconPressed,
-    this.obscureText = false,
-    this.keyboardType = TextInputType.text,
+    this.enabled = true,
+    this.focusNode,
     this.maxLines = 1,
-  }) : hintText = hintText ?? label ?? '';
+    this.autofocus = false,
+  });
 
   @override
   State<SmartInputField> createState() => _SmartInputFieldState();
 }
 
 class _SmartInputFieldState extends State<SmartInputField> {
-  bool _isFocused = false;
+  bool _obscured = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscured = widget.obscureText;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? AppTheme.surfaceColor : Colors.white,
-        borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-        border: Border.all(
-          color: _isFocused
-              ? AppTheme.primaryColor.withOpacity(0.5)
-              : (isDark ? Colors.transparent : AppTheme.lightCardBorder),
-          width: _isFocused ? 2 : 1,
-        ),
-        boxShadow: _isFocused
-            ? [
-                BoxShadow(
-                  color: AppTheme.primaryColor.withOpacity(0.1),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ]
-            : null,
-      ),
-      child: Focus(
-        onFocusChange: (hasFocus) {
-          setState(() {
-            _isFocused = hasFocus;
-          });
-        },
-        child: TextFormField(
-          controller: widget.controller,
-          onChanged: widget.onChanged,
-          onFieldSubmitted: widget.onSubmitted,
-          validator: widget.validator,
-          obscureText: widget.obscureText,
-          keyboardType: widget.keyboardType,
-          maxLines: widget.maxLines,
-          style: TextStyle(
-            color: AppTheme.getTextPrimary(context),
-            fontSize: 17,
-            fontWeight: FontWeight.w400,
-            letterSpacing: -0.41,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (widget.label != null) ...[
+          Text(
+            widget.label!,
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: HBotColors.textSecondaryLight,
+            ),
           ),
-          decoration: InputDecoration(
-            hintText: widget.hintText,
-            hintStyle: TextStyle(
-              color: AppTheme.getTextHint(context),
-              fontSize: 17,
+          const SizedBox(height: HBotSpacing.space1),
+        ],
+        SizedBox(
+          height: widget.maxLines == 1 ? 52 : null,
+          child: TextFormField(
+            controller: widget.controller,
+            focusNode: widget.focusNode,
+            obscureText: _obscured,
+            keyboardType: widget.keyboardType,
+            textInputAction: widget.textInputAction,
+            onChanged: widget.onChanged,
+            onEditingComplete: widget.onEditingComplete,
+            validator: widget.validator,
+            enabled: widget.enabled,
+            maxLines: widget.maxLines,
+            autofocus: widget.autofocus,
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 16,
               fontWeight: FontWeight.w400,
-              letterSpacing: -0.41,
+              color: HBotColors.textPrimaryLight,
             ),
-            border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: AppTheme.paddingMedium,
-              vertical: 14,
+            decoration: InputDecoration(
+              hintText: widget.hint,
+              prefixIcon: widget.prefixIcon,
+              suffixIcon: widget.obscureText
+                  ? IconButton(
+                      icon: Icon(
+                        _obscured ? Icons.visibility_off : Icons.visibility,
+                        color: HBotColors.iconDefault,
+                        size: 24,
+                      ),
+                      onPressed: () => setState(() => _obscured = !_obscured),
+                    )
+                  : widget.suffixIcon,
+              errorText: widget.errorText,
             ),
-            prefixIcon: widget.prefixIcon != null
-                ? Icon(
-                    widget.prefixIcon,
-                    color: _isFocused
-                        ? AppTheme.primaryColor
-                        : AppTheme.getTextHint(context),
-                    size: 20,
-                  )
-                : null,
-            suffixIcon: widget.suffixIcon,
           ),
         ),
-      ),
+      ],
     );
   }
 }

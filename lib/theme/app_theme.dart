@@ -1,433 +1,641 @@
 import 'package:flutter/material.dart';
 
+// ═══════════════════════════════════════════════════════════════
+// H-Bot Design System — derived from design/01-DESIGN-TOKENS.md
+// Every token traces back to h-bot.tech
+// ═══════════════════════════════════════════════════════════════
+
+// ─── Color Primitives ─────────────────────────────────────────
+// Never use these directly in components — use HBotColors below.
+class _Blue {
+  static const blue50 = Color(0xFFF0F7FF);
+  static const blue100 = Color(0xFFD6ECFE);
+  static const blue200 = Color(0xFF8CD1FB); // gradient endpoint
+  static const blue300 = Color(0xFF5BBDF7);
+  static const blue400 = Color(0xFF2FB8EC); // bright accent
+  static const blue500 = Color(0xFF0883FD); // PRIMARY
+  static const blue600 = Color(0xFF1070AD);
+  static const blue700 = Color(0xFF094972);
+  static const blue800 = Color(0xFF006080);
+  static const blue900 = Color(0xFF0A1628); // deep navy
+  static const blue950 = Color(0xFF010510);
+}
+
+class _Neutral {
+  static const n0 = Color(0xFFFFFFFF);
+  static const n50 = Color(0xFFF8F9FB);
+  static const n100 = Color(0xFFF0F2F5);
+  static const n200 = Color(0xFFE8ECF1);
+  static const n300 = Color(0xFFD1D7E0);
+  static const n400 = Color(0xFFA0AAB8);
+  static const n500 = Color(0xFF7A8494);
+  static const n600 = Color(0xFF5A6577);
+  static const n700 = Color(0xFF3D4A5C);
+  static const n800 = Color(0xFF1A202B);
+  static const n900 = Color(0xFF0F1520);
+  static const n950 = Color(0xFF010510);
+}
+
+// ─── Semantic Colors (Light Mode) ─────────────────────────────
+class HBotColors {
+  // Primary
+  static const primary = _Blue.blue500;
+  static const primaryLight = _Blue.blue200;
+  static const primaryHover = Color(0xFF0773E0);
+  static const primaryDisabled = _Neutral.n300;
+  static const primarySurface = _Blue.blue50; // tinted bg
+
+  // Surfaces
+  static const backgroundLight = _Neutral.n50;
+  static const surfaceLight = _Neutral.n0;
+  static const cardLight = _Neutral.n0;
+  static const cardHover = _Neutral.n100;
+  static const elevatedLight = _Neutral.n0;
+  static const inputBg = _Neutral.n0;
+
+  // Borders
+  static const borderLight = _Neutral.n200;
+  static const borderSubtle = _Neutral.n100;
+
+  // Text
+  static const textPrimaryLight = _Blue.blue900;
+  static const textSecondaryLight = _Neutral.n600;
+  static const textTertiaryLight = _Neutral.n500;
+  static const textOnPrimary = _Neutral.n0;
+
+  // Icons
+  static const iconDefault = _Neutral.n600;
+  static const iconActive = _Blue.blue500;
+
+  // Semantic
+  static const success = Color(0xFF22C55E);
+  static const successLight = Color(0xFFDCFCE7);
+  static const warning = Color(0xFFF59E0B);
+  static const warningLight = Color(0xFFFEF3C7);
+  static const error = Color(0xFFEF4444);
+  static const errorLight = Color(0xFFFEE2E2);
+
+  // Toggle
+  static const toggleTrackOff = _Neutral.n300;
+  static const toggleThumb = _Neutral.n0;
+
+  // Neutrals (direct access for special cases)
+  static const neutral0 = _Neutral.n0;
+  static const neutral50 = _Neutral.n50;
+  static const neutral100 = _Neutral.n100;
+  static const neutral200 = _Neutral.n200;
+  static const neutral300 = _Neutral.n300;
+  static const neutral400 = _Neutral.n400;
+  static const neutral500 = _Neutral.n500;
+  static const neutral600 = _Neutral.n600;
+  static const neutral700 = _Neutral.n700;
+  static const neutral800 = _Neutral.n800;
+  static const neutral900 = _Neutral.n900;
+
+  // Dark mode
+  static const backgroundDark = _Neutral.n950;
+  static const cardDark = _Neutral.n800;
+  static const borderDark = Color(0xFF181B1F);
+  static const textPrimaryDark = _Neutral.n0;
+  static const textSecondaryDark = Color(0xFFC7C9CC);
+
+  // Gradients
+  static const primaryGradient = LinearGradient(
+    colors: [_Blue.blue500, _Blue.blue200],
+  );
+
+  static const primaryGradientReversed = LinearGradient(
+    colors: [_Blue.blue200, _Blue.blue500],
+  );
+
+  // Device type colors
+  static const deviceRelay = Color(0xFF3B82F6);
+  static const deviceDimmer = Color(0xFFF59E0B);
+  static const deviceSensor = Color(0xFF22C55E);
+  static const deviceShutter = Color(0xFF8B5CF6);
+}
+
+// ─── Spacing (4px base) ───────────────────────────────────────
+class HBotSpacing {
+  static const space0 = 0.0;
+  static const space1 = 4.0;
+  static const space2 = 8.0;
+  static const space3 = 12.0;
+  static const space4 = 16.0;
+  static const space5 = 20.0;
+  static const space6 = 24.0;
+  static const space7 = 32.0;
+  static const space8 = 40.0;
+  static const space9 = 48.0;
+  static const space10 = 64.0;
+  static const screenPadding = 20.0;
+}
+
+// ─── Border Radius ────────────────────────────────────────────
+class HBotRadius {
+  static const none = 0.0;
+  static const small = 8.0;
+  static const medium = 12.0;
+  static const large = 16.0;
+  static const xl = 24.0;
+  static const full = 9999.0;
+
+  static final smallRadius = BorderRadius.circular(small);
+  static final mediumRadius = BorderRadius.circular(medium);
+  static final largeRadius = BorderRadius.circular(large);
+  static final xlRadius = BorderRadius.circular(xl);
+  static final fullRadius = BorderRadius.circular(full);
+}
+
+// ─── Shadows ──────────────────────────────────────────────────
+class HBotShadows {
+  static const none = <BoxShadow>[];
+
+  static const small = [
+    BoxShadow(
+      color: Color(0x0F0A1628), // rgba(10,22,40,0.06)
+      blurRadius: 3,
+      offset: Offset(0, 1),
+    ),
+    BoxShadow(
+      color: Color(0x0A0A1628), // rgba(10,22,40,0.04)
+      blurRadius: 2,
+      offset: Offset(0, 1),
+    ),
+  ];
+
+  static const medium = [
+    BoxShadow(
+      color: Color(0x140A1628), // rgba(10,22,40,0.08)
+      blurRadius: 12,
+      offset: Offset(0, 4),
+    ),
+  ];
+
+  static const large = [
+    BoxShadow(
+      color: Color(0x1F0A1628), // rgba(10,22,40,0.12)
+      blurRadius: 24,
+      offset: Offset(0, 8),
+    ),
+  ];
+
+  static const glow = [
+    BoxShadow(
+      color: Color(0x260883FD), // rgba(8,131,253,0.15)
+      blurRadius: 20,
+    ),
+  ];
+}
+
+// ─── Motion / Animation ──────────────────────────────────────
+class HBotDurations {
+  static const fast = Duration(milliseconds: 150);
+  static const medium = Duration(milliseconds: 250);
+  static const slow = Duration(milliseconds: 400);
+  static const skeleton = Duration(milliseconds: 1500);
+}
+
+class HBotCurves {
+  static const standard = Curves.easeInOut;
+  static const decelerate = Curves.easeOut;
+  static const accelerate = Curves.easeIn;
+  static const sharp = Curves.easeInOutCubic;
+}
+
+// ─── Helper Widgets & Decorations ─────────────────────────────
+
+/// Primary gradient button background
+BoxDecoration hbotPrimaryButtonDecoration({bool disabled = false}) {
+  return BoxDecoration(
+    gradient: disabled ? null : HBotColors.primaryGradient,
+    color: disabled ? HBotColors.primaryDisabled : null,
+    borderRadius: HBotRadius.mediumRadius,
+    boxShadow: disabled ? null : HBotShadows.medium,
+  );
+}
+
+/// Gradient text effect (brand signature from website)
+Widget hbotGradientText(String text, TextStyle style) {
+  return ShaderMask(
+    shaderCallback: (bounds) =>
+        HBotColors.primaryGradient.createShader(bounds),
+    child: Text(text, style: style.copyWith(color: Colors.white)),
+  );
+}
+
+/// Status indicator dot
+Widget hbotStatusDot({
+  required Color color,
+  double size = 8,
+}) {
+  return Container(
+    width: size,
+    height: size,
+    decoration: BoxDecoration(
+      color: color,
+      shape: BoxShape.circle,
+    ),
+  );
+}
+
+/// Section header — overline style
+Widget hbotSectionHeader(String title) {
+  return Padding(
+    padding: const EdgeInsets.only(
+      left: HBotSpacing.space5,
+      right: HBotSpacing.space5,
+      top: HBotSpacing.space6,
+      bottom: HBotSpacing.space2,
+    ),
+    child: Text(
+      title.toUpperCase(),
+      style: const TextStyle(
+        fontFamily: 'Inter',
+        fontSize: 11,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 1.0,
+        color: HBotColors.textSecondaryLight,
+      ),
+    ),
+  );
+}
+
+// ─── Theme Data ───────────────────────────────────────────────
 class AppTheme {
-  // Brand colors (shared across themes)
-  static const Color primaryColor = Color(0xFF2196F3);
-  static const Color secondaryColor = Color(0xFF03DAC6);
-  static const Color accentColor = Color(0xFF4CAF50);
-  static const Color warningColor = Color(0xFF2196F3);
-  static const Color errorColor = Color(0xFFF44336);
+  // Legacy statics (for backward compatibility during migration)
+  static const Color primaryColor = HBotColors.primary;
+  static const Color secondaryColor = HBotColors.primaryLight;
+  static const Color accentColor = HBotColors.success;
+  static const Color warningColor = HBotColors.warning;
+  static const Color errorColor = HBotColors.error;
+  static const Color textSecondary = HBotColors.textSecondaryLight;
+  static const Color cardColor = HBotColors.cardLight;
+  static const double paddingSmall = HBotSpacing.space2;
+  static const double paddingMedium = HBotSpacing.space4;
+  static const double paddingLarge = HBotSpacing.space6;
+  static const double radiusSmall = HBotRadius.small;
+  static const double radiusMedium = HBotRadius.medium;
+  static const double radiusLarge = HBotRadius.large;
 
-  // Dark theme colors
-  static const Color backgroundColor = Color(0xFF121212);
-  static const Color surfaceColor = Color(0xFF1E1E1E);
-  static const Color cardColor = Color(0xFF2C2C2C);
-  static const Color textPrimary = Color(0xFFFFFFFF);
-  static const Color textSecondary = Color(0xFFB3B3B3);
-  static const Color textHint = Color(0xFF666666);
+  static Color getCardColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? HBotColors.cardDark
+        : HBotColors.cardLight;
+  }
 
-  // Light theme colors - Complete hard-defined system
-  // 1. Main Background
-  static const Color lightBackgroundColor = Color(0xFFFFFFFF); // Pure white
-  static const Color lightSecondaryBackground = Color(
-    0xFFFAFAFA,
-  ); // Secondary section background
-
-  // 2. Cards / Containers / Widgets
-  static const Color lightCardColor = Color(0xFFF5F7FA); // Card background
-  static const Color lightElevatedCardColor = Color(
-    0xFFFFFFFF,
-  ); // Elevated card
-  static const Color lightCardBorder = Color(0xFFE5E7EB); // Card border
-  static const Color lightDividerColor = Color(0xFFE5E7EB); // Divider lines
-
-  // 3. Titles & Text
-  static const Color lightMainTitle = Color(
-    0xFF111827,
-  ); // Main titles (Screen titles)
-  static const Color lightSectionTitle = Color(0xFF1F2937); // Section titles
-  static const Color lightTextPrimary = Color(0xFF1F2937); // Primary text
-  static const Color lightTextSecondary = Color(0xFF4B5563); // Secondary text
-  static const Color lightTextDisabled = Color(0xFF9CA3AF); // Disabled text
-
-  // 4. Icons
-  static const Color lightIconInactive = Color(0xFF6B7280); // Inactive icons
-  static const Color lightIconDefault = Color(
-    0xFF374151,
-  ); // Default icon color inside cards
-
-  // 5. Bottom Navigation Bar
-  static const Color lightNavBarBackground = Color(
-    0xFFFFFFFF,
-  ); // Navbar background
-  static const Color lightNavBarBorder = Color(0xFFE5E7EB); // Top border line
-  static const Color lightNavBarInactive = Color(
-    0xFF6B7280,
-  ); // Inactive icon/text
-
-  // 6. Buttons
-  static const Color lightSecondaryButtonBg = Color(
-    0xFFE5E7EB,
-  ); // Secondary button background
-  static const Color lightSecondaryButtonText = Color(
-    0xFF1F2937,
-  ); // Secondary button text
-
-  // 7. Switches / Toggles
-  static const Color lightSwitchInactiveTrack = Color(
-    0xFFD1D5DB,
-  ); // Inactive track
-
-  // 8. Profile Header Gradient
-  static const Color lightGradientStart = Color(
-    0xFFE0F2FE,
-  ); // Light blue gradient start
-  static const Color lightGradientEnd = Color(0xFFFFFFFF); // White gradient end
-
-  // Legacy aliases for compatibility (map to new system)
-  static const Color lightSurfaceColor = lightCardColor;
-  static const Color lightBorderColor = lightCardBorder;
-  static const Color lightTextHint = lightIconInactive;
-
-  // Typography
-  static const String fontFamily = 'Inter';
-
-  static ThemeData get lightTheme {
+  static ThemeData lightTheme() {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      primarySwatch: Colors.blue,
-      primaryColor: primaryColor,
-      scaffoldBackgroundColor: lightBackgroundColor,
-      fontFamily: fontFamily,
-      iconTheme: const IconThemeData(
-        color: lightMainTitle, // Dark icons globally in Light Mode
-      ),
+      fontFamily: 'Inter',
+      scaffoldBackgroundColor: HBotColors.backgroundLight,
       colorScheme: const ColorScheme.light(
-        primary: primaryColor,
-        secondary: secondaryColor,
-        surface: lightCardColor,
-        error: errorColor,
-        onPrimary: Colors.white,
-        onSecondary: Colors.white,
-        onSurface: lightTextPrimary,
-        onError: Colors.white,
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: lightBackgroundColor,
-        foregroundColor: lightMainTitle,
-        elevation: 0,
-        shadowColor: Colors.transparent,
-        centerTitle: false,
-        iconTheme: IconThemeData(
-          color: lightMainTitle, // Dark icons in Light Mode
-        ),
-        titleTextStyle: TextStyle(
-          color: lightMainTitle,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.5,
-        ),
-      ),
-      cardTheme: const CardThemeData(
-        color: lightCardColor,
-        elevation: 0,
-        shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          side: BorderSide(color: lightCardBorder, width: 1),
-        ),
-      ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: lightNavBarBackground,
-        selectedItemColor: primaryColor,
-        unselectedItemColor: lightNavBarInactive,
-        selectedLabelStyle: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 12,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 12,
-        ),
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        ),
-      ),
-      inputDecorationTheme: const InputDecorationTheme(
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          borderSide: BorderSide(color: lightCardBorder),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          borderSide: BorderSide(color: lightCardBorder),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-          borderSide: BorderSide(color: primaryColor, width: 2),
-        ),
-        hintStyle: TextStyle(
-          color: lightIconInactive,
-          fontSize: 17,
-          fontWeight: FontWeight.w400,
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        primary: HBotColors.primary,
+        secondary: HBotColors.primaryLight,
+        surface: HBotColors.surfaceLight,
+        error: HBotColors.error,
+        onPrimary: HBotColors.textOnPrimary,
+        onSurface: HBotColors.textPrimaryLight,
+        onError: HBotColors.textOnPrimary,
       ),
       textTheme: const TextTheme(
-        headlineLarge: TextStyle(
-          color: lightMainTitle,
+        displayLarge: TextStyle(
+          fontFamily: 'Inter',
           fontSize: 32,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w700,
+          height: 1.25,
           letterSpacing: -0.5,
+          color: HBotColors.textPrimaryLight,
         ),
-        headlineMedium: TextStyle(
-          color: lightSectionTitle,
+        displayMedium: TextStyle(
+          fontFamily: 'Inter',
           fontSize: 28,
           fontWeight: FontWeight.w700,
+          height: 1.29,
           letterSpacing: -0.5,
+          color: HBotColors.textPrimaryLight,
         ),
-        headlineSmall: TextStyle(
-          color: lightSectionTitle,
+        headlineLarge: TextStyle(
+          fontFamily: 'Inter',
           fontSize: 24,
           fontWeight: FontWeight.w700,
-          letterSpacing: -0.5,
+          height: 1.33,
+          letterSpacing: -0.3,
+          color: HBotColors.textPrimaryLight,
+        ),
+        headlineMedium: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 22,
+          fontWeight: FontWeight.w600,
+          height: 1.27,
+          letterSpacing: -0.3,
+          color: HBotColors.textPrimaryLight,
+        ),
+        headlineSmall: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          height: 1.30,
+          letterSpacing: -0.2,
+          color: HBotColors.textPrimaryLight,
         ),
         titleLarge: TextStyle(
-          color: lightTextPrimary,
-          fontSize: 22,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.5,
-        ),
-        titleMedium: TextStyle(
-          color: lightTextPrimary,
+          fontFamily: 'Inter',
           fontSize: 18,
           fontWeight: FontWeight.w600,
-          letterSpacing: -0.3,
+          height: 1.33,
+          letterSpacing: -0.1,
+          color: HBotColors.textPrimaryLight,
         ),
-        titleSmall: TextStyle(
-          color: lightTextPrimary,
+        titleMedium: TextStyle(
+          fontFamily: 'Inter',
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          letterSpacing: -0.3,
+          height: 1.38,
+          color: HBotColors.textPrimaryLight,
+        ),
+        titleSmall: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          height: 1.43,
+          color: HBotColors.textPrimaryLight,
         ),
         bodyLarge: TextStyle(
-          color: lightTextPrimary,
-          fontSize: 17,
+          fontFamily: 'Inter',
+          fontSize: 16,
           fontWeight: FontWeight.w400,
-          letterSpacing: -0.41,
+          height: 1.50,
+          color: HBotColors.textPrimaryLight,
         ),
         bodyMedium: TextStyle(
-          color: lightTextSecondary,
-          fontSize: 15,
+          fontFamily: 'Inter',
+          fontSize: 14,
           fontWeight: FontWeight.w400,
-          letterSpacing: -0.24,
+          height: 1.43,
+          color: HBotColors.textSecondaryLight,
         ),
         bodySmall: TextStyle(
-          color: lightIconInactive,
-          fontSize: 13,
+          fontFamily: 'Inter',
+          fontSize: 12,
           fontWeight: FontWeight.w400,
-          letterSpacing: -0.08,
+          height: 1.33,
+          letterSpacing: 0.1,
+          color: HBotColors.textSecondaryLight,
         ),
         labelLarge: TextStyle(
-          color: lightTextPrimary,
-          fontSize: 17,
-          fontWeight: FontWeight.w600,
-          letterSpacing: -0.41,
+          fontFamily: 'Inter',
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          height: 1.38,
+          color: HBotColors.textPrimaryLight,
+        ),
+        labelMedium: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          height: 1.43,
+          letterSpacing: 0.1,
+          color: HBotColors.textPrimaryLight,
+        ),
+        labelSmall: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          height: 1.33,
+          letterSpacing: 0.2,
+          color: HBotColors.textPrimaryLight,
         ),
       ),
-    );
-  }
-
-  static ThemeData get darkTheme {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      primarySwatch: Colors.blue,
-      primaryColor: primaryColor,
-      scaffoldBackgroundColor: backgroundColor,
-      fontFamily: fontFamily,
-      iconTheme: const IconThemeData(
-        color: textPrimary, // White icons globally in Dark Mode
-      ),
-      colorScheme: const ColorScheme.dark(
-        primary: primaryColor,
-        secondary: secondaryColor,
-        surface: surfaceColor,
-        error: errorColor,
-        onPrimary: Colors.white,
-        onSecondary: Colors.black,
-        onSurface: textPrimary,
-        onError: Colors.white,
-      ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: backgroundColor,
-        foregroundColor: textPrimary,
+        backgroundColor: HBotColors.backgroundLight,
+        foregroundColor: HBotColors.textPrimaryLight,
         elevation: 0,
-        centerTitle: true,
+        scrolledUnderElevation: 0,
+        titleTextStyle: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 22,
+          fontWeight: FontWeight.w600,
+          height: 1.27,
+          letterSpacing: -0.3,
+          color: HBotColors.textPrimaryLight,
+        ),
         iconTheme: IconThemeData(
-          color: textPrimary, // White icons in Dark Mode
+          color: HBotColors.iconDefault,
+          size: 24,
         ),
       ),
       cardTheme: CardThemeData(
-        color: cardColor,
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        color: HBotColors.cardLight,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: HBotRadius.largeRadius,
+          side: const BorderSide(color: HBotColors.borderLight, width: 1),
         ),
+        margin: EdgeInsets.zero,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: surfaceColor,
+        fillColor: HBotColors.inputBg,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: HBotSpacing.space4,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide.none,
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.borderLight, width: 1.5),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.borderLight, width: 1.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.error, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.error, width: 2),
         ),
         hintStyle: const TextStyle(
-          color: textHint,
-          fontSize: 17,
+          fontFamily: 'Inter',
+          fontSize: 16,
           fontWeight: FontWeight.w400,
+          color: HBotColors.textTertiaryLight,
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 12,
+        labelStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: HBotColors.textSecondaryLight,
+        ),
+        errorStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: HBotColors.error,
         ),
       ),
-      textTheme: const TextTheme(
-        headlineLarge: TextStyle(
-          color: textPrimary,
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(120, 52),
+          backgroundColor: HBotColors.primary,
+          foregroundColor: HBotColors.textOnPrimary,
+          textStyle: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: HBotRadius.mediumRadius,
+          ),
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(
+            horizontal: HBotSpacing.space4,
+            vertical: 14,
+          ),
         ),
-        headlineMedium: TextStyle(
-          color: textPrimary,
-          fontSize: 28,
-          fontWeight: FontWeight.w600,
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(120, 52),
+          foregroundColor: HBotColors.primary,
+          textStyle: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: HBotRadius.mediumRadius,
+          ),
+          side: const BorderSide(color: HBotColors.primary, width: 1.5),
+          padding: const EdgeInsets.symmetric(
+            horizontal: HBotSpacing.space4,
+            vertical: 14,
+          ),
         ),
-        headlineSmall: TextStyle(
-          color: textPrimary,
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          minimumSize: const Size(0, 44),
+          foregroundColor: HBotColors.primary,
+          textStyle: const TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: HBotRadius.smallRadius,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space3),
         ),
-        titleLarge: TextStyle(
-          color: textPrimary,
-          fontSize: 22,
-          fontWeight: FontWeight.w600,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.all(HBotColors.toggleThumb),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          return states.contains(WidgetState.selected)
+              ? HBotColors.primary
+              : HBotColors.toggleTrackOff;
+        }),
+        trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: HBotColors.surfaceLight,
+        selectedItemColor: HBotColors.primary,
+        unselectedItemColor: HBotColors.neutral400,
+        selectedLabelStyle: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
         ),
-        titleMedium: TextStyle(
-          color: textPrimary,
+        unselectedLabelStyle: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+        ),
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: HBotColors.elevatedLight,
+        shape: RoundedRectangleBorder(
+          borderRadius: HBotRadius.xlRadius,
+        ),
+        titleTextStyle: const TextStyle(
+          fontFamily: 'Inter',
           fontSize: 18,
-          fontWeight: FontWeight.w500,
-        ),
-        titleSmall: TextStyle(
-          color: textPrimary,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
-        bodyLarge: TextStyle(
-          color: textPrimary,
-          fontSize: 17,
-          fontWeight: FontWeight.w400,
-          letterSpacing: -0.41,
-        ),
-        bodyMedium: TextStyle(
-          color: textSecondary,
-          fontSize: 15,
-          fontWeight: FontWeight.w400,
-        ),
-        bodySmall: TextStyle(
-          color: textHint,
-          fontSize: 13,
-          fontWeight: FontWeight.w400,
-        ),
-        labelLarge: TextStyle(
-          color: textPrimary,
-          fontSize: 17,
           fontWeight: FontWeight.w600,
-          letterSpacing: -0.41,
+          color: HBotColors.textPrimaryLight,
         ),
+        contentTextStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: HBotColors.textSecondaryLight,
+        ),
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: HBotColors.elevatedLight,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(HBotRadius.xl),
+            topRight: Radius.circular(HBotRadius.xl),
+          ),
+        ),
+        dragHandleColor: HBotColors.neutral300,
+        dragHandleSize: Size(36, 4),
+        showDragHandle: true,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: HBotColors.neutral800,
+        contentTextStyle: const TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: HBotColors.textOnPrimary,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: HBotRadius.mediumRadius,
+        ),
+        behavior: SnackBarBehavior.floating,
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: HBotColors.primary,
+        foregroundColor: HBotColors.textOnPrimary,
+        elevation: 4,
+        shape: const CircleBorder(),
+      ),
+      dividerTheme: const DividerThemeData(
+        color: HBotColors.borderSubtle,
+        thickness: 1,
+        space: 0,
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: HBotColors.primary,
+        linearTrackColor: HBotColors.neutral200,
+        circularTrackColor: HBotColors.neutral200,
       ),
     );
   }
 
-  // Custom text styles based on Figma design
-  static const TextStyle priceTextStyle = TextStyle(
-    fontSize: 17,
-    fontWeight: FontWeight.w600,
-    color: textPrimary,
-    letterSpacing: -0.41,
-  );
-
-  static const TextStyle placeholderTextStyle = TextStyle(
-    fontSize: 17,
-    fontWeight: FontWeight.w400,
-    color: textHint,
-    letterSpacing: -0.41,
-  );
-
-  // Spacing constants
-  static const double paddingSmall = 8.0;
-  static const double paddingMedium = 16.0;
-  static const double paddingLarge = 24.0;
-  static const double paddingXLarge = 32.0;
-
-  // Border radius constants
-  static const double radiusSmall = 8.0;
-  static const double radiusMedium = 12.0;
-  static const double radiusLarge = 16.0;
-  static const double radiusXLarge = 24.0;
-
-  // Helper methods to get theme-aware colors
-  static Color getCardColor(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? cardColor
-        : lightCardColor;
-  }
-
-  static Color getSurfaceColor(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? surfaceColor
-        : lightSurfaceColor;
-  }
-
-  static Color getTextPrimary(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? textPrimary
-        : lightTextPrimary;
-  }
-
-  static Color getTextSecondary(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? textSecondary
-        : lightTextSecondary;
-  }
-
-  static Color getTextHint(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? textHint
-        : lightTextHint;
-  }
-
-  static Color getMainTitle(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? textPrimary
-        : lightMainTitle;
-  }
-
-  static Color getSectionTitle(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? textPrimary
-        : lightSectionTitle;
-  }
-
-  static Color getIconDefault(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark
-        ? textPrimary
-        : lightIconDefault;
+  // Dark theme stub for future
+  static ThemeData darkTheme() {
+    return lightTheme().copyWith(
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: HBotColors.backgroundDark,
+      colorScheme: const ColorScheme.dark(
+        primary: HBotColors.primary,
+        secondary: HBotColors.primaryLight,
+        surface: HBotColors.cardDark,
+        error: HBotColors.error,
+        onPrimary: HBotColors.textOnPrimary,
+        onSurface: HBotColors.textPrimaryDark,
+      ),
+    );
   }
 }

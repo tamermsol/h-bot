@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-class DeviceCard extends StatelessWidget {
+/// Device Card — 2-column grid item on Home Dashboard
+/// Design: 03-COMPONENT-LIBRARY.md §2.1
+class DeviceCard extends StatefulWidget {
   final String title;
   final IconData icon;
-
-  /// Optional explicit online flag. If null the caller's previous behavior
-  /// should provide a computed boolean; keep the existing `isOn` for backward
-  /// compatibility.
   final bool? isOnline;
   final bool isOn;
   final String? value;
+  final String? roomName;
   final Function(bool) onToggle;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final Color? deviceColor;
 
   const DeviceCard({
     super.key,
@@ -23,115 +23,134 @@ class DeviceCard extends StatelessWidget {
     required this.isOn,
     required this.onToggle,
     this.value,
+    this.roomName,
     this.onTap,
     this.onLongPress,
+    this.deviceColor,
   });
+
+  @override
+  State<DeviceCard> createState() => _DeviceCardState();
+}
+
+class _DeviceCardState extends State<DeviceCard> {
+  bool _isPressed = false;
+
+  Color get _activeColor => widget.deviceColor ?? HBotColors.primary;
+  bool get _unreachable => widget.isOnline == false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: Container(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
-        decoration: BoxDecoration(
-          color: AppTheme.cardColor,
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          border: Border.all(
-            color: isOn
-                ? AppTheme.primaryColor.withOpacity(0.3)
-                : Colors.transparent,
-            width: 1,
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) => setState(() => _isPressed = false),
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedScale(
+        scale: _isPressed ? 0.98 : 1.0,
+        duration: HBotDurations.fast,
+        curve: HBotCurves.standard,
+        child: AnimatedContainer(
+          duration: HBotDurations.medium,
+          curve: HBotCurves.standard,
+          constraints: const BoxConstraints(minHeight: 140),
+          padding: const EdgeInsets.all(HBotSpacing.space4),
+          decoration: BoxDecoration(
+            color: _isPressed ? HBotColors.cardHover : HBotColors.cardLight,
+            borderRadius: HBotRadius.largeRadius,
+            border: Border(
+              left: BorderSide(
+                color: widget.isOn ? _activeColor : HBotColors.borderLight,
+                width: widget.isOn ? 3 : 1,
+              ),
+              top: const BorderSide(color: HBotColors.borderLight, width: 1),
+              right: const BorderSide(color: HBotColors.borderLight, width: 1),
+              bottom: const BorderSide(color: HBotColors.borderLight, width: 1),
+            ),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header with icon and toggle
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Opacity(
+            opacity: _unreachable ? 0.5 : 1.0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: isOn
-                        ? AppTheme.primaryColor.withOpacity(0.2)
-                        : AppTheme.textHint.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-                  ),
-                  child: Icon(
-                    icon,
-                    color: isOn ? AppTheme.primaryColor : AppTheme.textHint,
-                    size: 24,
-                  ),
+                // Row: device icon + unreachable indicator
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(
+                      widget.icon,
+                      color: widget.isOn ? _activeColor : HBotColors.iconDefault,
+                      size: 32,
+                    ),
+                    if (_unreachable)
+                      hbotStatusDot(color: HBotColors.error, size: 6),
+                  ],
                 ),
-                Switch(
-                  value: isOn,
-                  onChanged: onToggle,
-                  inactiveTrackColor: AppTheme.textHint.withOpacity(0.3),
-                ),
-              ],
-            ),
 
-            const Spacer(),
+                const Spacer(),
 
-            // Device title
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: isOn ? AppTheme.textPrimary : AppTheme.textSecondary,
-                fontWeight: FontWeight.w600,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-
-            // Value display (if provided)
-            if (value != null) ...[
-              const SizedBox(height: 4),
-              Text(
-                value!,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: isOn ? AppTheme.primaryColor : AppTheme.textHint,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-
-            // Status indicator
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: (isOnline ?? isOn)
-                        ? AppTheme.accentColor
-                        : AppTheme.textHint,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const SizedBox(width: 6),
+                // Device name
                 Text(
-                  (isOnline ?? isOn) ? 'Online' : 'Offline',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: (isOnline ?? isOn)
-                        ? AppTheme.accentColor
-                        : AppTheme.textHint,
-                    fontSize: 12,
+                  widget.title,
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: HBotColors.textPrimaryLight,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+
+                if (widget.roomName != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    widget.roomName!,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: HBotColors.textSecondaryLight,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+
+                const SizedBox(height: HBotSpacing.space3),
+
+                // Bottom row: state text + toggle
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.value ?? (widget.isOn ? 'ON' : 'OFF'),
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: widget.isOn
+                            ? _activeColor
+                            : HBotColors.textSecondaryLight,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 32,
+                      width: 52,
+                      child: FittedBox(
+                        child: Switch(
+                          value: widget.isOn,
+                          onChanged: _unreachable ? null : widget.onToggle,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );

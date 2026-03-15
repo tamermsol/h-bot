@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
-/// Banner that shows when device is offline
+/// Persistent offline banner — sits at top of screen when offline
+/// Design: 04-SCREEN-DESIGNS.md §10.2
 class ConnectivityBanner extends StatelessWidget {
   final bool isOnline;
 
-  const ConnectivityBanner({required this.isOnline, super.key});
+  const ConnectivityBanner({super.key, required this.isOnline});
 
   @override
   Widget build(BuildContext context) {
-    if (isOnline) return const SizedBox.shrink();
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: const Color(0xFFFF9500), // Orange warning color
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(Icons.cloud_off, size: 16, color: Colors.white),
-          SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              'No internet connection',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
+    return AnimatedContainer(
+      duration: HBotDurations.medium,
+      height: isOnline ? 0 : 36,
+      color: HBotColors.warning,
+      child: isOnline
+          ? const SizedBox.shrink()
+          : const Center(
+              child: Text(
+                'No internet connection',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
               ),
-              textAlign: TextAlign.center,
             ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -1,82 +1,176 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
+/// Settings item — 56px row inside a SettingsGroup
+/// Design: 03-COMPONENT-LIBRARY.md §2.3
 class SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String subtitle;
+  final String? subtitle;
+  final String? value;
   final VoidCallback? onTap;
   final bool showDivider;
+  final bool showChevron;
   final Color? titleColor;
+  final Color? iconColor;
   final Widget? trailing;
 
   const SettingsTile({
     super.key,
     required this.icon,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
+    this.value,
     this.onTap,
     this.showDivider = true,
+    this.showChevron = true,
     this.titleColor,
+    this.iconColor,
     this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final surfaceColor = isDark
-        ? AppTheme.surfaceColor
-        : AppTheme.lightSurfaceColor;
-    final textPrimary = isDark
-        ? AppTheme.textPrimary
-        : AppTheme.lightTextPrimary;
-    final textSecondary = isDark
-        ? AppTheme.textSecondary
-        : AppTheme.lightTextSecondary;
-    final textHint = isDark ? AppTheme.textHint : AppTheme.lightTextHint;
-    final dividerColor = isDark
-        ? AppTheme.textHint
-        : AppTheme.lightDividerColor;
-
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        ListTile(
-          leading: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: surfaceColor,
-              borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-            ),
-            child: Icon(icon, color: titleColor ?? textPrimary, size: 20),
-          ),
-          title: Text(
-            title,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: titleColor ?? textPrimary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          subtitle: Text(
-            subtitle,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: textSecondary),
-          ),
-          trailing:
-              trailing ?? Icon(Icons.chevron_right, color: textHint, size: 20),
+        InkWell(
           onTap: onTap,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: AppTheme.paddingMedium,
-            vertical: 4,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 56),
+            padding: const EdgeInsets.symmetric(
+              horizontal: HBotSpacing.space4,
+              vertical: HBotSpacing.space3,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  size: 24,
+                  color: iconColor ?? titleColor ?? HBotColors.iconDefault,
+                ),
+                const SizedBox(width: HBotSpacing.space3),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: titleColor ?? HBotColors.textPrimaryLight,
+                        ),
+                      ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          subtitle!,
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: HBotColors.textTertiaryLight,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                if (value != null) ...[
+                  const SizedBox(width: HBotSpacing.space2),
+                  Text(
+                    value!,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: HBotColors.textSecondaryLight,
+                    ),
+                  ),
+                ],
+                if (trailing != null) ...[
+                  const SizedBox(width: HBotSpacing.space2),
+                  trailing!,
+                ] else if (showChevron) ...[
+                  const SizedBox(width: HBotSpacing.space2),
+                  const Icon(
+                    Icons.chevron_right,
+                    color: HBotColors.neutral400,
+                    size: 16,
+                  ),
+                ],
+              ],
+            ),
           ),
         ),
         if (showDivider)
-          Divider(
-            color: dividerColor.withOpacity(0.5),
-            height: 1,
-            indent: AppTheme.paddingMedium,
-            endIndent: AppTheme.paddingMedium,
+          Padding(
+            padding: const EdgeInsets.only(left: 56),
+            child: Container(height: 1, color: HBotColors.borderSubtle),
           ),
+      ],
+    );
+  }
+}
+
+/// Grouped card wrapper for settings items
+/// Design: 03-COMPONENT-LIBRARY.md §2.3 Group wrapper
+class SettingsGroup extends StatelessWidget {
+  final String? label;
+  final List<Widget> children;
+  final EdgeInsetsGeometry? margin;
+
+  const SettingsGroup({
+    super.key,
+    this.label,
+    required this.children,
+    this.margin,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (label != null) ...[
+          Padding(
+            padding: const EdgeInsets.only(
+              left: HBotSpacing.space5,
+              bottom: HBotSpacing.space2,
+              top: HBotSpacing.space6,
+            ),
+            child: Text(
+              label!.toUpperCase(),
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.0,
+                color: HBotColors.textSecondaryLight,
+              ),
+            ),
+          ),
+        ],
+        Container(
+          margin: margin ??
+              const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+          decoration: BoxDecoration(
+            color: HBotColors.cardLight,
+            borderRadius: HBotRadius.largeRadius,
+            border: Border.all(color: HBotColors.borderLight, width: 1),
+          ),
+          child: ClipRRect(
+            borderRadius: HBotRadius.largeRadius,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: children,
+            ),
+          ),
+        ),
       ],
     );
   }

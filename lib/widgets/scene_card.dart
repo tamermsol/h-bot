@@ -1,143 +1,133 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-class SceneCard extends StatelessWidget {
-  final Map<String, dynamic> scene;
-  final Function(bool) onToggle;
+/// Scene Card — horizontal list item (72px height)
+/// Design: 03-COMPONENT-LIBRARY.md §2.2
+class SceneCard extends StatefulWidget {
+  final String name;
+  final String subtitle;
+  final IconData? icon;
+  final String? emoji;
   final VoidCallback? onTap;
+  final VoidCallback? onPlay;
+  final VoidCallback? onLongPress;
 
   const SceneCard({
     super.key,
-    required this.scene,
-    required this.onToggle,
+    required this.name,
+    required this.subtitle,
+    this.icon,
+    this.emoji,
     this.onTap,
+    this.onPlay,
+    this.onLongPress,
   });
 
   @override
+  State<SceneCard> createState() => _SceneCardState();
+}
+
+class _SceneCardState extends State<SceneCard> {
+  bool _isPressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    final bool isActive = scene['isActive'] ?? false;
-    final Color sceneColor = scene['color'] ?? AppTheme.primaryColor;
-
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) => setState(() => _isPressed = false),
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedContainer(
+        duration: HBotDurations.fast,
+        height: 72,
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
-          color: AppTheme.cardColor,
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-          border: Border.all(
-            color: isActive
-                ? sceneColor.withOpacity(0.5)
-                : Colors.transparent,
-            width: 2,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: isActive
-                  ? sceneColor.withOpacity(0.2)
-                  : Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          color: _isPressed ? HBotColors.cardHover : HBotColors.cardLight,
+          borderRadius: HBotRadius.largeRadius,
+          border: Border.all(color: HBotColors.borderLight, width: 1),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+        child: Row(
           children: [
-            // Header with icon and toggle
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: isActive
-                        ? sceneColor.withOpacity(0.2)
-                        : AppTheme.textHint.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-                  ),
-                  child: Icon(
-                    scene['icon'],
-                    color: isActive ? sceneColor : AppTheme.textHint,
-                    size: 20,
-                  ),
-                ),
-                Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    value: isActive,
-                    onChanged: onToggle,
-                    inactiveTrackColor: AppTheme.textHint.withOpacity(0.3),
-                  ),
-                ),
-              ],
-            ),
-
-            const Spacer(),
-
-            // Scene name
-            Text(
-              scene['name'],
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: isActive ? AppTheme.textPrimary : AppTheme.textSecondary,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
+            // Scene icon in tinted circle
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: HBotColors.primarySurface,
+                shape: BoxShape.circle,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-
-            const SizedBox(height: 2),
-
-            // Scene description
-            Text(
-              scene['description'],
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: isActive ? AppTheme.textSecondary : AppTheme.textHint,
-                fontSize: 11,
+              child: Center(
+                child: widget.emoji != null
+                    ? Text(widget.emoji!, style: const TextStyle(fontSize: 20))
+                    : Icon(
+                        widget.icon ?? Icons.play_circle_outline,
+                        color: HBotColors.primary,
+                        size: 24,
+                      ),
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
 
-            const SizedBox(height: 6),
+            const SizedBox(width: HBotSpacing.space3),
 
-            // Time/trigger info
-            Row(
-              children: [
-                Icon(
-                  _getTimeIcon(scene['time']),
-                  size: 10,
-                  color: isActive ? sceneColor : AppTheme.textHint,
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    scene['time'],
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isActive ? sceneColor : AppTheme.textHint,
-                      fontSize: 10,
+            // Name + subtitle
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.name,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: HBotColors.textPrimaryLight,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
+                  if (widget.subtitle.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      widget.subtitle,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: HBotColors.textSecondaryLight,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ],
+              ),
             ),
+
+            const SizedBox(width: HBotSpacing.space3),
+
+            // Play button
+            if (widget.onPlay != null)
+              GestureDetector(
+                onTap: widget.onPlay,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    color: HBotColors.primarySurface,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.play_arrow_rounded,
+                    color: HBotColors.primary,
+                    size: 24,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
     );
-  }
-
-  IconData _getTimeIcon(String time) {
-    if (time.toLowerCase().contains('manual')) {
-      return Icons.touch_app;
-    } else if (time.toLowerCase().contains('location')) {
-      return Icons.location_on;
-    } else {
-      return Icons.schedule;
-    }
   }
 }
