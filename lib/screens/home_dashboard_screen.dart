@@ -940,35 +940,86 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   Widget _buildV0AppBar() {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6), width: 1)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Top row: Home name + 3-dot menu
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: _homes.length > 1 ? () => _navigateToHomes() : null,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _selectedHome?.name ?? 'My Home',
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF1F2937),
+                      ),
+                    ),
+                    if (_homes.length > 1) ...[
+                      const SizedBox(width: 4),
+                      Icon(HBotIcons.chevronDown, size: 16, color: const Color(0xFF9CA3AF)),
+                    ],
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: _showV0HomeMenu,
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF5F7FA),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: Icon(HBotIcons.more, size: 17, color: const Color(0xFF4B5563)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          // Greeting row
           Text(
-            _selectedHome?.name ?? 'My Home',
+            '${_getGreeting()}${_getGreetingEmoji()}',
             style: const TextStyle(
               fontFamily: 'Inter',
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF1F2937),
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF6B7280),
             ),
           ),
-          GestureDetector(
-            onTap: _showV0HomeMenu,
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F7FA),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Icon(HBotIcons.more, size: 17, color: const Color(0xFF4B5563)),
+          const SizedBox(height: 2),
+          // Device count
+          if (_devices.isNotEmpty)
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF9CA3AF),
+                ),
+                children: [
+                  TextSpan(
+                    text: '${_devices.length}',
+                    style: const TextStyle(
+                      color: Color(0xFF0883FD),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' device${_devices.length == 1 ? '' : 's'}',
+                  ),
+                ],
               ),
             ),
-          ),
         ],
       ),
     );
