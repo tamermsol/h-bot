@@ -1001,7 +1001,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (108)',
+                'v1.0.0 (109)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
@@ -1258,7 +1258,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         crossAxisCount: columns,
         crossAxisSpacing: spacing,
         mainAxisSpacing: spacing,
-        childAspectRatio: isTablet ? 0.9 : 0.85,
+        childAspectRatio: isTablet ? 1.1 : 1.0,
       ),
       itemCount: _filteredDevices.length,
       itemBuilder: (context, index) {
@@ -1619,10 +1619,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     final textHint = HBotColors.textTertiaryLight;
 
     return Column(
-      mainAxisSize:
-          MainAxisSize.max, // Changed from min to max to fill available space
-      mainAxisAlignment: MainAxisAlignment
-          .start, // Changed to start to prevent overflow with long names
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Large device icon at the top - compact with online status indicator
@@ -1680,7 +1678,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         ),
         const SizedBox(height: 2), // Minimal spacing
         // Device name - centered and allow wrapping to 2 lines
-        Flexible(
+        SizedBox(
+          width: double.infinity,
           child: Text(
             device.deviceName,
             style: const TextStyle(
