@@ -325,7 +325,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SettingsTile(
                 icon: Icons.palette_outlined,
                 title: 'Appearance',
-                value: 'Light',
+                value: 'Light Mode',
                 onTap: _showAppearanceDialog,
               ),
               SettingsTile(

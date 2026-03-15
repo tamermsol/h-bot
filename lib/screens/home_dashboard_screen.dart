@@ -862,8 +862,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     return filtered;
   }
 
-  @override
-  String get _greeting {
+    String get _greeting {
     final hour = DateTime.now().hour;
     if (hour < 5) return 'Good night 🌙';
     if (hour < 12) return 'Good morning ☀️';

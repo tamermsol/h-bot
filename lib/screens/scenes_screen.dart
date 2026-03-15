@@ -194,7 +194,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '${0} action${0 != 1 ? "s" : ""}',
+                        scene.isEnabled ? 'Enabled' : 'Disabled',
                         style: const TextStyle(fontFamily: 'Inter', fontSize: 13, color: HBotColors.textSecondaryLight),
                       ),
                     ],
@@ -358,7 +358,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                         Text(scene.name, style: const TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
                         const SizedBox(height: 2),
                         Text(
-                          '${0} action${0 != 1 ? "s" : ""} · ${scene.isEnabled ? "Enabled" : "Disabled"}',
+                          scene.isEnabled ? 'Enabled' : 'Disabled',
                           style: TextStyle(fontFamily: 'Inter', fontSize: 13, color: scene.isEnabled ? sceneColor : HBotColors.textSecondaryLight),
                         ),
                       ],
