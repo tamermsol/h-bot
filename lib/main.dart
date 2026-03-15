@@ -125,8 +125,8 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
     return MaterialApp(
       title: 'HBOT',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme(),
+      darkTheme: AppTheme.darkTheme(),
       themeMode: themeService.themeMode,
       home: const AuthWrapper(),
     );

@@ -396,7 +396,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
             SmartInputField(
               controller: _nameController,
-              hintText: 'Scene name (e.g., Movie Night)',
+              hint: 'Scene name (e.g., Movie Night)',
               onChanged: (value) => setState(() {}),
             ),
 

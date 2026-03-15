@@ -200,8 +200,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
                         children: [
                           SmartInputField(
                             controller: _searchController,
-                            hintText: 'Search devices...',
-                            prefixIcon: Icons.search,
+                            hint: 'Search devices...',
+                            prefixIcon: Icon(Icons.search, color: HBotColors.iconDefault, size: 20),
                             onChanged: (value) {
                               setState(() {});
                             },

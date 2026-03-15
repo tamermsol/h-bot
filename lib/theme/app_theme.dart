@@ -270,7 +270,20 @@ class AppTheme {
   static const Color warningColor = HBotColors.warning;
   static const Color errorColor = HBotColors.error;
   static const Color textSecondary = HBotColors.textSecondaryLight;
+  static const Color textPrimary = HBotColors.textPrimaryLight;
+  static const Color textHint = HBotColors.textTertiaryLight;
   static const Color cardColor = HBotColors.cardLight;
+  static const Color backgroundColor = HBotColors.backgroundLight;
+  static const Color surfaceColor = HBotColors.surfaceLight;
+  static const Color lightBackgroundColor = HBotColors.backgroundLight;
+  static const Color lightCardColor = HBotColors.cardLight;
+  static const Color lightCardBorder = HBotColors.borderLight;
+  static const Color lightBorderColor = HBotColors.borderLight;
+  static const Color lightSurfaceColor = HBotColors.surfaceLight;
+  static const Color lightTextPrimary = HBotColors.textPrimaryLight;
+  static const Color lightTextSecondary = HBotColors.textSecondaryLight;
+  static const Color lightGradientStart = Color(0xFFE0F2FE);
+  static const Color lightGradientEnd = Color(0xFFFFFFFF);
   static const double paddingSmall = HBotSpacing.space2;
   static const double paddingMedium = HBotSpacing.space4;
   static const double paddingLarge = HBotSpacing.space6;
@@ -278,10 +291,35 @@ class AppTheme {
   static const double radiusMedium = HBotRadius.medium;
   static const double radiusLarge = HBotRadius.large;
 
+  static final TextStyle priceTextStyle = const TextStyle(
+    fontFamily: 'Inter',
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: HBotColors.textPrimaryLight,
+  );
+
   static Color getCardColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
         ? HBotColors.cardDark
         : HBotColors.cardLight;
+  }
+
+  static Color getTextPrimary(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? HBotColors.textPrimaryDark
+        : HBotColors.textPrimaryLight;
+  }
+
+  static Color getTextSecondary(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? HBotColors.textSecondaryDark
+        : HBotColors.textSecondaryLight;
+  }
+
+  static Color getTextHint(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? HBotColors.textSecondaryDark
+        : HBotColors.textTertiaryLight;
   }
 
   static ThemeData lightTheme() {
@@ -426,7 +464,7 @@ class AppTheme {
           size: 24,
         ),
       ),
-      cardTheme: CardThemeData(
+      cardTheme: CardTheme(
         color: HBotColors.cardLight,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -561,7 +599,7 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
         elevation: 0,
       ),
-      dialogTheme: DialogThemeData(
+      dialogTheme: DialogTheme(
         backgroundColor: HBotColors.elevatedLight,
         shape: RoundedRectangleBorder(
           borderRadius: HBotRadius.xlRadius,
