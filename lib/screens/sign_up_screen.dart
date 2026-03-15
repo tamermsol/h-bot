@@ -161,98 +161,85 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E), // Dark background from Figma
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: HBotSpacing.space5),
 
-                // Title
-                const Text(
+                Text(
                   'Create Account',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: -0.5,
-                  ),
+                  style: Theme.of(context).textTheme.headlineLarge,
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 8),
+                const SizedBox(height: HBotSpacing.space2),
 
-                const Text(
+                Text(
                   'Join the smart home revolution',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white70,
-                    letterSpacing: -0.2,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 40),
+                const SizedBox(height: HBotSpacing.space7),
 
-                // Full Name Field (Mandatory)
+                // Full Name
                 SmartInputField(
                   controller: _fullNameController,
                   label: 'Full Name',
+                  hint: 'Your full name',
                   keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  enabled: !_isLoading,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your full name';
-                    }
-                    if (value.trim().length < 2) {
-                      return 'Full name must be at least 2 characters';
-                    }
+                    if (value == null || value.isEmpty) return 'Please enter your full name';
+                    if (value.trim().length < 2) return 'Name must be at least 2 characters';
                     return null;
                   },
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: HBotSpacing.space4),
 
-                // Email Field
+                // Email
                 SmartInputField(
                   controller: _emailController,
                   label: 'Email',
+                  hint: 'user@example.com',
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  enabled: !_isLoading,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!RegExp(
-                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                    ).hasMatch(value)) {
+                    if (value == null || value.isEmpty) return 'Please enter your email';
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                       return 'Please enter a valid email';
                     }
                     return null;
                   },
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: HBotSpacing.space4),
 
-                // Phone Number Field (Optional)
+                // Phone
                 SmartInputField(
                   controller: _phoneController,
-                  label: 'Phone Number (Optional)',
+                  label: 'Phone (Optional)',
+                  hint: '+1234567890',
                   keyboardType: TextInputType.phone,
+                  textInputAction: TextInputAction.next,
+                  enabled: !_isLoading,
                   validator: (value) {
-                    // Optional field - only validate if not empty
                     if (value != null && value.isNotEmpty) {
-                      // E.164-ish format validation: ^\+?[1-9]\d{1,14}$
                       if (!Profile.isValidPhoneNumber(value)) {
                         return 'Use E.164 format (e.g., +1234567890)';
                       }
@@ -261,191 +248,142 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: HBotSpacing.space4),
 
-                // Password Field
+                // Password
                 SmartInputField(
                   controller: _passwordController,
                   label: 'Password',
-                  obscureText: _obscurePassword,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.white54,
-                    ),
-                    onPressed: () {
-                      setState(() => _obscurePassword = !_obscurePassword);
-                    },
-                  ),
+                  hint: '••••••••',
+                  obscureText: true,
+                  textInputAction: TextInputAction.next,
+                  enabled: !_isLoading,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a password';
-                    }
-                    if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
-                    }
+                    if (value == null || value.isEmpty) return 'Please enter a password';
+                    if (value.length < 6) return 'Password must be at least 6 characters';
                     return null;
                   },
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: HBotSpacing.space4),
 
-                // Confirm Password Field
+                // Confirm Password
                 SmartInputField(
                   controller: _confirmPasswordController,
                   label: 'Confirm Password',
-                  obscureText: _obscureConfirmPassword,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureConfirmPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.white54,
-                    ),
-                    onPressed: () {
-                      setState(
-                        () =>
-                            _obscureConfirmPassword = !_obscureConfirmPassword,
-                      );
-                    },
-                  ),
+                  hint: '••••••••',
+                  obscureText: true,
+                  textInputAction: TextInputAction.done,
+                  enabled: !_isLoading,
+                  onEditingComplete: _signUpWithEmail,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please confirm your password';
-                    }
-                    if (value != _passwordController.text) {
-                      return 'Passwords do not match';
-                    }
+                    if (value == null || value.isEmpty) return 'Please confirm your password';
+                    if (value != _passwordController.text) return 'Passwords do not match';
                     return null;
                   },
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: HBotSpacing.space6),
 
-                // Sign Up Button
+                // Create Account button
                 SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _signUpWithEmail,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          AppTheme.primaryColor, // Blue theme color
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  height: 52,
+                  child: Container(
+                    decoration: hbotPrimaryButtonDecoration(disabled: _isLoading),
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _signUpWithEmail,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: HBotRadius.mediumRadius,
+                        ),
                       ),
-                      elevation: 0,
-                    ),
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : const Text(
+                              'Create Account',
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          )
-                        : const Text(
-                            'Create Account',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                    ),
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: HBotSpacing.space5),
 
                 // Divider
                 Row(
                   children: [
-                    Expanded(
-                      child: Container(height: 1, color: Colors.white24),
+                    const Expanded(child: Divider(color: HBotColors.borderLight)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
+                      child: Text('or', style: Theme.of(context).textTheme.bodySmall),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'or',
-                        style: TextStyle(color: Colors.white54, fontSize: 14),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(height: 1, color: Colors.white24),
-                    ),
+                    const Expanded(child: Divider(color: HBotColors.borderLight)),
                   ],
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: HBotSpacing.space5),
 
-                // Google Sign Up Button
+                // Google Sign Up
                 SizedBox(
-                  height: 50,
+                  height: 52,
                   child: OutlinedButton.icon(
                     onPressed: _isLoading ? null : _signUpWithGoogle,
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white24),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
                     icon: Image.asset(
                       'assets/images/google_logo.png',
                       height: 20,
                       width: 20,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.login, color: Colors.white);
-                      },
+                      errorBuilder: (_, __, ___) => const Icon(Icons.login, size: 20),
                     ),
-                    label: const Text(
-                      'Continue with Google',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                    label: const Text('Continue with Google'),
                   ),
                 ),
 
-                const SizedBox(height: 40),
+                const SizedBox(height: HBotSpacing.space6),
 
-                // Terms and Privacy
-                const Text(
+                // Terms
+                Text(
                   'By creating an account, you agree to our Terms of Service and Privacy Policy',
-                  style: TextStyle(color: Colors.white54, fontSize: 12),
+                  style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: HBotSpacing.space4),
 
-                // Sign In Link
+                // Sign In link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Already have an account? ',
-                      style: TextStyle(color: Colors.white70, fontSize: 14),
-                    ),
+                    Text('Already have an account? ', style: Theme.of(context).textTheme.bodyMedium),
                     TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+                      onPressed: () => Navigator.of(context).pop(),
                       child: const Text(
                         'Sign In',
                         style: TextStyle(
-                          color: AppTheme.primaryColor,
+                          fontFamily: 'Inter',
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
+                          color: HBotColors.primary,
                         ),
                       ),
                     ),
                   ],
                 ),
+
+                const SizedBox(height: HBotSpacing.space5),
               ],
             ),
           ),

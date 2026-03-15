@@ -62,7 +62,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   String _sortOption = 'name'; // 'name', 'recent', 'room', 'type'
-  bool _isGridView = false; // false = list view, true = grid view
+  bool _isGridView = true; // true = grid view (default per design), false = list view
   bool _hideOfflineDevices = false;
 
   // SharedPreferences key for view preference
@@ -863,143 +863,166 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+  String get _greeting {
+    final hour = DateTime.now().hour;
+    if (hour < 5) return 'Good night 🌙';
+    if (hour < 12) return 'Good morning ☀️';
+    if (hour < 18) return 'Good afternoon';
+    if (hour < 22) return 'Good evening';
+    return 'Good night 🌙';
+  }
 
-    return Stack(
-      children: [
-        // Background layer - only show in dark mode or when there's a custom background
-        // Background image for both light and dark modes
-        Positioned.fill(
-          child: BackgroundContainer(
-            backgroundImageUrl: _selectedHome?.backgroundImageUrl,
-            overlayColor: isDark ? Colors.black : Colors.white,
-            overlayOpacity: isDark ? 0.3 : 0.7,
-            child: const SizedBox.expand(),
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              _buildHeader(),
+              if (_homes.isNotEmpty && _devices.isNotEmpty) _buildSearchBar(),
+              if (_homes.isNotEmpty && _rooms.isNotEmpty)
+                Container(
+                  key: ValueKey('tabs_${_rooms.map((r) => r.id).join("_")}'),
+                  margin: const EdgeInsets.only(top: HBotSpacing.space2),
+                  child: _buildTabBar(),
+                ),
+              Expanded(child: _buildContent()),
+            ],
           ),
-        ),
-        // Content layer - with proper padding
-        Column(
-          children: [
-            // Add top padding for status bar + AppBar (minimized spacing)
-            SizedBox(
-              height:
-                  MediaQuery.of(context).padding.top +
-                  kToolbarHeight -
-                  40, // Aggressive reduction to remove gap
-            ),
-            _buildHeader(),
-            if (_homes.isNotEmpty && _devices.isNotEmpty) _buildSearchBar(),
-            if (_homes.isNotEmpty && _rooms.isNotEmpty)
-              Container(
-                key: ValueKey('tabs_${_rooms.map((r) => r.id).join("_")}'),
-                margin: const EdgeInsets.only(
-                  top: 4,
-                ), // Minimal spacing above tabs
-                child: _buildTabBar(),
+          // FAB
+          if (_homes.isNotEmpty)
+            Positioned(
+              right: HBotSpacing.space5,
+              bottom: HBotSpacing.space5,
+              child: FloatingActionButton(
+                onPressed: _showAddMenu,
+                child: const Icon(Icons.add, size: 28),
               ),
-            Expanded(child: _buildContent()),
-            // Add bottom padding for navigation bar (reduced)
-            SizedBox(
-              height:
-                  MediaQuery.of(context).padding.bottom +
-                  kBottomNavigationBarHeight -
-                  40, // Reduce gap at bottom
             ),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildHeader() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = AppTheme.getCardColor(context);
-
-    return Container(
+    return Padding(
       padding: const EdgeInsets.fromLTRB(
-        AppTheme.paddingMedium,
-        0, // Remove top padding completely
-        AppTheme.paddingMedium,
-        4, // Minimal bottom padding
+        HBotSpacing.space5,
+        HBotSpacing.space3,
+        HBotSpacing.space5,
+        HBotSpacing.space2,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Home dropdown
-          Expanded(
-            child: GestureDetector(
-              onTap: _showHomeSelector,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.paddingMedium,
-                  vertical:
-                      8, // Reduced from paddingSmall for more compact look
-                ),
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? cardColor.withOpacity(0.7)
-                      : cardColor, // Solid color in light mode
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-                  border: isDark
-                      ? null
-                      : Border.all(color: AppTheme.lightCardBorder, width: 1),
-                ),
+          // Title row: Home name + actions
+          Row(
+            children: [
+              GestureDetector(
+                onTap: _homes.length > 1 ? _showHomeSelector : null,
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(
-                      child: Text(
-                        _selectedHome?.name ?? 'Select Home',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
+                    Text(
+                      _selectedHome?.name ?? 'My Home',
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: HBotColors.textPrimaryLight,
+                        letterSpacing: -0.3,
                       ),
                     ),
-                    Icon(
-                      Icons.keyboard_arrow_down,
-                      color: AppTheme.getTextPrimary(context),
-                    ),
+                    if (_homes.length > 1) ...[
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.keyboard_arrow_down,
+                        color: HBotColors.textSecondaryLight,
+                        size: 20,
+                      ),
+                    ],
                   ],
                 ),
               ),
-            ),
-          ),
-          const SizedBox(width: AppTheme.paddingSmall),
-          // Add button
-          Container(
-            decoration: BoxDecoration(
-              color: AppTheme.primaryColor,
-              borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-            ),
-            child: IconButton(
-              icon: const Icon(Icons.add, color: Colors.white),
-              onPressed: _showAddMenu,
-              padding: const EdgeInsets.all(8), // Compact padding
-              constraints: const BoxConstraints(), // Remove default constraints
-            ),
-          ),
-          const SizedBox(width: AppTheme.paddingSmall),
-          // MQTT status indicator (non-interactive)
-          Tooltip(
-            message: _mqttConnected ? 'MQTT Connected' : 'MQTT Disconnected',
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: _mqttConnected
-                    ? Colors.green.withOpacity(0.2)
-                    : Colors.red.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-                border: Border.all(
-                  color: _mqttConnected ? Colors.green : Colors.red,
-                  width: 1,
+              const Spacer(),
+              // MQTT indicator
+              if (!_mqttConnected)
+                Padding(
+                  padding: const EdgeInsets.only(right: HBotSpacing.space2),
+                  child: hbotStatusDot(color: HBotColors.error, size: 8),
                 ),
+              // Notification bell
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined),
+                color: HBotColors.iconDefault,
+                iconSize: 24,
+                constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                onPressed: () {},
               ),
-              child: Icon(
-                _mqttConnected ? Icons.wifi : Icons.wifi_off,
-                color: _mqttConnected ? Colors.green : Colors.red,
-                size: 20,
+              // Settings menu
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, color: HBotColors.iconDefault, size: 24),
+                onSelected: (v) {
+                  switch (v) {
+                    case 'add_device': _showAddMenu(); break;
+                    case 'background': _showHomeBackgroundDialog(); break;
+                    case 'manage_homes': _showHomeSelector(); break;
+                  }
+                },
+                itemBuilder: (_) => const [
+                  PopupMenuItem(value: 'add_device',
+                    child: ListTile(leading: Icon(Icons.add_circle_outline),
+                      title: Text('Add Device'), contentPadding: EdgeInsets.zero)),
+                  PopupMenuItem(value: 'background',
+                    child: ListTile(leading: Icon(Icons.wallpaper_outlined),
+                      title: Text('Background'), contentPadding: EdgeInsets.zero)),
+                  PopupMenuItem(value: 'manage_homes',
+                    child: ListTile(leading: Icon(Icons.home_work_outlined),
+                      title: Text('Manage Homes'), contentPadding: EdgeInsets.zero)),
+                ],
               ),
+            ],
+          ),
+
+          const SizedBox(height: HBotSpacing.space2),
+
+          // Greeting
+          Text(
+            _greeting,
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+              color: HBotColors.textSecondaryLight,
             ),
           ),
+
+          const SizedBox(height: HBotSpacing.space1),
+
+          // Device count
+          if (_devices.isNotEmpty)
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: HBotColors.textSecondaryLight,
+                ),
+                children: [
+                  TextSpan(
+                    text: '${_devices.length}',
+                    style: const TextStyle(
+                      color: HBotColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' device${_devices.length == 1 ? '' : 's'}',
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
@@ -1061,75 +1084,61 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   Widget _buildSearchBar() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = AppTheme.getCardColor(context);
-    final textPrimary = AppTheme.getTextPrimary(context);
-    final textHint = AppTheme.getTextHint(context);
-
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: AppTheme.paddingMedium,
-        vertical: 0, // Remove vertical margin completely
+      margin: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+      height: 44,
+      decoration: BoxDecoration(
+        color: HBotColors.cardLight,
+        borderRadius: HBotRadius.mediumRadius,
+        border: Border.all(color: HBotColors.borderLight, width: 1),
       ),
       child: Row(
         children: [
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: isDark ? cardColor.withOpacity(0.7) : cardColor,
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-                border: isDark
-                    ? null
-                    : Border.all(color: AppTheme.lightCardBorder, width: 1),
+            child: TextField(
+              controller: _searchController,
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                color: HBotColors.textPrimaryLight,
               ),
-              child: TextField(
-                controller: _searchController,
-                style: TextStyle(color: textPrimary),
-                decoration: InputDecoration(
-                  hintText: 'Search devices...',
-                  hintStyle: TextStyle(color: textHint),
-                  prefixIcon: Icon(Icons.search, color: textHint),
-                  suffixIcon: _searchQuery.isNotEmpty
-                      ? IconButton(
-                          icon: Icon(Icons.clear, color: textHint),
-                          onPressed: () {
-                            setState(() {
-                              _searchController.clear();
-                              _searchQuery = '';
-                            });
-                          },
-                        )
-                      : null,
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: AppTheme.paddingMedium,
-                    vertical: 8, // Reduced from paddingSmall for compact look
-                  ),
+              decoration: InputDecoration(
+                hintText: 'Search devices...',
+                hintStyle: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 14,
+                  color: HBotColors.textTertiaryLight,
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
-                },
+                prefixIcon: const Icon(Icons.search, color: HBotColors.iconDefault, size: 20),
+                suffixIcon: _searchQuery.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear, color: HBotColors.iconDefault, size: 18),
+                        onPressed: () => setState(() {
+                          _searchController.clear();
+                          _searchQuery = '';
+                        }),
+                      )
+                    : null,
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: HBotSpacing.space4,
+                  vertical: 12,
+                ),
               ),
+              onChanged: (value) => setState(() => _searchQuery = value),
             ),
           ),
-          const SizedBox(width: AppTheme.paddingSmall),
-          // Options menu button
+          // Filter button
           Container(
-            decoration: BoxDecoration(
-              color: isDark ? cardColor.withOpacity(0.7) : cardColor,
-              borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-              border: isDark
-                  ? null
-                  : Border.all(color: AppTheme.lightCardBorder, width: 1),
+            decoration: const BoxDecoration(
+              border: Border(left: BorderSide(color: HBotColors.borderLight, width: 1)),
             ),
             child: IconButton(
-              icon: Icon(Icons.tune, color: textPrimary),
+              icon: const Icon(Icons.tune, color: HBotColors.iconDefault, size: 20),
               onPressed: _showOptionsMenu,
-              tooltip: 'Filter and sort options',
-              padding: const EdgeInsets.all(8), // Compact padding
-              constraints: const BoxConstraints(), // Remove default constraints
+              tooltip: 'Filter and sort',
+              padding: const EdgeInsets.all(10),
+              constraints: const BoxConstraints(),
             ),
           ),
         ],
@@ -1141,19 +1150,21 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     if (_tabController == null) return const SizedBox.shrink();
 
     return TabBar(
-      key: ValueKey(
-        _rooms.map((r) => r.name).join(','),
-      ), // Force rebuild when room names change
+      key: ValueKey(_rooms.map((r) => r.name).join(',')),
       controller: _tabController,
       isScrollable: true,
-      labelColor: AppTheme.primaryColor,
-      unselectedLabelColor: AppTheme.textSecondary,
-      indicatorColor: AppTheme.primaryColor,
-      indicatorWeight: 3,
-      labelStyle: const TextStyle(fontWeight: FontWeight.w600),
-      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-      padding: EdgeInsets.zero,
-      labelPadding: const EdgeInsets.symmetric(horizontal: 16),
+      labelColor: Colors.white,
+      unselectedLabelColor: HBotColors.textSecondaryLight,
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicator: BoxDecoration(
+        gradient: HBotColors.primaryGradient,
+        borderRadius: HBotRadius.fullRadius,
+      ),
+      dividerHeight: 0,
+      labelStyle: const TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w500, fontSize: 14),
+      unselectedLabelStyle: const TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w400, fontSize: 14),
+      padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+      labelPadding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
       tabAlignment: TabAlignment.start,
       tabs: [
         const Tab(text: 'All'),
@@ -1224,9 +1235,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       padding: const EdgeInsets.all(AppTheme.paddingMedium),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: AppTheme.paddingSmall,
-        mainAxisSpacing: AppTheme.paddingSmall,
-        childAspectRatio: 1.25, // Increased to 1.25 for maximum compactness
+        crossAxisSpacing: HBotSpacing.space3,
+        mainAxisSpacing: HBotSpacing.space3,
+        childAspectRatio: 0.85, // Taller cards per design spec
       ),
       itemCount: _filteredDevices.length,
       itemBuilder: (context, index) {
@@ -1277,38 +1288,60 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space7),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 80, color: AppTheme.textHint),
-            const SizedBox(height: AppTheme.paddingMedium),
+            Container(
+              width: 64,
+              height: 64,
+              decoration: const BoxDecoration(
+                color: HBotColors.primarySurface,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, size: 32, color: HBotColors.primary),
+            ),
+            const SizedBox(height: HBotSpacing.space5),
             Text(
               title,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: AppTheme.textSecondary,
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: HBotColors.textPrimaryLight,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             Text(
               subtitle,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: AppTheme.textHint),
+              style: const TextStyle(
+                fontFamily: 'Inter',
+                fontSize: 14,
+                color: HBotColors.textSecondaryLight,
+              ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
-            ElevatedButton(
-              onPressed: onAction,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.paddingLarge,
-                  vertical: AppTheme.paddingMedium,
+            const SizedBox(height: HBotSpacing.space6),
+            SizedBox(
+              height: 52,
+              child: Container(
+                decoration: hbotPrimaryButtonDecoration(),
+                child: ElevatedButton(
+                  onPressed: onAction,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: HBotSpacing.space6,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: HBotRadius.mediumRadius,
+                    ),
+                  ),
+                  child: Text(actionText),
                 ),
               ),
-              child: Text(actionText),
             ),
           ],
         ),
