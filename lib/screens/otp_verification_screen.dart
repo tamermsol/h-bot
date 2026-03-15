@@ -6,7 +6,6 @@ import 'home_screen.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
-
   const OtpVerificationScreen({super.key, required this.email});
 
   @override
@@ -15,12 +14,8 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final _authService = AuthService();
-  final List<TextEditingController> _otpControllers = List.generate(
-    6,
-    (_) => TextEditingController(),
-  );
+  final List<TextEditingController> _otpControllers = List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
-
   bool _isVerifying = false;
   bool _isResending = false;
   int _resendCountdown = 60;
@@ -34,12 +29,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   @override
   void dispose() {
-    for (var controller in _otpControllers) {
-      controller.dispose();
-    }
-    for (var node in _focusNodes) {
-      node.dispose();
-    }
+    for (var c in _otpControllers) { c.dispose(); }
+    for (var n in _focusNodes) { n.dispose(); }
     _countdownTimer?.cancel();
     super.dispose();
   }
@@ -50,58 +41,37 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted) {
         setState(() {
-          if (_resendCountdown > 0) {
-            _resendCountdown--;
-          } else {
-            timer.cancel();
-          }
+          if (_resendCountdown > 0) { _resendCountdown--; } else { timer.cancel(); }
         });
       }
     });
   }
 
-  String _getOtpCode() {
-    return _otpControllers.map((c) => c.text).join();
-  }
+  String _getOtpCode() => _otpControllers.map((c) => c.text).join();
 
   Future<void> _verifyOtp() async {
     final otp = _getOtpCode();
     if (otp.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter the complete 6-digit code'),
-          backgroundColor: AppTheme.errorColor,
-        ),
+        const SnackBar(content: Text('Please enter the complete 6-digit code'), backgroundColor: HBotColors.error),
       );
       return;
     }
-
     setState(() => _isVerifying = true);
-
     try {
       await _authService.verifyOtp(widget.email, otp);
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Email verified successfully!'),
-            backgroundColor: Colors.green,
-          ),
+          const SnackBar(content: Text('Email verified successfully!'), backgroundColor: HBotColors.success),
         );
-
-        // Navigate to home screen
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-          (route) => false,
+          MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false,
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Verification failed: ${e.toString()}'),
-            backgroundColor: AppTheme.errorColor,
-          ),
+          SnackBar(content: Text('Verification failed: ${e.toString()}'), backgroundColor: HBotColors.error),
         );
       }
     } finally {
@@ -111,25 +81,18 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   Future<void> _resendOtp() async {
     setState(() => _isResending = true);
-
     try {
       await _authService.resendOtp(widget.email);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('OTP sent! Please check your email.'),
-            backgroundColor: Colors.green,
-          ),
+          const SnackBar(content: Text('Code sent! Check your email.'), backgroundColor: HBotColors.success),
         );
         _startCountdown();
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to resend OTP: ${e.toString()}'),
-            backgroundColor: AppTheme.errorColor,
-          ),
+          SnackBar(content: Text('Failed to resend: ${e.toString()}'), backgroundColor: HBotColors.error),
         );
       }
     } finally {
@@ -140,234 +103,123 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: Colors.transparent, elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        title: const Text('Verify Email', style: TextStyle(fontFamily: 'Inter', fontSize: 17, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: HBotSpacing.space7),
 
               // Icon
-              const Icon(
-                Icons.email_outlined,
-                size: 80,
-                color: AppTheme.primaryColor,
+              Center(
+                child: Container(
+                  width: 64, height: 64,
+                  decoration: const BoxDecoration(color: HBotColors.primarySurface, shape: BoxShape.circle),
+                  child: const Icon(Icons.verified_outlined, size: 32, color: HBotColors.primary),
+                ),
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: HBotSpacing.space5),
 
-              // Title
-              const Text(
-                'Verify Your Email',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+              const Text('Verify Your Email',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: HBotSpacing.space3),
 
-              // Subtitle
-              Text(
-                'We sent a 6-digit code to:',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white.withOpacity(0.7),
-                ),
-                textAlign: TextAlign.center,
-              ),
+              const Text('We sent a code to', style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: HBotColors.textSecondaryLight), textAlign: TextAlign.center),
+              const SizedBox(height: 4),
+              Text(widget.email, style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary), textAlign: TextAlign.center),
 
-              const SizedBox(height: 8),
+              const SizedBox(height: HBotSpacing.space7),
 
-              Text(
-                widget.email,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryColor,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 40),
-
-              // OTP Input Fields
+              // OTP boxes — 48×56px each per spec
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(6, (index) {
-                  return SizedBox(
-                    width: 50,
-                    height: 60,
-                    child: TextField(
-                      controller: _otpControllers[index],
-                      focusNode: _focusNodes[index],
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      maxLength: 1,
-                      obscureText: false, // Make sure numbers are visible
-                      enableInteractiveSelection: false,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 0,
-                      ),
-                      decoration: InputDecoration(
-                        counterText: '',
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.15),
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.white24,
-                            width: 1.5,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Colors.white24,
-                            width: 1.5,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: AppTheme.primaryColor,
-                            width: 2.5,
-                          ),
-                        ),
-                      ),
-                      onChanged: (value) {
-                        if (value.isNotEmpty && index < 5) {
-                          _focusNodes[index + 1].requestFocus();
-                        } else if (value.isEmpty && index > 0) {
-                          _focusNodes[index - 1].requestFocus();
-                        }
-
-                        // Auto-verify when all 6 digits are entered
-                        if (index == 5 && value.isNotEmpty) {
-                          _verifyOtp();
-                        }
-                      },
+                children: List.generate(6, (index) => SizedBox(
+                  width: 48, height: 56,
+                  child: TextField(
+                    controller: _otpControllers[index],
+                    focusNode: _focusNodes[index],
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    maxLength: 1,
+                    style: const TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+                    decoration: InputDecoration(
+                      counterText: '',
+                      filled: true,
+                      fillColor: HBotColors.cardLight,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                      border: OutlineInputBorder(borderRadius: HBotRadius.smallRadius, borderSide: const BorderSide(color: HBotColors.borderLight, width: 1)),
+                      enabledBorder: OutlineInputBorder(borderRadius: HBotRadius.smallRadius, borderSide: const BorderSide(color: HBotColors.borderLight, width: 1)),
+                      focusedBorder: OutlineInputBorder(borderRadius: HBotRadius.smallRadius, borderSide: const BorderSide(color: HBotColors.primary, width: 2)),
                     ),
-                  );
-                }),
+                    onChanged: (value) {
+                      if (value.isNotEmpty && index < 5) _focusNodes[index + 1].requestFocus();
+                      else if (value.isEmpty && index > 0) _focusNodes[index - 1].requestFocus();
+                      if (index == 5 && value.isNotEmpty) _verifyOtp();
+                    },
+                  ),
+                )),
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: HBotSpacing.space7),
 
-              // Verify Button
+              // Verify button — gradient
               SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _isVerifying ? null : _verifyOtp,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                height: 52,
+                child: Container(
+                  decoration: hbotPrimaryButtonDecoration(disabled: _isVerifying),
+                  child: ElevatedButton(
+                    onPressed: _isVerifying ? null : _verifyOtp,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent, shadowColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
                     ),
+                    child: _isVerifying
+                        ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
+                        : const Text('Verify Email', style: TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w500)),
                   ),
-                  child: _isVerifying
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          ),
-                        )
-                      : const Text(
-                          'Verify Email',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: HBotSpacing.space5),
 
-              // Resend OTP
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Didn't receive the code? ",
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
-                      fontSize: 14,
-                    ),
-                  ),
-                  if (_resendCountdown > 0)
-                    Text(
-                      'Resend in ${_resendCountdown}s',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                        fontSize: 14,
+              // Resend countdown
+              Center(
+                child: _resendCountdown > 0
+                    ? Text('Resend code in 0:${_resendCountdown.toString().padLeft(2, '0')}',
+                        style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: HBotColors.textSecondaryLight))
+                    : TextButton(
+                        onPressed: _isResending ? null : _resendOtp,
+                        child: _isResending
+                            ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary)))
+                            : const Text('Resend Code', style: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary)),
                       ),
-                    )
-                  else
-                    TextButton(
-                      onPressed: _isResending ? null : _resendOtp,
-                      child: _isResending
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppTheme.primaryColor,
-                                ),
-                              ),
-                            )
-                          : const Text(
-                              'Resend',
-                              style: TextStyle(
-                                color: AppTheme.primaryColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                    ),
-                ],
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: HBotSpacing.space4),
 
-              // Skip for now button
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    (route) => false,
-                  );
-                },
-                child: Text(
-                  'Skip for now',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
-                    fontSize: 14,
+              // Skip
+              Center(
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false,
                   ),
+                  child: const Text('Skip for now', style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: HBotColors.textSecondaryLight)),
                 ),
               ),
             ],

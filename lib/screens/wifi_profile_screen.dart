@@ -100,12 +100,12 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         title: Text(
           widget.initialProfile != null ? 'Edit Wi-Fi Profile' : 'Home Wi-Fi',
         ),
@@ -115,11 +115,11 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
         key: _formKey,
         child: SingleChildScrollView(
           padding: EdgeInsets.only(
-            left: AppTheme.paddingLarge,
-            right: AppTheme.paddingLarge,
-            top: AppTheme.paddingLarge,
+            left: HBotSpacing.space6,
+            right: HBotSpacing.space6,
+            top: HBotSpacing.space6,
             bottom:
-                AppTheme.paddingLarge +
+                HBotSpacing.space6 +
                 MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Column(
@@ -131,25 +131,25 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                     : 'Enter your home Wi-Fi credentials for device provisioning',
                 style: const TextStyle(
                   fontSize: 16,
-                  color: AppTheme.textSecondary,
+                  color: HBotColors.textSecondaryLight,
                 ),
               ),
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
 
               if (_currentSSID != null) ...[
                 Container(
-                  padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                  padding: const EdgeInsets.all(HBotSpacing.space4),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                    color: HBotColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(HBotRadius.medium),
                     border: Border.all(
-                      color: AppTheme.primaryColor.withOpacity(0.3),
+                      color: HBotColors.primary.withOpacity(0.3),
                     ),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.wifi, color: AppTheme.primaryColor),
-                      const SizedBox(width: AppTheme.paddingSmall),
+                      const Icon(Icons.wifi, color: HBotColors.primary),
+                      const SizedBox(width: HBotSpacing.space2),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,14 +158,14 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                               'Current Network',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: AppTheme.textSecondary,
+                                color: HBotColors.textSecondaryLight,
                               ),
                             ),
                             Text(
                               _currentSSID!,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
-                                color: AppTheme.textPrimary,
+                                color: HBotColors.textPrimaryLight,
                               ),
                             ),
                           ],
@@ -176,7 +176,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: AppTheme.paddingLarge),
+                const SizedBox(height: HBotSpacing.space6),
               ],
 
               TextFormField(
@@ -193,7 +193,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
 
               TextFormField(
                 controller: _passwordController,
@@ -225,7 +225,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
 
               if (widget.initialProfile == null) ...[
                 CheckboxListTile(
@@ -239,7 +239,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                       _saveToAccount = value ?? true;
                     });
                   },
-                  activeColor: AppTheme.primaryColor,
+                  activeColor: HBotColors.primary,
                   contentPadding: EdgeInsets.zero,
                 ),
 
@@ -255,44 +255,44 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                         _setAsDefault = value ?? true;
                       });
                     },
-                    activeColor: AppTheme.primaryColor,
+                    activeColor: HBotColors.primary,
                     contentPadding: EdgeInsets.zero,
                   ),
                 ],
               ],
 
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
 
               if (_isLoading) ...[
                 const Center(child: CircularProgressIndicator()),
-                const SizedBox(height: AppTheme.paddingMedium),
+                const SizedBox(height: HBotSpacing.space4),
               ],
 
               if (_statusMessage.isNotEmpty) ...[
                 Container(
-                  padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                  padding: const EdgeInsets.all(HBotSpacing.space4),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                    color: HBotColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(HBotRadius.medium),
                   ),
                   child: Text(
                     _statusMessage,
-                    style: const TextStyle(color: AppTheme.textPrimary),
+                    style: const TextStyle(color: HBotColors.textPrimaryLight),
                   ),
                 ),
-                const SizedBox(height: AppTheme.paddingMedium),
+                const SizedBox(height: HBotSpacing.space4),
               ],
 
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
 
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _saveProfile,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: HBotColors.primary,
                     padding: const EdgeInsets.symmetric(
-                      vertical: AppTheme.paddingMedium,
+                      vertical: HBotSpacing.space4,
                     ),
                   ),
                   child: _isLoading

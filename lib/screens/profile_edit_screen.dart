@@ -60,7 +60,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Profile updated successfully!'),
-            backgroundColor: AppTheme.accentColor,
+            backgroundColor: HBotColors.success,
           ),
         );
         Navigator.of(context).pop(updatedProfile);
@@ -70,7 +70,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error updating profile: $e'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -87,13 +87,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Edit Profile'),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         elevation: 0,
         actions: [
           TextButton(
@@ -105,14 +105,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        AppTheme.primaryColor,
+                        HBotColors.primary,
                       ),
                     ),
                   )
                 : const Text(
                     'Save',
                     style: TextStyle(
-                      color: AppTheme.primaryColor,
+                      color: HBotColors.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -120,7 +120,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         child: Form(
           key: _formKey,
           child: Column(
@@ -128,19 +128,19 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             children: [
               // Info card
               Container(
-                padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                padding: const EdgeInsets.all(HBotSpacing.space4),
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                  color: HBotColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(HBotRadius.medium),
                   border: Border.all(
-                    color: AppTheme.primaryColor.withOpacity(0.2),
+                    color: HBotColors.primary.withOpacity(0.2),
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
                       Icons.info_outline,
-                      color: AppTheme.primaryColor,
+                      color: HBotColors.primary,
                       size: 20,
                     ),
                     const SizedBox(width: 12),
@@ -148,7 +148,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       child: Text(
                         'Update your profile information. Phone numbers must be in E.164 format (e.g., +1234567890).',
                         style: TextStyle(
-                          color: AppTheme.textSecondary,
+                          color: HBotColors.textSecondaryLight,
                           fontSize: 14,
                         ),
                       ),
@@ -199,7 +199,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _saveProfile,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
+                    backgroundColor: HBotColors.primary,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

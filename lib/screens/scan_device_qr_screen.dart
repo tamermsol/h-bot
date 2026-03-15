@@ -70,7 +70,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: const Text('Add Shared Device?'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -92,7 +92,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primaryColor,
+              backgroundColor: HBotColors.primary,
             ),
             child: const Text('Add Device'),
           ),
@@ -134,7 +134,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: const Text('Add Shared Devices?'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -168,7 +168,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppTheme.primaryColor,
+              backgroundColor: HBotColors.primary,
             ),
             child: const Text('Add All'),
           ),
@@ -275,7 +275,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
               width: 250,
               height: 250,
               decoration: BoxDecoration(
-                border: Border.all(color: AppTheme.primaryColor, width: 3),
+                border: Border.all(color: HBotColors.primary, width: 3),
                 borderRadius: BorderRadius.circular(12),
               ),
             ),

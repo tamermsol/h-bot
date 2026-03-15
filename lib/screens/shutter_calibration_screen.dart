@@ -300,28 +300,28 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: isDark
-            ? AppTheme.surfaceColor
-            : AppTheme.lightCardColor,
+            ? HBotColors.surfaceLight
+            : HBotColors.cardLight,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimary),
+          icon: const Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: const Text(
           'Shutter Calibration',
           style: TextStyle(
-            color: AppTheme.textPrimary,
+            color: HBotColors.textPrimaryLight,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -329,17 +329,17 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
             Text(
               widget.device.deviceName,
               style: const TextStyle(
-                color: AppTheme.textPrimary,
+                color: HBotColors.textPrimaryLight,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Instructions card
             _buildInstructionsCard(),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Close calibration section
             _buildCalibrationSection(
@@ -352,7 +352,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
               icon: Icons.arrow_downward,
               color: Colors.red,
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Open calibration section
             _buildCalibrationSection(
@@ -365,14 +365,14 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
               icon: Icons.arrow_upward,
               color: Colors.green,
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Timer display (when calibrating)
             if (_isCalibrating) _buildTimerDisplay(),
 
             // Stop button (when calibrating)
             if (_isCalibrating) ...[
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
               ElevatedButton.icon(
                 onPressed: _stopCalibration,
                 icon: const Icon(Icons.stop, size: 32),
@@ -385,7 +385,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                    borderRadius: BorderRadius.circular(HBotRadius.medium),
                   ),
                 ),
               ),
@@ -393,7 +393,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
             // Apply and Reset buttons
             if (!_isCalibrating) ...[
-              const SizedBox(height: AppTheme.paddingLarge),
+              const SizedBox(height: HBotSpacing.space6),
               Row(
                 children: [
                   Expanded(
@@ -402,13 +402,13 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                       icon: const Icon(Icons.refresh),
                       label: const Text('Reset'),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: AppTheme.textPrimary,
-                        side: const BorderSide(color: AppTheme.textHint),
+                        foregroundColor: HBotColors.textPrimaryLight,
+                        side: const BorderSide(color: HBotColors.textTertiaryLight),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                     ),
                   ),
-                  const SizedBox(width: AppTheme.paddingMedium),
+                  const SizedBox(width: HBotSpacing.space4),
                   Expanded(
                     flex: 2,
                     child: ElevatedButton.icon(
@@ -416,7 +416,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                       icon: const Icon(Icons.check),
                       label: const Text('Apply Calibration'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.primaryColor,
+                        backgroundColor: HBotColors.primary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
@@ -433,9 +433,9 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
   Widget _buildInstructionsCard() {
     return Card(
-      color: AppTheme.cardColor,
+      color: HBotColors.cardLight,
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -443,28 +443,28 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
               children: [
                 Icon(
                   Icons.info_outline,
-                  color: AppTheme.primaryColor,
+                  color: HBotColors.primary,
                   size: 24,
                 ),
                 const SizedBox(width: 8),
                 const Text(
                   'Calibration Instructions',
                   style: TextStyle(
-                    color: AppTheme.textPrimary,
+                    color: HBotColors.textPrimaryLight,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             const Text(
               '1. Complete BOTH calibrations (close and open)\n'
               '2. Follow the instructions for each calibration\n'
               '3. Press STOP when the shutter reaches its limit\n'
               '4. Click "Apply Calibration" to save settings',
               style: TextStyle(
-                color: AppTheme.textSecondary,
+                color: HBotColors.textSecondaryLight,
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -488,9 +488,9 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
     final canStart = !_isCalibrating;
 
     return Card(
-      color: isActive ? color.withOpacity(0.1) : AppTheme.cardColor,
+      color: isActive ? color.withOpacity(0.1) : HBotColors.cardLight,
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -502,7 +502,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                   child: Text(
                     title,
                     style: TextStyle(
-                      color: AppTheme.textPrimary,
+                      color: HBotColors.textPrimaryLight,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -539,16 +539,16 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                   ),
               ],
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Text(
               description,
               style: const TextStyle(
-                color: AppTheme.textSecondary,
+                color: HBotColors.textSecondaryLight,
                 fontSize: 14,
                 height: 1.4,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -558,7 +558,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: color,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor: AppTheme.textHint,
+                  disabledBackgroundColor: HBotColors.textTertiaryLight,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
@@ -571,24 +571,24 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
   Widget _buildTimerDisplay() {
     return Card(
-      color: AppTheme.primaryColor.withOpacity(0.1),
+      color: HBotColors.primary.withOpacity(0.1),
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           children: [
             const Text(
               'Calibration in Progress',
               style: TextStyle(
-                color: AppTheme.textPrimary,
+                color: HBotColors.textPrimaryLight,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Text(
               '$_elapsedSeconds',
               style: TextStyle(
-                color: AppTheme.primaryColor,
+                color: HBotColors.primary,
                 fontSize: 64,
                 fontWeight: FontWeight.bold,
                 fontFeatures: [FontFeature.tabularFigures()],
@@ -596,7 +596,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
             ),
             const Text(
               'seconds',
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 16),
+              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 16),
             ),
           ],
         ),

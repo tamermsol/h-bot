@@ -86,18 +86,18 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
 
               // Header
               Padding(
-                padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                padding: const EdgeInsets.all(HBotSpacing.space4),
                 child: Row(
                   children: [
-                    const Icon(Icons.bug_report, color: AppTheme.primaryColor),
-                    const SizedBox(width: AppTheme.paddingSmall),
+                    const Icon(Icons.bug_report, color: HBotColors.primary),
+                    const SizedBox(width: HBotSpacing.space2),
                     const Expanded(
                       child: Text(
                         'MQTT Debug Information',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.textPrimary,
+                          color: HBotColors.textPrimaryLight,
                         ),
                       ),
                     ),
@@ -115,12 +115,12 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
               Expanded(
                 child: ListView(
                   controller: scrollController,
-                  padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                  padding: const EdgeInsets.all(HBotSpacing.space4),
                   children: [
                     _buildConnectionInfo(),
-                    const SizedBox(height: AppTheme.paddingLarge),
+                    const SizedBox(height: HBotSpacing.space6),
                     _buildBrokerInfo(),
-                    const SizedBox(height: AppTheme.paddingLarge),
+                    const SizedBox(height: HBotSpacing.space6),
                     _buildDebugMessages(),
                   ],
                 ),
@@ -167,14 +167,14 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Icon(statusIcon, color: statusColor, size: 20),
-                const SizedBox(width: AppTheme.paddingSmall),
+                const SizedBox(width: HBotSpacing.space2),
                 Text(
                   'Connection Status',
                   style: TextStyle(
@@ -185,7 +185,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                 ),
               ],
             ),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             Text(
               statusText,
               style: TextStyle(
@@ -194,7 +194,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Row(
               children: [
                 Expanded(
@@ -206,12 +206,12 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                     icon: const Icon(Icons.refresh),
                     label: const Text('Reconnect'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primaryColor,
+                      backgroundColor: HBotColors.primary,
                       foregroundColor: Colors.white,
                     ),
                   ),
                 ),
-                const SizedBox(width: AppTheme.paddingSmall),
+                const SizedBox(width: HBotSpacing.space2),
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: _copyDebugInfo,
@@ -230,7 +230,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
   Widget _buildBrokerInfo() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -239,10 +239,10 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.textPrimary,
+                color: HBotColors.textPrimaryLight,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             _buildInfoRow('Host', 'y3ae1177.ala.eu-central-1.emqxsl.com'),
             _buildInfoRow('Port', '8883 (TLS/SSL)'),
             _buildInfoRow('Username', 'admin'),
@@ -268,7 +268,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
               '$label:',
               style: const TextStyle(
                 fontSize: 12,
-                color: AppTheme.textSecondary,
+                color: HBotColors.textSecondaryLight,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -276,7 +276,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 12, color: AppTheme.textPrimary),
+              style: const TextStyle(fontSize: 12, color: HBotColors.textPrimaryLight),
             ),
           ),
         ],
@@ -287,7 +287,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
   Widget _buildDebugMessages() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -299,7 +299,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.textPrimary,
+                      color: HBotColors.textPrimaryLight,
                     ),
                   ),
                 ),
@@ -311,7 +311,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                 ),
               ],
             ),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             Container(
               height: 200,
               width: double.infinity,
@@ -325,7 +325,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                       child: Text(
                         'No debug messages',
                         style: TextStyle(
-                          color: AppTheme.textSecondary,
+                          color: HBotColors.textSecondaryLight,
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -342,7 +342,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                             style: const TextStyle(
                               fontSize: 10,
                               fontFamily: 'monospace',
-                              color: AppTheme.textPrimary,
+                              color: HBotColors.textPrimaryLight,
                             ),
                           ),
                         );

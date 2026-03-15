@@ -20,25 +20,25 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = isDark ? AppTheme.cardColor : AppTheme.lightCardColor;
+    final cardColor = isDark ? HBotColors.cardLight : HBotColors.cardLight;
     final textPrimary = isDark
-        ? AppTheme.textPrimary
-        : AppTheme.lightTextPrimary;
+        ? HBotColors.textPrimaryLight
+        : HBotColors.textPrimaryLight;
     final textSecondary = isDark
-        ? AppTheme.textSecondary
-        : AppTheme.lightTextSecondary;
+        ? HBotColors.textSecondaryLight
+        : HBotColors.textSecondaryLight;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
           color: cardColor,
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          borderRadius: BorderRadius.circular(HBotRadius.medium),
           border: Border.all(
             color: isDark
                 ? color.withOpacity(0.3)
-                : AppTheme.lightBorderColor,
+                : HBotColors.borderLight,
             width: 1,
           ),
           boxShadow: [
@@ -57,12 +57,12 @@ class ProfileCard extends StatelessWidget {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                borderRadius: BorderRadius.circular(HBotRadius.small),
               ),
               child: Icon(icon, color: color, size: 24),
             ),
 
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Value
             Text(

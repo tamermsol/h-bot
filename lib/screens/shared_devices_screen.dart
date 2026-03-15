@@ -49,13 +49,13 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Shared with Me'),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         actions: [
           IconButton(
             icon: const Icon(Icons.qr_code_scanner),
@@ -83,25 +83,25 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                 itemBuilder: (context, index) {
                   final shared = _sharedDevices[index];
                   return Card(
-                    color: AppTheme.getCardColor(context),
+                    color: HBotColors.cardLight,
                     margin: const EdgeInsets.only(bottom: 12),
                     child: ListTile(
                       leading: Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryColor.withOpacity(0.2),
+                          color: HBotColors.primary.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
                           _getDeviceIcon(shared.deviceType ?? ''),
-                          color: AppTheme.primaryColor,
+                          color: HBotColors.primary,
                         ),
                       ),
                       title: Text(
                         shared.deviceName ?? 'Unknown Device',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: AppTheme.getTextPrimary(context),
+                          color: HBotColors.textPrimaryLight,
                         ),
                       ),
                       subtitle: Column(
@@ -112,7 +112,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                             'Type: ${_getDeviceTypeName(shared.deviceType ?? '')}',
                             style: TextStyle(
                               fontSize: 13,
-                              color: AppTheme.getTextSecondary(context),
+                              color: HBotColors.textSecondaryLight,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -120,7 +120,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                             'Owner: ${shared.ownerEmail ?? 'Unknown'}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: AppTheme.getTextSecondary(context),
+                              color: HBotColors.textSecondaryLight,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -168,7 +168,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
             Icon(
               Icons.share_outlined,
               size: 80,
-              color: AppTheme.getTextHint(context),
+              color: HBotColors.textTertiaryLight,
             ),
             const SizedBox(height: 16),
             Text(
@@ -176,14 +176,14 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: AppTheme.getTextPrimary(context),
+                color: HBotColors.textPrimaryLight,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'Devices shared with you will appear here.\nControl them from your dashboard.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppTheme.getTextSecondary(context)),
+              style: TextStyle(color: HBotColors.textSecondaryLight),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -198,7 +198,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
               icon: const Icon(Icons.qr_code_scanner),
               label: const Text('Scan QR Code'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
+                backgroundColor: HBotColors.primary,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 12,

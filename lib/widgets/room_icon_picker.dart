@@ -101,15 +101,15 @@ class RoomIconPicker extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppTheme.primaryColor.withOpacity(0.2)
-                    : AppTheme.getCardColor(context),
+                    ? HBotColors.primary.withOpacity(0.2)
+                    : HBotColors.cardLight,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isSelected
-                      ? AppTheme.primaryColor
+                      ? HBotColors.primary
                       : (Theme.of(context).brightness == Brightness.dark
                             ? Colors.transparent
-                            : AppTheme.lightCardBorder),
+                            : HBotColors.borderLight),
                   width: isSelected ? 2 : 1,
                 ),
               ),
@@ -119,8 +119,8 @@ class RoomIconPicker extends StatelessWidget {
                   Icon(
                     iconData['icon'] as IconData,
                     color: isSelected
-                        ? AppTheme.primaryColor
-                        : AppTheme.getTextSecondary(context),
+                        ? HBotColors.primary
+                        : HBotColors.textSecondaryLight,
                     size: 28,
                   ),
                   const SizedBox(height: 4),
@@ -130,8 +130,8 @@ class RoomIconPicker extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 9,
                         color: isSelected
-                            ? AppTheme.primaryColor
-                            : AppTheme.getTextSecondary(context),
+                            ? HBotColors.primary
+                            : HBotColors.textSecondaryLight,
                       ),
                       textAlign: TextAlign.center,
                       maxLines: 2,

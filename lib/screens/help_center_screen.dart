@@ -45,7 +45,7 @@ class HelpCenterScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: AppTheme.errorColor,
+        backgroundColor: HBotColors.error,
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -57,17 +57,17 @@ class HelpCenterScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Help Center'),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -76,25 +76,25 @@ class HelpCenterScreen extends StatelessWidget {
               'We\'re here to help',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppTheme.getTextPrimary(context),
+                color: HBotColors.textPrimaryLight,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             Text(
               'Get in touch with us through any of the following channels',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.getTextSecondary(context),
+                color: HBotColors.textSecondaryLight,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Contact Information Section
             _buildSectionHeader(context, 'Contact Information'),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Container(
               decoration: BoxDecoration(
-                color: AppTheme.getCardColor(context),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                color: HBotColors.cardLight,
+                borderRadius: HBotRadius.mediumRadius,
               ),
               child: Column(
                 children: [
@@ -143,16 +143,16 @@ class HelpCenterScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Additional Info
             Container(
-              padding: const EdgeInsets.all(AppTheme.paddingMedium),
+              padding: const EdgeInsets.all(HBotSpacing.space4),
               decoration: BoxDecoration(
-                color: AppTheme.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                color: HBotColors.primary.withOpacity(0.1),
+                borderRadius: HBotRadius.mediumRadius,
                 border: Border.all(
-                  color: AppTheme.primaryColor.withOpacity(0.3),
+                  color: HBotColors.primary.withOpacity(0.3),
                   width: 1,
                 ),
               ),
@@ -160,15 +160,15 @@ class HelpCenterScreen extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.info_outline,
-                    color: AppTheme.primaryColor,
+                    color: HBotColors.primary,
                     size: 24,
                   ),
-                  const SizedBox(width: AppTheme.paddingMedium),
+                  const SizedBox(width: HBotSpacing.space4),
                   Expanded(
                     child: Text(
                       'We typically respond within 24 hours during business days.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.getTextPrimary(context),
+                        color: HBotColors.textPrimaryLight,
                       ),
                     ),
                   ),
@@ -186,7 +186,7 @@ class HelpCenterScreen extends StatelessWidget {
       title,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
         fontWeight: FontWeight.w600,
-        color: AppTheme.getTextPrimary(context),
+        color: HBotColors.textPrimaryLight,
       ),
     );
   }
@@ -201,30 +201,30 @@ class HelpCenterScreen extends StatelessWidget {
   }) {
     return ListTile(
       leading: Container(
-        padding: const EdgeInsets.all(AppTheme.paddingSmall),
+        padding: const EdgeInsets.all(HBotSpacing.space2),
         decoration: BoxDecoration(
-          color: AppTheme.primaryColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+          color: HBotColors.primary.withOpacity(0.1),
+          borderRadius: HBotRadius.smallRadius,
         ),
-        child: Icon(icon, color: AppTheme.primaryColor, size: 24),
+        child: Icon(icon, color: HBotColors.primary, size: 24),
       ),
       title: Text(
         title,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontWeight: FontWeight.w500,
-          color: AppTheme.getTextPrimary(context),
+          color: HBotColors.textPrimaryLight,
         ),
       ),
       subtitle: Text(
         subtitle,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: AppTheme.getTextSecondary(context),
+          color: HBotColors.textSecondaryLight,
         ),
       ),
       trailing: Icon(
         Icons.arrow_forward_ios,
         size: 16,
-        color: AppTheme.getTextSecondary(context),
+        color: HBotColors.textSecondaryLight,
       ),
       onTap: onTap,
     );

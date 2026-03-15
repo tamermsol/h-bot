@@ -514,7 +514,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: AppTheme.getCardColor(context),
+              backgroundColor: HBotColors.cardLight,
               title: const Text('Change Password'),
               content: SingleChildScrollView(
                 child: Column(
@@ -540,12 +540,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
-                            AppTheme.radiusSmall,
+                            HBotRadius.small,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppTheme.paddingMedium),
+                    const SizedBox(height: HBotSpacing.space4),
                     TextField(
                       controller: newPasswordController,
                       obscureText: obscureNewPassword,
@@ -566,12 +566,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
-                            AppTheme.radiusSmall,
+                            HBotRadius.small,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppTheme.paddingMedium),
+                    const SizedBox(height: HBotSpacing.space4),
                     TextField(
                       controller: confirmPasswordController,
                       obscureText: obscureConfirmPassword,
@@ -592,17 +592,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
-                            AppTheme.radiusSmall,
+                            HBotRadius.small,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppTheme.paddingSmall),
+                    const SizedBox(height: HBotSpacing.space2),
                     const Text(
                       'Password must be at least 6 characters',
                       style: TextStyle(
                         fontSize: 12,
-                        color: AppTheme.textSecondary,
+                        color: HBotColors.textSecondaryLight,
                       ),
                     ),
                   ],
@@ -625,7 +625,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                   style: TextButton.styleFrom(
-                    foregroundColor: AppTheme.primaryColor,
+                    foregroundColor: HBotColors.primary,
                   ),
                   child: const Text('Change Password'),
                 ),
@@ -650,7 +650,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please fill in all fields'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -660,7 +660,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Password must be at least 6 characters'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -670,7 +670,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('New passwords do not match'),
-          backgroundColor: AppTheme.errorColor,
+          backgroundColor: HBotColors.error,
         ),
       );
       return;
@@ -697,7 +697,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Text('Changing password...'),
             ],
           ),
-          backgroundColor: AppTheme.primaryColor,
+          backgroundColor: HBotColors.primary,
           duration: const Duration(seconds: 3),
         ),
       );
@@ -732,7 +732,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to change password: $e'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 4),
           ),
         );
@@ -745,7 +745,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Sign Out'),
           content: const Text('Are you sure you want to sign out?'),
           actions: [
@@ -760,7 +760,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.of(context).pop(); // Close dialog first
                 await _handleSignOut();
               },
-              style: TextButton.styleFrom(foregroundColor: AppTheme.errorColor),
+              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
               child: const Text('Sign Out'),
             ),
           ],
@@ -789,7 +789,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text('Signing out...'),
               ],
             ),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
             duration: const Duration(seconds: 2),
           ),
         );
@@ -811,7 +811,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error signing out: $e'),
-            backgroundColor: AppTheme.errorColor,
+            backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 4),
           ),
         );

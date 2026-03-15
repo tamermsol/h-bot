@@ -178,8 +178,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 const SizedBox(height: HBotSpacing.space5),
 
+                // Logo
+                Center(
+                  child: ClipRRect(
+                    borderRadius: HBotRadius.mediumRadius,
+                    child: Image.asset(
+                      'assets/images/hbot_logo.png',
+                      width: 64,
+                      height: 64,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 64, height: 64,
+                        decoration: BoxDecoration(gradient: HBotColors.primaryGradient, borderRadius: HBotRadius.mediumRadius),
+                        child: const Icon(Icons.home_rounded, color: Colors.white, size: 32),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: HBotSpacing.space4),
+
                 Text(
-                  'Create Account',
+                  'Create account',
                   style: Theme.of(context).textTheme.headlineLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -187,7 +206,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: HBotSpacing.space2),
 
                 Text(
-                  'Join the smart home revolution',
+                  'Set up your smart home',
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),

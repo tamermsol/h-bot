@@ -187,12 +187,12 @@ class _DeviceSelectorState extends State<DeviceSelector> {
     if (_isLoading) {
       return const Center(
         child: Padding(
-          padding: EdgeInsets.all(AppTheme.paddingLarge),
+          padding: EdgeInsets.all(HBotSpacing.space6),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               CircularProgressIndicator(),
-              SizedBox(height: AppTheme.paddingMedium),
+              SizedBox(height: HBotSpacing.space4),
               Text('Loading devices...'),
             ],
           ),
@@ -204,20 +204,20 @@ class _DeviceSelectorState extends State<DeviceSelector> {
     if (_errorMessage != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(AppTheme.paddingLarge),
+          padding: const EdgeInsets.all(HBotSpacing.space6),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.error_outline, size: 64, color: AppTheme.textHint),
-              const SizedBox(height: AppTheme.paddingMedium),
+              Icon(Icons.error_outline, size: 64, color: HBotColors.textTertiaryLight),
+              const SizedBox(height: HBotSpacing.space4),
               Text(
                 _errorMessage!,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppTheme.getTextSecondary(context),
+                  color: HBotColors.textSecondaryLight,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
               ElevatedButton.icon(
                 onPressed: _loadDevices,
                 icon: const Icon(Icons.refresh),
@@ -248,7 +248,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
             children: _categories.map((category) {
               final isSelected = category == _selectedCategory;
               return Container(
-                margin: const EdgeInsets.only(right: AppTheme.paddingSmall),
+                margin: const EdgeInsets.only(right: HBotSpacing.space2),
                 child: FilterChip(
                   label: Text(category),
                   selected: isSelected,
@@ -262,29 +262,29 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                   labelStyle: TextStyle(
                     color: isSelected
                         ? widget.accentColor
-                        : AppTheme.getTextSecondary(context),
+                        : HBotColors.textSecondaryLight,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),
-                  backgroundColor: AppTheme.getCardColor(context),
+                  backgroundColor: HBotColors.cardLight,
                   side: BorderSide(
                     color: isSelected
                         ? widget.accentColor.withOpacity(0.5)
-                        : AppTheme.textHint.withOpacity(0.3),
+                        : HBotColors.textTertiaryLight.withOpacity(0.3),
                   ),
                 ),
               );
             }).toList(),
           ),
         ),
-        const SizedBox(height: AppTheme.paddingMedium),
+        const SizedBox(height: HBotSpacing.space4),
 
         // Selected devices count
         if (widget.selectedDevices.isNotEmpty) ...[
           Container(
-            padding: const EdgeInsets.all(AppTheme.paddingMedium),
+            padding: const EdgeInsets.all(HBotSpacing.space4),
             decoration: BoxDecoration(
               color: widget.accentColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+              borderRadius: BorderRadius.circular(HBotRadius.medium),
               border: Border.all(
                 color: widget.accentColor.withOpacity(0.3),
               ),
@@ -292,7 +292,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
             child: Row(
               children: [
                 Icon(Icons.check_circle, color: widget.accentColor, size: 20),
-                const SizedBox(width: AppTheme.paddingSmall),
+                const SizedBox(width: HBotSpacing.space2),
                 Text(
                   '${widget.selectedDevices.length} devices selected',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -303,7 +303,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
               ],
             ),
           ),
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
         ],
 
         // Device list
@@ -318,35 +318,35 @@ class _DeviceSelectorState extends State<DeviceSelector> {
             );
 
             return Container(
-              margin: const EdgeInsets.only(bottom: AppTheme.paddingSmall),
+              margin: const EdgeInsets.only(bottom: HBotSpacing.space2),
               child: ListTile(
                 leading: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? widget.accentColor.withOpacity(0.2)
-                        : AppTheme.getCardColor(context),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                        : HBotColors.cardLight,
+                    borderRadius: BorderRadius.circular(HBotRadius.small),
                   ),
                   child: Icon(
                     device['icon'],
                     color: isSelected
                         ? widget.accentColor
-                        : AppTheme.getTextSecondary(context),
+                        : HBotColors.textSecondaryLight,
                     size: 20,
                   ),
                 ),
                 title: Text(
                   device['name'],
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: AppTheme.getTextPrimary(context),
+                    color: HBotColors.textPrimaryLight,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),
                 ),
                 subtitle: Text(
                   device['room'],
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.getTextHint(context),
+                    color: HBotColors.textTertiaryLight,
                   ),
                 ),
                 trailing: Checkbox(
@@ -361,9 +361,9 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                 },
                 tileColor: isSelected
                     ? widget.accentColor.withOpacity(0.1)
-                    : AppTheme.getCardColor(context),
+                    : HBotColors.cardLight,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                  borderRadius: BorderRadius.circular(HBotRadius.medium),
                   side: BorderSide(
                     color: isSelected
                         ? widget.accentColor.withOpacity(0.5)

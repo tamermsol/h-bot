@@ -61,8 +61,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.dark(
-              primary: AppTheme.primaryColor,
-              surface: AppTheme.cardColor,
+              primary: HBotColors.primary,
+              surface: HBotColors.cardLight,
             ),
           ),
           child: child!,
@@ -99,20 +99,20 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: Text(widget.existingTimer == null ? 'Add Timer' : 'Edit Timer'),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         actions: [
           TextButton(
             onPressed: _saveTimer,
             child: const Text(
               'Save',
               style: TextStyle(
-                color: AppTheme.primaryColor,
+                color: HBotColors.primary,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -174,7 +174,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: AppTheme.getTextPrimary(context),
+          color: HBotColors.textPrimaryLight,
         ),
       ),
     );
@@ -183,8 +183,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
   Widget _buildTimerModeSelector() {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.getCardColor(context),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        color: HBotColors.cardLight,
+        borderRadius: HBotRadius.mediumRadius,
       ),
       child: Column(
         children: TimerMode.values.map((mode) {
@@ -197,9 +197,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                 border: Border(
                   bottom: mode != TimerMode.values.last
                       ? BorderSide(
-                          color: AppTheme.getTextSecondary(
-                            context,
-                          ).withOpacity(0.1),
+                          color: HBotColors.textSecondaryLight.withOpacity(0.1),
                         )
                       : BorderSide.none,
                 ),
@@ -213,8 +211,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                         ? Icons.nights_stay
                         : Icons.schedule,
                     color: isSelected
-                        ? AppTheme.primaryColor
-                        : AppTheme.getTextSecondary(context),
+                        ? HBotColors.primary
+                        : HBotColors.textSecondaryLight,
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -223,8 +221,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: isSelected
-                            ? AppTheme.primaryColor
-                            : AppTheme.getTextPrimary(context),
+                            ? HBotColors.primary
+                            : HBotColors.textPrimaryLight,
                         fontWeight: isSelected
                             ? FontWeight.w600
                             : FontWeight.normal,
@@ -234,7 +232,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                   if (isSelected)
                     const Icon(
                       Icons.check_circle,
-                      color: AppTheme.primaryColor,
+                      color: HBotColors.primary,
                     ),
                 ],
               ),
@@ -251,15 +249,15 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: AppTheme.getCardColor(context),
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          color: HBotColors.cardLight,
+          borderRadius: HBotRadius.mediumRadius,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
               Icons.access_time,
-              color: AppTheme.primaryColor,
+              color: HBotColors.primary,
               size: 32,
             ),
             const SizedBox(width: 16),
@@ -268,7 +266,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
               style: const TextStyle(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.primaryColor,
+                color: HBotColors.primary,
               ),
             ),
           ],
@@ -280,8 +278,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
   Widget _buildChannelSelector() {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.getCardColor(context),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        color: HBotColors.cardLight,
+        borderRadius: HBotRadius.mediumRadius,
       ),
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -294,8 +292,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
               margin: const EdgeInsets.only(bottom: 8),
               decoration: BoxDecoration(
                 color: _output == 0
-                    ? AppTheme.primaryColor
-                    : AppTheme.getTextSecondary(context).withOpacity(0.1),
+                    ? HBotColors.primary
+                    : HBotColors.textSecondaryLight.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -305,7 +303,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                     Icons.all_inclusive,
                     color: _output == 0
                         ? Colors.white
-                        : AppTheme.getTextSecondary(context),
+                        : HBotColors.textSecondaryLight,
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -316,7 +314,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                       fontWeight: FontWeight.w600,
                       color: _output == 0
                           ? Colors.white
-                          : AppTheme.getTextSecondary(context),
+                          : HBotColors.textSecondaryLight,
                     ),
                   ),
                 ],
@@ -344,10 +342,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? AppTheme.primaryColor
-                          : AppTheme.getTextSecondary(
-                              context,
-                            ).withOpacity(0.1),
+                          ? HBotColors.primary
+                          : HBotColors.textSecondaryLight.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -358,7 +354,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                         fontWeight: FontWeight.w600,
                         color: isSelected
                             ? Colors.white
-                            : AppTheme.getTextSecondary(context),
+                            : HBotColors.textSecondaryLight,
                       ),
                     ),
                   ),
@@ -374,8 +370,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
   Widget _buildActionSelector() {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.getCardColor(context),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        color: HBotColors.cardLight,
+        borderRadius: HBotRadius.mediumRadius,
       ),
       child: Column(
         children: TimerAction.values.map((action) {
@@ -388,9 +384,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                 border: Border(
                   bottom: action != TimerAction.values.last
                       ? BorderSide(
-                          color: AppTheme.getTextSecondary(
-                            context,
-                          ).withOpacity(0.1),
+                          color: HBotColors.textSecondaryLight.withOpacity(0.1),
                         )
                       : BorderSide.none,
                 ),
@@ -409,7 +403,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                               : action == TimerAction.off
                               ? Colors.red
                               : Colors.orange)
-                        : AppTheme.getTextSecondary(context),
+                        : HBotColors.textSecondaryLight,
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -418,8 +412,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         color: isSelected
-                            ? AppTheme.primaryColor
-                            : AppTheme.getTextPrimary(context),
+                            ? HBotColors.primary
+                            : HBotColors.textPrimaryLight,
                         fontWeight: isSelected
                             ? FontWeight.w600
                             : FontWeight.normal,
@@ -429,7 +423,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                   if (isSelected)
                     const Icon(
                       Icons.check_circle,
-                      color: AppTheme.primaryColor,
+                      color: HBotColors.primary,
                     ),
                 ],
               ),
@@ -446,8 +440,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.getCardColor(context),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        color: HBotColors.cardLight,
+        borderRadius: HBotRadius.mediumRadius,
       ),
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -469,10 +463,8 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                   height: 56,
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppTheme.primaryColor
-                        : AppTheme.getTextSecondary(
-                            context,
-                          ).withOpacity(0.1),
+                        ? HBotColors.primary
+                        : HBotColors.textSecondaryLight.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -485,7 +477,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                           fontWeight: FontWeight.bold,
                           color: isSelected
                               ? Colors.white
-                              : AppTheme.getTextSecondary(context),
+                              : HBotColors.textSecondaryLight,
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -495,9 +487,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                           fontSize: 9,
                           color: isSelected
                               ? Colors.white.withOpacity(0.8)
-                              : AppTheme.getTextSecondary(
-                                  context,
-                                ).withOpacity(0.6),
+                              : HBotColors.textSecondaryLight.withOpacity(0.6),
                         ),
                       ),
                     ],
@@ -547,23 +537,21 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: AppTheme.getCardColor(context),
+          color: HBotColors.cardLight,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: AppTheme.getTextSecondary(context).withOpacity(0.2),
+            color: HBotColors.textSecondaryLight.withOpacity(0.2),
           ),
         ),
         child: Column(
           children: [
-            Icon(icon, size: 20, color: AppTheme.getTextSecondary(context)),
+            Icon(icon, size: 20, color: HBotColors.textSecondaryLight),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
                 fontSize: 11,
-                color: AppTheme.getTextSecondary(
-                  context,
-                ).withOpacity(0.8),
+                color: HBotColors.textSecondaryLight.withOpacity(0.8),
               ),
             ),
           ],
@@ -575,13 +563,13 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
   Widget _buildRepeatOption() {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.getCardColor(context),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        color: HBotColors.cardLight,
+        borderRadius: HBotRadius.mediumRadius,
       ),
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          Icon(Icons.repeat, color: AppTheme.getTextSecondary(context)),
+          Icon(Icons.repeat, color: HBotColors.textSecondaryLight),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
@@ -592,7 +580,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: AppTheme.getTextPrimary(context),
+                    color: HBotColors.textPrimaryLight,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -600,7 +588,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                   'Timer will repeat on selected days',
                   style: TextStyle(
                     fontSize: 12,
-                    color: AppTheme.getTextSecondary(context),
+                    color: HBotColors.textSecondaryLight,
                   ),
                 ),
               ],
@@ -609,7 +597,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
           Switch(
             value: _repeat,
             onChanged: (value) => setState(() => _repeat = value),
-            activeColor: AppTheme.primaryColor,
+            activeColor: HBotColors.primary,
           ),
         ],
       ),
@@ -623,16 +611,16 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: AppTheme.getTextPrimary(context),
+          color: HBotColors.textPrimaryLight,
         ),
       ),
-      backgroundColor: AppTheme.getCardColor(context),
-      collapsedBackgroundColor: AppTheme.getCardColor(context),
+      backgroundColor: HBotColors.cardLight,
+      collapsedBackgroundColor: HBotColors.cardLight,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        borderRadius: HBotRadius.mediumRadius,
       ),
       collapsedShape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        borderRadius: HBotRadius.mediumRadius,
       ),
       children: [
         Padding(
@@ -645,7 +633,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: AppTheme.getTextSecondary(context),
+                  color: HBotColors.textSecondaryLight,
                 ),
               ),
               const SizedBox(height: 8),
@@ -653,9 +641,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                 'Add ±$_window minutes random delay for security',
                 style: TextStyle(
                   fontSize: 12,
-                  color: AppTheme.getTextSecondary(
-                    context,
-                  ).withOpacity(0.7),
+                  color: HBotColors.textSecondaryLight.withOpacity(0.7),
                 ),
               ),
               Slider(
@@ -664,7 +650,7 @@ class _AddTimerScreenState extends State<AddTimerScreen> {
                 max: 15,
                 divisions: 15,
                 label: '$_window min',
-                activeColor: AppTheme.primaryColor,
+                activeColor: HBotColors.primary,
                 onChanged: (value) {
                   setState(() {
                     _window = value.toInt();

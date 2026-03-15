@@ -123,19 +123,23 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 const SizedBox(height: HBotSpacing.space9),
 
-                // Logo
+                // Logo — H-Bot brand mark from h-bot.tech
                 Center(
-                  child: Container(
-                    width: 48,
-                    height: 48,
-                    decoration: const BoxDecoration(
-                      color: HBotColors.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.home_rounded,
-                      color: Colors.white,
-                      size: 28,
+                  child: ClipRRect(
+                    borderRadius: HBotRadius.mediumRadius,
+                    child: Image.asset(
+                      'assets/images/hbot_logo.png',
+                      width: 64,
+                      height: 64,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          gradient: HBotColors.primaryGradient,
+                          borderRadius: HBotRadius.mediumRadius,
+                        ),
+                        child: const Icon(Icons.home_rounded, color: Colors.white, size: 32),
+                      ),
                     ),
                   ),
                 ),

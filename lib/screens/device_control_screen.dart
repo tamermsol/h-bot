@@ -452,21 +452,21 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         backgroundColor: isDark
-            ? AppTheme.surfaceColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.surfaceLight
+            : HBotColors.backgroundLight,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppTheme.getTextPrimary(context)),
+          icon: Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           _currentDevice.deviceName,
           style: TextStyle(
-            color: AppTheme.getTextPrimary(context),
+            color: HBotColors.textPrimaryLight,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -478,7 +478,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
             IconButton(
               icon: const Icon(
                 Icons.timer_outlined,
-                color: AppTheme.primaryColor,
+                color: HBotColors.primary,
               ),
               onPressed: () {
                 Navigator.push(
@@ -494,14 +494,14 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               tooltip: 'Set Timers',
             ),
           IconButton(
-            icon: Icon(Icons.refresh, color: AppTheme.getTextPrimary(context)),
+            icon: Icon(Icons.refresh, color: HBotColors.textPrimaryLight),
             onPressed: _refreshDeviceStatus,
             tooltip: 'Refresh device status',
           ),
           IconButton(
             icon: Icon(
               Icons.more_vert,
-              color: AppTheme.getTextPrimary(context),
+              color: HBotColors.textPrimaryLight,
             ),
             onPressed: _showDeviceOptions,
           ),
@@ -509,19 +509,19 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       ),
       body: _isLoading
           ? const Center(
-              child: CircularProgressIndicator(color: AppTheme.primaryColor),
+              child: CircularProgressIndicator(color: HBotColors.primary),
             )
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(AppTheme.paddingLarge),
+              padding: const EdgeInsets.all(HBotSpacing.space6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildDeviceHeader(),
-                  const SizedBox(height: AppTheme.paddingLarge),
+                  const SizedBox(height: HBotSpacing.space6),
                   _buildChannelControls(),
-                  const SizedBox(height: AppTheme.paddingLarge),
+                  const SizedBox(height: HBotSpacing.space6),
                   if (_showDebugInfo) ...[
-                    const SizedBox(height: AppTheme.paddingLarge),
+                    const SizedBox(height: HBotSpacing.space6),
                     _buildDebugInfo(),
                   ],
                 ],
@@ -537,7 +537,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         Text(
           _currentDevice.deviceName,
           style: TextStyle(
-            color: AppTheme.getTextPrimary(context),
+            color: HBotColors.textPrimaryLight,
             fontSize: 28,
             fontWeight: FontWeight.bold,
           ),
@@ -551,13 +551,13 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   void _showDeviceOptions() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.getCardColor(context),
+      backgroundColor: HBotColors.cardLight,
       isScrollControlled: true,
       builder: (context) => SafeArea(
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.symmetric(
-              vertical: AppTheme.paddingLarge,
+              vertical: HBotSpacing.space6,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -565,11 +565,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ListTile(
                   leading: Icon(
                     Icons.edit,
-                    color: AppTheme.getTextPrimary(context),
+                    color: HBotColors.textPrimaryLight,
                   ),
                   title: Text(
                     'Rename Device',
-                    style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                    style: TextStyle(color: HBotColors.textPrimaryLight),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -579,11 +579,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ListTile(
                   leading: Icon(
                     Icons.room,
-                    color: AppTheme.getTextPrimary(context),
+                    color: HBotColors.textPrimaryLight,
                   ),
                   title: Text(
                     'Move to Room',
-                    style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                    style: TextStyle(color: HBotColors.textPrimaryLight),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -595,15 +595,15 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   ListTile(
                     leading: Icon(
                       Icons.tune,
-                      color: AppTheme.getTextPrimary(context),
+                      color: HBotColors.textPrimaryLight,
                     ),
                     title: Text(
                       'Auto Calibrate Shutter',
-                      style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                      style: TextStyle(color: HBotColors.textPrimaryLight),
                     ),
                     subtitle: const Text(
                       'Measure time automatically',
-                      style: TextStyle(color: AppTheme.textHint, fontSize: 12),
+                      style: TextStyle(color: HBotColors.textTertiaryLight, fontSize: 12),
                     ),
                     onTap: () {
                       Navigator.pop(context);
@@ -613,15 +613,15 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   ListTile(
                     leading: Icon(
                       Icons.timer,
-                      color: AppTheme.getTextPrimary(context),
+                      color: HBotColors.textPrimaryLight,
                     ),
                     title: Text(
                       'Manual Calibrate Shutter',
-                      style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                      style: TextStyle(color: HBotColors.textPrimaryLight),
                     ),
                     subtitle: const Text(
                       'Enter times directly',
-                      style: TextStyle(color: AppTheme.textHint, fontSize: 12),
+                      style: TextStyle(color: HBotColors.textTertiaryLight, fontSize: 12),
                     ),
                     onTap: () {
                       Navigator.pop(context);
@@ -633,15 +633,15 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ListTile(
                   leading: Icon(
                     Icons.share_outlined,
-                    color: AppTheme.getTextPrimary(context),
+                    color: HBotColors.textPrimaryLight,
                   ),
                   title: Text(
                     'Share Device',
-                    style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                    style: TextStyle(color: HBotColors.textPrimaryLight),
                   ),
                   subtitle: const Text(
                     'Share with other users via QR code',
-                    style: TextStyle(color: AppTheme.textHint, fontSize: 12),
+                    style: TextStyle(color: HBotColors.textTertiaryLight, fontSize: 12),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -658,11 +658,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ListTile(
                   leading: Icon(
                     _showDebugInfo ? Icons.visibility_off : Icons.visibility,
-                    color: AppTheme.getTextPrimary(context),
+                    color: HBotColors.textPrimaryLight,
                   ),
                   title: Text(
                     _showDebugInfo ? 'Hide Device Info' : 'Show Device Info',
-                    style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                    style: TextStyle(color: HBotColors.textPrimaryLight),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -671,7 +671,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                     });
                   },
                 ),
-                const Divider(color: AppTheme.textHint),
+                const Divider(color: HBotColors.textTertiaryLight),
                 ListTile(
                   leading: const Icon(Icons.delete, color: Colors.red),
                   title: const Text(
@@ -740,28 +740,28 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Card(
-      color: isDark ? AppTheme.cardColor : Colors.white,
+      color: isDark ? HBotColors.cardLight : Colors.white,
       elevation: isDark ? 4 : 2,
       child: Padding(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Device Information',
               style: TextStyle(
-                color: AppTheme.getTextPrimary(context),
+                color: HBotColors.textPrimaryLight,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             _buildInfoRow('Manufacturer', manufacturer),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             _buildInfoRow('Device Model', modelName),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             _buildInfoRow('Mac address', macAddress ?? 'Unknown'),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             _buildInfoRow('IP Address', ipAddress ?? 'Unknown'),
           ],
         ),
@@ -781,7 +781,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           child: Text(
             label,
             style: TextStyle(
-              color: isDark ? AppTheme.textSecondary : Colors.grey[600],
+              color: isDark ? HBotColors.textSecondaryLight : Colors.grey[600],
               fontSize: 14,
             ),
           ),
@@ -790,7 +790,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           child: Text(
             value,
             style: TextStyle(
-              color: isDark ? AppTheme.textPrimary : Colors.grey[900],
+              color: isDark ? HBotColors.textPrimaryLight : Colors.grey[900],
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
@@ -885,8 +885,8 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: columns,
-            crossAxisSpacing: AppTheme.paddingMedium,
-            mainAxisSpacing: AppTheme.paddingMedium,
+            crossAxisSpacing: HBotSpacing.space4,
+            mainAxisSpacing: HBotSpacing.space4,
             childAspectRatio: 1.0,
           ),
           itemCount: widget.device.effectiveChannels,
@@ -921,10 +921,10 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isOn ? AppTheme.primaryColor : AppTheme.getCardColor(context),
+          color: isOn ? HBotColors.primary : HBotColors.cardLight,
           border: Border.all(
             color: isOn
-                ? AppTheme.primaryColor
+                ? HBotColors.primary
                 : (isDark ? Colors.grey[700]! : Colors.grey[400]!),
             width: 2,
           ),
@@ -938,7 +938,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 size: 40,
                 color: isOn
                     ? Colors.white
-                    : (isDark ? AppTheme.textSecondary : Colors.grey[600]),
+                    : (isDark ? HBotColors.textSecondaryLight : Colors.grey[600]),
               ),
               const SizedBox(height: 4),
               Text(
@@ -946,7 +946,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 style: TextStyle(
                   color: isOn
                       ? Colors.white
-                      : (isDark ? AppTheme.textSecondary : Colors.grey[700]),
+                      : (isDark ? HBotColors.textSecondaryLight : Colors.grey[700]),
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -968,14 +968,14 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: Text('Rename ${_getChannelName(channel)}'),
         content: TextField(
           controller: controller,
-          style: TextStyle(color: AppTheme.getTextPrimary(context)),
+          style: TextStyle(color: HBotColors.textPrimaryLight),
           decoration: const InputDecoration(
             hintText: 'Enter channel name',
-            hintStyle: TextStyle(color: AppTheme.textHint),
+            hintStyle: TextStyle(color: HBotColors.textTertiaryLight),
           ),
           autofocus: true,
         ),
@@ -1003,16 +1003,16 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: Text('${_getChannelName(channel)} Options'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              leading: const Icon(Icons.edit, color: AppTheme.primaryColor),
+              leading: const Icon(Icons.edit, color: HBotColors.primary),
               title: Text(
                 'Rename Channel',
-                style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                style: TextStyle(color: HBotColors.textPrimaryLight),
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -1024,15 +1024,15 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               leading: Icon(
                 Icons.lightbulb,
                 color: channelType == 'light'
-                    ? AppTheme.primaryColor
-                    : AppTheme.textSecondary,
+                    ? HBotColors.primary
+                    : HBotColors.textSecondaryLight,
               ),
               title: Text(
                 'Light',
-                style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                style: TextStyle(color: HBotColors.textPrimaryLight),
               ),
               trailing: channelType == 'light'
-                  ? const Icon(Icons.check, color: AppTheme.primaryColor)
+                  ? const Icon(Icons.check, color: HBotColors.primary)
                   : null,
               onTap: () {
                 Navigator.pop(context);
@@ -1043,15 +1043,15 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               leading: Icon(
                 Icons.power_settings_new,
                 color: channelType == 'switch'
-                    ? AppTheme.primaryColor
-                    : AppTheme.textSecondary,
+                    ? HBotColors.primary
+                    : HBotColors.textSecondaryLight,
               ),
               title: Text(
                 'Switch',
-                style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                style: TextStyle(color: HBotColors.textPrimaryLight),
               ),
               trailing: channelType == 'switch'
-                  ? const Icon(Icons.check, color: AppTheme.primaryColor)
+                  ? const Icon(Icons.check, color: HBotColors.primary)
                   : null,
               onTap: () {
                 Navigator.pop(context);
@@ -1192,7 +1192,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: const Text('Rename Device'),
         content: TextField(
           controller: controller,
@@ -1312,7 +1312,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Move to Room'),
           content: SizedBox(
             width: double.maxFinite,
@@ -1325,7 +1325,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 children: [
                   const Text(
                     'Select a room for this device:',
-                    style: TextStyle(color: AppTheme.textSecondary),
+                    style: TextStyle(color: HBotColors.textSecondaryLight),
                   ),
                   const SizedBox(height: 16),
                   // Scrollable list of rooms
@@ -1338,20 +1338,20 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                           ListTile(
                             leading: const Icon(
                               Icons.home_outlined,
-                              color: AppTheme.primaryColor,
+                              color: HBotColors.primary,
                             ),
                             title: Text(
                               'No Room',
                               style: TextStyle(
-                                color: AppTheme.getTextPrimary(context),
+                                color: HBotColors.textPrimaryLight,
                               ),
                             ),
                             subtitle: const Text(
                               'Place device in the main area',
-                              style: TextStyle(color: AppTheme.textSecondary),
+                              style: TextStyle(color: HBotColors.textSecondaryLight),
                             ),
                             selected: _currentDevice.roomId == null,
-                            selectedTileColor: AppTheme.primaryColor.withOpacity(0.1),
+                            selectedTileColor: HBotColors.primary.withOpacity(0.1),
                             onTap: () {
                               Navigator.pop(context);
                               _moveDeviceToRoom(null);
@@ -1365,16 +1365,16 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                               (room) => ListTile(
                                 leading: const Icon(
                                   Icons.room,
-                                  color: AppTheme.primaryColor,
+                                  color: HBotColors.primary,
                                 ),
                                 title: Text(
                                   room.name,
                                   style: TextStyle(
-                                    color: AppTheme.getTextPrimary(context),
+                                    color: HBotColors.textPrimaryLight,
                                   ),
                                 ),
                                 selected: _currentDevice.roomId == room.id,
-                                selectedTileColor: AppTheme.primaryColor
+                                selectedTileColor: HBotColors.primary
                                     .withOpacity(0.1),
                                 onTap: () {
                                   Navigator.pop(context);
@@ -1387,7 +1387,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                               padding: EdgeInsets.all(16.0),
                               child: Text(
                                 'No rooms available. Create rooms from the home screen.',
-                                style: TextStyle(color: AppTheme.textHint),
+                                style: TextStyle(color: HBotColors.textTertiaryLight),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -1507,7 +1507,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
+        backgroundColor: HBotColors.cardLight,
         title: const Row(
           children: [
             Icon(Icons.warning, color: Colors.red),
@@ -1522,14 +1522,14 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
             Text(
               'Are you sure you want to delete "${widget.device.deviceName}"?',
               style: TextStyle(
-                color: AppTheme.getTextPrimary(context),
+                color: HBotColors.textPrimaryLight,
                 fontSize: 16,
               ),
             ),
             const SizedBox(height: 12),
             const Text(
               'This action cannot be undone. All device data, settings, and channel configurations will be permanently removed.',
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
+              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 14),
             ),
           ],
         ),
@@ -1538,7 +1538,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
             onPressed: () => Navigator.pop(context),
             child: const Text(
               'Cancel',
-              style: TextStyle(color: AppTheme.textSecondary),
+              style: TextStyle(color: HBotColors.textSecondaryLight),
             ),
           ),
           TextButton(
@@ -1563,15 +1563,15 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            backgroundColor: AppTheme.getCardColor(context),
+            backgroundColor: HBotColors.cardLight,
             content: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircularProgressIndicator(color: AppTheme.primaryColor),
+                CircularProgressIndicator(color: HBotColors.primary),
                 SizedBox(width: 16),
                 Text(
                   'Deleting device...',
-                  style: TextStyle(color: AppTheme.getTextPrimary(context)),
+                  style: TextStyle(color: HBotColors.textPrimaryLight),
                 ),
               ],
             ),
@@ -1639,7 +1639,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            backgroundColor: AppTheme.getCardColor(context),
+            backgroundColor: HBotColors.cardLight,
             title: Row(
               children: [
                 Icon(errorIcon, color: Colors.red),
@@ -1649,7 +1649,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
             ),
             content: Text(
               errorMessage,
-              style: TextStyle(color: AppTheme.getTextPrimary(context)),
+              style: TextStyle(color: HBotColors.textPrimaryLight),
             ),
             actions: [
               TextButton(

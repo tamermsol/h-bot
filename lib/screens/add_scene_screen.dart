@@ -31,7 +31,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   // Scene data
   final TextEditingController _nameController = TextEditingController();
   IconData _selectedIcon = Icons.auto_awesome;
-  Color _selectedColor = AppTheme.primaryColor;
+  Color _selectedColor = HBotColors.primary;
   String _selectedTrigger = 'Manual';
   TimeOfDay? _selectedTime;
 
@@ -296,16 +296,16 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: Text(
           _isEditMode ? 'Edit Scene' : 'Create New Scene',
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
         elevation: 0,
         actions: [
           if (_currentStep > 0)
@@ -344,7 +344,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   Widget _buildProgressIndicator() {
     return Container(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       child: Row(
         children: List.generate(6, (index) {
           final isActive = index <= _currentStep;
@@ -352,13 +352,13 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           return Expanded(
             child: Container(
               margin: EdgeInsets.only(
-                right: index < 5 ? AppTheme.paddingSmall : 0,
+                right: index < 5 ? HBotSpacing.space2 : 0,
               ),
               height: 4,
               decoration: BoxDecoration(
                 color: isActive
-                    ? AppTheme.primaryColor
-                    : AppTheme.textHint.withOpacity(0.3),
+                    ? HBotColors.primary
+                    : HBotColors.textTertiaryLight.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -375,7 +375,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         FocusScope.of(context).unfocus();
       },
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppTheme.paddingMedium),
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -385,14 +385,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 context,
               ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             Text(
               'Give your scene a name',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.getTextSecondary(context),
+                color: HBotColors.textSecondaryLight,
               ),
             ),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             SmartInputField(
               controller: _nameController,
@@ -400,17 +400,17 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               onChanged: (value) => setState(() {}),
             ),
 
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Preview card
             if (_nameController.text.isNotEmpty)
               Container(
-                padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                padding: const EdgeInsets.all(HBotSpacing.space4),
                 decoration: BoxDecoration(
-                  color: AppTheme.getCardColor(context),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                  color: HBotColors.cardLight,
+                  borderRadius: HBotRadius.mediumRadius,
                   border: Border.all(
-                    color: AppTheme.primaryColor.withOpacity(0.3),
+                    color: HBotColors.primary.withOpacity(0.3),
                   ),
                 ),
                 child: Row(
@@ -418,18 +418,18 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryColor.withOpacity(0.2),
+                        color: HBotColors.primary.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(
-                          AppTheme.radiusSmall,
+                          HBotRadius.small,
                         ),
                       ),
                       child: Icon(
                         Icons.auto_awesome,
-                        color: AppTheme.primaryColor,
+                        color: HBotColors.primary,
                         size: 24,
                       ),
                     ),
-                    const SizedBox(width: AppTheme.paddingMedium),
+                    const SizedBox(width: HBotSpacing.space4),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -453,7 +453,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   Widget _buildAppearanceStep() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -463,14 +463,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           Text(
             'Choose an icon and color for your scene',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.getTextSecondary(context),
+              color: HBotColors.textSecondaryLight,
             ),
           ),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Icon selection
           Text(
@@ -479,7 +479,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
           SceneIconSelector(
             selectedIcon: _selectedIcon,
             onIconSelected: (icon) {
@@ -489,7 +489,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             },
           ),
 
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Color selection
           Text(
@@ -498,10 +498,10 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
           Wrap(
-            spacing: AppTheme.paddingSmall,
-            runSpacing: AppTheme.paddingSmall,
+            spacing: HBotSpacing.space2,
+            runSpacing: HBotSpacing.space2,
             children: _availableColors.map((color) {
               final isSelected = color == _selectedColor;
               return GestureDetector(
@@ -538,14 +538,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             }).toList(),
           ),
 
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           // Preview
           Container(
-            padding: const EdgeInsets.all(AppTheme.paddingMedium),
+            padding: const EdgeInsets.all(HBotSpacing.space4),
             decoration: BoxDecoration(
-              color: AppTheme.getCardColor(context),
-              borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+              color: HBotColors.cardLight,
+              borderRadius: HBotRadius.mediumRadius,
               border: Border.all(color: _selectedColor.withOpacity(0.3)),
             ),
             child: Row(
@@ -554,11 +554,11 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: _selectedColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                    borderRadius: HBotRadius.smallRadius,
                   ),
                   child: Icon(_selectedIcon, color: _selectedColor, size: 24),
                 ),
-                const SizedBox(width: AppTheme.paddingMedium),
+                const SizedBox(width: HBotSpacing.space4),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -583,7 +583,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   Widget _buildTriggerStep() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -593,34 +593,34 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           Text(
             'How should this scene be activated?',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.getTextSecondary(context),
+              color: HBotColors.textSecondaryLight,
             ),
           ),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Trigger type selection
           ..._triggerTypes.map((trigger) {
             final isSelected = trigger == _selectedTrigger;
             return Container(
-              margin: const EdgeInsets.only(bottom: AppTheme.paddingSmall),
+              margin: const EdgeInsets.only(bottom: HBotSpacing.space2),
               child: ListTile(
                 leading: Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? _selectedColor.withOpacity(0.2)
-                        : AppTheme.getCardColor(context),
-                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                        : HBotColors.cardLight,
+                    borderRadius: HBotRadius.smallRadius,
                   ),
                   child: Icon(
                     _getTriggerIcon(trigger),
                     color: isSelected
                         ? _selectedColor
-                        : AppTheme.getTextSecondary(context),
+                        : HBotColors.textSecondaryLight,
                     size: 20,
                   ),
                 ),
@@ -628,15 +628,15 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   trigger,
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: isSelected
-                        ? AppTheme.getTextPrimary(context)
-                        : AppTheme.getTextSecondary(context),
+                        ? HBotColors.textPrimaryLight
+                        : HBotColors.textSecondaryLight,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),
                 ),
                 subtitle: Text(
                   _getTriggerDescription(trigger),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.getTextHint(context),
+                    color: HBotColors.textTertiaryLight,
                   ),
                 ),
                 trailing: GestureDetector(
@@ -672,9 +672,9 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 },
                 tileColor: isSelected
                     ? _selectedColor.withOpacity(0.1)
-                    : AppTheme.getCardColor(context),
+                    : HBotColors.cardLight,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                  borderRadius: HBotRadius.mediumRadius,
                   side: BorderSide(
                     color: isSelected
                         ? _selectedColor.withOpacity(0.5)
@@ -687,12 +687,12 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
           // Time picker for time-based triggers
           if (_selectedTrigger == 'Time Based') ...[
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Container(
-              padding: const EdgeInsets.all(AppTheme.paddingMedium),
+              padding: const EdgeInsets.all(HBotSpacing.space4),
               decoration: BoxDecoration(
-                color: AppTheme.getCardColor(context),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                color: HBotColors.cardLight,
+                borderRadius: HBotRadius.mediumRadius,
                 border: Border.all(
                   color: _selectedColor.withOpacity(0.3),
                 ),
@@ -726,12 +726,12 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             ),
 
             // Repeat option
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             Container(
-              padding: const EdgeInsets.all(AppTheme.paddingMedium),
+              padding: const EdgeInsets.all(HBotSpacing.space4),
               decoration: BoxDecoration(
-                color: AppTheme.getCardColor(context),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                color: HBotColors.cardLight,
+                borderRadius: HBotRadius.mediumRadius,
                 border: Border.all(
                   color: _selectedColor.withOpacity(0.3),
                 ),
@@ -756,12 +756,12 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
             // Custom days selector (only show if Custom is selected)
             if (_selectedRepeat == 'Custom') ...[
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
               Container(
-                padding: const EdgeInsets.all(AppTheme.paddingMedium),
+                padding: const EdgeInsets.all(HBotSpacing.space4),
                 decoration: BoxDecoration(
-                  color: AppTheme.getCardColor(context),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                  color: HBotColors.cardLight,
+                  borderRadius: HBotRadius.mediumRadius,
                   border: Border.all(
                     color: _selectedColor.withOpacity(0.3),
                   ),
@@ -773,7 +773,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       'Select Days',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    const SizedBox(height: AppTheme.paddingSmall),
+                    const SizedBox(height: HBotSpacing.space2),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
@@ -795,14 +795,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
           // Location configuration for location-based triggers
           if (_selectedTrigger == 'Location Based') ...[
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Trigger type selection (Arrive/Leave)
             Container(
-              padding: const EdgeInsets.all(AppTheme.paddingMedium),
+              padding: const EdgeInsets.all(HBotSpacing.space4),
               decoration: BoxDecoration(
-                color: AppTheme.getCardColor(context),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                color: HBotColors.cardLight,
+                borderRadius: HBotRadius.mediumRadius,
                 border: Border.all(
                   color: _selectedColor.withOpacity(0.3),
                 ),
@@ -814,7 +814,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     'Trigger Type',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: AppTheme.paddingSmall),
+                  const SizedBox(height: HBotSpacing.space2),
                   Row(
                     children: [
                       Expanded(
@@ -824,7 +824,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                           Icons.location_on,
                         ),
                       ),
-                      const SizedBox(width: AppTheme.paddingSmall),
+                      const SizedBox(width: HBotSpacing.space2),
                       Expanded(
                         child: _buildLocationTriggerTypeButton(
                           'leave',
@@ -838,14 +838,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               ),
             ),
 
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Location detection
             Container(
-              padding: const EdgeInsets.all(AppTheme.paddingMedium),
+              padding: const EdgeInsets.all(HBotSpacing.space4),
               decoration: BoxDecoration(
-                color: AppTheme.getCardColor(context),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                color: HBotColors.cardLight,
+                borderRadius: HBotRadius.mediumRadius,
                 border: Border.all(
                   color: _selectedColor.withOpacity(0.3),
                 ),
@@ -857,16 +857,16 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     'Location',
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  const SizedBox(height: AppTheme.paddingSmall),
+                  const SizedBox(height: HBotSpacing.space2),
 
                   if (_selectedLatitude != null &&
                       _selectedLongitude != null) ...[
                     Container(
-                      padding: const EdgeInsets.all(AppTheme.paddingSmall),
+                      padding: const EdgeInsets.all(HBotSpacing.space2),
                       decoration: BoxDecoration(
                         color: _selectedColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(
-                          AppTheme.radiusSmall,
+                          HBotRadius.small,
                         ),
                       ),
                       child: Row(
@@ -876,7 +876,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                             color: _selectedColor,
                             size: 20,
                           ),
-                          const SizedBox(width: AppTheme.paddingSmall),
+                          const SizedBox(width: HBotSpacing.space2),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -893,9 +893,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                                   'Lng: ${_selectedLongitude!.toStringAsFixed(6)}',
                                   style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
-                                        color: AppTheme.getTextSecondary(
-                                          context,
-                                        ),
+                                        color: HBotColors.textSecondaryLight,
                                       ),
                                 ),
                               ],
@@ -904,7 +902,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: AppTheme.paddingSmall),
+                    const SizedBox(height: HBotSpacing.space2),
                   ],
 
                   ElevatedButton.icon(
@@ -935,14 +933,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               ),
             ),
 
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
 
             // Radius selection
             Container(
-              padding: const EdgeInsets.all(AppTheme.paddingMedium),
+              padding: const EdgeInsets.all(HBotSpacing.space4),
               decoration: BoxDecoration(
-                color: AppTheme.getCardColor(context),
-                borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                color: HBotColors.cardLight,
+                borderRadius: HBotRadius.mediumRadius,
                 border: Border.all(
                   color: _selectedColor.withOpacity(0.3),
                 ),
@@ -966,7 +964,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: AppTheme.paddingSmall),
+                  const SizedBox(height: HBotSpacing.space2),
                   Slider(
                     value: _selectedRadius,
                     min: 50,
@@ -983,7 +981,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   Text(
                     'Scene will trigger when you are within this distance',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.getTextSecondary(context),
+                      color: HBotColors.textSecondaryLight,
                     ),
                   ),
                 ],
@@ -999,7 +997,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     debugPrint('AddSceneScreen: _buildDevicesStep - homeId = ${widget.homeId}');
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1009,14 +1007,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           Text(
             'Choose which devices this scene will control',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.getTextSecondary(context),
+              color: HBotColors.textSecondaryLight,
             ),
           ),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           DeviceSelector(
             selectedDevices: _selectedDevices,
@@ -1037,7 +1035,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   Widget _buildDeviceActionsStep() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1047,39 +1045,39 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           Text(
             'Set what each device should do when this scene is activated',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.getTextSecondary(context),
+              color: HBotColors.textSecondaryLight,
             ),
           ),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           if (_selectedDevices.isEmpty)
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(AppTheme.paddingLarge),
+                padding: const EdgeInsets.all(HBotSpacing.space6),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       Icons.devices_outlined,
                       size: 64,
-                      color: AppTheme.textHint,
+                      color: HBotColors.textTertiaryLight,
                     ),
-                    const SizedBox(height: AppTheme.paddingMedium),
+                    const SizedBox(height: HBotSpacing.space4),
                     Text(
                       'No devices selected',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppTheme.getTextSecondary(context),
+                        color: HBotColors.textSecondaryLight,
                       ),
                     ),
-                    const SizedBox(height: AppTheme.paddingSmall),
+                    const SizedBox(height: HBotSpacing.space2),
                     Text(
                       'Go back and select devices first',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppTheme.textHint,
+                        color: HBotColors.textTertiaryLight,
                       ),
                     ),
                   ],
@@ -1136,11 +1134,11 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     final action = _deviceActions[device.id]!;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: AppTheme.paddingMedium),
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      margin: const EdgeInsets.only(bottom: HBotSpacing.space4),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: AppTheme.getCardColor(context),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        color: HBotColors.cardLight,
+        borderRadius: HBotRadius.mediumRadius,
         border: Border.all(color: _selectedColor.withOpacity(0.3)),
       ),
       child: Column(
@@ -1153,7 +1151,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: _selectedColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                  borderRadius: HBotRadius.smallRadius,
                 ),
                 child: Icon(
                   deviceMap['icon'] as IconData? ?? Icons.device_unknown,
@@ -1161,7 +1159,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: AppTheme.paddingMedium),
+              const SizedBox(width: HBotSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1175,7 +1173,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     Text(
                       deviceMap['room'] as String? ?? 'No Room',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.getTextHint(context),
+                        color: HBotColors.textTertiaryLight,
                       ),
                     ),
                   ],
@@ -1183,9 +1181,9 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               ),
             ],
           ),
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
           const Divider(height: 1),
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           // Action configuration based on device type
           if (device.deviceType == DeviceType.relay ||
@@ -1213,18 +1211,18 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           'Action',
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppTheme.getTextPrimary(context),
+            color: HBotColors.textPrimaryLight,
           ),
         ),
-        const SizedBox(height: AppTheme.paddingSmall),
+        const SizedBox(height: HBotSpacing.space2),
 
         // Power state toggle
         Container(
-          padding: const EdgeInsets.all(AppTheme.paddingMedium),
+          padding: const EdgeInsets.all(HBotSpacing.space4),
           decoration: BoxDecoration(
-            color: isDark ? AppTheme.surfaceColor : Colors.white,
-            borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-            border: isDark ? null : Border.all(color: AppTheme.lightCardBorder),
+            color: isDark ? HBotColors.surfaceLight : Colors.white,
+            borderRadius: HBotRadius.smallRadius,
+            border: isDark ? null : Border.all(color: HBotColors.borderLight),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1249,18 +1247,18 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         ),
 
         if (channels > 1) ...[
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
           Text(
             'Channels',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppTheme.getTextPrimary(context),
+              color: HBotColors.textPrimaryLight,
             ),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           Wrap(
-            spacing: AppTheme.paddingSmall,
-            runSpacing: AppTheme.paddingSmall,
+            spacing: HBotSpacing.space2,
+            runSpacing: HBotSpacing.space2,
             children: [
               // All channels option
               FilterChip(
@@ -1283,7 +1281,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 labelStyle: TextStyle(
                   color: selectedChannels.length == channels
                       ? _selectedColor
-                      : AppTheme.getTextSecondary(context),
+                      : HBotColors.textSecondaryLight,
                 ),
               ),
               // Individual channel options
@@ -1317,7 +1315,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   labelStyle: TextStyle(
                     color: isSelected
                         ? _selectedColor
-                        : AppTheme.getTextSecondary(context),
+                        : HBotColors.textSecondaryLight,
                   ),
                 );
               }),
@@ -1336,11 +1334,11 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.all(AppTheme.paddingMedium),
+          padding: const EdgeInsets.all(HBotSpacing.space4),
           decoration: BoxDecoration(
-            color: isDark ? AppTheme.surfaceColor : Colors.white,
-            borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-            border: isDark ? null : Border.all(color: AppTheme.lightCardBorder),
+            color: isDark ? HBotColors.surfaceLight : Colors.white,
+            borderRadius: HBotRadius.smallRadius,
+            border: isDark ? null : Border.all(color: HBotColors.borderLight),
           ),
           child: Column(
             children: [
@@ -1352,7 +1350,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   color: _selectedColor,
                 ),
               ),
-              const SizedBox(height: AppTheme.paddingSmall),
+              const SizedBox(height: HBotSpacing.space2),
               Slider(
                 value: position.toDouble(),
                 min: 0,
@@ -1370,7 +1368,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           ),
         ),
 
-        const SizedBox(height: AppTheme.paddingMedium),
+        const SizedBox(height: HBotSpacing.space4),
 
         // Quick position buttons
         Row(
@@ -1385,17 +1383,17 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: position == 0
                       ? _selectedColor
-                      : AppTheme.getTextSecondary(context),
+                      : HBotColors.textSecondaryLight,
                   side: BorderSide(
                     color: position == 0
                         ? _selectedColor
-                        : AppTheme.textHint.withOpacity(0.3),
+                        : HBotColors.textTertiaryLight.withOpacity(0.3),
                   ),
                 ),
                 child: const Text('0%'),
               ),
             ),
-            const SizedBox(width: AppTheme.paddingSmall),
+            const SizedBox(width: HBotSpacing.space2),
             Expanded(
               child: OutlinedButton(
                 onPressed: () {
@@ -1406,17 +1404,17 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: position == 50
                       ? _selectedColor
-                      : AppTheme.getTextSecondary(context),
+                      : HBotColors.textSecondaryLight,
                   side: BorderSide(
                     color: position == 50
                         ? _selectedColor
-                        : AppTheme.textHint.withOpacity(0.3),
+                        : HBotColors.textTertiaryLight.withOpacity(0.3),
                   ),
                 ),
                 child: const Text('50%'),
               ),
             ),
-            const SizedBox(width: AppTheme.paddingSmall),
+            const SizedBox(width: HBotSpacing.space2),
             Expanded(
               child: OutlinedButton(
                 onPressed: () {
@@ -1427,11 +1425,11 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: position == 100
                       ? _selectedColor
-                      : AppTheme.getTextSecondary(context),
+                      : HBotColors.textSecondaryLight,
                   side: BorderSide(
                     color: position == 100
                         ? _selectedColor
-                        : AppTheme.textHint.withOpacity(0.3),
+                        : HBotColors.textTertiaryLight.withOpacity(0.3),
                   ),
                 ),
                 child: const Text('100%'),
@@ -1447,25 +1445,25 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: isDark ? AppTheme.surfaceColor : Colors.white,
-        borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
-        border: isDark ? null : Border.all(color: AppTheme.lightCardBorder),
+        color: isDark ? HBotColors.surfaceLight : Colors.white,
+        borderRadius: HBotRadius.smallRadius,
+        border: isDark ? null : Border.all(color: HBotColors.borderLight),
       ),
       child: Row(
         children: [
           Icon(
             Icons.info_outline,
-            color: AppTheme.getTextHint(context),
+            color: HBotColors.textTertiaryLight,
             size: 20,
           ),
-          const SizedBox(width: AppTheme.paddingSmall),
+          const SizedBox(width: HBotSpacing.space2),
           Expanded(
             child: Text(
               'No actions available for this device type',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.getTextHint(context),
+                color: HBotColors.textTertiaryLight,
               ),
             ),
           ),
@@ -1478,7 +1476,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1488,35 +1486,35 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           Text(
             'Review your scene configuration before creating',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppTheme.getTextSecondary(context),
+              color: HBotColors.textSecondaryLight,
             ),
           ),
-          const SizedBox(height: AppTheme.paddingLarge),
+          const SizedBox(height: HBotSpacing.space6),
 
           // Scene preview card
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(AppTheme.paddingLarge),
+            padding: const EdgeInsets.all(HBotSpacing.space6),
             decoration: BoxDecoration(
-              color: AppTheme.getCardColor(context),
-              borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+              color: HBotColors.cardLight,
+              borderRadius: HBotRadius.mediumRadius,
               gradient: isDark
                   ? LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
                         _selectedColor.withOpacity(0.2),
-                        AppTheme.cardColor,
+                        HBotColors.cardLight,
                       ],
                     )
                   : null,
               border: isDark
                   ? null
-                  : Border.all(color: AppTheme.lightCardBorder),
+                  : Border.all(color: HBotColors.borderLight),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1528,7 +1526,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       decoration: BoxDecoration(
                         color: _selectedColor.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(
-                          AppTheme.radiusSmall,
+                          HBotRadius.small,
                         ),
                       ),
                       child: Icon(
@@ -1537,7 +1535,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                         size: 28,
                       ),
                     ),
-                    const SizedBox(width: AppTheme.paddingMedium),
+                    const SizedBox(width: HBotSpacing.space4),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1552,26 +1550,26 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: AppTheme.paddingMedium),
+                const SizedBox(height: HBotSpacing.space4),
                 Row(
                   children: [
                     Icon(
                       Icons.devices_outlined,
                       size: 16,
-                      color: AppTheme.getTextSecondary(context),
+                      color: HBotColors.textSecondaryLight,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       '${_selectedDevices.length} devices',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.getTextSecondary(context),
+                        color: HBotColors.textSecondaryLight,
                       ),
                     ),
                     const SizedBox(width: 16),
                     Icon(
                       _getTriggerIcon(_selectedTrigger),
                       size: 16,
-                      color: AppTheme.getTextSecondary(context),
+                      color: HBotColors.textSecondaryLight,
                     ),
                     const SizedBox(width: 4),
                     Text(
@@ -1582,7 +1580,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                           ? '${_selectedLocationTriggerType == 'arrive' ? 'Arrive' : 'Leave'} (${_selectedRadius.toInt()}m)'
                           : _selectedTrigger,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppTheme.getTextSecondary(context),
+                        color: HBotColors.textSecondaryLight,
                       ),
                     ),
                   ],
@@ -1591,12 +1589,12 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             ),
           ),
 
-          const SizedBox(height: AppTheme.paddingMedium),
+          const SizedBox(height: HBotSpacing.space4),
 
           // Configuration summary
           _buildSummarySection('Basic Info', ['Name: ${_nameController.text}']),
 
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
 
           _buildSummarySection('Trigger', [
             'Type: $_selectedTrigger',
@@ -1611,7 +1609,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             ],
           ]),
 
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
 
           _buildSummarySection('Devices', [
             '${_selectedDevices.length} devices selected',
@@ -1624,10 +1622,10 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   Widget _buildSummarySection(String title, List<String> items) {
     return Container(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: AppTheme.getCardColor(context),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+        color: HBotColors.cardLight,
+        borderRadius: HBotRadius.mediumRadius,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1638,14 +1636,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: AppTheme.paddingSmall),
+          const SizedBox(height: HBotSpacing.space2),
           ...items.map(
             (item) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: Text(
                 item,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.getTextSecondary(context),
+                  color: HBotColors.textSecondaryLight,
                 ),
               ),
             ),
@@ -1659,14 +1657,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: isDark ? AppTheme.cardColor : Colors.white,
+        color: isDark ? HBotColors.cardLight : Colors.white,
         border: Border(
           top: BorderSide(
             color: isDark
-                ? AppTheme.textHint.withOpacity(0.2)
-                : AppTheme.lightCardBorder,
+                ? HBotColors.textTertiaryLight.withOpacity(0.2)
+                : HBotColors.borderLight,
             width: 1,
           ),
         ),
@@ -1687,18 +1685,18 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 child: ElevatedButton(
                   onPressed: _isCreating ? null : _previousStep,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark ? AppTheme.cardColor : Colors.white,
-                    foregroundColor: AppTheme.getTextPrimary(context),
+                    backgroundColor: isDark ? HBotColors.cardLight : Colors.white,
+                    foregroundColor: HBotColors.textPrimaryLight,
                     side: BorderSide(
                       color: isDark
-                          ? AppTheme.textHint
-                          : AppTheme.lightCardBorder,
+                          ? HBotColors.textTertiaryLight
+                          : HBotColors.borderLight,
                       width: 2,
                     ),
                     elevation: 0,
                     minimumSize: const Size(0, 48),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                      borderRadius: HBotRadius.smallRadius,
                     ),
                   ),
                   child: const Text(
@@ -1707,7 +1705,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   ),
                 ),
               ),
-            if (_currentStep > 0) const SizedBox(width: AppTheme.paddingMedium),
+            if (_currentStep > 0) const SizedBox(width: HBotSpacing.space4),
             Expanded(
               child: ElevatedButton(
                 onPressed: (_canProceed() && !_isCreating) ? _nextStep : null,
@@ -1717,7 +1715,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   elevation: 0,
                   minimumSize: const Size(0, 48),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                    borderRadius: HBotRadius.smallRadius,
                   ),
                   disabledBackgroundColor: _selectedColor.withOpacity(0.5),
                 ),
@@ -1896,7 +1894,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               content: Text(
                 'Scene "${_nameController.text.trim()}" updated with ${_deviceActions.length} device action${_deviceActions.length != 1 ? 's' : ''}!',
               ),
-              backgroundColor: AppTheme.primaryColor,
+              backgroundColor: HBotColors.primary,
             ),
           );
           Navigator.pop(context, true);
@@ -1939,7 +1937,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               content: Text(
                 'Scene "${_nameController.text.trim()}" created with ${_deviceActions.length} device action${_deviceActions.length != 1 ? 's' : ''}!',
               ),
-              backgroundColor: AppTheme.primaryColor,
+              backgroundColor: HBotColors.primary,
             ),
           );
           Navigator.pop(context, true);
@@ -2048,18 +2046,18 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   void _showRepeatOptions() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.getCardColor(context),
+      backgroundColor: HBotColors.cardLight,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Container(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Repeat', style: Theme.of(context).textTheme.headlineSmall),
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
             ..._repeatOptions.map(
               (option) => ListTile(
                 title: Text(option),
@@ -2106,7 +2104,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       selectedColor: _selectedColor.withOpacity(0.3),
       checkmarkColor: _selectedColor,
       labelStyle: TextStyle(
-        color: isSelected ? _selectedColor : AppTheme.getTextSecondary(context),
+        color: isSelected ? _selectedColor : HBotColors.textSecondaryLight,
       ),
     );
   }
@@ -2173,20 +2171,20 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(
-          vertical: AppTheme.paddingMedium,
-          horizontal: AppTheme.paddingSmall,
+          vertical: HBotSpacing.space4,
+          horizontal: HBotSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: isSelected
               ? _selectedColor.withOpacity(0.2)
-              : (isDark ? AppTheme.surfaceColor : Colors.white),
-          borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+              : (isDark ? HBotColors.surfaceLight : Colors.white),
+          borderRadius: HBotRadius.smallRadius,
           border: Border.all(
             color: isSelected
                 ? _selectedColor
                 : (isDark
                       ? Colors.grey.withOpacity(0.3)
-                      : AppTheme.lightCardBorder),
+                      : HBotColors.borderLight),
             width: 2,
           ),
         ),
@@ -2196,16 +2194,16 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               icon,
               color: isSelected
                   ? _selectedColor
-                  : AppTheme.getTextSecondary(context),
+                  : HBotColors.textSecondaryLight,
               size: 32,
             ),
-            const SizedBox(height: AppTheme.paddingSmall),
+            const SizedBox(height: HBotSpacing.space2),
             Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: isSelected
                     ? _selectedColor
-                    : AppTheme.getTextSecondary(context),
+                    : HBotColors.textSecondaryLight,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
               textAlign: TextAlign.center,
@@ -2289,7 +2287,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             content: Text(
               'Location detected: ${position.latitude.toStringAsFixed(6)}, ${position.longitude.toStringAsFixed(6)}',
             ),
-            backgroundColor: AppTheme.primaryColor,
+            backgroundColor: HBotColors.primary,
           ),
         );
       }

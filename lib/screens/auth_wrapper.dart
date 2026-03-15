@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/auth_service.dart';
+import '../theme/app_theme.dart';
 import 'sign_in_screen.dart';
 import 'home_screen.dart';
 
@@ -17,7 +18,7 @@ class AuthWrapper extends StatelessWidget {
         // Show loading indicator while checking auth state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            backgroundColor: Color(0xFF1C1C1E),
+            backgroundColor: HBotColors.backgroundLight,
             body: Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF9500)),

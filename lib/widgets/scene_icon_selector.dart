@@ -43,19 +43,19 @@ class SceneIconSelector extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: AppTheme.getCardColor(context),
-        borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
-        border: isDark ? null : Border.all(color: AppTheme.lightCardBorder),
+        color: HBotColors.cardLight,
+        borderRadius: BorderRadius.circular(HBotRadius.medium),
+        border: isDark ? null : Border.all(color: HBotColors.borderLight),
       ),
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 6,
-          crossAxisSpacing: AppTheme.paddingSmall,
-          mainAxisSpacing: AppTheme.paddingSmall,
+          crossAxisSpacing: HBotSpacing.space2,
+          mainAxisSpacing: HBotSpacing.space2,
           childAspectRatio: 1.0,
         ),
         itemCount: _availableIcons.length,
@@ -68,23 +68,23 @@ class SceneIconSelector extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppTheme.primaryColor.withOpacity(0.2)
-                    : (isDark ? AppTheme.surfaceColor : Colors.white),
-                borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
+                    ? HBotColors.primary.withOpacity(0.2)
+                    : (isDark ? HBotColors.surfaceLight : Colors.white),
+                borderRadius: BorderRadius.circular(HBotRadius.small),
                 border: Border.all(
                   color: isSelected
-                      ? AppTheme.primaryColor
+                      ? HBotColors.primary
                       : (isDark
                             ? Colors.transparent
-                            : AppTheme.lightCardBorder),
+                            : HBotColors.borderLight),
                   width: isSelected ? 2 : 1,
                 ),
               ),
               child: Icon(
                 icon,
                 color: isSelected
-                    ? AppTheme.primaryColor
-                    : AppTheme.getTextSecondary(context),
+                    ? HBotColors.primary
+                    : HBotColors.textSecondaryLight,
                 size: 24,
               ),
             ),

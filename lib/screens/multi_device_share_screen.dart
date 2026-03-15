@@ -180,13 +180,13 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
 
     return Scaffold(
       backgroundColor: isDark
-          ? AppTheme.backgroundColor
-          : AppTheme.lightBackgroundColor,
+          ? HBotColors.backgroundLight
+          : HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Share Multiple Devices'),
         backgroundColor: isDark
-            ? AppTheme.backgroundColor
-            : AppTheme.lightBackgroundColor,
+            ? HBotColors.backgroundLight
+            : HBotColors.backgroundLight,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -197,14 +197,14 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
-                    color: AppTheme.primaryColor.withOpacity(0.1),
+                    color: HBotColors.primary.withOpacity(0.1),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
                             '${_selectedDeviceIds.length} device(s) selected',
                             style: TextStyle(
-                              color: AppTheme.getTextPrimary(context),
+                              color: HBotColors.textPrimaryLight,
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                             ),
@@ -247,7 +247,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                             style: TextStyle(fontSize: 13),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppTheme.primaryColor,
+                            backgroundColor: HBotColors.primary,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 12,
                               vertical: 8,
@@ -305,7 +305,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                       final isSelected = _selectedDeviceIds.contains(device.id);
 
                       return Card(
-                        color: AppTheme.getCardColor(context),
+                        color: HBotColors.cardLight,
                         margin: const EdgeInsets.only(bottom: 8),
                         child: CheckboxListTile(
                           value: isSelected,
@@ -321,23 +321,23 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                           title: Text(
                             device.deviceName,
                             style: TextStyle(
-                              color: AppTheme.getTextPrimary(context),
+                              color: HBotColors.textPrimaryLight,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: Text(
                             device.deviceType.toString().split('.').last,
                             style: TextStyle(
-                              color: AppTheme.getTextSecondary(context),
+                              color: HBotColors.textSecondaryLight,
                             ),
                           ),
                           secondary: Icon(
                             Icons.devices,
                             color: isSelected
-                                ? AppTheme.primaryColor
-                                : AppTheme.getTextSecondary(context),
+                                ? HBotColors.primary
+                                : HBotColors.textSecondaryLight,
                           ),
-                          activeColor: AppTheme.primaryColor,
+                          activeColor: HBotColors.primary,
                         ),
                       );
                     },

@@ -10,9 +10,9 @@ class AvatarPickerDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: AppTheme.getCardColor(context),
+      backgroundColor: HBotColors.cardLight,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
+        borderRadius: BorderRadius.circular(HBotRadius.large),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -23,7 +23,7 @@ class AvatarPickerDialog extends StatelessWidget {
             const Text(
               'Choose Avatar',
               style: TextStyle(
-                color: AppTheme.textPrimary,
+                color: HBotColors.textPrimaryLight,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
@@ -33,7 +33,7 @@ class AvatarPickerDialog extends StatelessWidget {
             // Default avatars grid
             const Text(
               'Default Avatars',
-              style: TextStyle(color: AppTheme.textSecondary, fontSize: 14),
+              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 14),
             ),
             const SizedBox(height: 12),
             GridView.builder(
@@ -57,7 +57,7 @@ class AvatarPickerDialog extends StatelessWidget {
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: isSelected
-                            ? AppTheme.primaryColor
+                            ? HBotColors.primary
                             : Colors.transparent,
                         width: 2,
                       ),
@@ -72,7 +72,7 @@ class AvatarPickerDialog extends StatelessWidget {
             ),
 
             const SizedBox(height: 20),
-            Divider(color: AppTheme.textSecondary.withOpacity(0.2)),
+            Divider(color: HBotColors.textSecondaryLight.withOpacity(0.2)),
             const SizedBox(height: 12),
 
             // Custom options
@@ -103,7 +103,7 @@ class AvatarPickerDialog extends StatelessWidget {
                 onPressed: () => Navigator.pop(context),
                 child: const Text(
                   'Cancel',
-                  style: TextStyle(color: AppTheme.textSecondary),
+                  style: TextStyle(color: HBotColors.textSecondaryLight),
                 ),
               ),
             ),
@@ -121,20 +121,20 @@ class AvatarPickerDialog extends StatelessWidget {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+      borderRadius: BorderRadius.circular(HBotRadius.medium),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
-          color: AppTheme.surfaceColor,
-          borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+          color: HBotColors.surfaceLight,
+          borderRadius: BorderRadius.circular(HBotRadius.medium),
         ),
         child: Column(
           children: [
-            Icon(icon, color: AppTheme.primaryColor, size: 32),
+            Icon(icon, color: HBotColors.primary, size: 32),
             const SizedBox(height: 4),
             Text(
               label,
-              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 12),
+              style: const TextStyle(color: HBotColors.textPrimaryLight, fontSize: 12),
             ),
           ],
         ),

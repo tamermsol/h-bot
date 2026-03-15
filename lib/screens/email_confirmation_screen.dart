@@ -4,12 +4,10 @@ import '../theme/app_theme.dart';
 
 class EmailConfirmationScreen extends StatefulWidget {
   final String email;
-
   const EmailConfirmationScreen({super.key, required this.email});
 
   @override
-  State<EmailConfirmationScreen> createState() =>
-      _EmailConfirmationScreenState();
+  State<EmailConfirmationScreen> createState() => _EmailConfirmationScreenState();
 }
 
 class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
@@ -18,21 +16,17 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
 
   Future<void> _resendConfirmation() async {
     setState(() => _isResending = true);
-
     try {
       await _authService.resendEmailConfirmation(widget.email);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Confirmation email sent! Please check your inbox.'),
-            backgroundColor: Colors.green,
-          ),
+          const SnackBar(content: Text('Confirmation email sent!'), backgroundColor: HBotColors.success),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+          SnackBar(content: Text(e.toString()), backgroundColor: HBotColors.error),
         );
       }
     } finally {
@@ -43,161 +37,99 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1C1C1E),
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: Colors.transparent, elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        title: const Text('Email Confirmation', style: TextStyle(fontFamily: 'Inter', fontSize: 17, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.email_outlined,
-              size: 80,
-              color: Color(0xFFFF9500),
-            ),
-
-            const SizedBox(height: 32),
-
-            const Text(
-              'Check Your Email',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Icon
+              Container(
+                width: 64, height: 64,
+                decoration: const BoxDecoration(color: HBotColors.primarySurface, shape: BoxShape.circle),
+                child: const Center(child: Text('✉️', style: TextStyle(fontSize: 32))),
               ),
-              textAlign: TextAlign.center,
-            ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: HBotSpacing.space5),
 
-            Text(
-              'We sent a confirmation link to:',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white.withOpacity(0.7),
+              const Text('Check Your Email',
+                style: TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
 
-            const SizedBox(height: 8),
+              const SizedBox(height: HBotSpacing.space3),
 
-            Text(
-              widget.email,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFFFF9500),
+              Text("We've sent a confirmation email to",
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 14, color: HBotColors.textSecondaryLight),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-
-            const SizedBox(height: 32),
-
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 4),
+              Text(widget.email,
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary),
+                textAlign: TextAlign.center,
               ),
-              child: Column(
-                children: [
-                  const Text(
-                    '📱 Mobile App Note',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+
+              const SizedBox(height: HBotSpacing.space3),
+
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
+                child: Text(
+                  'Please check your inbox and click the confirmation link to activate your account.',
+                  style: TextStyle(fontFamily: 'Inter', fontSize: 14, color: HBotColors.textSecondaryLight),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+
+              const SizedBox(height: HBotSpacing.space7),
+
+              // Resend button — gradient
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: Container(
+                  decoration: hbotPrimaryButtonDecoration(disabled: _isResending),
+                  child: ElevatedButton(
+                    onPressed: _isResending ? null : _resendConfirmation,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent, shadowColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'If the email link doesn\'t work, you can still use the app! Email confirmation is optional for testing.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _isResending ? null : _resendConfirmation,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.primaryColor,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    child: _isResending
+                        ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
+                        : const Text('Resend Email', style: TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w500)),
                   ),
                 ),
-                child: _isResending
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
-                          ),
-                        ),
-                      )
-                    : const Text(
-                        'Resend Email',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
               ),
-            ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: HBotSpacing.space3),
 
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.white24),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              // Continue without — outlined
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: OutlinedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: HBotColors.textPrimaryLight,
+                    side: const BorderSide(color: HBotColors.borderLight, width: 1.5),
+                    shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
                   ),
-                ),
-                child: const Text(
-                  'Continue Without Confirmation',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  child: const Text('Continue Without Confirmation', style: TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w500)),
                 ),
               ),
-            ),
-
-            const SizedBox(height: 24),
-
-            Text(
-              'You can always confirm your email later in settings.',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.white.withOpacity(0.6),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

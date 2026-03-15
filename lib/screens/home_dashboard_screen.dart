@@ -1038,7 +1038,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Dashboard Background Image'),
           content: SingleChildScrollView(
             child: BackgroundImagePicker(
@@ -1221,7 +1221,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
   Widget _buildDeviceList() {
     return ListView.builder(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       itemCount: _filteredDevices.length,
       itemBuilder: (context, index) {
         final device = _filteredDevices[index];
@@ -1232,7 +1232,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
   Widget _buildDeviceGrid() {
     return GridView.builder(
-      padding: const EdgeInsets.all(AppTheme.paddingMedium),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: HBotSpacing.space3,
@@ -1486,16 +1486,16 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         }
 
         return Card(
-          color: AppTheme.getCardColor(context),
+          color: HBotColors.cardLight,
           margin: isGridView
               ? EdgeInsets.zero
               : const EdgeInsets.symmetric(
-                  horizontal: AppTheme.paddingMedium,
-                  vertical: AppTheme.paddingSmall,
+                  horizontal: HBotSpacing.space4,
+                  vertical: HBotSpacing.space2,
                 ),
           child: InkWell(
             onTap: () => _navigateToDeviceControl(device),
-            borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+            borderRadius: BorderRadius.circular(HBotRadius.medium),
             child: Padding(
               padding: const EdgeInsets.all(
                 6,
@@ -1518,7 +1518,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                           child: Text(
                             device.deviceName,
                             style: TextStyle(
-                              color: AppTheme.getTextPrimary(context),
+                              color: HBotColors.textPrimaryLight,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -1558,7 +1558,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                                         strokeWidth: 2,
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
-                                              AppTheme.primaryColor,
+                                              HBotColors.primary,
                                             ),
                                       ),
                                     )
@@ -1595,8 +1595,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     bool waitingForInitialState, // FETCH-FIRST: loading indicator flag
   ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textPrimary = AppTheme.getTextPrimary(context);
-    final textHint = AppTheme.getTextHint(context);
+    final textPrimary = HBotColors.textPrimaryLight;
+    final textHint = HBotColors.textTertiaryLight;
 
     return Column(
       mainAxisSize:
@@ -1619,12 +1619,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                           (deviceState ||
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
-                      ? AppTheme.primaryColor.withOpacity(0.2)
+                      ? HBotColors.primary.withOpacity(0.2)
                       : (isDark
-                            ? AppTheme.textHint.withOpacity(0.1)
+                            ? HBotColors.textTertiaryLight.withOpacity(0.1)
                             : Colors
                                   .white), // White background for better contrast in Light Mode
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
+                  borderRadius: BorderRadius.circular(HBotRadius.medium),
                 ),
                 child: Icon(
                   _getDeviceIcon(device.deviceType),
@@ -1634,9 +1634,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                           (deviceState ||
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
-                      ? AppTheme.primaryColor
+                      ? HBotColors.primary
                       : (isDark
-                            ? AppTheme.textHint
+                            ? HBotColors.textTertiaryLight
                             : AppTheme
                                   .lightTextSecondary), // Better contrast in Light Mode
                   size: 32, // Reduced from 36 to 32 for maximum compactness
@@ -1653,7 +1653,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     color: isOnline ? Colors.green : Colors.red.shade400,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isDark ? AppTheme.surfaceColor : Colors.white,
+                      color: isDark ? HBotColors.surfaceLight : Colors.white,
                       width: 2,
                     ),
                   ),
@@ -1688,7 +1688,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               Text(
                 '$shutterPosition%',
                 style: const TextStyle(
-                  color: AppTheme.primaryColor,
+                  color: HBotColors.primary,
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                 ),
@@ -1779,7 +1779,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        AppTheme.primaryColor,
+                        HBotColors.primary,
                       ),
                     ),
                   )
@@ -1858,8 +1858,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     bool isOnline,
   ) {
     final canControl = isControllable && _mqttConnected && isOnline;
-    final textPrimary = AppTheme.getTextPrimary(context);
-    final textHint = AppTheme.getTextHint(context);
+    final textPrimary = HBotColors.textPrimaryLight;
+    final textHint = HBotColors.textTertiaryLight;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -1870,7 +1870,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: AppTheme.primaryColor,
+            color: HBotColors.primary,
           ),
         ),
         const SizedBox(height: 8),
@@ -2044,7 +2044,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void _showOptionsMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.getCardColor(context),
+      backgroundColor: HBotColors.cardLight,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -2052,7 +2052,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       builder: (context) => SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(AppTheme.paddingLarge),
+            padding: const EdgeInsets.all(HBotSpacing.space6),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -2063,19 +2063,19 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: AppTheme.getTextHint(context),
+                      color: HBotColors.textTertiaryLight,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ),
-                const SizedBox(height: AppTheme.paddingMedium),
+                const SizedBox(height: HBotSpacing.space4),
                 Text(
                   'View & Filter Options',
                   style: Theme.of(
                     context,
                   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
                 ),
-                const SizedBox(height: AppTheme.paddingMedium),
+                const SizedBox(height: HBotSpacing.space4),
 
                 // Dashboard Background option (only if home is selected)
                 if (_selectedHome != null) ...[
@@ -2084,12 +2084,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     leading: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryColor.withOpacity(0.1),
+                        color: HBotColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Icon(
                         Icons.image_outlined,
-                        color: AppTheme.primaryColor,
+                        color: HBotColors.primary,
                       ),
                     ),
                     title: const Text('Dashboard Background'),
@@ -2108,7 +2108,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   contentPadding: EdgeInsets.zero,
                   leading: Icon(
                     _isGridView ? Icons.grid_view : Icons.view_list,
-                    color: AppTheme.primaryColor,
+                    color: HBotColors.primary,
                   ),
                   title: const Text('View Mode'),
                   subtitle: Text(_isGridView ? 'Grid View' : 'List View'),
@@ -2121,7 +2121,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       _saveViewPreference(value);
                       Navigator.pop(context);
                     },
-                    activeTrackColor: AppTheme.primaryColor,
+                    activeTrackColor: HBotColors.primary,
                   ),
                   onTap: () {
                     final newValue = !_isGridView;
@@ -2138,7 +2138,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(
                     Icons.visibility_off,
-                    color: AppTheme.secondaryColor,
+                    color: HBotColors.primaryLight,
                   ),
                   title: const Text('Hide Offline Devices'),
                   trailing: Switch(
@@ -2149,7 +2149,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       });
                       Navigator.pop(context);
                     },
-                    activeTrackColor: AppTheme.secondaryColor,
+                    activeTrackColor: HBotColors.primaryLight,
                   ),
                   onTap: () {
                     setState(() {
@@ -2164,12 +2164,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 // Sort options
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    vertical: AppTheme.paddingSmall,
+                    vertical: HBotSpacing.space2,
                   ),
                   child: Text(
                     'Sort By',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: AppTheme.getTextSecondary(context),
+                      color: HBotColors.textSecondaryLight,
                     ),
                   ),
                 ),
@@ -2183,7 +2183,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   Icons.category_outlined,
                 ),
 
-                const SizedBox(height: AppTheme.paddingMedium),
+                const SizedBox(height: HBotSpacing.space4),
               ],
             ),
           ),
@@ -2199,20 +2199,20 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       leading: Icon(
         icon,
         color: isSelected
-            ? AppTheme.primaryColor
-            : AppTheme.getTextSecondary(context),
+            ? HBotColors.primary
+            : HBotColors.textSecondaryLight,
       ),
       title: Text(
         label,
         style: TextStyle(
           color: isSelected
-              ? AppTheme.primaryColor
-              : AppTheme.getTextPrimary(context),
+              ? HBotColors.primary
+              : HBotColors.textPrimaryLight,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
         ),
       ),
       trailing: isSelected
-          ? const Icon(Icons.check, color: AppTheme.primaryColor)
+          ? const Icon(Icons.check, color: HBotColors.primary)
           : null,
       onTap: () {
         setState(() {
@@ -2226,15 +2226,15 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void _showHomeSelector() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.getCardColor(context),
+      backgroundColor: HBotColors.cardLight,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppTheme.radiusLarge),
+          top: Radius.circular(HBotRadius.large),
         ),
       ),
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.all(AppTheme.paddingLarge),
+          padding: const EdgeInsets.all(HBotSpacing.space6),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -2245,12 +2245,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
               ),
-              const SizedBox(height: AppTheme.paddingMedium),
+              const SizedBox(height: HBotSpacing.space4),
               ..._homes.map(
                 (home) => ListTile(
                   title: Text(home.name),
                   trailing: _selectedHome?.id == home.id
-                      ? Icon(Icons.check, color: AppTheme.primaryColor)
+                      ? Icon(Icons.check, color: HBotColors.primary)
                       : null,
                   onTap: () {
                     Navigator.pop(context);
@@ -2350,12 +2350,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void _showAddMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.getCardColor(context),
+      backgroundColor: HBotColors.cardLight,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Container(
-        padding: const EdgeInsets.all(AppTheme.paddingLarge),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -2363,18 +2363,18 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppTheme.textHint,
+                color: HBotColors.textTertiaryLight,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
             Text(
               _getAddMenuTitle(),
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: AppTheme.paddingLarge),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Show different options based on current state
             if (_homes.isEmpty) ...[
@@ -2383,12 +2383,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 leading: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withOpacity(0.1),
+                    color: HBotColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     Icons.home_work_outlined,
-                    color: AppTheme.primaryColor,
+                    color: HBotColors.primary,
                   ),
                 ),
                 title: const Text('Create Your First Home'),
@@ -2444,12 +2444,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 leading: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.secondaryColor.withOpacity(0.1),
+                    color: HBotColors.primaryLight.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     Icons.devices_outlined,
-                    color: AppTheme.secondaryColor,
+                    color: HBotColors.primaryLight,
                   ),
                 ),
                 title: const Text('Add Device'),
@@ -2464,17 +2464,17 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   _showAddDeviceDialog();
                 },
               ),
-              const SizedBox(height: AppTheme.paddingSmall),
+              const SizedBox(height: HBotSpacing.space2),
               ListTile(
                 leading: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withOpacity(0.1),
+                    color: HBotColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     Icons.home_work_outlined,
-                    color: AppTheme.primaryColor,
+                    color: HBotColors.primary,
                   ),
                 ),
                 title: const Text('Create New Home'),
@@ -2496,7 +2496,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 },
               ),
             ],
-            const SizedBox(height: AppTheme.paddingMedium),
+            const SizedBox(height: HBotSpacing.space4),
           ],
         ),
       ),
@@ -2544,13 +2544,13 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: Text('Add Device to ${_selectedHome!.name}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.wifi, color: AppTheme.primaryColor),
+                leading: const Icon(Icons.wifi, color: HBotColors.primary),
                 title: const Text('HBOT Device'),
                 subtitle: const Text('Add HBOT device via Wi-Fi'),
                 onTap: () {
@@ -2560,7 +2560,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Divider(),
               ListTile(
-                leading: const Icon(Icons.device_hub, color: AppTheme.textHint),
+                leading: const Icon(Icons.device_hub, color: HBotColors.textTertiaryLight),
                 title: const Text('Other Device'),
                 subtitle: const Text('Coming soon...'),
                 enabled: false,
@@ -2635,7 +2635,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Select Home for Device'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -2711,12 +2711,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: const Text('Create Home First'),
           content: const Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.home_outlined, size: 64, color: AppTheme.primaryColor),
+              Icon(Icons.home_outlined, size: 64, color: HBotColors.primary),
               SizedBox(height: 16),
               Text(
                 'You need to create a home before adding devices.',
@@ -2727,7 +2727,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               Text(
                 'A home is a container for organizing your smart devices.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppTheme.textHint),
+                style: TextStyle(color: HBotColors.textTertiaryLight),
               ),
             ],
           ),
@@ -2754,7 +2754,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 _loadData();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
+                backgroundColor: HBotColors.primary,
                 foregroundColor: Colors.white,
               ),
               child: const Text('Create Home'),
@@ -2774,7 +2774,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: AppTheme.getCardColor(context),
+          backgroundColor: HBotColors.cardLight,
           title: Row(
             children: [
               Icon(
@@ -2839,7 +2839,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   'Debug Messages:',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryColor,
+                    color: HBotColors.primary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -2900,7 +2900,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           title,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: AppTheme.primaryColor,
+            color: HBotColors.primary,
             fontSize: 14,
           ),
         ),
