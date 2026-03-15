@@ -117,7 +117,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
     try {
       final topicBase = widget.device.tasmotaTopicBase;
       if (topicBase == null || topicBase.isEmpty) {
-        throw Exception('Device has no MQTT topic configured');
+        throw Exception('Device is not configured for remote control');
       }
 
       switch (action) {
@@ -162,7 +162,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
     try {
       final topicBase = widget.device.tasmotaTopicBase;
       if (topicBase == null || topicBase.isEmpty) {
-        throw Exception('Device has no MQTT topic configured');
+        throw Exception('Device is not configured for remote control');
       }
 
       // NOTE: ShutterSetClose1 and ShutterSetOpen1 were already sent

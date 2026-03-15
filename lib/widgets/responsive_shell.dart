@@ -48,7 +48,8 @@ class ResponsiveShell extends StatelessWidget {
 
     return Container(
       color: HBotColors.backgroundLight,
-      child: Center(
+      child: Align(
+        alignment: Alignment.topCenter,
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: maxWidth),
           child: child,
@@ -89,7 +90,8 @@ class ResponsiveScaffold extends StatelessWidget {
       extendBodyBehindAppBar: extendBodyBehindAppBar,
       appBar: appBar,
       body: isTablet
-          ? Center(
+          ? Align(
+              alignment: Alignment.topCenter,
               child: ConstrainedBox(
                 constraints:
                     const BoxConstraints(maxWidth: HBotLayout.contentMaxWidth),
@@ -98,7 +100,9 @@ class ResponsiveScaffold extends StatelessWidget {
             )
           : body,
       bottomNavigationBar: isTablet && bottomNavigationBar != null
-          ? Center(
+          ? Align(
+              alignment: Alignment.bottomCenter,
+              heightFactor: 1.0,
               child: ConstrainedBox(
                 constraints:
                     const BoxConstraints(maxWidth: HBotLayout.contentMaxWidth),

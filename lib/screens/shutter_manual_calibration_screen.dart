@@ -53,7 +53,7 @@ class _ShutterManualCalibrationScreenState
     try {
       final topicBase = widget.device.tasmotaTopicBase;
       if (topicBase == null || topicBase.isEmpty) {
-        throw Exception('Device has no MQTT topic configured');
+        throw Exception('Device is not configured for remote control');
       }
 
       final openTime = int.parse(_openTimeController.text);

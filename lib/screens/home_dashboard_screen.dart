@@ -177,7 +177,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Retrying MQTT connection...'),
+            content: Text('Reconnecting...'),
             backgroundColor: Colors.blue,
             duration: Duration(seconds: 2),
           ),
@@ -215,7 +215,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     children: [
                       Icon(Icons.check_circle, color: Colors.white, size: 20),
                       SizedBox(width: 8),
-                      Text('MQTT connection restored'),
+                      Text('Connection restored'),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -246,7 +246,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     children: [
                       Icon(Icons.error, color: Colors.white, size: 20),
                       SizedBox(width: 8),
-                      Text('Failed to restore MQTT connection'),
+                      Text('Failed to restore connection'),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -2774,7 +2774,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 color: _mqttConnected ? Colors.green : Colors.red,
               ),
               const SizedBox(width: 8),
-              Text('MQTT Diagnostics'),
+              Text('Connection Diagnostics'),
             ],
           ),
           content: SingleChildScrollView(

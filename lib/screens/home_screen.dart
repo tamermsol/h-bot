@@ -67,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: HBotColors.backgroundLight,
       body: isTablet
-          ? Center(
+          ? Align(
+              alignment: Alignment.topCenter,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: HBotLayout.contentMaxWidth),
                 child: Column(
@@ -85,7 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
       bottomNavigationBar: isTablet
-          ? Center(
+          ? Align(
+              alignment: Alignment.bottomCenter,
+              heightFactor: 1.0,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: HBotLayout.contentMaxWidth),
                 child: _buildBottomNavigation(),

@@ -2440,9 +2440,9 @@ Troubleshooting:
             .timeout(
               const Duration(seconds: 10),
               onTimeout: () {
-                _addDebugLog('MQTT initialization timed out');
+                _addDebugLog('Connection initialization timed out');
                 throw TimeoutException(
-                  'MQTT initialization timeout',
+                  'Connection initialization timeout',
                   const Duration(seconds: 10),
                 );
               },
@@ -2452,13 +2452,13 @@ Troubleshooting:
         final connected = await _mqttManager.connect().timeout(
           const Duration(seconds: 30),
           onTimeout: () {
-            _addDebugLog('MQTT connection timed out');
+            _addDebugLog('Connection timed out');
             return false;
           },
         );
 
         if (connected) {
-          _addDebugLog('MQTT connected successfully');
+          _addDebugLog('Connected successfully');
 
           // Register the created device if available
           if (_createdDevice != null) {
@@ -2476,7 +2476,7 @@ Troubleshooting:
           _addDebugLog('Failed to connect to MQTT broker');
         }
       } catch (e) {
-        _addDebugLog('MQTT initialization error: $e');
+        _addDebugLog('Connection error: $e');
         // Don't fail device creation if MQTT fails - this is background operation
       }
     });

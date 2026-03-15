@@ -255,7 +255,7 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
               Padding(
                 padding: const EdgeInsets.only(top: HBotSpacing.space2),
                 child: Text(
-                  'No realtime data (MQTT not available)',
+                  'No realtime data available',
                   style: Theme.of(
                     context,
                   ).textTheme.bodySmall?.copyWith(color: Colors.orange),

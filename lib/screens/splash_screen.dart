@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 import 'auth_wrapper.dart';
 
-/// Splash screen per design spec §1
-/// Logo + gradient app name + tagline, animated entrance
+/// Splash screen — dark gradient background with animated logo + text
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -13,148 +13,198 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  late final AnimationController _logoController;
-  late final AnimationController _textController;
-  late final AnimationController _taglineController;
-
-  late final Animation<double> _logoFade;
-  late final Animation<double> _textFade;
-  late final Animation<Offset> _textSlide;
-  late final Animation<double> _taglineFade;
+  late final AnimationController _mainController;
+  late final Animation<double> _fadeAnimation;
+  late final Animation<double> _scaleAnimation;
+  late final AnimationController _pulseController;
+  late final Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    // Logo: fade in 300ms
-    _logoController = AnimationController(
+    _mainController = AnimationController(
+      duration: const Duration(milliseconds: 900),
       vsync: this,
-      duration: const Duration(milliseconds: 300),
     );
-    _logoFade = CurvedAnimation(parent: _logoController, curve: Curves.easeOut);
+    _fadeAnimation = CurvedAnimation(
+      parent: _mainController,
+      curve: Curves.easeOut,
+    );
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _mainController, curve: Curves.easeOutBack),
+    );
 
-    // App name: slide up + fade in, 300ms after 200ms delay
-    _textController = AnimationController(
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
       vsync: this,
-      duration: const Duration(milliseconds: 300),
     );
-    _textFade = CurvedAnimation(parent: _textController, curve: Curves.easeOut);
-    _textSlide = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeOut));
-
-    // Tagline: fade in 200ms after 400ms delay
-    _taglineController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
+    _pulseAnimation = Tween<double>(begin: 0.3, end: 1.0).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
-    _taglineFade = CurvedAnimation(parent: _taglineController, curve: Curves.easeOut);
+    _pulseController.repeat(reverse: true);
 
-    _startAnimation();
-  }
+    _mainController.forward();
 
-  Future<void> _startAnimation() async {
-    await Future.delayed(const Duration(milliseconds: 100));
-    _logoController.forward();
-
-    await Future.delayed(const Duration(milliseconds: 200));
-    _textController.forward();
-
-    await Future.delayed(const Duration(milliseconds: 200));
-    _taglineController.forward();
-
-    // Navigate after splash
-    await Future.delayed(const Duration(milliseconds: 1200));
-    if (mounted) {
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const AuthWrapper(),
-          transitionsBuilder: (_, animation, __, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-          transitionDuration: const Duration(milliseconds: 400),
-        ),
-      );
-    }
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder: (_, __, ___) => const AuthWrapper(),
+            transitionsBuilder: (_, animation, __, child) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            transitionDuration: HBotDurations.slow,
+          ),
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
-    _logoController.dispose();
-    _textController.dispose();
-    _taglineController.dispose();
+    _mainController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Logo — 64×64, animated fade
-            FadeTransition(
-              opacity: _logoFade,
-              child: ClipRRect(
-                borderRadius: HBotRadius.mediumRadius,
-                child: Image.asset(
-                  'assets/images/hbot_logo.png',
-                  width: 64,
-                  height: 64,
-                  errorBuilder: (_, __, ___) => Container(
-                    width: 64,
-                    height: 64,
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF0A1628),
+              Color(0xFF0668CA),
+              Color(0xFF0883FD),
+            ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: SafeArea(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: Column(
+                children: [
+                  const Spacer(flex: 3),
+
+                  // Logo with white glow effect
+                  Container(
+                    width: 120,
+                    height: 120,
                     decoration: BoxDecoration(
-                      gradient: HBotColors.primaryGradient,
-                      borderRadius: HBotRadius.mediumRadius,
+                      borderRadius: BorderRadius.circular(28),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.18),
+                          blurRadius: 48,
+                          spreadRadius: 10,
+                        ),
+                        BoxShadow(
+                          color: HBotColors.primary.withOpacity(0.3),
+                          blurRadius: 60,
+                          spreadRadius: 4,
+                        ),
+                      ],
                     ),
-                    child: const Icon(Icons.home_rounded, color: Colors.white, size: 32),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(28),
+                      child: Image.asset(
+                        'assets/images/hbot_logo.png',
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(28),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.2),
+                              width: 1,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.home_rounded,
+                            color: Colors.white,
+                            size: 56,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
 
-            const SizedBox(height: HBotSpacing.space4),
+                  const SizedBox(height: 32),
 
-            // App name — gradient text, slide up + fade
-            SlideTransition(
-              position: _textSlide,
-              child: FadeTransition(
-                opacity: _textFade,
-                child: ShaderMask(
-                  shaderCallback: (bounds) => HBotColors.primaryGradient.createShader(bounds),
-                  child: const Text(
+                  // "H-Bot" in white
+                  const Text(
                     'H-Bot',
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      fontSize: 32,
+                      fontSize: 36,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white, // Will be masked by gradient
+                      color: Colors.white,
+                      letterSpacing: -0.5,
                     ),
                   ),
-                ),
+
+                  const SizedBox(height: 8),
+
+                  // Tagline
+                  Text(
+                    'Smart Home, Simplified',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white.withOpacity(0.7),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+
+                  const Spacer(flex: 2),
+
+                  // Pulsing dot loader
+                  AnimatedBuilder(
+                    animation: _pulseAnimation,
+                    builder: (context, child) {
+                      return Opacity(
+                        opacity: _pulseAnimation.value,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.8),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.white.withOpacity(0.4),
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+
+                  const SizedBox(height: 48),
+                ],
               ),
             ),
-
-            const SizedBox(height: HBotSpacing.space2),
-
-            // Tagline
-            FadeTransition(
-              opacity: _taglineFade,
-              child: const Text(
-                'Smart Home, Simplified',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: HBotColors.textSecondaryLight,
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

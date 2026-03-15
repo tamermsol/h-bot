@@ -1676,7 +1676,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
-                'MQTT not connected. Please check your connection.',
+                'Not connected. Please check your connection.',
               ),
               backgroundColor: Colors.orange,
             ),

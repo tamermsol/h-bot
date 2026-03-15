@@ -102,10 +102,10 @@ class _ScenesScreenState extends State<ScenesScreen>
       );
     }
 
-    if (_currentHomeId == null) return _buildNoHomeState();
-    if (_scenes.isEmpty) return _buildEmptyState();
+    if (_currentHomeId == null) return SafeArea(child: _buildNoHomeState());
+    if (_scenes.isEmpty) return SafeArea(child: _buildEmptyState());
 
-    return Stack(
+    return SafeArea(child: Stack(
       children: [
         ListView.builder(
           padding: const EdgeInsets.fromLTRB(
@@ -146,7 +146,7 @@ class _ScenesScreenState extends State<ScenesScreen>
           ),
         ),
       ],
-    );
+    ));
   }
 
   Widget _buildSceneCard(Scene scene) {

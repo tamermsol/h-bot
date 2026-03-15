@@ -93,7 +93,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                     const SizedBox(width: HBotSpacing.space2),
                     const Expanded(
                       child: Text(
-                        'MQTT Debug Information',
+                        'Connection Debug Information',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -235,7 +235,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Broker Configuration',
+              'Server Configuration',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -372,7 +372,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
 
   void _copyDebugInfo() {
     final info = StringBuffer();
-    info.writeln('MQTT Debug Information');
+    info.writeln('Connection Debug Information');
     info.writeln('======================');
     info.writeln('Connection State: $_connectionState');
     info.writeln('Broker: y3ae1177.ala.eu-central-1.emqxsl.com:8883');
