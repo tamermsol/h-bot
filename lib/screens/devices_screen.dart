@@ -148,17 +148,12 @@ class _DevicesScreenState extends State<DevicesScreen> {
         : widget.home != null
         ? '${widget.home!.name} Devices'
         : 'All Devices';
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
         title: Text(title),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
         actions: [
           if (widget.home != null)
@@ -180,9 +175,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                 backgroundImageUrl: widget.room!.backgroundImageUrl,
                 overlayColor:
                     Colors.black, // Always use black for better contrast
-                overlayOpacity: isDark
-                    ? 0.3
-                    : 0.6, // Increased to 0.6 for better text visibility in Light Mode
+                overlayOpacity: 0.6, // Increased to 0.6 for better text visibility in Light Mode
                 child: const SizedBox.expand(),
               ),
             ),
@@ -355,7 +348,6 @@ class _DevicesScreenState extends State<DevicesScreen> {
     int shutterDirection,
     bool waitingForInitialState,
   ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final textPrimary = HBotColors.textPrimaryLight;
 
     return Column(
@@ -378,9 +370,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
                       ? HBotColors.primary.withOpacity(0.2)
-                      : (isDark
-                            ? HBotColors.textTertiaryLight.withOpacity(0.1)
-                            : Colors.white),
+                      : (Colors.white),
                   borderRadius: HBotRadius.mediumRadius,
                 ),
                 child: Icon(
@@ -392,9 +382,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
                       ? HBotColors.primary
-                      : (isDark
-                            ? HBotColors.textTertiaryLight
-                            : HBotColors.textSecondaryLight),
+                      : (HBotColors.textSecondaryLight),
                   size: 32,
                 ),
               ),
@@ -409,7 +397,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                     color: isOnline ? Colors.green : Colors.red.shade400,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isDark ? HBotColors.surfaceLight : Colors.white,
+                      color: Colors.white,
                       width: 2,
                     ),
                   ),

@@ -296,16 +296,11 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: isDark
-            ? HBotColors.surfaceLight
-            : HBotColors.cardLight,
+        backgroundColor: HBotColors.cardLight,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),

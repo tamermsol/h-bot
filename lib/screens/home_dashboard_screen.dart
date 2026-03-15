@@ -15,9 +15,9 @@ import '../services/current_home_service.dart';
 import '../services/app_lifecycle_manager.dart';
 import '../services/room_change_notifier.dart';
 import '../widgets/background_image_picker.dart';
-import '../widgets/background_container.dart';
 import 'homes_screen.dart';
 import 'add_device_flow_screen.dart';
+import 'notifications_settings_screen.dart';
 import 'device_control_screen.dart';
 
 class HomeDashboardScreen extends StatefulWidget {
@@ -957,7 +957,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 color: HBotColors.iconDefault,
                 iconSize: 24,
                 constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
-                onPressed: () {},
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
               ),
               // Settings menu
               PopupMenuButton<String>(
@@ -1594,7 +1595,6 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     int shutterDirection, // 0=stopped, 1=opening, -1=closing
     bool waitingForInitialState, // FETCH-FIRST: loading indicator flag
   ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final textPrimary = HBotColors.textPrimaryLight;
     final textHint = HBotColors.textTertiaryLight;
 
@@ -1620,9 +1620,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
                       ? HBotColors.primary.withOpacity(0.2)
-                      : (isDark
-                            ? HBotColors.textTertiaryLight.withOpacity(0.1)
-                            : Colors
+                      : (Colors
                                   .white), // White background for better contrast in Light Mode
                   borderRadius: BorderRadius.circular(HBotRadius.medium),
                 ),
@@ -1635,9 +1633,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
                       ? HBotColors.primary
-                      : (isDark
-                            ? HBotColors.textTertiaryLight
-                            : AppTheme
+                      : (AppTheme
                                   .lightTextSecondary), // Better contrast in Light Mode
                   size: 32, // Reduced from 36 to 32 for maximum compactness
                 ),
@@ -1653,7 +1649,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     color: isOnline ? Colors.green : Colors.red.shade400,
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isDark ? HBotColors.surfaceLight : Colors.white,
+                      color: Colors.white,
                       width: 2,
                     ),
                   ),
@@ -2558,16 +2554,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   _addTasmotaDevice();
                 },
               ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.device_hub, color: HBotColors.textTertiaryLight),
-                title: const Text('Other Device'),
-                subtitle: const Text('Coming soon...'),
-                enabled: false,
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
+
             ],
           ),
           actions: [

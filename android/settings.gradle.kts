@@ -24,10 +24,4 @@ plugins {
 
 include(":app")
 
-// Provide flutter.compileSdkVersion and flutter.minSdkVersion for old plugins
-gradle.beforeProject {
-    if (project.name != "app" && project.name != rootProject.name) {
-        project.extensions.extraProperties["flutter.compileSdkVersion"] = 35
-        project.extensions.extraProperties["flutter.minSdkVersion"] = 21
-    }
-}
+

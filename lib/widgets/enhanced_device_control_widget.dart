@@ -7,7 +7,6 @@ import '../repos/devices_repo.dart';
 import '../widgets/mqtt_debug_sheet.dart';
 import '../widgets/shutter_control_widget.dart';
 import '../theme/app_theme.dart';
-import '../utils/channel_detection_utils.dart';
 
 /// Enhanced widget for controlling devices with the new MQTT device manager
 class EnhancedDeviceControlWidget extends StatefulWidget {

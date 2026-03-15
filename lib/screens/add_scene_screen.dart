@@ -292,20 +292,15 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
         title: Text(
           _isEditMode ? 'Edit Scene' : 'Create New Scene',
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
         actions: [
           if (_currentStep > 0)
@@ -1202,7 +1197,6 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     final channels = device.effectiveChannels;
     final selectedChannels = List<int>.from(action['channels'] ?? [1]);
     final state = action['state'] as bool? ?? true;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1220,9 +1214,9 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         Container(
           padding: const EdgeInsets.all(HBotSpacing.space4),
           decoration: BoxDecoration(
-            color: isDark ? HBotColors.surfaceLight : Colors.white,
+            color: Colors.white,
             borderRadius: HBotRadius.smallRadius,
-            border: isDark ? null : Border.all(color: HBotColors.borderLight),
+            border: Border.all(color: HBotColors.borderLight),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1328,7 +1322,6 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
   Widget _buildShutterAction(Device device, Map<String, dynamic> action) {
     final position = action['position'] as int? ?? 50;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1336,9 +1329,9 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         Container(
           padding: const EdgeInsets.all(HBotSpacing.space4),
           decoration: BoxDecoration(
-            color: isDark ? HBotColors.surfaceLight : Colors.white,
+            color: Colors.white,
             borderRadius: HBotRadius.smallRadius,
-            border: isDark ? null : Border.all(color: HBotColors.borderLight),
+            border: Border.all(color: HBotColors.borderLight),
           ),
           child: Column(
             children: [
@@ -1442,14 +1435,13 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   }
 
   Widget _buildNoActionAvailable() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: isDark ? HBotColors.surfaceLight : Colors.white,
+        color: Colors.white,
         borderRadius: HBotRadius.smallRadius,
-        border: isDark ? null : Border.all(color: HBotColors.borderLight),
+        border: Border.all(color: HBotColors.borderLight),
       ),
       child: Row(
         children: [
@@ -1473,7 +1465,6 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   }
 
   Widget _buildReviewStep() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(HBotSpacing.space4),
@@ -1502,19 +1493,15 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             decoration: BoxDecoration(
               color: HBotColors.cardLight,
               borderRadius: HBotRadius.mediumRadius,
-              gradient: isDark
-                  ? LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        _selectedColor.withOpacity(0.2),
-                        HBotColors.cardLight,
-                      ],
-                    )
-                  : null,
-              border: isDark
-                  ? null
-                  : Border.all(color: HBotColors.borderLight),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  _selectedColor.withOpacity(0.2),
+                  HBotColors.cardLight,
+                ],
+              ),
+              border: Border.all(color: HBotColors.borderLight),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1654,23 +1641,20 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   }
 
   Widget _buildBottomNavigation() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: isDark ? HBotColors.cardLight : Colors.white,
+        color: Colors.white,
         border: Border(
           top: BorderSide(
-            color: isDark
-                ? HBotColors.textTertiaryLight.withOpacity(0.2)
-                : HBotColors.borderLight,
+            color: HBotColors.borderLight,
             width: 1,
           ),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -1685,12 +1669,10 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 child: ElevatedButton(
                   onPressed: _isCreating ? null : _previousStep,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark ? HBotColors.cardLight : Colors.white,
+                    backgroundColor: Colors.white,
                     foregroundColor: HBotColors.textPrimaryLight,
                     side: BorderSide(
-                      color: isDark
-                          ? HBotColors.textTertiaryLight
-                          : HBotColors.borderLight,
+                      color: HBotColors.borderLight,
                       width: 2,
                     ),
                     elevation: 0,
@@ -2161,7 +2143,6 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     IconData icon,
   ) {
     final isSelected = _selectedLocationTriggerType == type;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: () {
@@ -2177,14 +2158,12 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? _selectedColor.withOpacity(0.2)
-              : (isDark ? HBotColors.surfaceLight : Colors.white),
+              : (Colors.white),
           borderRadius: HBotRadius.smallRadius,
           border: Border.all(
             color: isSelected
                 ? _selectedColor
-                : (isDark
-                      ? Colors.grey.withOpacity(0.3)
-                      : HBotColors.borderLight),
+                : (HBotColors.borderLight),
             width: 2,
           ),
         ),

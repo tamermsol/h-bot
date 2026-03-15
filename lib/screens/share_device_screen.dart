@@ -284,17 +284,12 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text('Share Device'),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: HBotColors.backgroundLight,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),

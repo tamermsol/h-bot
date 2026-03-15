@@ -91,3 +91,29 @@
 ### Workspace
 - H-Bot source copied to `/root/.openclaw/workspace-hbot/` (lib/, pubspec.yaml, ios/, android/, assets/)
 - Work from hbot workspace, not flutter workspace
+
+## 2026-03-15 — Design System Migration Complete (Build 101)
+
+### hbot-design branch status
+- All AppTheme references migrated to HBotColors/HBotSpacing/HBotRadius tokens (70+ files)
+- Branding applied: app icons, splash screen, auth screens from h-bot.tech assets
+- Zero compile errors
+- Latest commit: `d369ced` on `hbot-design` branch
+- Build 101 on TestFlight + Android APK sent to Tim
+
+### Correct App Store Connect IDs (verified)
+- App Apple ID: `6760253054`
+- Build 101 ASC ID: `5839a6e7-e207-4789-97ba-fa2404347fdc`
+- Internal Testers Group: `12c1b517-a3ee-4c0d-bcac-d4b16cb59abb`
+
+### Android Build Environment Notes
+- Server `/tmp` is `noexec` — must use `JAVA_OPTS=-Djava.io.tmpdir=/root/gradle-tmp`
+- Groovy init script at `/root/.gradle/init.d/flutter-compat.gradle` creates `flutter` extension for old Groovy plugins (geolocator_android etc.)
+- Don't create for `:app` project — only subprojects
+- Kotlin version warnings (2.1.0 vs 1.8.0) are benign
+
+### Remaining design work
+- Implement remaining screens from `05-REMAINING-SCREENS.md`
+- Audit platform-specific Android code (auto-discovery, NsdManager vs Bonjour)
+- Dark mode tokens defined but not implemented
+- Visual polish pass needed

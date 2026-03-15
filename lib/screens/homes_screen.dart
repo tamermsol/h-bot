@@ -293,20 +293,15 @@ class _HomesScreenState extends State<HomesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
         title: const Text(
           'My Homes',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
         actions: [
           IconButton(
@@ -374,7 +369,6 @@ class _HomesScreenState extends State<HomesScreen> {
   }
 
   Widget _buildHomesList() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return ListView.builder(
       padding: const EdgeInsets.all(HBotSpacing.space4),
@@ -382,14 +376,12 @@ class _HomesScreenState extends State<HomesScreen> {
       itemBuilder: (context, index) {
         final home = _homes[index];
         return Card(
-          color: isDark ? HBotColors.cardLight : HBotColors.cardLight,
+          color: HBotColors.cardLight,
           margin: const EdgeInsets.only(bottom: HBotSpacing.space4),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: HBotRadius.mediumRadius,
-            side: isDark
-                ? BorderSide.none
-                : const BorderSide(color: HBotColors.borderLight),
+            side: const BorderSide(color: HBotColors.borderLight),
           ),
           child: ListTile(
             leading: Container(

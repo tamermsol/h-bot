@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
-import 'package:provider/provider.dart';
 import '../theme/app_theme.dart';
-import '../widgets/profile_card.dart';
 import '../widgets/settings_tile.dart';
 import '../widgets/avatar_picker_dialog.dart';
 import '../services/auth_service.dart';
 import '../services/smart_home_service.dart';
 import '../services/current_home_service.dart';
 import '../services/avatar_service.dart';
-import '../services/theme_service.dart';
 import '../models/profile.dart';
+import '../models/home.dart';
 import '../utils/error_handler.dart';
 import '../core/supabase_client.dart';
 import 'sign_in_screen.dart';
@@ -23,6 +21,8 @@ import 'feedback_screen.dart';
 import 'hbot_account_screen.dart';
 import 'shared_devices_screen.dart';
 import 'multi_device_share_screen.dart';
+import 'rooms_screen.dart';
+import 'wifi_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -175,47 +175,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showAppearanceDialog() {
-    final themeService = Provider.of<ThemeService>(context, listen: false);
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Appearance'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<ThemeMode>(
-              title: const Text('Light Mode'),
-              subtitle: const Text('Bright and clean interface'),
-              value: ThemeMode.light,
-              groupValue: themeService.themeMode,
-              onChanged: (value) {
-                if (value != null) {
-                  themeService.setThemeMode(value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            RadioListTile<ThemeMode>(
-              title: const Text('Dark Mode'),
-              subtitle: const Text('Easy on the eyes'),
-              value: ThemeMode.dark,
-              groupValue: themeService.themeMode,
-              onChanged: (value) {
-                if (value != null) {
-                  themeService.setThemeMode(value);
-                  Navigator.pop(context);
-                }
-              },
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-        ],
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Dark mode coming in a future update'),
+        backgroundColor: HBotColors.primary,
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
@@ -312,12 +276,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SettingsTile(
                 icon: Icons.meeting_room_outlined,
                 title: 'Rooms',
-                onTap: () {},
+                onTap: () async {
+                  final homeId = await CurrentHomeService().getCurrentHomeId();
+                  if (homeId == null) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please select a home first'), backgroundColor: HBotColors.warning),
+                      );
+                    }
+                    return;
+                  }
+                  try {
+                    final homes = await SmartHomeService().getMyHomes();
+                    final home = homes.firstWhere((h) => h.id == homeId);
+                    if (mounted) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => RoomsScreen(home: home)));
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Could not load home: $e'), backgroundColor: HBotColors.error),
+                      );
+                    }
+                  }
+                },
               ),
               SettingsTile(
                 icon: Icons.wifi_outlined,
                 title: 'WiFi Profiles',
-                onTap: () {},
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const WiFiProfileScreen())),
                 showDivider: false,
               ),
             ],
@@ -397,6 +386,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'Shared with Me',
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const SharedDevicesScreen())),
+              ),
+              SettingsTile(
+                icon: Icons.feedback_outlined,
+                title: 'Send Feedback',
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const FeedbackScreen())),
+              ),
+              SettingsTile(
+                icon: Icons.account_circle_outlined,
+                title: 'HBOT Account',
+                onTap: _openHBOTAccountScreen,
               ),
               SettingsTile(
                 icon: Icons.logout,

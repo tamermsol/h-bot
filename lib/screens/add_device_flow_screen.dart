@@ -357,19 +357,14 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // iOS: Skip permission gate - location permission only needed for auto-detect SSID
     // Local Network permission will be requested automatically when accessing 192.168.4.1
     if (isIOS) {
       return Scaffold(
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: HBotColors.backgroundLight,
         appBar: AppBar(
-          backgroundColor: isDark
-              ? HBotColors.backgroundLight
-              : HBotColors.backgroundLight,
+          backgroundColor: HBotColors.backgroundLight,
           title: const Text('Add Device'),
           elevation: 0,
           actions: [
@@ -398,13 +393,9 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: HBotColors.backgroundLight,
         appBar: AppBar(
-          backgroundColor: isDark
-              ? HBotColors.backgroundLight
-              : HBotColors.backgroundLight,
+          backgroundColor: HBotColors.backgroundLight,
           title: const Text('Add Device'),
           elevation: 0,
           actions: [

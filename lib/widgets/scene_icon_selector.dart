@@ -40,14 +40,13 @@ class SceneIconSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
         color: HBotColors.cardLight,
         borderRadius: BorderRadius.circular(HBotRadius.medium),
-        border: isDark ? null : Border.all(color: HBotColors.borderLight),
+        border: Border.all(color: HBotColors.borderLight),
       ),
       child: GridView.builder(
         shrinkWrap: true,
@@ -69,14 +68,12 @@ class SceneIconSelector extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? HBotColors.primary.withOpacity(0.2)
-                    : (isDark ? HBotColors.surfaceLight : Colors.white),
+                    : (Colors.white),
                 borderRadius: BorderRadius.circular(HBotRadius.small),
                 border: Border.all(
                   color: isSelected
                       ? HBotColors.primary
-                      : (isDark
-                            ? Colors.transparent
-                            : HBotColors.borderLight),
+                      : (HBotColors.borderLight),
                   width: isSelected ? 2 : 1,
                 ),
               ),

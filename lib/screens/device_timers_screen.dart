@@ -584,12 +584,9 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
   @override
   Widget build(BuildContext context) {
     final hasSpace = _getNextAvailableIndex(slotsNeeded: 1) != null;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -609,9 +606,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             ),
           ],
         ),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        backgroundColor: HBotColors.backgroundLight,
         actions: [
           if (_isSyncingTime)
             const Padding(

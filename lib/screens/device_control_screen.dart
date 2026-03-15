@@ -448,16 +448,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: HBotColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: isDark
-            ? HBotColors.surfaceLight
-            : HBotColors.backgroundLight,
+        backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),
@@ -737,11 +732,9 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     // Determine model name based on device type and channel count
     modelName = _getHbotModelName();
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     return Card(
-      color: isDark ? HBotColors.cardLight : Colors.white,
-      elevation: isDark ? 4 : 2,
+      color: Colors.white,
+      elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
@@ -771,7 +764,6 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
 
   /// Build a single info row with label and value
   Widget _buildInfoRow(String label, String value) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -781,7 +773,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           child: Text(
             label,
             style: TextStyle(
-              color: isDark ? HBotColors.textSecondaryLight : Colors.grey[600],
+              color: Colors.grey[600],
               fontSize: 14,
             ),
           ),
@@ -790,7 +782,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           child: Text(
             value,
             style: TextStyle(
-              color: isDark ? HBotColors.textPrimaryLight : Colors.grey[900],
+              color: Colors.grey[900],
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
@@ -913,7 +905,6 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   }) {
     final channelType = _channelTypes[channel] ?? 'light';
     final isLight = channelType == 'light';
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
       onTap: canControl ? () => _toggleChannel(channel) : null,
@@ -925,7 +916,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           border: Border.all(
             color: isOn
                 ? HBotColors.primary
-                : (isDark ? Colors.grey[700]! : Colors.grey[400]!),
+                : (Colors.grey[400]!),
             width: 2,
           ),
         ),
@@ -938,7 +929,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 size: 40,
                 color: isOn
                     ? Colors.white
-                    : (isDark ? HBotColors.textSecondaryLight : Colors.grey[600]),
+                    : (Colors.grey[600]),
               ),
               const SizedBox(height: 4),
               Text(
@@ -946,7 +937,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 style: TextStyle(
                   color: isOn
                       ? Colors.white
-                      : (isDark ? HBotColors.textSecondaryLight : Colors.grey[700]),
+                      : (Colors.grey[700]),
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),

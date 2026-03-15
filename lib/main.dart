@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'env.dart';
-import 'screens/auth_wrapper.dart';
 import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
 import 'services/app_lifecycle_manager.dart';
@@ -105,18 +104,12 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
 
   @override
   Widget build(BuildContext context) {
-    final themeService = Provider.of<ThemeService>(context);
-
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
+      const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        statusBarIconBrightness: themeService.isDarkMode
-            ? Brightness.light
-            : Brightness.dark,
+        statusBarIconBrightness: Brightness.dark,
         systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: themeService.isDarkMode
-            ? Brightness.light
-            : Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.dark,
       ),
     );
 
@@ -127,8 +120,7 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
       title: 'HBOT',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme(),
-      darkTheme: AppTheme.darkTheme(),
-      themeMode: themeService.themeMode,
+      themeMode: ThemeMode.light,
       home: const SplashScreen(),
     );
   }
