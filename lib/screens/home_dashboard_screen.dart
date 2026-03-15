@@ -988,14 +988,28 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           const SizedBox(height: HBotSpacing.space2),
 
           // Greeting
-          Text(
-            _greeting,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-              color: HBotColors.textSecondaryLight,
-            ),
+          Row(
+            children: [
+              Text(
+                _greeting,
+                style: const TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: HBotColors.textSecondaryLight,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                'v1.0.0 (107)',
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 11,
+                  fontWeight: FontWeight.w400,
+                  color: HBotColors.textTertiaryLight,
+                ),
+              ),
+            ],
           ),
 
           const SizedBox(height: HBotSpacing.space1),
@@ -1669,10 +1683,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         Flexible(
           child: Text(
             device.deviceName,
-            style: TextStyle(
-              color: textPrimary,
-              fontSize: 12, // Reduced from 13 to 12
+            style: const TextStyle(
+              fontFamily: 'Inter',
+              color: HBotColors.textPrimaryLight,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
+              letterSpacing: -0.2,
             ),
             textAlign: TextAlign.center,
             maxLines: 2,
