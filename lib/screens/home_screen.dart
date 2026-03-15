@@ -3,6 +3,7 @@ import 'dart:async';
 import '../theme/app_theme.dart';
 import '../services/network_connectivity_service.dart';
 import '../widgets/connectivity_banner.dart';
+import '../widgets/responsive_shell.dart';
 import 'home_dashboard_screen.dart';
 import 'profile_screen.dart';
 import 'scenes_screen.dart';
@@ -61,15 +62,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = HBotLayout.isTablet(context);
+
     return Scaffold(
       backgroundColor: HBotColors.backgroundLight,
-      body: Column(
-        children: [
-          ConnectivityBanner(isOnline: _isOnline),
-          Expanded(child: _buildBody()),
-        ],
-      ),
-      bottomNavigationBar: _buildBottomNavigation(),
+      body: isTablet
+          ? Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: HBotLayout.contentMaxWidth),
+                child: Column(
+                  children: [
+                    ConnectivityBanner(isOnline: _isOnline),
+                    Expanded(child: _buildBody()),
+                  ],
+                ),
+              ),
+            )
+          : Column(
+              children: [
+                ConnectivityBanner(isOnline: _isOnline),
+                Expanded(child: _buildBody()),
+              ],
+            ),
+      bottomNavigationBar: isTablet
+          ? Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: HBotLayout.contentMaxWidth),
+                child: _buildBottomNavigation(),
+              ),
+            )
+          : _buildBottomNavigation(),
     );
   }
 

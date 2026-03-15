@@ -4,6 +4,7 @@ import '../theme/app_theme.dart';
 import '../models/wifi_profile.dart';
 import '../services/smart_home_service.dart';
 import '../core/supabase_client.dart';
+import '../widgets/responsive_shell.dart';
 
 /// Screen for managing Wi-Fi profiles for device provisioning
 class WiFiProfileScreen extends StatefulWidget {

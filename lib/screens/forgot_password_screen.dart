@@ -3,6 +3,7 @@ import '../services/auth_service.dart';
 import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import 'reset_password_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -69,11 +70,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SafeArea(
+      body: ResponsiveShell(child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
           child: _emailSent ? _buildSuccessState() : _buildFormState(),
         ),
+      ),
       ),
     );
   }

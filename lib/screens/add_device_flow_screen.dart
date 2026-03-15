@@ -28,6 +28,7 @@ import '../utils/channel_detection_utils.dart';
 import '../widgets/wifi_permission_gate.dart';
 import '../widgets/enhanced_device_control_widget.dart';
 import '../theme/app_theme.dart';
+import '../widgets/responsive_shell.dart';
 
 /// Complete device pairing flow: Wi-Fi Setup → Device Discovery → Provisioning → Success
 class AddDeviceFlowScreen extends StatefulWidget {

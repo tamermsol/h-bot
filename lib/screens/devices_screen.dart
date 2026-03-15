@@ -10,6 +10,7 @@ import '../models/room.dart';
 import '../models/device.dart';
 import 'add_device_flow_screen.dart';
 import 'device_control_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 class DevicesScreen extends StatefulWidget {
   final Home? home;

@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../widgets/smart_input_field.dart';
 import '../services/auth_service.dart';
 import '../models/profile.dart';
+import '../widgets/responsive_shell.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   final Profile? initialProfile;
@@ -114,7 +115,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: ResponsiveShell(child: SingleChildScrollView(
         padding: const EdgeInsets.all(HBotSpacing.space4),
         child: Form(
           key: _formKey,
@@ -224,6 +225,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             ],
           ),
         ),
+      ),
       ),
     );
   }

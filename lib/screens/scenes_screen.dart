@@ -6,6 +6,7 @@ import '../services/current_home_service.dart';
 import '../utils/error_handler.dart';
 import '../widgets/error_message_widget.dart';
 import 'add_scene_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 class ScenesScreen extends StatefulWidget {
   const ScenesScreen({super.key});

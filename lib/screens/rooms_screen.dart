@@ -10,6 +10,7 @@ import '../widgets/background_image_picker.dart';
 import '../widgets/background_container.dart';
 import '../widgets/room_icon_picker.dart';
 import 'devices_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 class RoomsScreen extends StatefulWidget {
   final Home home;

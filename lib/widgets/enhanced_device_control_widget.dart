@@ -6,6 +6,7 @@ import '../services/mqtt_device_manager.dart';
 import '../repos/devices_repo.dart';
 import '../widgets/mqtt_debug_sheet.dart';
 import '../widgets/shutter_control_widget.dart';
+import '../widgets/channel_grid.dart';
 import '../theme/app_theme.dart';
 
 /// Enhanced widget for controlling devices with the new MQTT device manager
@@ -395,15 +396,7 @@ class _EnhancedDeviceControlWidgetState
             else if (widget.device.channels == 1)
               _buildSingleChannelControl()
             else
-              _buildMultiChannelControls(),
-
-            // Bulk controls for multi-channel devices
-            if (widget.showBulkControls &&
-                widget.device.deviceType != DeviceType.shutter &&
-                widget.device.effectiveChannels > 1) ...[
-              const SizedBox(height: HBotSpacing.space4),
-              _buildBulkControls(),
-            ],
+              _buildChannelGrid(),
           ],
         ),
       ),
@@ -421,112 +414,19 @@ class _EnhancedDeviceControlWidgetState
     );
   }
 
-  Widget _buildMultiChannelControls() {
+  Widget _buildChannelGrid() {
     final isConnected = _connectionState == MqttConnectionState.connected;
 
-    return Column(
-      children: [
-        for (int i = 1; i <= widget.device.effectiveChannels; i++)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: Row(
-              children: [
-                Icon(
-                  _channelTypes[i] == 'light'
-                      ? Icons.lightbulb
-                      : Icons.power_settings_new,
-                  size: 20,
-                  color: (_channelStates[i] ?? false)
-                      ? HBotColors.primary
-                      : HBotColors.textSecondaryLight,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    _getChannelName(i),
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: HBotColors.textPrimaryLight,
-                    ),
-                  ),
-                ),
-                Switch(
-                  value: _channelStates[i] ?? false,
-                  onChanged: isConnected
-                      ? (value) => _setChannelState(i, value)
-                      : null,
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildBulkControls() {
-    final isConnected = _connectionState == MqttConnectionState.connected;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      decoration: BoxDecoration(
-        color: HBotColors.surfaceLight,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[800]!),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Bulk Controls',
-            style: TextStyle(
-              color: HBotColors.textPrimaryLight,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: HBotSpacing.space2),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: isConnected ? _turnAllOn : null,
-                  icon: const Icon(Icons.power_settings_new, size: 18),
-                  label: const Text('All ON'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[700],
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey[800],
-                    disabledForegroundColor: Colors.grey[600],
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: HBotSpacing.space2),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: isConnected ? _turnAllOff : null,
-                  icon: const Icon(Icons.power_off, size: 18),
-                  label: const Text('All OFF'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red[700],
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey[800],
-                    disabledForegroundColor: Colors.grey[600],
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return ChannelGrid(
+      channelCount: widget.device.effectiveChannels,
+      channelStates: _channelStates,
+      channelNames: _channelNames,
+      channelTypes: _channelTypes,
+      canControl: isConnected,
+      compact: true,
+      onToggleChannel: (channel, value) => _setChannelState(channel, value),
+      onAllOn: _turnAllOn,
+      onAllOff: _turnAllOff,
     );
   }
 

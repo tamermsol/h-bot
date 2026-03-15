@@ -7,10 +7,12 @@ import '../repos/devices_repo.dart';
 import '../theme/app_theme.dart';
 import '../utils/channel_detection_utils.dart';
 import '../widgets/shutter_control_widget.dart';
+import '../widgets/channel_grid.dart';
 import 'shutter_calibration_screen.dart';
 import 'shutter_manual_calibration_screen.dart';
 import 'device_timers_screen.dart';
 import 'share_device_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 /// Dedicated screen for controlling a specific device
 class DeviceControlScreen extends StatefulWidget {
@@ -502,26 +504,31 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           ),
         ],
       ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: HBotColors.primary),
-            )
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(HBotSpacing.space6),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildDeviceHeader(),
-                  const SizedBox(height: HBotSpacing.space6),
-                  _buildChannelControls(),
-                  const SizedBox(height: HBotSpacing.space6),
-                  if (_showDebugInfo) ...[
+      body: ResponsiveShell(
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: HBotColors.primary),
+              )
+            : SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: HBotLayout.isTablet(context) ? HBotSpacing.space6 : HBotSpacing.space5,
+                  vertical: HBotSpacing.space6,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildDeviceHeader(),
                     const SizedBox(height: HBotSpacing.space6),
-                    _buildDebugInfo(),
+                    _buildChannelControls(),
+                    const SizedBox(height: HBotSpacing.space6),
+                    if (_showDebugInfo) ...[
+                      const SizedBox(height: HBotSpacing.space6),
+                      _buildDebugInfo(),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
+      ),
     );
   }
 
@@ -829,7 +836,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     } else if (widget.device.channels == 1) {
       return _buildSingleChannelControl();
     } else {
-      return _buildMultiChannelControls();
+      return _buildMultiChannelGrid();
     }
   }
 
@@ -845,111 +852,86 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   /// Build single channel control with large circular power button
   Widget _buildSingleChannelControl() {
     final isOn = _getChannelState(1);
-    final canControl = _isDeviceControllable();
+    final canControl = _canSendCommands();
 
-    return Column(
-      children: [
-        // Large circular power button
-        Center(
-          child: _buildCircularChannelButton(
-            channel: 1,
-            isOn: isOn,
-            canControl: canControl,
-          ),
-        ),
-      ],
-    );
-  }
-
-  /// Build multi-channel controls with grid of circular buttons
-  Widget _buildMultiChannelControls() {
-    final canControl = _isDeviceControllable();
-    final layout = ChannelDetectionUtils.getOptimalGridLayout(
-      widget.device.effectiveChannels,
-    );
-    final columns = layout['columns'] ?? 2;
-
-    return Column(
-      children: [
-        // Grid of channel buttons
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: columns,
-            crossAxisSpacing: HBotSpacing.space4,
-            mainAxisSpacing: HBotSpacing.space4,
-            childAspectRatio: 1.0,
-          ),
-          itemCount: widget.device.effectiveChannels,
-          itemBuilder: (context, index) {
-            final channel = index + 1;
-            final isOn = _getChannelState(channel);
-
-            return _buildCircularChannelButton(
-              channel: channel,
-              isOn: isOn,
-              canControl: canControl,
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  /// Build a circular channel button
-  Widget _buildCircularChannelButton({
-    required int channel,
-    required bool isOn,
-    required bool canControl,
-  }) {
-    final channelType = _channelTypes[channel] ?? 'light';
-    final isLight = channelType == 'light';
-
-    return GestureDetector(
-      onTap: canControl ? () => _toggleChannel(channel) : null,
-      onLongPress: () => _showChannelOptionsDialog(channel),
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: isOn ? HBotColors.primary : HBotColors.cardLight,
-          border: Border.all(
+    return Center(
+      child: GestureDetector(
+        onTap: canControl ? () => _toggleChannel(1) : null,
+        child: AnimatedContainer(
+          duration: HBotDurations.medium,
+          width: 160,
+          height: 160,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
             color: isOn
-                ? HBotColors.primary
-                : (Colors.grey[400]!),
-            width: 2,
+                ? HBotColors.primary.withOpacity(0.1)
+                : HBotColors.cardLight,
+            border: Border.all(
+              color: isOn ? HBotColors.primary : HBotColors.borderLight,
+              width: 3,
+            ),
           ),
-        ),
-        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                isLight ? Icons.lightbulb : Icons.power_settings_new,
-                size: 40,
-                color: isOn
-                    ? Colors.white
-                    : (Colors.grey[600]),
+                _channelTypes[1] == 'switch'
+                    ? Icons.power_settings_new
+                    : Icons.lightbulb,
+                size: 48,
+                color: isOn ? HBotColors.primary : HBotColors.iconDefault,
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: HBotSpacing.space2),
               Text(
-                _getChannelName(channel),
+                isOn ? 'ON' : 'OFF',
                 style: TextStyle(
-                  color: isOn
-                      ? Colors.white
-                      : (Colors.grey[700]),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Inter',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: isOn ? HBotColors.primary : HBotColors.textSecondaryLight,
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  /// Build multi-channel controls using ChannelGrid
+  Widget _buildMultiChannelGrid() {
+    final canControl = _canSendCommands();
+    final Map<int, bool> states = {};
+    for (int i = 1; i <= widget.device.effectiveChannels; i++) {
+      states[i] = _getChannelState(i);
+    }
+
+    return ChannelGrid(
+      channelCount: widget.device.effectiveChannels,
+      channelStates: states,
+      channelNames: _channelNames,
+      channelTypes: _channelTypes,
+      canControl: canControl,
+      onToggleChannel: (channel, value) => _toggleChannel(channel),
+      onChannelLongPress: _showChannelOptionsDialog,
+      onAllOn: () => _setAllChannels(true),
+      onAllOff: () => _setAllChannels(false),
+    );
+  }
+
+  /// Set all channels on or off
+  Future<void> _setAllChannels(bool on) async {
+    for (int i = 1; i <= widget.device.effectiveChannels; i++) {
+      try {
+        await _mqttManager.setChannelPower(
+          widget.device.id,
+          i,
+          on,
+        );
+      } catch (e) {
+        debugPrint('Failed to set channel $i: $e');
+      }
+    }
   }
 
   /// Show channel rename dialog

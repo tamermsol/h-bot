@@ -6,6 +6,7 @@ import '../theme/app_theme.dart';
 import 'sign_up_screen.dart';
 import 'home_screen.dart';
 import 'forgot_password_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -113,7 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: HBotColors.backgroundLight,
-      body: SafeArea(
+      body: ResponsiveShell(child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
           child: Form(
@@ -342,6 +343,7 @@ class _SignInScreenState extends State<SignInScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

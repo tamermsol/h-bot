@@ -5,6 +5,7 @@ import '../theme/app_theme.dart';
 import '../models/profile.dart';
 import 'home_screen.dart';
 import 'otp_verification_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -168,7 +169,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SafeArea(
+      body: ResponsiveShell(child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
           child: Form(
@@ -407,6 +408,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

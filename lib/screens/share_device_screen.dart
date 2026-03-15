@@ -8,6 +8,7 @@ import '../models/device_share_invitation.dart';
 import '../models/device_share_request.dart';
 import '../models/shared_device.dart';
 import '../repos/device_sharing_repo.dart';
+import '../widgets/responsive_shell.dart';
 
 class ShareDeviceScreen extends StatefulWidget {
   final Device device;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../widgets/settings_tile.dart';
 import '../services/auth_service.dart';
+import '../widgets/responsive_shell.dart';
 
 class HBOTAccountScreen extends StatefulWidget {
   final String? userEmail;
@@ -37,7 +38,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
         backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
+      body: ResponsiveShell(child: SingleChildScrollView(
         child: Column(
           children: [
             // Email Address Section
@@ -72,6 +73,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

@@ -18,6 +18,7 @@ import '../widgets/background_image_picker.dart';
 import 'homes_screen.dart';
 import 'add_device_flow_screen.dart';
 import 'notifications_settings_screen.dart';
+import '../widgets/responsive_shell.dart';
 import 'device_control_screen.dart';
 
 class HomeDashboardScreen extends StatefulWidget {
@@ -1231,12 +1232,17 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   Widget _buildDeviceGrid() {
+    final columns = HBotLayout.deviceGridColumns(context);
+    final spacing = HBotLayout.gridSpacing(context);
+
     return GridView.builder(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: HBotSpacing.space3,
-        mainAxisSpacing: HBotSpacing.space3,
+      padding: HBotLayout.screenPadding(context).add(
+        const EdgeInsets.symmetric(vertical: HBotSpacing.space4),
+      ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: columns,
+        crossAxisSpacing: spacing,
+        mainAxisSpacing: spacing,
         childAspectRatio: 0.85, // Taller cards per design spec
       ),
       itemCount: _filteredDevices.length,

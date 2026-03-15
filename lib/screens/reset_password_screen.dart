@@ -3,6 +3,7 @@ import 'dart:async';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import 'sign_in_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String email;

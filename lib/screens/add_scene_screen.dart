@@ -10,6 +10,7 @@ import '../models/device.dart';
 import '../models/scene.dart';
 import '../models/scene_step.dart';
 import '../models/scene_trigger.dart';
+import '../widgets/responsive_shell.dart';
 
 class AddSceneScreen extends StatefulWidget {
   final String homeId;

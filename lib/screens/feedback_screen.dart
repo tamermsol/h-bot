@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
+import '../widgets/responsive_shell.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -154,7 +155,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         backgroundColor: HBotColors.backgroundLight,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
+      body: ResponsiveShell(child: SingleChildScrollView(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,6 +314,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

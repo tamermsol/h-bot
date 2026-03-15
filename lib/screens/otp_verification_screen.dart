@@ -3,6 +3,7 @@ import 'dart:async';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import 'home_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
