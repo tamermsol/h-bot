@@ -72,11 +72,12 @@ class _DeviceCardState extends State<DeviceCard> {
           child: Opacity(
             opacity: _unreachable ? 0.5 : 1.0,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Row: device icon + unreachable indicator
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // Device icon with optional unreachable dot
+                Stack(
+                  clipBehavior: Clip.none,
                   children: [
                     Icon(
                       widget.icon,
@@ -84,24 +85,44 @@ class _DeviceCardState extends State<DeviceCard> {
                       size: 32,
                     ),
                     if (_unreachable)
-                      hbotStatusDot(color: HBotColors.error, size: 6),
+                      Positioned(
+                        top: -2,
+                        right: -4,
+                        child: hbotStatusDot(color: HBotColors.error, size: 8),
+                      ),
                   ],
                 ),
 
-                const Spacer(),
+                const SizedBox(height: HBotSpacing.space3),
 
-                // Device name
+                // Device name — centered
                 Text(
                   widget.title,
                   style: const TextStyle(
                     fontFamily: 'Inter',
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: HBotColors.textPrimaryLight,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 ),
+
+                if (widget.value != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    widget.value!,
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: widget.isOn
+                          ? _activeColor
+                          : HBotColors.textSecondaryLight,
+                    ),
+                  ),
+                ],
 
                 if (widget.roomName != null) ...[
                   const SizedBox(height: 2),
@@ -120,33 +141,17 @@ class _DeviceCardState extends State<DeviceCard> {
 
                 const SizedBox(height: HBotSpacing.space3),
 
-                // Bottom row: state text + toggle
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.value ?? (widget.isOn ? 'ON' : 'OFF'),
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: widget.isOn
-                            ? _activeColor
-                            : HBotColors.textSecondaryLight,
-                      ),
+                // Toggle switch — centered
+                SizedBox(
+                  height: 32,
+                  width: 52,
+                  child: FittedBox(
+                    child: Switch(
+                      value: widget.isOn,
+                      onChanged: _unreachable ? null : widget.onToggle,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    SizedBox(
-                      height: 32,
-                      width: 52,
-                      child: FittedBox(
-                        child: Switch(
-                          value: widget.isOn,
-                          onChanged: _unreachable ? null : widget.onToggle,
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
