@@ -62,39 +62,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isTablet = HBotLayout.isTablet(context);
-
     return Scaffold(
       backgroundColor: HBotColors.backgroundLight,
-      body: isTablet
-          ? Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: HBotLayout.contentMaxWidth),
-                child: Column(
-                  children: [
-                    ConnectivityBanner(isOnline: _isOnline),
-                    Expanded(child: _buildBody()),
-                  ],
-                ),
-              ),
-            )
-          : Column(
-              children: [
-                ConnectivityBanner(isOnline: _isOnline),
-                Expanded(child: _buildBody()),
-              ],
-            ),
-      bottomNavigationBar: isTablet
-          ? Align(
-              alignment: Alignment.bottomCenter,
-              heightFactor: 1.0,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: HBotLayout.contentMaxWidth),
-                child: _buildBottomNavigation(),
-              ),
-            )
-          : _buildBottomNavigation(),
+      body: Column(
+        children: [
+          ConnectivityBanner(isOnline: _isOnline),
+          Expanded(child: _buildBody()),
+        ],
+      ),
+      bottomNavigationBar: _buildBottomNavigation(),
     );
   }
 

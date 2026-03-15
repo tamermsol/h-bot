@@ -1232,18 +1232,19 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   Widget _buildDeviceGrid() {
-    final columns = HBotLayout.deviceGridColumns(context);
-    final spacing = HBotLayout.gridSpacing(context);
+    final width = MediaQuery.of(context).size.width;
+    final isTablet = width >= 600;
+    final columns = width >= 900 ? 4 : (isTablet ? 3 : 2);
+    final spacing = isTablet ? HBotSpacing.space4 : HBotSpacing.space3;
+    final hPadding = isTablet ? HBotSpacing.space6 : HBotSpacing.space4;
 
     return GridView.builder(
-      padding: HBotLayout.screenPadding(context).add(
-        const EdgeInsets.symmetric(vertical: HBotSpacing.space4),
-      ),
+      padding: EdgeInsets.fromLTRB(hPadding, HBotSpacing.space4, hPadding, 80),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: columns,
         crossAxisSpacing: spacing,
         mainAxisSpacing: spacing,
-        childAspectRatio: 0.85, // Taller cards per design spec
+        childAspectRatio: isTablet ? 0.9 : 0.85,
       ),
       itemCount: _filteredDevices.length,
       itemBuilder: (context, index) {

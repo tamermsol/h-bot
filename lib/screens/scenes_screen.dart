@@ -109,11 +109,28 @@ class _ScenesScreenState extends State<ScenesScreen>
       children: [
         ListView.builder(
           padding: const EdgeInsets.fromLTRB(
-            HBotSpacing.space5, HBotSpacing.space4,
+            HBotSpacing.space5, HBotSpacing.space3,
             HBotSpacing.space5, 80, // bottom padding for FAB
           ),
-          itemCount: _scenes.length,
-          itemBuilder: (context, index) => _buildSceneCard(_scenes[index]),
+          itemCount: _scenes.length + 1, // +1 for header
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: HBotSpacing.space4),
+                child: Text(
+                  'Scenes',
+                  style: const TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: HBotColors.textPrimaryLight,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+              );
+            }
+            return _buildSceneCard(_scenes[index - 1]);
+          },
         ),
         // Gradient FAB — bottom right
         Positioned(
