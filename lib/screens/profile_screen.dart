@@ -275,6 +275,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             label: 'Home',
             children: [
               SettingsTile(
+                icon: Icons.home_work_outlined,
+                title: 'Manage Homes',
+                onTap: () async {
+                  await Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => HomesScreen(onHomeChanged: () => _loadStatistics())));
+                  _loadStatistics();
+                },
+              ),
+              SettingsTile(
                 icon: Icons.meeting_room_outlined,
                 title: 'Rooms',
                 onTap: () async {
@@ -354,15 +363,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: 'Change Password',
                   onTap: _showChangePasswordDialog,
                 ),
-              SettingsTile(
-                icon: Icons.home_work_outlined,
-                title: 'Manage Homes',
-                onTap: () async {
-                  await Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => HomesScreen(onHomeChanged: () => _loadStatistics())));
-                  _loadStatistics();
-                },
-              ),
               SettingsTile(
                 icon: Icons.share_outlined,
                 title: 'Share Devices',
@@ -501,244 +501,252 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  /// Change password flow: Step 1 → Enter email, Step 2 → Enter OTP, Step 3 → New password
   void _showChangePasswordDialog() {
-    final currentPasswordController = TextEditingController();
+    final email = _authService.currentUser?.email ?? '';
+    final emailController = TextEditingController(text: email);
+    final otpController = TextEditingController();
     final newPasswordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
-    bool obscureCurrentPassword = true;
-    bool obscureNewPassword = true;
-    bool obscureConfirmPassword = true;
+    int step = 0; // 0=email, 1=OTP, 2=new password
+    bool isLoading = false;
+    bool obscureNew = true;
+    bool obscureConfirm = true;
+    String? errorMessage;
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return StatefulBuilder(
-          builder: (context, setState) {
+          builder: (ctx, setState) {
+            Widget content;
+            List<Widget> actions;
+
+            if (step == 0) {
+              // Step 1: Email confirmation
+              content = Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.email_outlined, size: 48, color: HBotColors.primary),
+                  const SizedBox(height: HBotSpacing.space4),
+                  const Text(
+                    'We\'ll send a verification code to your email to confirm your identity.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: HBotColors.textSecondaryLight),
+                  ),
+                  const SizedBox(height: HBotSpacing.space4),
+                  TextField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: 'Email Address',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
+                    ),
+                  ),
+                  if (errorMessage != null) ...[
+                    const SizedBox(height: HBotSpacing.space2),
+                    Text(errorMessage!, style: const TextStyle(color: HBotColors.error, fontSize: 13)),
+                  ],
+                ],
+              );
+              actions = [
+                TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Cancel')),
+                TextButton(
+                  onPressed: isLoading ? null : () async {
+                    if (emailController.text.isEmpty) {
+                      setState(() => errorMessage = 'Please enter your email');
+                      return;
+                    }
+                    setState(() { isLoading = true; errorMessage = null; });
+                    try {
+                      await _authService.resetPassword(emailController.text.trim());
+                      setState(() { step = 1; isLoading = false; });
+                    } catch (e) {
+                      setState(() { isLoading = false; errorMessage = 'Failed to send code: $e'; });
+                    }
+                  },
+                  style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
+                  child: isLoading
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Text('Send Code'),
+                ),
+              ];
+            } else if (step == 1) {
+              // Step 2: OTP verification
+              content = Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.pin_outlined, size: 48, color: HBotColors.primary),
+                  const SizedBox(height: HBotSpacing.space4),
+                  Text(
+                    'Enter the 6-digit code sent to\n${emailController.text.trim()}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 14, color: HBotColors.textSecondaryLight),
+                  ),
+                  const SizedBox(height: HBotSpacing.space4),
+                  TextField(
+                    controller: otpController,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    maxLength: 6,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 8),
+                    decoration: InputDecoration(
+                      labelText: 'Verification Code',
+                      counterText: '',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
+                    ),
+                  ),
+                  if (errorMessage != null) ...[
+                    const SizedBox(height: HBotSpacing.space2),
+                    Text(errorMessage!, style: const TextStyle(color: HBotColors.error, fontSize: 13)),
+                  ],
+                  const SizedBox(height: HBotSpacing.space2),
+                  TextButton(
+                    onPressed: isLoading ? null : () async {
+                      setState(() => isLoading = true);
+                      try {
+                        await _authService.resendOtp(emailController.text.trim());
+                        setState(() => isLoading = false);
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Code resent'), backgroundColor: Colors.green),
+                          );
+                        }
+                      } catch (e) {
+                        setState(() { isLoading = false; errorMessage = 'Failed to resend: $e'; });
+                      }
+                    },
+                    child: const Text('Resend Code'),
+                  ),
+                ],
+              );
+              actions = [
+                TextButton(onPressed: () => setState(() { step = 0; errorMessage = null; }), child: const Text('Back')),
+                TextButton(
+                  onPressed: isLoading ? null : () async {
+                    if (otpController.text.length != 6) {
+                      setState(() => errorMessage = 'Please enter the 6-digit code');
+                      return;
+                    }
+                    setState(() { isLoading = true; errorMessage = null; });
+                    try {
+                      await _authService.verifyOtp(emailController.text.trim(), otpController.text.trim());
+                      setState(() { step = 2; isLoading = false; });
+                    } catch (e) {
+                      setState(() { isLoading = false; errorMessage = 'Invalid code. Please try again.'; });
+                    }
+                  },
+                  style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
+                  child: isLoading
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Text('Verify'),
+                ),
+              ];
+            } else {
+              // Step 3: New password
+              content = Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.lock_reset, size: 48, color: HBotColors.primary),
+                  const SizedBox(height: HBotSpacing.space4),
+                  const Text(
+                    'Set your new password',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: HBotColors.textSecondaryLight),
+                  ),
+                  const SizedBox(height: HBotSpacing.space4),
+                  TextField(
+                    controller: newPasswordController,
+                    obscureText: obscureNew,
+                    decoration: InputDecoration(
+                      labelText: 'New Password',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(obscureNew ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () => setState(() => obscureNew = !obscureNew),
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
+                    ),
+                  ),
+                  const SizedBox(height: HBotSpacing.space4),
+                  TextField(
+                    controller: confirmPasswordController,
+                    obscureText: obscureConfirm,
+                    decoration: InputDecoration(
+                      labelText: 'Confirm New Password',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(obscureConfirm ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () => setState(() => obscureConfirm = !obscureConfirm),
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
+                    ),
+                  ),
+                  if (errorMessage != null) ...[
+                    const SizedBox(height: HBotSpacing.space2),
+                    Text(errorMessage!, style: const TextStyle(color: HBotColors.error, fontSize: 13)),
+                  ],
+                  const SizedBox(height: HBotSpacing.space2),
+                  const Text(
+                    'Password must be at least 6 characters',
+                    style: TextStyle(fontSize: 12, color: HBotColors.textSecondaryLight),
+                  ),
+                ],
+              );
+              actions = [
+                TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Cancel')),
+                TextButton(
+                  onPressed: isLoading ? null : () async {
+                    final newPw = newPasswordController.text;
+                    final confirmPw = confirmPasswordController.text;
+                    if (newPw.isEmpty || confirmPw.isEmpty) {
+                      setState(() => errorMessage = 'Please fill in all fields');
+                      return;
+                    }
+                    if (newPw.length < 6) {
+                      setState(() => errorMessage = 'Password must be at least 6 characters');
+                      return;
+                    }
+                    if (newPw != confirmPw) {
+                      setState(() => errorMessage = 'Passwords do not match');
+                      return;
+                    }
+                    setState(() { isLoading = true; errorMessage = null; });
+                    try {
+                      await _authService.changePassword(newPw);
+                      Navigator.of(dialogContext).pop();
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Password changed successfully!'), backgroundColor: Colors.green),
+                        );
+                      }
+                    } catch (e) {
+                      setState(() { isLoading = false; errorMessage = 'Failed to change password: $e'; });
+                    }
+                  },
+                  style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
+                  child: isLoading
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Text('Change Password'),
+                ),
+              ];
+            }
+
             return AlertDialog(
               backgroundColor: HBotColors.cardLight,
-              title: const Text('Change Password'),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: currentPasswordController,
-                      obscureText: obscureCurrentPassword,
-                      decoration: InputDecoration(
-                        labelText: 'Current Password',
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            obscureCurrentPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              obscureCurrentPassword = !obscureCurrentPassword;
-                            });
-                          },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                            HBotRadius.small,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: HBotSpacing.space4),
-                    TextField(
-                      controller: newPasswordController,
-                      obscureText: obscureNewPassword,
-                      decoration: InputDecoration(
-                        labelText: 'New Password',
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            obscureNewPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              obscureNewPassword = !obscureNewPassword;
-                            });
-                          },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                            HBotRadius.small,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: HBotSpacing.space4),
-                    TextField(
-                      controller: confirmPasswordController,
-                      obscureText: obscureConfirmPassword,
-                      decoration: InputDecoration(
-                        labelText: 'Confirm New Password',
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            obscureConfirmPassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              obscureConfirmPassword = !obscureConfirmPassword;
-                            });
-                          },
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                            HBotRadius.small,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: HBotSpacing.space2),
-                    const Text(
-                      'Password must be at least 6 characters',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: HBotColors.textSecondaryLight,
-                      ),
-                    ),
-                  ],
-                ),
+              title: Text(
+                step == 0 ? 'Change Password' : step == 1 ? 'Verify Email' : 'New Password',
+                style: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w600),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                  },
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    await _handlePasswordChange(
-                      dialogContext,
-                      currentPasswordController.text,
-                      newPasswordController.text,
-                      confirmPasswordController.text,
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: HBotColors.primary,
-                  ),
-                  child: const Text('Change Password'),
-                ),
-              ],
+              content: SingleChildScrollView(child: content),
+              actions: actions,
             );
           },
         );
       },
     );
-  }
-
-  Future<void> _handlePasswordChange(
-    BuildContext dialogContext,
-    String currentPassword,
-    String newPassword,
-    String confirmPassword,
-  ) async {
-    // Validate inputs
-    if (currentPassword.isEmpty ||
-        newPassword.isEmpty ||
-        confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill in all fields'),
-          backgroundColor: HBotColors.error,
-        ),
-      );
-      return;
-    }
-
-    if (newPassword.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password must be at least 6 characters'),
-          backgroundColor: HBotColors.error,
-        ),
-      );
-      return;
-    }
-
-    if (newPassword != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('New passwords do not match'),
-          backgroundColor: HBotColors.error,
-        ),
-      );
-      return;
-    }
-
-    try {
-      // Close dialog first
-      Navigator.of(dialogContext).pop();
-
-      // Show loading
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Row(
-            children: [
-              SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              ),
-              SizedBox(width: 12),
-              Text('Changing password...'),
-            ],
-          ),
-          backgroundColor: HBotColors.primary,
-          duration: const Duration(seconds: 3),
-        ),
-      );
-
-      // Verify current password by attempting to sign in
-      final email = _authService.currentUser?.email;
-      if (email == null) {
-        throw Exception('User email not found');
-      }
-
-      try {
-        await _authService.signInWithEmailAndPassword(email, currentPassword);
-      } catch (e) {
-        throw Exception('Current password is incorrect');
-      }
-
-      // Change password
-      await _authService.changePassword(newPassword);
-
-      // Show success message
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Password changed successfully'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      // Show error message
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to change password: $e'),
-            backgroundColor: HBotColors.error,
-            duration: const Duration(seconds: 4),
-          ),
-        );
-      }
-    }
   }
 
   void _showSignOutDialog() {

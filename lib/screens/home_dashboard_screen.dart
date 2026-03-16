@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -876,6 +877,24 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     return SafeArea(
       child: Stack(
         children: [
+          // Background image
+          if (_selectedHome?.backgroundImageUrl != null &&
+              _selectedHome!.backgroundImageUrl!.isNotEmpty)
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.15,
+                child: _selectedHome!.backgroundImageUrl!.startsWith('assets/')
+                    ? Image.asset(
+                        _selectedHome!.backgroundImageUrl!,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.file(
+                        File(_selectedHome!.backgroundImageUrl!),
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                      ),
+              ),
+            ),
           Column(
             children: [
               _buildHeader(),
@@ -1001,7 +1020,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (109)',
+                'v1.0.0 (110)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
