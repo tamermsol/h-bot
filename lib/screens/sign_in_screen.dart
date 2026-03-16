@@ -267,47 +267,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
 
-                const SizedBox(height: HBotSpacing.space5),
-
-                // Divider
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(color: context.hBorder),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: HBotSpacing.space4,
-                      ),
-                      child: Text(
-                        'or',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(color: context.hBorder),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: HBotSpacing.space5),
-
-                // Google Sign In
-                SizedBox(
-                  height: 52,
-                  child: OutlinedButton.icon(
-                    onPressed: _isLoading ? null : _signInWithGoogle,
-                    icon: Image.asset(
-                      'assets/images/google_logo.png',
-                      height: 20,
-                      width: 20,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.login, size: 20);
-                      },
-                    ),
-                    label: const Text('Continue with Google'),
-                  ),
-                ),
+                
 
                 const SizedBox(height: HBotSpacing.space6),
 
