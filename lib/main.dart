@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 import 'env.dart';
 import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
@@ -24,37 +28,107 @@ import 'services/notification_service.dart';
 Future<void> homeWidgetBackgroundCallback(Uri? uri) async {
   if (uri == null) return;
 
-  // Parse the toggle action: hbot://toggle?deviceId=XXX&state=ON/OFF
-  if (uri.host == 'toggle') {
+  if (uri.host == 'toggle' || uri.host == 'shutter') {
     final deviceId = uri.queryParameters['deviceId'];
-    final newState = uri.queryParameters['state']; // ON or OFF
+    final topic = uri.queryParameters['topic'];
+    final action = uri.host; // 'toggle' or 'shutter'
 
-    if (deviceId != null && newState != null) {
-      debugPrint('🏠 Widget toggle: $deviceId → $newState');
+    if (deviceId == null || topic == null) return;
 
-      // Update the widget data immediately for instant visual feedback
-      final currentState = newState == 'ON' ? 'ON' : 'OFF';
+    debugPrint('🏠 Widget action: $action on $deviceId');
 
-      // Find which device slot this is
+    // 1. Update widget visually FIRST (instant feedback)
+    if (action == 'toggle') {
+      final newState = uri.queryParameters['state'] ?? 'OFF';
       for (int i = 0; i < 4; i++) {
         final storedId = await HomeWidget.getWidgetData<String>('device_${i}_id');
         if (storedId == deviceId) {
-          await HomeWidget.saveWidgetData('device_${i}_state', currentState);
+          await HomeWidget.saveWidgetData('device_${i}_state', newState);
           break;
         }
       }
+    }
+    await HomeWidget.updateWidget(androidName: 'HBotDeviceWidget');
 
-      // Store the pending MQTT command for when the app opens
-      await HomeWidget.saveWidgetData('pending_toggle_device', deviceId);
-      await HomeWidget.saveWidgetData('pending_toggle_state', currentState);
-
-      // Refresh the widget
-      await HomeWidget.updateWidget(
-        androidName: 'HBotDeviceWidget',
+    // 2. Send MQTT command directly from background
+    try {
+      final client = MqttServerClient(
+        'y3ae1177.ala.eu-central-1.emqxsl.com',
+        'hbot-widget-${DateTime.now().millisecondsSinceEpoch}',
       );
+      client.port = 8883;
+      client.secure = true;
+      client.keepAlivePeriod = 10;
+      client.connectTimeoutPeriod = 5000;
+      client.securityContext = SecurityContext()
+        ..setTrustedCertificatesBytes(utf8.encode(_emqxCaCert));
+
+      final connMsg = MqttConnectMessage()
+          .withClientIdentifier(client.clientIdentifier)
+          .authenticateAs('admin', 'P@ssword1')
+          .startClean();
+      client.connectionMessage = connMsg;
+
+      await client.connect();
+
+      if (client.connectionStatus?.state == MqttConnectionState.connected) {
+        String cmdTopic;
+        String payload;
+
+        if (action == 'shutter') {
+          final direction = uri.queryParameters['direction'] ?? 'stop';
+          cmdTopic = 'cmnd/$topic/ShutterPosition1';
+          payload = direction == 'up' ? '0' : direction == 'down' ? '100' : 'STOP';
+        } else {
+          final newState = uri.queryParameters['state'] ?? 'OFF';
+          cmdTopic = 'cmnd/$topic/POWER0';
+          payload = newState;
+        }
+
+        final builder = MqttClientPayloadBuilder();
+        builder.addString(payload);
+        client.publishMessage(cmdTopic, MqttQos.atLeastOnce, builder.payload!);
+        debugPrint('🏠 Widget MQTT sent: $cmdTopic = $payload');
+
+        // Brief delay to ensure message is sent
+        await Future.delayed(const Duration(milliseconds: 300));
+        client.disconnect();
+      }
+    } catch (e) {
+      debugPrint('⚠️ Widget MQTT error: $e');
+      // Store as pending for when app opens
+      await HomeWidget.saveWidgetData('pending_toggle_device', deviceId);
+      await HomeWidget.saveWidgetData('pending_toggle_state',
+          uri.queryParameters['state'] ?? uri.queryParameters['direction'] ?? '');
     }
   }
 }
+
+// EMQX Cloud CA certificate for TLS connections from widget background
+const String _emqxCaCert = '''
+-----BEGIN CERTIFICATE-----
+MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD
+QTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVT
+MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j
+b20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG
+9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsB
+CSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97
+nh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt
+43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7P
+T19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4
+gdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAO
+BgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbR
+TLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUw
+DQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/Esr
+hMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg
+06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJF
+PnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0ls
+YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk
+CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
+-----END CERTIFICATE-----''';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

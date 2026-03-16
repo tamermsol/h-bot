@@ -1038,7 +1038,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (124)',
+                'v1.0.0 (125)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
@@ -1942,6 +1942,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         name: d.deviceName,
         isOn: isOn,
         type: d.deviceType.name,
+        topicBase: d.deviceTopicBase ?? d.id,
+        channels: d.effectiveChannels,
       );
     }).toList();
     HomeWidgetService.updateDeviceStates(widgetDevices);

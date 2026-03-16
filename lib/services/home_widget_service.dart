@@ -32,6 +32,8 @@ class HomeWidgetService {
         await HomeWidget.saveWidgetData('device_${i}_name', d.name);
         await HomeWidget.saveWidgetData('device_${i}_state', d.isOn ? 'ON' : 'OFF');
         await HomeWidget.saveWidgetData('device_${i}_type', d.type);
+        await HomeWidget.saveWidgetData('device_${i}_topic', d.topicBase);
+        await HomeWidget.saveWidgetData('device_${i}_channels', d.channels.toString());
       }
 
       // Trigger widget update
@@ -103,13 +105,17 @@ class WidgetDevice {
   final String id;
   final String name;
   final bool isOn;
-  final String type; // 'light', 'switch', 'shutter'
+  final String type; // 'light', 'switch', 'shutter', 'dimmer'
+  final String topicBase; // MQTT topic base for sending commands
+  final int channels; // number of relay channels
 
   WidgetDevice({
     required this.id,
     required this.name,
     required this.isOn,
     this.type = 'switch',
+    this.topicBase = '',
+    this.channels = 1,
   });
 
   Map<String, dynamic> toJson() => {
@@ -117,6 +123,8 @@ class WidgetDevice {
     'name': name,
     'isOn': isOn,
     'type': type,
+    'topicBase': topicBase,
+    'channels': channels,
   };
 
   factory WidgetDevice.fromJson(Map<String, dynamic> json) => WidgetDevice(
@@ -124,5 +132,7 @@ class WidgetDevice {
     name: json['name'] as String,
     isOn: json['isOn'] as bool? ?? false,
     type: json['type'] as String? ?? 'switch',
+    topicBase: json['topicBase'] as String? ?? '',
+    channels: json['channels'] as int? ?? 1,
   );
 }

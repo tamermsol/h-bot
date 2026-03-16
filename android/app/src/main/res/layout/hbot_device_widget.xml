@@ -4,19 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp"
+    android:padding="14dp"
     android:background="@drawable/widget_background">
 
     <!-- Header row -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp">
+        android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/widget_logo"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@mipmap/ic_launcher"
@@ -29,9 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/widget_logo"
             android:layout_centerVertical="true"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="8dp"
             android:text="H-Bot"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF" />
 
@@ -41,16 +41,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:textColor="#99FFFFFF"
-            android:text="0 ON" />
+            android:text="" />
     </RelativeLayout>
 
-    <!-- Thin divider -->
+    <!-- Divider -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="8dp"
         android:background="#22FFFFFF" />
 
     <!-- Device 0 -->
@@ -58,18 +58,18 @@
         android:id="@+id/device_0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/device_0_icon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_menu_manage"
-            android:contentDescription="device icon" />
+            android:src="@drawable/device_icon_switch"
+            android:contentDescription="device" />
 
         <TextView
             android:id="@+id/device_0_name"
@@ -77,25 +77,55 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/device_0_icon"
             android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:layout_toStartOf="@id/device_0_toggle"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textColor="#E0FFFFFF"
             android:maxLines="1"
             android:ellipsize="end" />
 
+        <!-- ON/OFF toggle (for switches/lights) -->
         <TextView
             android:id="@+id/device_0_toggle"
-            android:layout_width="44dp"
-            android:layout_height="24dp"
+            android:layout_width="52dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:background="@drawable/toggle_off_bg"
             android:text="OFF" />
+
+        <!-- Shutter UP arrow -->
+        <TextView
+            android:id="@+id/device_0_shutter_up"
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_toStartOf="@id/device_0_shutter_down"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="4dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/toggle_off_bg"
+            android:text="▲"
+            android:visibility="gone" />
+
+        <!-- Shutter DOWN arrow -->
+        <TextView
+            android:id="@+id/device_0_shutter_down"
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/toggle_off_bg"
+            android:text="▼"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <!-- Device 1 -->
@@ -103,18 +133,18 @@
         android:id="@+id/device_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/device_1_icon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_menu_manage"
-            android:contentDescription="device icon" />
+            android:src="@drawable/device_icon_switch"
+            android:contentDescription="device" />
 
         <TextView
             android:id="@+id/device_1_name"
@@ -122,25 +152,52 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/device_1_icon"
             android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:layout_toStartOf="@id/device_1_toggle"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textColor="#E0FFFFFF"
             android:maxLines="1"
             android:ellipsize="end" />
 
         <TextView
             android:id="@+id/device_1_toggle"
-            android:layout_width="44dp"
-            android:layout_height="24dp"
+            android:layout_width="52dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:background="@drawable/toggle_off_bg"
             android:text="OFF" />
+
+        <TextView
+            android:id="@+id/device_1_shutter_up"
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_toStartOf="@id/device_1_shutter_down"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="4dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/toggle_off_bg"
+            android:text="▲"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/device_1_shutter_down"
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/toggle_off_bg"
+            android:text="▼"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <!-- Device 2 -->
@@ -148,18 +205,18 @@
         android:id="@+id/device_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/device_2_icon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_menu_manage"
-            android:contentDescription="device icon" />
+            android:src="@drawable/device_icon_switch"
+            android:contentDescription="device" />
 
         <TextView
             android:id="@+id/device_2_name"
@@ -167,25 +224,52 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/device_2_icon"
             android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:layout_toStartOf="@id/device_2_toggle"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textColor="#E0FFFFFF"
             android:maxLines="1"
             android:ellipsize="end" />
 
         <TextView
             android:id="@+id/device_2_toggle"
-            android:layout_width="44dp"
-            android:layout_height="24dp"
+            android:layout_width="52dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:background="@drawable/toggle_off_bg"
             android:text="OFF" />
+
+        <TextView
+            android:id="@+id/device_2_shutter_up"
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_toStartOf="@id/device_2_shutter_down"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="4dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/toggle_off_bg"
+            android:text="▲"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/device_2_shutter_down"
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/toggle_off_bg"
+            android:text="▼"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <!-- Device 3 -->
@@ -193,18 +277,18 @@
         android:id="@+id/device_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/device_3_icon"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_menu_manage"
-            android:contentDescription="device icon" />
+            android:src="@drawable/device_icon_switch"
+            android:contentDescription="device" />
 
         <TextView
             android:id="@+id/device_3_name"
@@ -212,25 +296,52 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/device_3_icon"
             android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="10dp"
             android:layout_toStartOf="@id/device_3_toggle"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textColor="#E0FFFFFF"
             android:maxLines="1"
             android:ellipsize="end" />
 
         <TextView
             android:id="@+id/device_3_toggle"
-            android:layout_width="44dp"
-            android:layout_height="24dp"
+            android:layout_width="52dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:textSize="10sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:background="@drawable/toggle_off_bg"
             android:text="OFF" />
+
+        <TextView
+            android:id="@+id/device_3_shutter_up"
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_toStartOf="@id/device_3_shutter_down"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="4dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/toggle_off_bg"
+            android:text="▲"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/device_3_shutter_down"
+            android:layout_width="36dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/toggle_off_bg"
+            android:text="▼"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <!-- Empty state -->

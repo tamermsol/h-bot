@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.view.View
 import android.widget.RemoteViews
+import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 
@@ -32,8 +33,12 @@ class HBotDeviceWidget : HomeWidgetProvider() {
 
                 val rowIds = intArrayOf(R.id.device_0, R.id.device_1, R.id.device_2, R.id.device_3)
                 val nameIds = intArrayOf(R.id.device_0_name, R.id.device_1_name, R.id.device_2_name, R.id.device_3_name)
-                val toggleIds = intArrayOf(R.id.device_0_toggle, R.id.device_1_toggle, R.id.device_2_toggle, R.id.device_3_toggle)
                 val iconIds = intArrayOf(R.id.device_0_icon, R.id.device_1_icon, R.id.device_2_icon, R.id.device_3_icon)
+                // Toggle buttons (for non-shutter)
+                val toggleIds = intArrayOf(R.id.device_0_toggle, R.id.device_1_toggle, R.id.device_2_toggle, R.id.device_3_toggle)
+                // Shutter buttons
+                val shutterUpIds = intArrayOf(R.id.device_0_shutter_up, R.id.device_1_shutter_up, R.id.device_2_shutter_up, R.id.device_3_shutter_up)
+                val shutterDownIds = intArrayOf(R.id.device_0_shutter_down, R.id.device_1_shutter_down, R.id.device_2_shutter_down, R.id.device_3_shutter_down)
 
                 for (i in 0 until 4) {
                     if (i < deviceCount) {
@@ -41,7 +46,9 @@ class HBotDeviceWidget : HomeWidgetProvider() {
                         val state = widgetData.getString("device_${i}_state", "OFF") ?: "OFF"
                         val deviceId = widgetData.getString("device_${i}_id", "") ?: ""
                         val type = widgetData.getString("device_${i}_type", "switch") ?: "switch"
+                        val topic = widgetData.getString("device_${i}_topic", "") ?: ""
                         val isOn = state == "ON"
+                        val isShutter = type.contains("shutter", ignoreCase = true) || type.contains("blind", ignoreCase = true)
                         if (isOn) onlineCount++
 
                         setViewVisibility(rowIds[i], View.VISIBLE)
@@ -49,40 +56,62 @@ class HBotDeviceWidget : HomeWidgetProvider() {
 
                         // Device type icon
                         val iconRes = when {
-                            type.contains("light", ignoreCase = true) || 
+                            isShutter -> R.drawable.device_icon_shutter
+                            type.contains("light", ignoreCase = true) ||
                             type.contains("dimmer", ignoreCase = true) -> R.drawable.device_icon_light
-                            type.contains("shutter", ignoreCase = true) || 
-                            type.contains("blind", ignoreCase = true) -> R.drawable.device_icon_shutter
                             else -> R.drawable.device_icon_switch
                         }
                         setImageViewResource(iconIds[i], iconRes)
 
-                        // Toggle button — different drawable for on/off
-                        setTextViewText(toggleIds[i], if (isOn) "ON" else "OFF")
-                        setInt(toggleIds[i], "setBackgroundResource",
-                            if (isOn) R.drawable.toggle_on_bg else R.drawable.toggle_off_bg)
-                        setTextColor(toggleIds[i],
-                            if (isOn) 0xFFFFFFFF.toInt() else 0x99FFFFFF.toInt())
-
-                        // Name color: brighter if on
+                        // Name brightness based on state
                         setTextColor(nameIds[i],
-                            if (isOn) 0xFFFFFFFF.toInt() else 0xBBFFFFFF.toInt())
+                            if (isOn) 0xFFFFFFFF.toInt() else 0xAAFFFFFF.toInt())
 
-                        // All clicks → open app with action URI
+                        if (isShutter) {
+                            // Show shutter controls (up/down), hide toggle
+                            setViewVisibility(toggleIds[i], View.GONE)
+                            setViewVisibility(shutterUpIds[i], View.VISIBLE)
+                            setViewVisibility(shutterDownIds[i], View.VISIBLE)
+
+                            if (topic.isNotEmpty()) {
+                                val upIntent = HomeWidgetBackgroundIntent.getBroadcast(
+                                    context,
+                                    Uri.parse("hbot://shutter?deviceId=$deviceId&topic=$topic&direction=up")
+                                )
+                                setOnClickPendingIntent(shutterUpIds[i], upIntent)
+
+                                val downIntent = HomeWidgetBackgroundIntent.getBroadcast(
+                                    context,
+                                    Uri.parse("hbot://shutter?deviceId=$deviceId&topic=$topic&direction=down")
+                                )
+                                setOnClickPendingIntent(shutterDownIds[i], downIntent)
+                            }
+                        } else {
+                            // Show toggle, hide shutter controls
+                            setViewVisibility(toggleIds[i], View.VISIBLE)
+                            setViewVisibility(shutterUpIds[i], View.GONE)
+                            setViewVisibility(shutterDownIds[i], View.GONE)
+
+                            setTextViewText(toggleIds[i], if (isOn) "ON" else "OFF")
+                            setInt(toggleIds[i], "setBackgroundResource",
+                                if (isOn) R.drawable.toggle_on_bg else R.drawable.toggle_off_bg)
+                            setTextColor(toggleIds[i],
+                                if (isOn) 0xFFFFFFFF.toInt() else 0x99FFFFFF.toInt())
+
+                            if (topic.isNotEmpty()) {
+                                val newState = if (isOn) "OFF" else "ON"
+                                val toggleIntent = HomeWidgetBackgroundIntent.getBroadcast(
+                                    context,
+                                    Uri.parse("hbot://toggle?deviceId=$deviceId&topic=$topic&state=$newState")
+                                )
+                                setOnClickPendingIntent(toggleIds[i], toggleIntent)
+                            }
+                        }
+
+                        // Name tap → open app to device
                         if (deviceId.isNotEmpty()) {
-                            // Toggle click → open app with toggle command
-                            val newState = if (isOn) "OFF" else "ON"
-                            val toggleIntent = HomeWidgetLaunchIntent.getActivity(
-                                context,
-                                MainActivity::class.java,
-                                Uri.parse("hbot://toggle?deviceId=$deviceId&state=$newState")
-                            )
-                            setOnClickPendingIntent(toggleIds[i], toggleIntent)
-
-                            // Row click → open app to device control
                             val deviceIntent = HomeWidgetLaunchIntent.getActivity(
-                                context,
-                                MainActivity::class.java,
+                                context, MainActivity::class.java,
                                 Uri.parse("hbot://device/$deviceId")
                             )
                             setOnClickPendingIntent(nameIds[i], deviceIntent)
