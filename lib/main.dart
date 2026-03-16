@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:home_widget/home_widget.dart';
 import 'env.dart';
 import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
@@ -17,6 +18,44 @@ import 'services/scene_command_executor.dart';
 import 'services/theme_service.dart';
 import 'services/notification_service.dart';
 
+/// Background callback for home widget toggle actions.
+/// This runs in a separate isolate when user taps toggle on widget.
+@pragma('vm:entry-point')
+Future<void> homeWidgetBackgroundCallback(Uri? uri) async {
+  if (uri == null) return;
+
+  // Parse the toggle action: hbot://toggle?deviceId=XXX&state=ON/OFF
+  if (uri.host == 'toggle') {
+    final deviceId = uri.queryParameters['deviceId'];
+    final newState = uri.queryParameters['state']; // ON or OFF
+
+    if (deviceId != null && newState != null) {
+      debugPrint('🏠 Widget toggle: $deviceId → $newState');
+
+      // Update the widget data immediately for instant visual feedback
+      final currentState = newState == 'ON' ? 'ON' : 'OFF';
+
+      // Find which device slot this is
+      for (int i = 0; i < 4; i++) {
+        final storedId = await HomeWidget.getWidgetData<String>('device_${i}_id');
+        if (storedId == deviceId) {
+          await HomeWidget.saveWidgetData('device_${i}_state', currentState);
+          break;
+        }
+      }
+
+      // Store the pending MQTT command for when the app opens
+      await HomeWidget.saveWidgetData('pending_toggle_device', deviceId);
+      await HomeWidget.saveWidgetData('pending_toggle_state', currentState);
+
+      // Refresh the widget
+      await HomeWidget.updateWidget(
+        androidName: 'HBotDeviceWidget',
+      );
+    }
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -28,6 +67,9 @@ void main() async {
 
   // Initialize local notifications
   await NotificationService().initialize();
+
+  // Register home widget background callback for toggle actions
+  HomeWidget.registerInteractivityCallback(homeWidgetBackgroundCallback);
 
   runApp(
     ChangeNotifierProvider(

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Blinds/shutter icon -->
+    <path
+        android:fillColor="#60A5FA"
+        android:pathData="M20,19V3H4v16H2v2h20v-2H20zM6,5h12v2H6V5zM6,9h12v2H6V9zM6,13h12v2H6V13zM6,17h12v2H6V17z" />
+</vector>

@@ -58,14 +58,23 @@ class HomeWidgetService {
     await prefs.setString('widget_pending_toggle', deviceId);
   }
 
-  /// Check and process any pending widget actions.
-  static Future<String?> getPendingToggle() async {
-    final prefs = await SharedPreferences.getInstance();
-    final deviceId = prefs.getString('widget_pending_toggle');
-    if (deviceId != null) {
-      await prefs.remove('widget_pending_toggle');
+  /// Check and process any pending widget toggle actions.
+  /// Returns (deviceId, state) if there's a pending toggle, null otherwise.
+  static Future<({String deviceId, String state})?> getPendingToggle() async {
+    try {
+      final deviceId = await HomeWidget.getWidgetData<String>('pending_toggle_device');
+      final state = await HomeWidget.getWidgetData<String>('pending_toggle_state');
+
+      if (deviceId != null && state != null) {
+        // Clear the pending action
+        await HomeWidget.saveWidgetData('pending_toggle_device', null);
+        await HomeWidget.saveWidgetData('pending_toggle_state', null);
+        return (deviceId: deviceId, state: state);
+      }
+    } catch (e) {
+      debugPrint('⚠️ Error reading pending toggle: $e');
     }
-    return deviceId;
+    return null;
   }
 
   /// Save favorite devices for widget display.

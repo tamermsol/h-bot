@@ -595,6 +595,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           '🔄 Requesting initial state for all ${devicesList.length} devices',
         );
         await _requestInitialDeviceStates(devicesList);
+
+        // Process any pending widget toggle action
+        _processPendingWidgetToggle();
       });
     } catch (e, stack) {
       debugPrint('Error registering devices with MQTT: $e');
@@ -1030,7 +1033,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (122)',
+                'v1.0.0 (123)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
@@ -1842,6 +1845,21 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           ),
       ],
     );
+  }
+
+  Future<void> _processPendingWidgetToggle() async {
+    final pending = await HomeWidgetService.getPendingToggle();
+    if (pending == null) return;
+
+    debugPrint('🏠 Processing widget toggle: ${pending.deviceId} → ${pending.state}');
+
+    // Find the device
+    final device = _devices.where((d) => d.id == pending.deviceId).firstOrNull;
+    if (device == null) return;
+
+    // Send MQTT toggle command via the underlying EnhancedMqttService
+    final on = pending.state == 'ON';
+    await _mqttManager.mqttService.sendBulkPowerCommand(device.id, on);
   }
 
   void _updateHomeWidget() {
