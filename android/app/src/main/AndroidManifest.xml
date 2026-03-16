@@ -75,6 +75,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="com.example.hbot" />
             </intent-filter>
+            <!-- Home Widget launch intent -->
+            <intent-filter>
+                <action android:name="es.antonborri.home_widget.action.LAUNCH" />
+            </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
@@ -82,7 +86,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <!-- Home Screen Widget -->
-        <receiver android:name=".HBotDeviceWidget"
+        <receiver android:name="HBotDeviceWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -90,6 +94,13 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/hbot_device_widget_info" />
+        </receiver>
+        <!-- Home Widget Background Receiver -->
+        <receiver android:name="es.antonborri.home_widget.HomeWidgetBackgroundReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="es.antonborri.home_widget.action.BACKGROUND" />
+            </intent-filter>
         </receiver>
     </application>
     <!-- Required to query activities that can process text, see:

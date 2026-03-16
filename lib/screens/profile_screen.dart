@@ -180,42 +180,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _openAlexaSkill() async {
-    // The Alexa app handles skill pages via its web portal URL.
-    // When opened with LaunchMode.externalApplication, Android shows
-    // a chooser. The Alexa app is a verified handler for alexa.amazon.com
-    // and will open the skill page directly.
+    // Amazon's documented approach for opening a skill in the Alexa app:
+    // 1. The Alexa app on Android registers as a verified App Link handler
+    //    for alexa.amazon.com domain
+    // 2. The URL format /spa/skill-store/skills/dp/ASIN opens the skill page
+    // 3. On iOS, use the same URL — Alexa app handles it as a Universal Link
     //
-    // The URL format /spa/skill/ASIN is the canonical skill detail page.
-    // On iOS, use the alexa:// custom scheme first.
+    // Ref: Amazon Alexa Skills Kit App-to-App Account Linking docs
 
     const skillAsin = 'B0GBZ7XB1N';
-
-    if (Platform.isIOS) {
-      // iOS: try alexa:// scheme first
+    
+    // URLs to try in order:
+    // 1. Alexa app's skill store page (handled as App Link / Universal Link)
+    // 2. Alexa SPA skill page (alternative format)
+    final urls = [
+      'https://alexa.amazon.com/spa/skill-store/skills/dp/$skillAsin',
+      'https://alexa.amazon.com/spa/skill/$skillAsin',
+    ];
+    
+    for (final url in urls) {
       try {
         final launched = await launchUrl(
-          Uri.parse('alexa://skills/$skillAsin'),
+          Uri.parse(url),
           mode: LaunchMode.externalApplication,
         );
         if (launched) return;
-      } catch (_) {}
+      } catch (_) {
+        continue;
+      }
     }
 
-    // Use the Alexa web portal skill URL — this is the most reliable
-    // The Alexa app on Android registers as a handler for this domain
-    // and opens the skill detail page directly
-    try {
-      await launchUrl(
-        Uri.parse('https://www.amazon.com/gp/product/$skillAsin'),
-        mode: LaunchMode.externalApplication,
-      );
-    } catch (_) {
-      // Last resort: basic Amazon URL
-      await launchUrl(
-        Uri.parse('https://www.amazon.com/dp/$skillAsin'),
-        mode: LaunchMode.externalApplication,
-      );
-    }
+    // Fallback: open Amazon product page
+    // This opens in Amazon Shopping app or browser
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Opening skill page in browser. For best experience, install the Amazon Alexa app.'),
+        duration: Duration(seconds: 3),
+      ),
+    );
+    await launchUrl(
+      Uri.parse('https://www.amazon.com/dp/$skillAsin'),
+      mode: LaunchMode.externalApplication,
+    );
   }
 
   void _showAppearanceDialog() {
