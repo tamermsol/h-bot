@@ -39,11 +39,12 @@
         android:paddingBottom="6dp"
         android:gravity="center_vertical"
         android:visibility="gone">
-        <View
+        <TextView
             android:id="@+id/device_0_indicator"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:background="#9CA3AF" />
+            android:background="#9CA3AF"
+            android:text="" />
         <TextView
             android:id="@+id/device_0_name"
             android:layout_width="0dp"
@@ -78,11 +79,12 @@
         android:paddingBottom="6dp"
         android:gravity="center_vertical"
         android:visibility="gone">
-        <View
+        <TextView
             android:id="@+id/device_1_indicator"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:background="#9CA3AF" />
+            android:background="#9CA3AF"
+            android:text="" />
         <TextView
             android:id="@+id/device_1_name"
             android:layout_width="0dp"
@@ -117,11 +119,12 @@
         android:paddingBottom="6dp"
         android:gravity="center_vertical"
         android:visibility="gone">
-        <View
+        <TextView
             android:id="@+id/device_2_indicator"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:background="#9CA3AF" />
+            android:background="#9CA3AF"
+            android:text="" />
         <TextView
             android:id="@+id/device_2_name"
             android:layout_width="0dp"
@@ -156,11 +159,12 @@
         android:paddingBottom="6dp"
         android:gravity="center_vertical"
         android:visibility="gone">
-        <View
+        <TextView
             android:id="@+id/device_3_indicator"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:background="#9CA3AF" />
+            android:background="#9CA3AF"
+            android:text="" />
         <TextView
             android:id="@+id/device_3_name"
             android:layout_width="0dp"

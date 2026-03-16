@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../services/alexa_account_linking_service.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:io';
@@ -180,12 +181,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _openAlexaSkill() async {
-    // Amazon doesn't provide a public deep link to open a specific skill page
-    // inside the Alexa app. The best UX is to show instructions + offer
-    // to open the Amazon product page where they can enable the skill.
+    // Try App-to-App Account Linking first (opens Alexa's consent screen)
+    if (AlexaAccountLinkingService.isConfigured) {
+      final launched = await AlexaAccountLinkingService.initiateAccountLinking();
+      if (launched) return;
+    }
 
+    // Fallback: show instructions bottom sheet
     if (!mounted) return;
+    _showAlexaInstructions();
+  }
 
+  void _showAlexaInstructions() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -213,12 +220,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Icon(Icons.mic, color: HBotColors.primary, size: 28),
                 const SizedBox(width: 12),
-                Text(
-                  'Enable H-Bot Alexa Skill',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: context.hTextPrimary,
+                Expanded(
+                  child: Text(
+                    'Link H-Bot with Alexa',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: context.hTextPrimary,
+                    ),
                   ),
                 ),
               ],
