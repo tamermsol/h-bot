@@ -39,7 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _startConnectivityMonitoring() {
-    _checkConnectivity();
+    // Delay initial check to avoid flash of "no internet" on app launch
+    // while Android's network stack initializes
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) _checkConnectivity();
+    });
     _connectivityCheckTimer = Timer.periodic(
       const Duration(seconds: 10),
       (_) => _checkConnectivity(),

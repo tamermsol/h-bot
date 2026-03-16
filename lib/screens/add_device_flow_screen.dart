@@ -2174,7 +2174,10 @@ Troubleshooting:
 
       _safeSetState(() {
         _discoveredDevice = deviceInfo.copyWith(status: statusWithType);
-        _deviceNameController.text = deviceInfo.module;
+        // Only set module name if user hasn't entered a custom name
+        if (_deviceNameController.text.trim().isEmpty) {
+          _deviceNameController.text = deviceInfo.module;
+        }
         _statusMessage = 'Provisioning device with Wi-Fi credentials...';
       });
 
@@ -2402,13 +2405,24 @@ Troubleshooting:
 
       _addDebugLog('Device created successfully: ${device.id}');
 
+      // If user entered a custom name that differs from what DB returned, persist it
+      if (deviceName != device.deviceName && deviceName.isNotEmpty) {
+        try {
+          await _deviceManagementRepo.renameDevice(
+            deviceId: device.id,
+            newName: deviceName,
+          );
+          _addDebugLog('Renamed device to user-specified name: $deviceName');
+        } catch (e) {
+          _addDebugLog('Warning: failed to rename device: $e');
+        }
+      }
+
       _safeSetState(() {
         _createdDevice = device;
         _currentStep = PairingStep.success;
         _statusMessage = 'Device added successfully!';
-        // Initialize the device name controller with the actual device name
-        // Use deviceName getter which handles displayName/name logic correctly
-        _deviceNameController.text = device.deviceName;
+        _deviceNameController.text = deviceName;
       });
 
       // Initialize MQTT connection asynchronously (don't block UI)
