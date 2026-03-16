@@ -80,17 +80,35 @@ class ChannelCard extends StatelessWidget {
 
               const SizedBox(height: HBotSpacing.space2),
 
-              // Channel name
-              Text(
-                channelName,
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: context.hTextPrimary,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              // Channel name + edit
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      channelName,
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: context.hTextPrimary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (onLongPress != null)
+                    GestureDetector(
+                      onTap: onLongPress,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: Icon(
+                          Icons.edit_outlined,
+                          size: 14,
+                          color: context.hTextTertiary,
+                        ),
+                      ),
+                    ),
+                ],
               ),
 
               const SizedBox(height: 2),

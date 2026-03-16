@@ -41,8 +41,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   bool _isLoading = true;
   bool _showDebugInfo = false;
   bool _isBottomSheetOpen = false;
-  String? _firmwareVersion;
-  bool _isUpdatingFirmware = false;
+  // firmware fields removed
   StreamSubscription? _stateSubscription;
 
   // Local device instance that can be updated
@@ -66,7 +65,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     _initializeDeviceControl();
     _loadChannelNames();
     // Extract firmware version from device metadata
-    _firmwareVersion = widget.device.metaJson?['version'] as String?;
+    // firmware version tracking removed
   }
 
   /// Load channel names from database
@@ -665,18 +664,6 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                             ShareDeviceScreen(device: widget.device),
                       ),
                     );
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.system_update, color: context.hTextPrimary),
-                  title: Text('Firmware Update', style: TextStyle(color: context.hTextPrimary)),
-                  subtitle: Text(
-                    _firmwareVersion ?? 'Check for updates',
-                    style: TextStyle(color: context.hTextTertiary, fontSize: 12),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _showFirmwareDialog();
                   },
                 ),
                 ListTile(
@@ -1515,119 +1502,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   }
 
   /// Show delete confirmation dialog
-  void _showFirmwareDialog() {
-    showDialog(
-      context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          backgroundColor: context.hCard,
-          title: const Text('Firmware Update'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Current Version',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: context.hTextTertiary,
-                  fontFamily: 'DM Sans',
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                _firmwareVersion ?? 'Unknown',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: context.hTextPrimary,
-                  fontFamily: 'DM Sans',
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'This will check for and install the latest Tasmota firmware. '
-                'The device will restart during the update.',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: context.hTextSecondary,
-                  fontFamily: 'DM Sans',
-                ),
-              ),
-              if (_isUpdatingFirmware) ...[
-                const SizedBox(height: 16),
-                const LinearProgressIndicator(color: HBotColors.primary),
-                const SizedBox(height: 8),
-                Text(
-                  'Updating firmware... Device will restart.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: HBotColors.primary,
-                    fontFamily: 'DM Sans',
-                  ),
-                ),
-              ],
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Close'),
-            ),
-            if (!_isUpdatingFirmware)
-              ElevatedButton.icon(
-                onPressed: () async {
-                  setDialogState(() {});
-                  setState(() => _isUpdatingFirmware = true);
-                  setDialogState(() {});
-                  try {
-                    // Send Tasmota OTA upgrade command
-                    await _mqttManager.publishCommand(
-                      widget.device.id,
-                      'Upgrade 1',
-                    );
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Firmware update initiated. Device will restart.'),
-                          backgroundColor: HBotColors.primary,
-                        ),
-                      );
-                    }
-                    // Log the event
-                    DeviceEventTracker().logEvent(
-                      deviceId: widget.device.id,
-                      deviceName: _currentDevice.deviceName,
-                      eventType: ActivityEventType.firmwareUpdate,
-                      description: 'Firmware update initiated',
-                      details: 'Current version: ${_firmwareVersion ?? "unknown"}',
-                    );
-                    Navigator.pop(ctx);
-                  } catch (e) {
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Failed to start update: $e'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  } finally {
-                    if (mounted) setState(() => _isUpdatingFirmware = false);
-                  }
-                },
-                icon: const Icon(Icons.system_update, size: 18),
-                label: const Text('Update Now'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: HBotColors.primary,
-                  foregroundColor: Colors.white,
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Firmware update removed — no user-facing firmware references
 
   void _showDeleteConfirmationDialog() {
     showDialog(

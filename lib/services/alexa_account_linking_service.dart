@@ -26,7 +26,7 @@ class AlexaAccountLinkingService {
   /// Format: amzn1.application-oa2-client.XXXXXXXXX
   static const String clientId = String.fromEnvironment(
     'ALEXA_LWA_CLIENT_ID',
-    defaultValue: 'amzn1.application-oa2-client.cd1600c814ee4ca3bc6030c550980529',
+    defaultValue: 'amzn1.application-oa2-client.b136c9d0dcf84ad8811ab061dd590e7a',
   );
 
   /// Redirect URI — must match what's configured in Amazon Developer Console
