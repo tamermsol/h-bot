@@ -180,15 +180,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  void _openAlexaSkill() async {
-    // Try App-to-App Account Linking first (opens Alexa's consent screen)
-    if (AlexaAccountLinkingService.isConfigured) {
-      final launched = await AlexaAccountLinkingService.initiateAccountLinking();
-      if (launched) return;
-    }
-
-    // Fallback: show instructions bottom sheet
-    if (!mounted) return;
+  void _openAlexaSkill() {
+    // Show instructions for linking with Alexa
     _showAlexaInstructions();
   }
 

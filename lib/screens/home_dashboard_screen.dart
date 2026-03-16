@@ -10,6 +10,7 @@ import '../models/device.dart';
 import '../repos/homes_repo.dart';
 import '../repos/rooms_repo.dart';
 import '../repos/devices_repo.dart';
+import '../repos/device_management_repo.dart';
 import '../services/mqtt_device_manager.dart';
 import '../services/smart_home_service.dart';
 import '../services/device_event_tracker.dart';
@@ -1038,7 +1039,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (134)',
+                'v1.0.0 (135)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
@@ -1953,20 +1954,27 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       );
     }).toList();
 
-    // Load channel labels from database for multi-channel devices
+    // Load channel labels from database + local storage for multi-channel devices
     final Map<String, Map<int, String>> channelLabels = {};
     for (final d in _devices) {
       if (d.effectiveChannels > 1) {
+        final labels = <int, String>{};
         try {
           final dwc = await _devicesRepo.getDeviceWithChannels(d.id);
           if (dwc != null) {
-            final labels = <int, String>{};
             for (int ch = 1; ch <= d.effectiveChannels; ch++) {
               labels[ch] = dwc.getChannelLabel(ch);
             }
-            channelLabels[d.id] = labels;
           }
         } catch (_) {}
+        // Override with local labels (most reliable)
+        for (int ch = 1; ch <= d.effectiveChannels; ch++) {
+          final localLabel = await DeviceManagementRepo.getLocalChannelLabel(d.id, ch);
+          if (localLabel != null && localLabel.isNotEmpty) {
+            labels[ch] = localLabel;
+          }
+        }
+        if (labels.isNotEmpty) channelLabels[d.id] = labels;
       }
     }
 

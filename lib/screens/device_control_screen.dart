@@ -4,6 +4,7 @@ import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../services/smart_home_service.dart';
 import '../repos/devices_repo.dart';
+import '../repos/device_management_repo.dart';
 import '../theme/app_theme.dart';
 import '../utils/channel_detection_utils.dart';
 import '../widgets/shutter_control_widget.dart';
@@ -99,6 +100,18 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
             );
           }
         });
+
+        // Also check local SharedPreferences for labels (most reliable)
+        for (int i = 1; i <= widget.device.effectiveChannels; i++) {
+          final localLabel = await DeviceManagementRepo.getLocalChannelLabel(
+            widget.device.id, i,
+          );
+          if (localLabel != null && localLabel.isNotEmpty && mounted) {
+            setState(() {
+              _channelNames[i] = localLabel;
+            });
+          }
+        }
 
         debugPrint('✅ Loaded channel types: $_channelTypes');
       } else {

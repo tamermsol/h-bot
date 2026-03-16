@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/supabase_client.dart';
 import '../models/device_channel.dart';
@@ -147,51 +148,60 @@ class DeviceManagementRepo {
   }
 
   /// Rename a device channel — stores in meta_json.channel_labels on devices table
-  /// (device_channels table has RLS that blocks client-side upserts)
+  /// AND locally in SharedPreferences as reliable fallback
   Future<void> renameChannel({
     required String deviceId,
     required int channelNo,
     required String newLabel,
   }) async {
-    try {
-      final label = newLabel.trim();
-      if (label.isEmpty) throw 'Channel label cannot be empty';
-      debugPrint('🔄 Renaming channel: $deviceId/$channelNo to "$label"');
+    final label = newLabel.trim();
+    if (label.isEmpty) throw 'Channel label cannot be empty';
+    debugPrint('🔄 Renaming channel: $deviceId/$channelNo to "$label"');
 
-      // Fetch current device to get existing meta_json
+    // Always save locally first (reliable)
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'channel_label_${deviceId}_$channelNo';
+    await prefs.setString(key, label);
+    debugPrint('💾 Saved channel label locally: $key = $label');
+
+    // Then try to save to Supabase (best-effort)
+    try {
       final device = await supabase
           .from('devices')
           .select('meta_json')
           .eq('id', deviceId)
           .maybeSingle();
 
-      if (device == null) throw 'Device not found';
+      if (device != null) {
+        final metaJson = Map<String, dynamic>.from(
+          (device['meta_json'] as Map<String, dynamic>?) ?? {},
+        );
+        final channelLabels = Map<String, dynamic>.from(
+          (metaJson['channel_labels'] as Map<String, dynamic>?) ?? {},
+        );
 
-      final metaJson = Map<String, dynamic>.from(
-        (device['meta_json'] as Map<String, dynamic>?) ?? {},
-      );
-      final channelLabels = Map<String, dynamic>.from(
-        (metaJson['channel_labels'] as Map<String, dynamic>?) ?? {},
-      );
+        final isCustom = label != 'Channel $channelNo';
+        channelLabels[channelNo.toString()] = {
+          'label': label,
+          'is_custom': isCustom,
+        };
+        metaJson['channel_labels'] = channelLabels;
 
-      final isCustom = label != 'Channel $channelNo';
-      channelLabels[channelNo.toString()] = {
-        'label': label,
-        'is_custom': isCustom,
-      };
-      metaJson['channel_labels'] = channelLabels;
-
-      await supabase
-          .from('devices')
-          .update({'meta_json': metaJson})
-          .eq('id', deviceId);
-
-      debugPrint('✅ Channel renamed successfully (stored in meta_json)');
+        await supabase
+            .from('devices')
+            .update({'meta_json': metaJson})
+            .eq('id', deviceId);
+        debugPrint('✅ Channel renamed in Supabase meta_json');
+      }
     } catch (e) {
-      debugPrint('❌ Channel rename failed: $e');
-      if (e is String) rethrow;
-      throw 'Failed to rename channel: $e';
+      debugPrint('⚠️ Supabase channel rename failed (local save OK): $e');
     }
+  }
+
+  /// Get locally saved channel label (SharedPreferences fallback)
+  static Future<String?> getLocalChannelLabel(String deviceId, int channelNo) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('channel_label_${deviceId}_$channelNo');
   }
 
   /// Update channel type (light or switch) — stores in meta_json on devices table
