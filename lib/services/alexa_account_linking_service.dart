@@ -26,7 +26,7 @@ class AlexaAccountLinkingService {
   /// Format: amzn1.application-oa2-client.XXXXXXXXX
   static const String clientId = String.fromEnvironment(
     'ALEXA_LWA_CLIENT_ID',
-    defaultValue: '', // Set via --dart-define or update here
+    defaultValue: 'amzn1.application-oa2-client.cd1600c814ee4ca3bc6030c550980529',
   );
 
   /// Redirect URI — must match what's configured in Amazon Developer Console
