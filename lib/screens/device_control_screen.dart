@@ -37,6 +37,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   Map<String, dynamic>? _deviceState;
   bool _isLoading = true;
   bool _showDebugInfo = false;
+  bool _isBottomSheetOpen = false;
   StreamSubscription? _stateSubscription;
 
   // Local device instance that can be updated
@@ -208,6 +209,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       _stateSubscription = _service
           .watchCombinedDeviceState(widget.device.id)
           .listen((state) {
+            if (_isBottomSheetOpen) return;
             if (mounted) {
               setState(() {
                 // When a combined snapshot arrives, update device state
@@ -263,6 +265,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       _stateSubscription = _service
           .watchCombinedDeviceState(widget.device.id)
           .listen((state) {
+            if (_isBottomSheetOpen) return;
             if (mounted) {
               setState(() {
                 _deviceState = state;
@@ -551,7 +554,8 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
 
   /// Show device options menu
   void _showDeviceOptions() {
-    showModalBottomSheet(
+    _isBottomSheetOpen = true;
+    showModalBottomSheet<void>(
       context: context,
       backgroundColor: HBotColors.cardLight,
       isScrollControlled: true,
@@ -690,7 +694,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           ),
         ),
       ),
-    );
+    ).then((_) {
+      _isBottomSheetOpen = false;
+      // Apply any pending state updates
+      if (mounted) setState(() {});
+    });
   }
 
   /// Navigate to shutter calibration screen
