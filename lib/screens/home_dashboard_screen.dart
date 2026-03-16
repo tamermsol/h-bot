@@ -13,6 +13,7 @@ import '../repos/devices_repo.dart';
 import '../services/mqtt_device_manager.dart';
 import '../services/smart_home_service.dart';
 import '../services/device_event_tracker.dart';
+import 'package:home_widget/home_widget.dart';
 import '../services/home_widget_service.dart';
 import '../services/current_home_service.dart';
 import '../services/app_lifecycle_manager.dart';
@@ -90,6 +91,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       debugPrint('🔔 Room change notification received, reloading rooms...');
       _reloadRoomsOnly();
     });
+
+    // Handle home widget launch URIs
+    HomeWidget.widgetClicked.listen(_handleWidgetUri);
+    HomeWidget.initiallyLaunchedFromHomeWidget().then(_handleWidgetUri);
   }
 
   @override
@@ -1033,7 +1038,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (123)',
+                'v1.0.0 (124)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
@@ -1845,6 +1850,59 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           ),
       ],
     );
+  }
+
+  void _handleWidgetUri(Uri? uri) {
+    if (uri == null) return;
+    debugPrint('🏠 Widget URI received: $uri');
+
+    if (uri.host == 'toggle') {
+      final deviceId = uri.queryParameters['deviceId'];
+      final newState = uri.queryParameters['state'];
+      if (deviceId != null && newState != null) {
+        // Wait a moment for MQTT to be ready, then send the command
+        Future.delayed(const Duration(milliseconds: 500), () {
+          _executeWidgetToggle(deviceId, newState == 'ON');
+        });
+      }
+    } else if (uri.host == 'device') {
+      // Navigate to specific device
+      final deviceId = uri.pathSegments.isNotEmpty ? uri.pathSegments.last : null;
+      if (deviceId != null) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          final device = _devices.where((d) => d.id == deviceId).firstOrNull;
+          if (device != null) {
+            _navigateToDeviceControl(device);
+          }
+        });
+      }
+    }
+  }
+
+  Future<void> _executeWidgetToggle(String deviceId, bool on) async {
+    debugPrint('🏠 Widget toggle: $deviceId → ${on ? "ON" : "OFF"}');
+    final device = _devices.where((d) => d.id == deviceId).firstOrNull;
+    if (device == null) {
+      debugPrint('⚠️ Widget toggle: device $deviceId not found');
+      return;
+    }
+
+    // Send MQTT command
+    await _mqttManager.mqttService.sendBulkPowerCommand(device.id, on);
+
+    // Update widget immediately with new state
+    _updateHomeWidget();
+
+    // Show a brief snackbar confirmation
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${device.deviceName} turned ${on ? "ON" : "OFF"}'),
+          duration: const Duration(seconds: 1),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   Future<void> _processPendingWidgetToggle() async {

@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.view.View
 import android.widget.RemoteViews
-import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 
@@ -69,15 +68,18 @@ class HBotDeviceWidget : HomeWidgetProvider() {
                         setTextColor(nameIds[i],
                             if (isOn) 0xFFFFFFFF.toInt() else 0xBBFFFFFF.toInt())
 
-                        // Toggle click → background Dart callback
+                        // All clicks → open app with action URI
                         if (deviceId.isNotEmpty()) {
-                            val toggleIntent = HomeWidgetBackgroundIntent.getBroadcast(
+                            // Toggle click → open app with toggle command
+                            val newState = if (isOn) "OFF" else "ON"
+                            val toggleIntent = HomeWidgetLaunchIntent.getActivity(
                                 context,
-                                Uri.parse("hbot://toggle?deviceId=$deviceId&state=${if (isOn) "OFF" else "ON"}")
+                                MainActivity::class.java,
+                                Uri.parse("hbot://toggle?deviceId=$deviceId&state=$newState")
                             )
                             setOnClickPendingIntent(toggleIds[i], toggleIntent)
 
-                            // Row click → open app to device
+                            // Row click → open app to device control
                             val deviceIntent = HomeWidgetLaunchIntent.getActivity(
                                 context,
                                 MainActivity::class.java,
