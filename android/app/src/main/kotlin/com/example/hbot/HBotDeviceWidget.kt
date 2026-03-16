@@ -46,6 +46,7 @@ class HBotDeviceWidget : HomeWidgetProvider() {
                         val deviceId = widgetData.getString("device_${i}_id", "") ?: ""
                         val type = widgetData.getString("device_${i}_type", "switch") ?: "switch"
                         val topic = widgetData.getString("device_${i}_topic", "") ?: ""
+                        val channel = (widgetData.getString("device_${i}_channel", "0") ?: "0").toIntOrNull() ?: 0
                         val isOn = state == "ON"
                         val isShutter = type.contains("shutter", ignoreCase = true) || type.contains("blind", ignoreCase = true)
                         if (isOn) onlineCount++
@@ -93,7 +94,7 @@ class HBotDeviceWidget : HomeWidgetProvider() {
                             if (topic.isNotEmpty()) {
                                 val newState = if (isOn) "OFF" else "ON"
                                 setOnClickPendingIntent(toggleIds[i],
-                                    createNativeIntent(context, WidgetToggleReceiver.ACTION_TOGGLE, deviceId, topic, "state", newState, i * 100 + 3))
+                                    createNativeIntent(context, WidgetToggleReceiver.ACTION_TOGGLE, deviceId, topic, "state", newState, i * 100 + 3, channel))
                             }
                         }
 
@@ -132,12 +133,14 @@ class HBotDeviceWidget : HomeWidgetProvider() {
         topic: String,
         extraKey: String,
         extraValue: String,
-        requestCode: Int
+        requestCode: Int,
+        channel: Int = 0
     ): PendingIntent {
         val intent = Intent(context, WidgetToggleReceiver::class.java).apply {
             this.action = action
             putExtra("deviceId", deviceId)
             putExtra("topic", topic)
+            putExtra("channel", channel)
             putExtra(extraKey, extraValue)
         }
         return PendingIntent.getBroadcast(

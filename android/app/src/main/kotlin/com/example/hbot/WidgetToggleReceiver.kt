@@ -71,7 +71,9 @@ CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
         when (action) {
             ACTION_TOGGLE -> {
                 val newState = intent.getStringExtra("state") ?: "OFF"
-                mqttTopic = "cmnd/$topic/POWER0"
+                val channel = intent.getIntExtra("channel", 0)
+                // channel 0 = POWER0 (bulk all), channel N = POWERN (specific)
+                mqttTopic = "cmnd/$topic/POWER$channel"
                 mqttPayload = newState
 
                 // Update stored state for instant visual feedback
