@@ -46,6 +46,16 @@ class HomeWidgetService {
     }
   }
 
+  /// Store all available devices so the native widget config activity can read them.
+  static Future<void> saveAllDevicesForConfig(List<WidgetDevice> allDevices) async {
+    try {
+      final json = allDevices.map((d) => d.toJson()).toList();
+      await HomeWidget.saveWidgetData('all_devices_json', jsonEncode(json));
+    } catch (e) {
+      debugPrint('⚠️ Error saving devices for widget config: $e');
+    }
+  }
+
   /// Handle widget interaction (device toggle).
   static Future<void> handleWidgetAction(Uri? uri) async {
     if (uri == null) return;

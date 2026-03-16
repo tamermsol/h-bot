@@ -1038,7 +1038,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (126)',
+                'v1.0.0 (127)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
@@ -1960,6 +1960,27 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       );
     }).toList();
     HomeWidgetService.updateDeviceStates(widgetDevices);
+
+    // Also save ALL devices for the native widget config picker
+    final allWidgetDevices = _devices.map((d) {
+      bool isOn = false;
+      final mqttState = _mqttManager.getDeviceState(d.id);
+      if (mqttState != null) {
+        if (mqttState['POWER'] == 'ON' || mqttState['POWER'] == true) isOn = true;
+        for (int i = 1; i <= d.effectiveChannels; i++) {
+          if (mqttState['POWER$i'] == 'ON' || mqttState['POWER$i'] == true) { isOn = true; break; }
+        }
+      }
+      return WidgetDevice(
+        id: d.id,
+        name: d.deviceName,
+        isOn: isOn,
+        type: d.deviceType.name,
+        topicBase: d.deviceTopicBase ?? d.id,
+        channels: d.effectiveChannels,
+      );
+    }).toList();
+    HomeWidgetService.saveAllDevicesForConfig(allWidgetDevices);
   }
 
   void _navigateToDeviceControl(Device device) async {

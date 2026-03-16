@@ -110,6 +110,15 @@
                 <action android:name="com.example.hbot.WIDGET_SHUTTER" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".WidgetConfigActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
