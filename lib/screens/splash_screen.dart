@@ -95,8 +95,9 @@ class _SplashScreenState extends State<SplashScreen>
             child: ScaleTransition(
               scale: _scaleAnimation,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Spacer(flex: 3),
+                  const Spacer(),
 
                   // Logo with white glow effect
                   Container(
@@ -173,7 +174,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                   ),
 
-                  const Spacer(flex: 2),
+                  const Spacer(),
 
                   // Pulsing dot loader
                   AnimatedBuilder(
