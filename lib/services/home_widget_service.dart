@@ -84,9 +84,22 @@ class HomeWidgetService {
         }
         if (isOn) onlineCount++;
 
-        // Only write state — name/type/topic/channel are set by native config
+        // Use latest channel label from local storage if available
+        String displayName = channelLabel;
+        if (channel > 0) {
+          final prefs = await SharedPreferences.getInstance();
+          final localLabel = prefs.getString('channel_label_${deviceId}_$channel');
+          if (localLabel != null && localLabel.isNotEmpty) {
+            // Extract device base name (before " · ") and append new label
+            final baseName = channelLabel.contains(' · ')
+                ? channelLabel.split(' · ').first
+                : channelLabel;
+            displayName = '$baseName · $localLabel';
+          }
+        }
+
         await HomeWidget.saveWidgetData('device_${i}_id', deviceId);
-        await HomeWidget.saveWidgetData('device_${i}_name', channelLabel);
+        await HomeWidget.saveWidgetData('device_${i}_name', displayName);
         await HomeWidget.saveWidgetData('device_${i}_state', isOn ? 'ON' : 'OFF');
         await HomeWidget.saveWidgetData('device_${i}_type', type);
         await HomeWidget.saveWidgetData('device_${i}_topic', topic);

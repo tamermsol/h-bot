@@ -1039,7 +1039,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (135)',
+                'v1.0.0 (136)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
