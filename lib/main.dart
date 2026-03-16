@@ -27,6 +27,7 @@ import 'services/notification_service.dart';
 @pragma('vm:entry-point')
 Future<void> homeWidgetBackgroundCallback(Uri? uri) async {
   if (uri == null) return;
+  WidgetsFlutterBinding.ensureInitialized();
 
   if (uri.host == 'toggle' || uri.host == 'shutter') {
     final deviceId = uri.queryParameters['deviceId'];

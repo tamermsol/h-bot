@@ -20,5 +20,10 @@
 # Play Core split compat
 -dontwarn com.google.android.play.core.splitcompat.SplitCompatApplication
 
-# Keep our widget provider
+# Keep our widget provider and toggle receiver
 -keep class com.example.hbot.HBotDeviceWidget { *; }
+-keep class com.example.hbot.WidgetToggleReceiver { *; }
+
+# Eclipse Paho MQTT
+-keep class org.eclipse.paho.client.mqttv3.** { *; }
+-dontwarn org.eclipse.paho.client.mqttv3.**

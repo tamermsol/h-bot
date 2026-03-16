@@ -1038,7 +1038,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (125)',
+                'v1.0.0 (126)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
@@ -1920,13 +1920,26 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     await _mqttManager.mqttService.sendBulkPowerCommand(device.id, on);
   }
 
-  void _updateHomeWidget() {
-    // Send first 4 devices to home screen widget with actual MQTT state
-    final widgetDevices = _devices.take(4).map((d) {
+  void _updateHomeWidget() async {
+    // Use user-selected favorites if configured, otherwise first 4 devices
+    final favorites = await HomeWidgetService.loadFavoriteDevices();
+    final List<Device> widgetSourceDevices;
+
+    if (favorites.isNotEmpty) {
+      // Show only user-selected devices, in their chosen order
+      final favoriteIds = favorites.map((f) => f.id).toList();
+      widgetSourceDevices = favoriteIds
+          .map((id) => _devices.where((d) => d.id == id).firstOrNull)
+          .whereType<Device>()
+          .toList();
+    } else {
+      widgetSourceDevices = _devices.take(4).toList();
+    }
+
+    final widgetDevices = widgetSourceDevices.map((d) {
       bool isOn = false;
       final mqttState = _mqttManager.getDeviceState(d.id);
       if (mqttState != null) {
-        // Check POWER or POWER1..N for on state
         if (mqttState['POWER'] == 'ON' || mqttState['POWER'] == true) {
           isOn = true;
         }

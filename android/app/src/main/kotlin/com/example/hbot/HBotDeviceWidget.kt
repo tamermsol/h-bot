@@ -1,12 +1,13 @@
 package com.example.hbot
 
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.view.View
 import android.widget.RemoteViews
-import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 
@@ -34,9 +35,7 @@ class HBotDeviceWidget : HomeWidgetProvider() {
                 val rowIds = intArrayOf(R.id.device_0, R.id.device_1, R.id.device_2, R.id.device_3)
                 val nameIds = intArrayOf(R.id.device_0_name, R.id.device_1_name, R.id.device_2_name, R.id.device_3_name)
                 val iconIds = intArrayOf(R.id.device_0_icon, R.id.device_1_icon, R.id.device_2_icon, R.id.device_3_icon)
-                // Toggle buttons (for non-shutter)
                 val toggleIds = intArrayOf(R.id.device_0_toggle, R.id.device_1_toggle, R.id.device_2_toggle, R.id.device_3_toggle)
-                // Shutter buttons
                 val shutterUpIds = intArrayOf(R.id.device_0_shutter_up, R.id.device_1_shutter_up, R.id.device_2_shutter_up, R.id.device_3_shutter_up)
                 val shutterDownIds = intArrayOf(R.id.device_0_shutter_down, R.id.device_1_shutter_down, R.id.device_2_shutter_down, R.id.device_3_shutter_down)
 
@@ -74,17 +73,10 @@ class HBotDeviceWidget : HomeWidgetProvider() {
                             setViewVisibility(shutterDownIds[i], View.VISIBLE)
 
                             if (topic.isNotEmpty()) {
-                                val upIntent = HomeWidgetBackgroundIntent.getBroadcast(
-                                    context,
-                                    Uri.parse("hbot://shutter?deviceId=$deviceId&topic=$topic&direction=up")
-                                )
-                                setOnClickPendingIntent(shutterUpIds[i], upIntent)
-
-                                val downIntent = HomeWidgetBackgroundIntent.getBroadcast(
-                                    context,
-                                    Uri.parse("hbot://shutter?deviceId=$deviceId&topic=$topic&direction=down")
-                                )
-                                setOnClickPendingIntent(shutterDownIds[i], downIntent)
+                                setOnClickPendingIntent(shutterUpIds[i],
+                                    createNativeIntent(context, WidgetToggleReceiver.ACTION_SHUTTER, deviceId, topic, "direction", "up", i * 100 + 1))
+                                setOnClickPendingIntent(shutterDownIds[i],
+                                    createNativeIntent(context, WidgetToggleReceiver.ACTION_SHUTTER, deviceId, topic, "direction", "down", i * 100 + 2))
                             }
                         } else {
                             // Show toggle, hide shutter controls
@@ -100,11 +92,8 @@ class HBotDeviceWidget : HomeWidgetProvider() {
 
                             if (topic.isNotEmpty()) {
                                 val newState = if (isOn) "OFF" else "ON"
-                                val toggleIntent = HomeWidgetBackgroundIntent.getBroadcast(
-                                    context,
-                                    Uri.parse("hbot://toggle?deviceId=$deviceId&topic=$topic&state=$newState")
-                                )
-                                setOnClickPendingIntent(toggleIds[i], toggleIntent)
+                                setOnClickPendingIntent(toggleIds[i],
+                                    createNativeIntent(context, WidgetToggleReceiver.ACTION_TOGGLE, deviceId, topic, "state", newState, i * 100 + 3))
                             }
                         }
 
@@ -134,5 +123,26 @@ class HBotDeviceWidget : HomeWidgetProvider() {
 
             appWidgetManager.updateAppWidget(widgetId, views)
         }
+    }
+
+    private fun createNativeIntent(
+        context: Context,
+        action: String,
+        deviceId: String,
+        topic: String,
+        extraKey: String,
+        extraValue: String,
+        requestCode: Int
+    ): PendingIntent {
+        val intent = Intent(context, WidgetToggleReceiver::class.java).apply {
+            this.action = action
+            putExtra("deviceId", deviceId)
+            putExtra("topic", topic)
+            putExtra(extraKey, extraValue)
+        }
+        return PendingIntent.getBroadcast(
+            context, requestCode, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 }

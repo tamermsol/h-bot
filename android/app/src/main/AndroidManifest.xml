@@ -102,6 +102,14 @@
                 <action android:name="es.antonborri.home_widget.action.BACKGROUND" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".WidgetToggleReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.hbot.WIDGET_TOGGLE" />
+                <action android:name="com.example.hbot.WIDGET_SHUTTER" />
+            </intent-filter>
+        </receiver>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

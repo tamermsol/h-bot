@@ -21,6 +21,7 @@ import 'profile_edit_screen.dart';
 import 'homes_screen.dart';
 import 'help_center_screen.dart';
 import 'activity_log_screen.dart';
+import 'widget_config_screen.dart';
 import 'notifications_settings_screen.dart';
 import 'feedback_screen.dart';
 import 'hbot_account_screen.dart';
@@ -504,6 +505,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'Amazon Alexa',
                 value: 'Control devices with voice',
                 onTap: _openAlexaSkill,
+              ),
+              SettingsTile(
+                icon: Icons.widgets_outlined,
+                title: 'Home Screen Widget',
+                value: 'Choose devices for quick control',
+                onTap: () async {
+                  final result = await Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const WidgetConfigScreen()));
+                  if (result == true && mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Widget updated! Re-add widget if needed.'),
+                        behavior: SnackBarBehavior.floating,
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                },
                 showDivider: false,
               ),
             ],
