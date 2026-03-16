@@ -363,10 +363,17 @@ class WidgetConfigActivity : Activity() {
                     deviceType, topic, channels
                 ))
 
-                // Individual channels
+                // Individual channels — use custom names if available
+                val channelLabelsObj = device.optJSONObject("channelLabels")
                 for (ch in 1..channels) {
+                    val customName = channelLabelsObj?.optString(ch.toString(), null)
+                    val label = if (!customName.isNullOrEmpty() && customName != "Channel $ch") {
+                        customName
+                    } else {
+                        "Channel $ch"
+                    }
                     card.addView(buildChannelRow(
-                        deviceId, deviceName, ch, "Channel $ch",
+                        deviceId, deviceName, ch, label,
                         deviceType, topic, channels
                     ))
                 }
@@ -420,7 +427,7 @@ class WidgetConfigActivity : Activity() {
         }
 
         row.setOnClickListener {
-            val channelLabel = if (channel == 0) deviceName else "$deviceName CH$channel"
+            val channelLabel = if (channel == 0) deviceName else "$deviceName · $label"
             toggleSlot(deviceId, deviceName, channel, channelLabel, type, topic, totalChannels)
         }
 

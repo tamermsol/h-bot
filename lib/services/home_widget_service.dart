@@ -17,40 +17,110 @@ class HomeWidgetService {
     }
   }
 
-  /// Update widget data with device states.
-  /// Call this whenever device states change.
-  static Future<void> updateDeviceStates(List<WidgetDevice> devices) async {
+  /// Load the widget slot configuration saved by the native config activity.
+  /// Returns a list of slot configs: {deviceId, channel, channelLabel, type, topic, totalChannels}
+  static Future<List<Map<String, dynamic>>> loadWidgetSlots() async {
     try {
-      // Store up to 4 devices for the widget
-      final widgetDevices = devices.take(4).toList();
+      // Native config saves to HomeWidgetPreferences via getSharedPreferences
+      // home_widget package also uses HomeWidgetPreferences, so getWidgetData works
+      final raw = await HomeWidget.getWidgetData<String>('widget_slots_json');
+      if (raw != null && raw.isNotEmpty) {
+        final list = jsonDecode(raw) as List;
+        return list.cast<Map<String, dynamic>>();
+      }
+    } catch (_) {}
+    return [];
+  }
 
-      await HomeWidget.saveWidgetData('device_count', widgetDevices.length);
+  /// Update widget slot states based on current MQTT data.
+  /// This ONLY updates the ON/OFF state — never overwrites device/channel/name config.
+  /// [mqttStates] maps deviceId -> MQTT state map (e.g. {'POWER1': 'ON', 'POWER2': 'OFF'})
+  static Future<void> updateWidgetStates(Map<String, Map<String, dynamic>> mqttStates) async {
+    try {
+      final slotsJson = await HomeWidget.getWidgetData<String>('widget_slots_json');
 
-      for (int i = 0; i < widgetDevices.length; i++) {
-        final d = widgetDevices[i];
-        await HomeWidget.saveWidgetData('device_${i}_id', d.id);
-        await HomeWidget.saveWidgetData('device_${i}_name', d.name);
-        await HomeWidget.saveWidgetData('device_${i}_state', d.isOn ? 'ON' : 'OFF');
-        await HomeWidget.saveWidgetData('device_${i}_type', d.type);
-        await HomeWidget.saveWidgetData('device_${i}_topic', d.topicBase);
-        await HomeWidget.saveWidgetData('device_${i}_channels', d.channels.toString());
+      if (slotsJson == null || slotsJson.isEmpty) {
+        // No widget configured — nothing to update
+        return;
       }
 
-      // Trigger widget update
+      List<dynamic> slots;
+      try {
+        slots = jsonDecode(slotsJson) as List;
+      } catch (_) {
+        return;
+      }
+
+      final count = slots.length.clamp(0, 4);
+      await HomeWidget.saveWidgetData('device_count', count);
+
+      int onlineCount = 0;
+      for (int i = 0; i < count; i++) {
+        final slot = slots[i] as Map<String, dynamic>;
+        final deviceId = slot['deviceId'] as String? ?? '';
+        final channel = slot['channel'] as int? ?? 0;
+        final channelLabel = slot['channelLabel'] as String? ?? 'Device';
+        final type = slot['type'] as String? ?? 'switch';
+        final topic = slot['topic'] as String? ?? '';
+        final totalChannels = slot['totalChannels'] as int? ?? 1;
+
+        // Determine ON/OFF from MQTT state for this specific channel
+        bool isOn = false;
+        final state = mqttStates[deviceId];
+        if (state != null) {
+          if (channel == 0) {
+            // Bulk: ON if any channel is ON
+            if (state['POWER'] == 'ON' || state['POWER'] == true) isOn = true;
+            for (int ch = 1; ch <= totalChannels; ch++) {
+              if (state['POWER$ch'] == 'ON' || state['POWER$ch'] == true) {
+                isOn = true;
+                break;
+              }
+            }
+          } else {
+            // Specific channel
+            isOn = state['POWER$channel'] == 'ON' || state['POWER$channel'] == true;
+          }
+        }
+        if (isOn) onlineCount++;
+
+        // Only write state — name/type/topic/channel are set by native config
+        await HomeWidget.saveWidgetData('device_${i}_id', deviceId);
+        await HomeWidget.saveWidgetData('device_${i}_name', channelLabel);
+        await HomeWidget.saveWidgetData('device_${i}_state', isOn ? 'ON' : 'OFF');
+        await HomeWidget.saveWidgetData('device_${i}_type', type);
+        await HomeWidget.saveWidgetData('device_${i}_topic', topic);
+        await HomeWidget.saveWidgetData('device_${i}_channels', totalChannels.toString());
+        await HomeWidget.saveWidgetData('device_${i}_channel', channel.toString());
+      }
+
+      // Trigger widget refresh
       await HomeWidget.updateWidget(
         androidName: _androidWidgetName,
         iOSName: _iOSWidgetName,
       );
     } catch (e) {
-      debugPrint('⚠️ Home widget update error: $e');
+      debugPrint('⚠️ Home widget state update error: $e');
     }
   }
 
   /// Store all available devices so the native widget config activity can read them.
-  static Future<void> saveAllDevicesForConfig(List<WidgetDevice> allDevices) async {
+  /// [channelLabels] maps deviceId -> {channelNo -> label}
+  static Future<void> saveAllDevicesForConfig(
+    List<WidgetDevice> allDevices, {
+    Map<String, Map<int, String>>? channelLabels,
+  }) async {
     try {
-      final json = allDevices.map((d) => d.toJson()).toList();
-      await HomeWidget.saveWidgetData('all_devices_json', jsonEncode(json));
+      final jsonList = allDevices.map((d) {
+        final map = d.toJson();
+        // Include channel labels if available
+        if (channelLabels != null && channelLabels.containsKey(d.id)) {
+          final labels = channelLabels[d.id]!;
+          map['channelLabels'] = labels.map((k, v) => MapEntry(k.toString(), v));
+        }
+        return map;
+      }).toList();
+      await HomeWidget.saveWidgetData('all_devices_json', jsonEncode(jsonList));
     } catch (e) {
       debugPrint('⚠️ Error saving devices for widget config: $e');
     }
@@ -59,26 +129,19 @@ class HomeWidgetService {
   /// Handle widget interaction (device toggle).
   static Future<void> handleWidgetAction(Uri? uri) async {
     if (uri == null) return;
-
     debugPrint('🏠 Widget action: $uri');
-
     final deviceId = uri.queryParameters['deviceId'];
     if (deviceId == null) return;
-
-    // Store the pending action for the app to process
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('widget_pending_toggle', deviceId);
   }
 
   /// Check and process any pending widget toggle actions.
-  /// Returns (deviceId, state) if there's a pending toggle, null otherwise.
   static Future<({String deviceId, String state})?> getPendingToggle() async {
     try {
       final deviceId = await HomeWidget.getWidgetData<String>('pending_toggle_device');
       final state = await HomeWidget.getWidgetData<String>('pending_toggle_state');
-
       if (deviceId != null && state != null) {
-        // Clear the pending action
         await HomeWidget.saveWidgetData('pending_toggle_device', null);
         await HomeWidget.saveWidgetData('pending_toggle_state', null);
         return (deviceId: deviceId, state: state);
@@ -88,36 +151,15 @@ class HomeWidgetService {
     }
     return null;
   }
-
-  /// Save favorite devices for widget display.
-  static Future<void> saveFavoriteDevices(List<WidgetDevice> devices) async {
-    final prefs = await SharedPreferences.getInstance();
-    final json = devices.map((d) => d.toJson()).toList();
-    await prefs.setString('widget_favorites', jsonEncode(json));
-    await updateDeviceStates(devices);
-  }
-
-  /// Load favorite devices.
-  static Future<List<WidgetDevice>> loadFavoriteDevices() async {
-    final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString('widget_favorites');
-    if (raw == null) return [];
-    try {
-      final list = jsonDecode(raw) as List;
-      return list.map((j) => WidgetDevice.fromJson(j as Map<String, dynamic>)).toList();
-    } catch (_) {
-      return [];
-    }
-  }
 }
 
 class WidgetDevice {
   final String id;
   final String name;
   final bool isOn;
-  final String type; // 'light', 'switch', 'shutter', 'dimmer'
-  final String topicBase; // MQTT topic base for sending commands
-  final int channels; // number of relay channels
+  final String type;
+  final String topicBase;
+  final int channels;
 
   WidgetDevice({
     required this.id,

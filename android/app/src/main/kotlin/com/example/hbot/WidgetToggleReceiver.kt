@@ -77,11 +77,14 @@ CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
                 mqttPayload = newState
 
                 // Update stored state for instant visual feedback
+                // Match by both deviceId AND channel to find the correct slot
                 val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
                 val editor = prefs.edit()
-                for (i in 0 until 4) {
+                val count = prefs.getInt("device_count", 0)
+                for (i in 0 until count) {
                     val storedId = prefs.getString("device_${i}_id", null)
-                    if (storedId == deviceId) {
+                    val storedChannel = (prefs.getString("device_${i}_channel", "0") ?: "0").toIntOrNull() ?: 0
+                    if (storedId == deviceId && storedChannel == channel) {
                         editor.putString("device_${i}_state", newState)
                         break
                     }

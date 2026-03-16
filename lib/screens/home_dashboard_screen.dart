@@ -1038,7 +1038,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (130)',
+                'v1.0.0 (131)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
@@ -1921,50 +1921,22 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   void _updateHomeWidget() async {
-    // Use user-selected favorites if configured, otherwise first 4 devices
-    final favorites = await HomeWidgetService.loadFavoriteDevices();
-    final List<Device> widgetSourceDevices;
-
-    if (favorites.isNotEmpty) {
-      // Show only user-selected devices, in their chosen order
-      final favoriteIds = favorites.map((f) => f.id).toList();
-      widgetSourceDevices = favoriteIds
-          .map((id) => _devices.where((d) => d.id == id).firstOrNull)
-          .whereType<Device>()
-          .toList();
-    } else {
-      widgetSourceDevices = _devices.take(4).toList();
+    // Build MQTT state map for all devices
+    final Map<String, Map<String, dynamic>> mqttStates = {};
+    for (final d in _devices) {
+      final state = _mqttManager.getDeviceState(d.id);
+      if (state != null) {
+        mqttStates[d.id] = state;
+      }
     }
 
-    final widgetDevices = widgetSourceDevices.map((d) {
-      bool isOn = false;
-      final mqttState = _mqttManager.getDeviceState(d.id);
-      if (mqttState != null) {
-        if (mqttState['POWER'] == 'ON' || mqttState['POWER'] == true) {
-          isOn = true;
-        }
-        for (int i = 1; i <= d.effectiveChannels; i++) {
-          if (mqttState['POWER$i'] == 'ON' || mqttState['POWER$i'] == true) {
-            isOn = true;
-            break;
-          }
-        }
-      }
-      return WidgetDevice(
-        id: d.id,
-        name: d.deviceName,
-        isOn: isOn,
-        type: d.deviceType.name,
-        topicBase: d.deviceTopicBase ?? d.id,
-        channels: d.effectiveChannels,
-      );
-    }).toList();
-    HomeWidgetService.updateDeviceStates(widgetDevices);
+    // Update widget slot states (respects channel-level config from native activity)
+    HomeWidgetService.updateWidgetStates(mqttStates);
 
-    // Also save ALL devices for the native widget config picker
+    // Save ALL devices for the native widget config picker
     final allWidgetDevices = _devices.map((d) {
       bool isOn = false;
-      final mqttState = _mqttManager.getDeviceState(d.id);
+      final mqttState = mqttStates[d.id];
       if (mqttState != null) {
         if (mqttState['POWER'] == 'ON' || mqttState['POWER'] == true) isOn = true;
         for (int i = 1; i <= d.effectiveChannels; i++) {
@@ -1980,7 +1952,25 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         channels: d.effectiveChannels,
       );
     }).toList();
-    HomeWidgetService.saveAllDevicesForConfig(allWidgetDevices);
+
+    // Load channel labels from database for multi-channel devices
+    final Map<String, Map<int, String>> channelLabels = {};
+    for (final d in _devices) {
+      if (d.effectiveChannels > 1) {
+        try {
+          final dwc = await _devicesRepo.getDeviceWithChannels(d.id);
+          if (dwc != null) {
+            final labels = <int, String>{};
+            for (int ch = 1; ch <= d.effectiveChannels; ch++) {
+              labels[ch] = dwc.getChannelLabel(ch);
+            }
+            channelLabels[d.id] = labels;
+          }
+        } catch (_) {}
+      }
+    }
+
+    HomeWidgetService.saveAllDevicesForConfig(allWidgetDevices, channelLabels: channelLabels);
   }
 
   void _navigateToDeviceControl(Device device) async {
