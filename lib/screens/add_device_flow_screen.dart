@@ -421,15 +421,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: _showDebugLog,
-            child: Container(
-              width: 36,
-              height: 36,
-              alignment: Alignment.center,
-              child: Icon(Icons.bug_report, size: 18, color: const Color(0xFF9CA3AF)),
-            ),
-          ),
+          // Debug log hidden — triple-tap title to access
+          const SizedBox(width: 36),
         ],
       ),
     );
