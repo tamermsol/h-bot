@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:io';
 import '../theme/app_theme.dart';
@@ -13,6 +14,7 @@ import '../models/profile.dart';
 import '../models/home.dart';
 import '../utils/error_handler.dart';
 import '../core/supabase_client.dart';
+import '../services/theme_service.dart';
 import 'sign_in_screen.dart';
 import 'profile_edit_screen.dart';
 import 'homes_screen.dart';
@@ -195,11 +197,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _showAppearanceDialog() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Dark mode coming in a future update'),
-        backgroundColor: HBotColors.primary,
-        behavior: SnackBarBehavior.floating,
+    final themeService = Provider.of<ThemeService>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.getCardColor(context),
+        title: const Text('Appearance'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<ThemeMode>(
+              title: const Text('Light'),
+              value: ThemeMode.light,
+              groupValue: themeService.themeMode,
+              onChanged: (v) {
+                themeService.setThemeMode(ThemeMode.light);
+                Navigator.pop(ctx);
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: const Text('Dark'),
+              value: ThemeMode.dark,
+              groupValue: themeService.themeMode,
+              onChanged: (v) {
+                themeService.setThemeMode(ThemeMode.dark);
+                Navigator.pop(ctx);
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: const Text('System'),
+              value: ThemeMode.system,
+              groupValue: themeService.themeMode,
+              onChanged: (v) {
+                themeService.setThemeMode(ThemeMode.system);
+                Navigator.pop(ctx);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -372,11 +407,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const ActivityLogScreen())),
               ),
-              SettingsTile(
-                icon: Icons.palette_outlined,
-                title: 'Appearance',
-                value: 'Light Mode',
-                onTap: _showAppearanceDialog,
+              Consumer<ThemeService>(
+                builder: (context, themeService, _) => SettingsTile(
+                  icon: Icons.palette_outlined,
+                  title: 'Appearance',
+                  value: themeService.isDarkMode ? 'Dark Mode' : 
+                         themeService.themeMode == ThemeMode.system ? 'System' : 'Light Mode',
+                  onTap: _showAppearanceDialog,
+                ),
               ),
               SettingsTile(
                 icon: Icons.info_outline,

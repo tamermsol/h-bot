@@ -662,9 +662,29 @@ class AppTheme {
   }
 
   // Dark theme stub for future
+  static Color getBackground(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? HBotColors.backgroundDark
+        : HBotColors.backgroundLight;
+  }
+
+  static Color getSurface(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? HBotColors.backgroundDark
+        : HBotColors.surfaceLight;
+  }
+
+  static Color getBorder(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? HBotColors.borderDark
+        : HBotColors.borderLight;
+  }
+
   static ThemeData darkTheme() {
-    return lightTheme().copyWith(
+    return ThemeData(
+      useMaterial3: true,
       brightness: Brightness.dark,
+      fontFamily: 'DM Sans',
       scaffoldBackgroundColor: HBotColors.backgroundDark,
       colorScheme: const ColorScheme.dark(
         primary: HBotColors.primary,
@@ -673,6 +693,71 @@ class AppTheme {
         error: HBotColors.error,
         onPrimary: HBotColors.textOnPrimary,
         onSurface: HBotColors.textPrimaryDark,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: HBotColors.backgroundDark,
+        foregroundColor: HBotColors.textPrimaryDark,
+        elevation: 0,
+      ),
+      cardTheme: CardTheme(
+        color: HBotColors.cardDark,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          side: const BorderSide(color: HBotColors.borderDark, width: 0.5),
+        ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: HBotColors.backgroundDark,
+        selectedItemColor: HBotColors.primary,
+        unselectedItemColor: HBotColors.textSecondaryDark,
+      ),
+      dialogTheme: DialogTheme(
+        backgroundColor: HBotColors.cardDark,
+        titleTextStyle: const TextStyle(
+          fontFamily: 'DM Sans',
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: HBotColors.textPrimaryDark,
+        ),
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        backgroundColor: HBotColors.cardDark,
+      ),
+      dividerTheme: const DividerThemeData(
+        color: HBotColors.borderDark,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return HBotColors.primary;
+          return HBotColors.textSecondaryDark;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return HBotColors.primary.withOpacity(0.3);
+          return HBotColors.borderDark;
+        }),
+      ),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: HBotColors.cardDark,
+        contentTextStyle: TextStyle(color: HBotColors.textPrimaryDark),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        fillColor: HBotColors.backgroundDark,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.borderDark),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.borderDark),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.primary),
+        ),
+        labelStyle: const TextStyle(color: HBotColors.textSecondaryDark),
+        hintStyle: const TextStyle(color: HBotColors.textSecondaryDark),
       ),
     );
   }

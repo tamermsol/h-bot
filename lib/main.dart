@@ -108,24 +108,30 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-    );
+    return Consumer<ThemeService>(
+      builder: (context, themeService, _) {
+        final isDark = themeService.isDarkMode;
+        SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+            systemNavigationBarColor: Colors.transparent,
+            systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+          ),
+        );
 
-    // Enable edge-to-edge mode
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        // Enable edge-to-edge mode
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-    return MaterialApp(
-      title: 'HBOT',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme(),
-      themeMode: ThemeMode.light,
-      home: const SplashScreen(),
+        return MaterialApp(
+          title: 'HBOT',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme(),
+          darkTheme: AppTheme.darkTheme(),
+          themeMode: themeService.themeMode,
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }
