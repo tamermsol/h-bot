@@ -17,6 +17,7 @@ import 'sign_in_screen.dart';
 import 'profile_edit_screen.dart';
 import 'homes_screen.dart';
 import 'help_center_screen.dart';
+import 'activity_log_screen.dart';
 import 'notifications_settings_screen.dart';
 import 'feedback_screen.dart';
 import 'hbot_account_screen.dart';
@@ -363,6 +364,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'Notifications',
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
+              ),
+              SettingsTile(
+                icon: Icons.history,
+                title: 'Activity Log',
+                value: 'Device events & history',
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const ActivityLogScreen())),
               ),
               SettingsTile(
                 icon: Icons.palette_outlined,

@@ -15,6 +15,7 @@ import 'services/location_trigger_monitor.dart';
 import 'services/device_state_cache.dart';
 import 'services/scene_command_executor.dart';
 import 'services/theme_service.dart';
+import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,9 @@ void main() async {
 
   // Initialize device state cache for instant UI feedback
   await DeviceStateCache().initialize();
+
+  // Initialize local notifications
+  await NotificationService().initialize();
 
   runApp(
     ChangeNotifierProvider(

@@ -40,6 +40,7 @@ import '../repos/scenes_repo.dart';
 import '../repos/wifi_profiles_repo.dart';
 import '../realtime/device_state_streams.dart';
 import 'mqtt_device_manager.dart';
+import 'device_event_tracker.dart';
 
 class SmartHomeService {
   static final SmartHomeService _instance = SmartHomeService._internal();
@@ -270,6 +271,11 @@ class SmartHomeService {
       if (hasSignificantChange(lastEmittedState, merged)) {
         lastEmittedState = Map.from(merged);
         controller.add(merged);
+
+        // Track device events for activity log + notifications
+        try {
+          DeviceEventTracker().trackState(deviceId, deviceId, merged);
+        } catch (_) {}
 
         // Debug logging for state changes
         debugPrint(

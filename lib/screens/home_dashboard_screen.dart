@@ -12,6 +12,8 @@ import '../repos/rooms_repo.dart';
 import '../repos/devices_repo.dart';
 import '../services/mqtt_device_manager.dart';
 import '../services/smart_home_service.dart';
+import '../services/device_event_tracker.dart';
+import '../services/home_widget_service.dart';
 import '../services/current_home_service.dart';
 import '../services/app_lifecycle_manager.dart';
 import '../services/room_change_notifier.dart';
@@ -436,6 +438,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             // Combine owned and shared devices
             _devices = [...ownedDevices, ...sharedDevices];
           });
+          // Register device names for activity tracking
+          for (final d in _devices) {
+            DeviceEventTracker().registerDevice(d.id, d.deviceName);
+          }
+          // Update home screen widget with device data
+          _updateHomeWidget();
           debugPrint(
             '✅ Rooms loaded and state updated: ${_rooms.map((r) => r.name).join(", ")}',
           );
@@ -1020,7 +1028,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (114)',
+                'v1.0.0 (115)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
@@ -1832,6 +1840,17 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           ),
       ],
     );
+  }
+
+  void _updateHomeWidget() {
+    // Send first 4 devices to home screen widget
+    final widgetDevices = _devices.take(4).map((d) => WidgetDevice(
+      id: d.id,
+      name: d.deviceName,
+      isOn: false, // Will be updated by state stream
+      type: d.deviceType.name,
+    )).toList();
+    HomeWidgetService.updateDeviceStates(widgetDevices);
   }
 
   void _navigateToDeviceControl(Device device) async {

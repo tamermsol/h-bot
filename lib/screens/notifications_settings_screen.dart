@@ -3,6 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_shell.dart';
+import '../services/notification_service.dart';
 
 class NotificationsSettingsScreen extends StatefulWidget {
   const NotificationsSettingsScreen({super.key});
@@ -19,6 +20,13 @@ class _NotificationsSettingsScreenState
   bool _isLoading = true;
   PermissionStatus _permissionStatus = PermissionStatus.denied;
 
+  // Granular notification preferences
+  final NotificationService _notifService = NotificationService();
+  bool _deviceOffline = true;
+  bool _deviceOnline = false;
+  bool _sceneRun = true;
+  bool _stateChange = false;
+
   @override
   void initState() {
     super.initState();
@@ -34,10 +42,20 @@ class _NotificationsSettingsScreenState
       // Check current permission status
       final status = await Permission.notification.status;
 
+      // Load granular preferences
+      final deviceOffline = await _notifService.deviceOfflineEnabled;
+      final deviceOnline = await _notifService.deviceOnlineEnabled;
+      final sceneRun = await _notifService.sceneRunEnabled;
+      final stateChange = await _notifService.stateChangeEnabled;
+
       if (mounted) {
         setState(() {
           _notificationsEnabled = enabled;
           _permissionStatus = status;
+          _deviceOffline = deviceOffline;
+          _deviceOnline = deviceOnline;
+          _sceneRun = sceneRun;
+          _stateChange = stateChange;
           _isLoading = false;
         });
       }
@@ -302,9 +320,9 @@ class _NotificationsSettingsScreenState
 
                   const SizedBox(height: HBotSpacing.space6),
 
-                  // What you'll receive section
+                  // Notification types section
                   Text(
-                    'What you\'ll receive',
+                    'Notification Types',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: HBotColors.textPrimaryLight,
@@ -314,31 +332,52 @@ class _NotificationsSettingsScreenState
                   Container(
                     decoration: BoxDecoration(
                       color: HBotColors.cardLight,
-                      borderRadius: BorderRadius.circular(
-                        HBotRadius.medium,
-                      ),
+                      borderRadius: BorderRadius.circular(HBotRadius.medium),
                     ),
                     child: Column(
                       children: [
-                        _buildNotificationTypeItem(
-                          icon: Icons.power_settings_new,
-                          title: 'Device Status',
-                          description:
-                              'Get notified when devices go online or offline',
+                        _buildNotificationToggle(
+                          icon: Icons.cloud_off,
+                          title: 'Device Offline',
+                          description: 'When a device goes offline',
+                          value: _deviceOffline,
+                          onChanged: _notificationsEnabled ? (v) {
+                            setState(() => _deviceOffline = v);
+                            _notifService.setDeviceOfflineEnabled(v);
+                          } : null,
                         ),
                         const Divider(height: 1, indent: 72),
-                        _buildNotificationTypeItem(
+                        _buildNotificationToggle(
+                          icon: Icons.cloud_done,
+                          title: 'Device Online',
+                          description: 'When a device comes back online',
+                          value: _deviceOnline,
+                          onChanged: _notificationsEnabled ? (v) {
+                            setState(() => _deviceOnline = v);
+                            _notifService.setDeviceOnlineEnabled(v);
+                          } : null,
+                        ),
+                        const Divider(height: 1, indent: 72),
+                        _buildNotificationToggle(
                           icon: Icons.auto_awesome,
-                          title: 'Automation Alerts',
-                          description:
-                              'Notifications when scenes and automations run',
+                          title: 'Scene Executed',
+                          description: 'When a scene or automation runs',
+                          value: _sceneRun,
+                          onChanged: _notificationsEnabled ? (v) {
+                            setState(() => _sceneRun = v);
+                            _notifService.setSceneRunEnabled(v);
+                          } : null,
                         ),
                         const Divider(height: 1, indent: 72),
-                        _buildNotificationTypeItem(
-                          icon: Icons.update,
-                          title: 'System Updates',
-                          description: 'Important updates and announcements',
-                          showDivider: false,
+                        _buildNotificationToggle(
+                          icon: Icons.lightbulb_outline,
+                          title: 'State Changes',
+                          description: 'When a device is turned on/off',
+                          value: _stateChange,
+                          onChanged: _notificationsEnabled ? (v) {
+                            setState(() => _stateChange = v);
+                            _notifService.setStateChangeEnabled(v);
+                          } : null,
                         ),
                       ],
                     ),
@@ -349,14 +388,15 @@ class _NotificationsSettingsScreenState
     );
   }
 
-  Widget _buildNotificationTypeItem({
+  Widget _buildNotificationToggle({
     required IconData icon,
     required String title,
     required String description,
-    bool showDivider = true,
+    required bool value,
+    ValueChanged<bool>? onChanged,
   }) {
-    return ListTile(
-      leading: Container(
+    return SwitchListTile(
+      secondary: Container(
         padding: const EdgeInsets.all(HBotSpacing.space2),
         decoration: BoxDecoration(
           color: HBotColors.primary.withOpacity(0.1),
@@ -377,6 +417,8 @@ class _NotificationsSettingsScreenState
           color: HBotColors.textSecondaryLight,
         ),
       ),
+      value: value,
+      onChanged: onChanged,
     );
   }
 }
