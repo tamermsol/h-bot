@@ -180,19 +180,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _openAlexaSkill() async {
-    // Try Alexa app deep link first, fall back to Amazon web page
-    const alexaDeepLink = 'alexa://skills/dp/B0GBZ7XB1N';
-    const alexaWebUrl = 'https://www.amazon.com/Amir-Aboelezz-Hbot/dp/B0GBZ7XB1N';
+    // The alexa:// deep link opens directly in the Alexa app
+    // Format: alexa://skills/dp/{ASIN} — goes to skill detail page
+    const alexaAppDeepLink = 'alexa://skills/dp/B0GBZ7XB1N';
+    // Fallback web URL if Alexa app is not installed
+    const webFallback = 'https://www.amazon.com/dp/B0GBZ7XB1N';
 
     try {
-      final deepLinkUri = Uri.parse(alexaDeepLink);
-      if (await canLaunchUrl(deepLinkUri)) {
-        await launchUrl(deepLinkUri, mode: LaunchMode.externalApplication);
-      } else {
-        await launchUrl(Uri.parse(alexaWebUrl), mode: LaunchMode.externalApplication);
+      final alexaUri = Uri.parse(alexaAppDeepLink);
+      final launched = await launchUrl(alexaUri, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        // Alexa app not installed — show message and offer web fallback
+        if (mounted) {
+          final goToWeb = await showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text('Alexa App Required'),
+              content: const Text(
+                'To link your H-Bot account with Alexa, you need the Amazon Alexa app installed.\n\n'
+                'Would you like to view the skill on Amazon.com instead?',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx, false),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx, true),
+                  child: const Text('Open Amazon'),
+                ),
+              ],
+            ),
+          );
+          if (goToWeb == true) {
+            await launchUrl(Uri.parse(webFallback), mode: LaunchMode.externalApplication);
+          }
+        }
       }
     } catch (e) {
-      await launchUrl(Uri.parse(alexaWebUrl), mode: LaunchMode.externalApplication);
+      // alexa:// scheme failed entirely — try web
+      await launchUrl(Uri.parse(webFallback), mode: LaunchMode.externalApplication);
     }
   }
 

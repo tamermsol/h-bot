@@ -111,6 +111,20 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="http" />
         </intent>
+        <!-- Alexa app deep link -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="alexa" />
+        </intent>
+        <!-- Amazon app deep link -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="amzn" />
+        </intent>
+        <!-- Amazon Shopping app -->
+        <package android:name="com.amazon.mShop.android.shopping" />
+        <!-- Alexa app -->
+        <package android:name="com.amazon.dee.app" />
         <!-- Required for url_launcher to open email -->
         <intent>
             <action android:name="android.intent.action.SENDTO" />

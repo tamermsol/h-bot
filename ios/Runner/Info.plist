@@ -95,5 +95,10 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>alexa</string>
+		<string>amzn</string>
+	</array>
 </dict>
 </plist>
