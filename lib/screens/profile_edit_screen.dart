@@ -86,10 +86,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         title: const Text('Edit Profile'),
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
         elevation: 0,
         actions: [
           TextButton(
@@ -144,7 +144,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       child: Text(
                         'Update your profile information. Phone numbers must be in E.164 format (e.g., +1234567890).',
                         style: TextStyle(
-                          color: HBotColors.textSecondaryLight,
+                          color: context.hTextSecondary,
                           fontSize: 14,
                         ),
                       ),

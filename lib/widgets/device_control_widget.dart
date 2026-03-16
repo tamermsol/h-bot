@@ -224,10 +224,10 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
                 Expanded(
                   child: Text(
                     widget.device.deviceName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                     ),
                   ),
                 ),
@@ -266,9 +266,9 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
             const SizedBox(height: HBotSpacing.space2),
             Text(
               '${ChannelDetectionUtils.getChannelCountDisplayName(widget.device.effectiveChannels)} • ${widget.device.deviceType.name}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
             ),
           ],
@@ -298,9 +298,9 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
                 Expanded(
                   child: Text(
                     _getChannelName(i),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                     ),
                   ),
                 ),

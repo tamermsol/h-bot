@@ -167,7 +167,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     return showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
+        backgroundColor: context.hCard,
         title: const Text('Choose Authentication Method'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -254,7 +254,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     return showDialog<PermissionLevel>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
+        backgroundColor: context.hCard,
         title: const Text('Choose Permission Level'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -287,10 +287,10 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         title: const Text('Share Device'),
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -313,7 +313,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: HBotColors.cardLight,
+                        color: context.hCard,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -333,7 +333,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
-                                    color: HBotColors.textPrimaryLight,
+                                    color: context.hTextPrimary,
                                   ),
                                 ),
                                 Text(
@@ -342,7 +342,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                                       .split('.')
                                       .last,
                                   style: TextStyle(
-                                    color: HBotColors.textSecondaryLight,
+                                    color: context.hTextSecondary,
                                   ),
                                 ),
                               ],
@@ -359,7 +359,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: HBotColors.textPrimaryLight,
+                        color: context.hTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -367,7 +367,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                       'Choose biometric or device password for authentication',
                       style: TextStyle(
                         fontSize: 13,
-                        color: HBotColors.textSecondaryLight,
+                        color: context.hTextSecondary,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -446,13 +446,13 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: HBotColors.textPrimaryLight,
+                          color: context.hTextPrimary,
                         ),
                       ),
                       const SizedBox(height: 12),
                       ..._pendingRequests.map(
                         (request) => Card(
-                          color: HBotColors.cardLight,
+                          color: context.hCard,
                           margin: const EdgeInsets.only(bottom: 8),
                           child: ListTile(
                             leading: const CircleAvatar(
@@ -462,13 +462,13 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                             title: Text(
                               request.requesterName ?? request.requesterEmail,
                               style: TextStyle(
-                                color: HBotColors.textPrimaryLight,
+                                color: context.hTextPrimary,
                               ),
                             ),
                             subtitle: Text(
                               request.requesterEmail,
                               style: TextStyle(
-                                color: HBotColors.textSecondaryLight,
+                                color: context.hTextSecondary,
                               ),
                             ),
                             trailing: Row(
@@ -503,13 +503,13 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: HBotColors.textPrimaryLight,
+                          color: context.hTextPrimary,
                         ),
                       ),
                       const SizedBox(height: 12),
                       ..._sharedWith.map(
                         (shared) => Card(
-                          color: HBotColors.cardLight,
+                          color: context.hCard,
                           margin: const EdgeInsets.only(bottom: 8),
                           child: ListTile(
                             leading: const CircleAvatar(
@@ -519,13 +519,13 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                             title: Text(
                               shared.ownerEmail ?? 'User',
                               style: TextStyle(
-                                color: HBotColors.textPrimaryLight,
+                                color: context.hTextPrimary,
                               ),
                             ),
                             subtitle: Text(
                               'Permission: ${shared.permissionLevel.name}',
                               style: TextStyle(
-                                color: HBotColors.textSecondaryLight,
+                                color: context.hTextSecondary,
                               ),
                             ),
                             trailing: IconButton(
@@ -534,7 +534,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                                 final confirm = await showDialog<bool>(
                                   context: context,
                                   builder: (context) => AlertDialog(
-                                    backgroundColor: HBotColors.cardLight,
+                                    backgroundColor: context.hCard,
                                     title: const Text('Revoke Access?'),
                                     content: const Text(
                                       'This user will no longer have access to this device.',

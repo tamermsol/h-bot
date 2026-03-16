@@ -182,12 +182,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight, size: 20),
+          icon: Icon(Icons.arrow_back_ios, color: context.hTextPrimary, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -209,12 +209,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               const SizedBox(height: 32),
 
               // Title
-              const Text(
+              Text(
                 'Reset Password',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: HBotColors.textPrimaryLight,
+                  color: context.hTextPrimary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -226,7 +226,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 'Enter the 6-digit code sent to:',
                 style: TextStyle(
                   fontSize: 16,
-                  color: HBotColors.textSecondaryLight,
+                  color: context.hTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -260,30 +260,30 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       maxLength: 1,
                       obscureText: false,
                       enableInteractiveSelection: false,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: HBotColors.textPrimaryLight,
+                        color: context.hTextPrimary,
                         letterSpacing: 0,
                       ),
                       decoration: InputDecoration(
                         counterText: '',
                         filled: true,
-                        fillColor: HBotColors.cardLight,
+                        fillColor: context.hCard,
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 16,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: HBotColors.borderLight,
+                          borderSide: BorderSide(
+                            color: context.hBorder,
                             width: 1.5,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: HBotColors.borderLight,
+                          borderSide: BorderSide(
+                            color: context.hBorder,
                             width: 1.5,
                           ),
                         ),
@@ -318,14 +318,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   labelText: 'New Password',
                   labelStyle: const TextStyle(color: Colors.white70),
                   filled: true,
-                  fillColor: HBotColors.cardLight,
+                  fillColor: context.hCard,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: HBotColors.borderLight),
+                    borderSide: BorderSide(color: context.hBorder),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: HBotColors.borderLight),
+                    borderSide: BorderSide(color: context.hBorder),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -361,14 +361,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   labelText: 'Confirm Password',
                   labelStyle: const TextStyle(color: Colors.white70),
                   filled: true,
-                  fillColor: HBotColors.cardLight,
+                  fillColor: context.hCard,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: HBotColors.borderLight),
+                    borderSide: BorderSide(color: context.hBorder),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: HBotColors.borderLight),
+                    borderSide: BorderSide(color: context.hBorder),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -447,7 +447,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   Text(
                     "Didn't receive the code? ",
                     style: TextStyle(
-                      color: HBotColors.textSecondaryLight,
+                      color: context.hTextSecondary,
                       fontSize: 14,
                     ),
                   ),
@@ -455,7 +455,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     Text(
                       'Resend in ${_resendCountdown}s',
                       style: TextStyle(
-                        color: HBotColors.textTertiaryLight,
+                        color: context.hTextTertiary,
                         fontSize: 14,
                       ),
                     )

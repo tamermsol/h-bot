@@ -38,14 +38,14 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent, elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight, size: 20),
+          icon: Icon(Icons.arrow_back_ios, color: context.hTextPrimary, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Email Confirmation', style: TextStyle(fontFamily: 'DM Sans', fontSize: 17, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
+        title: Text('Email Confirmation', style: TextStyle(fontFamily: 'DM Sans', fontSize: 17, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -63,15 +63,15 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
 
               const SizedBox(height: HBotSpacing.space5),
 
-              const Text('Check Your Email',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+              Text('Check Your Email',
+                style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: context.hTextPrimary),
                 textAlign: TextAlign.center,
               ),
 
               const SizedBox(height: HBotSpacing.space3),
 
               Text("We've sent a confirmation email to",
-                style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight),
+                style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 4),
@@ -82,11 +82,11 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
 
               const SizedBox(height: HBotSpacing.space3),
 
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
                 child: Text(
                   'Please check your inbox and click the confirmation link to activate your account.',
-                  style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight),
+                  style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -122,8 +122,8 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                 child: OutlinedButton(
                   onPressed: () => Navigator.of(context).pop(),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: HBotColors.textPrimaryLight,
-                    side: const BorderSide(color: HBotColors.borderLight, width: 1.5),
+                    foregroundColor: context.hTextPrimary,
+                    side: BorderSide(color: context.hBorder, width: 1.5),
                     shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
                   ),
                   child: const Text('Continue Without Confirmation', style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),

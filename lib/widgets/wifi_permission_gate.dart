@@ -184,19 +184,19 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
             const SizedBox(height: HBotSpacing.space6),
             Text(
               _permissionStatus.message,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: HBotSpacing.space4),
             Text(
               _explanation,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -263,9 +263,9 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
               const SizedBox(height: HBotSpacing.space4),
               Text(
                 'On iPhone, you can continue without auto-detecting WiFi. You\'ll enter your WiFi name manually.',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: HBotColors.textSecondaryLight,
+                  color: context.hTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),

@@ -151,10 +151,10 @@ class _DevicesScreenState extends State<DevicesScreen> {
         : 'All Devices';
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         title: Text(title),
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
         elevation: 0,
         actions: [
           if (widget.home != null)
@@ -319,7 +319,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     }
 
     return Card(
-      color: HBotColors.cardLight,
+      color: context.hCard,
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: () => _navigateToDeviceControl(device),
@@ -349,7 +349,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     int shutterDirection,
     bool waitingForInitialState,
   ) {
-    final textPrimary = HBotColors.textPrimaryLight;
+    final textPrimary = context.hTextPrimary;
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -383,7 +383,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                               (device.deviceType == DeviceType.shutter &&
                                   shutterPosition > 0)))
                       ? HBotColors.primary
-                      : (HBotColors.textSecondaryLight),
+                      : (context.hTextSecondary),
                   size: 32,
                 ),
               ),
@@ -469,8 +469,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
     bool isControllable,
     bool isOnline,
   ) {
-    final textPrimary = HBotColors.textPrimaryLight;
-    final textHint = HBotColors.textTertiaryLight;
+    final textPrimary = context.hTextPrimary;
+    final textHint = context.hTextTertiary;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -578,12 +578,12 @@ class _DevicesScreenState extends State<DevicesScreen> {
                   _selectedCategory = category;
                 });
               },
-              backgroundColor: HBotColors.cardLight,
+              backgroundColor: context.hCard,
               selectedColor: HBotColors.primary.withOpacity(0.2),
               labelStyle: TextStyle(
                 color: isSelected
                     ? HBotColors.primary
-                    : HBotColors.textSecondaryLight,
+                    : context.hTextSecondary,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
               ),
               side: BorderSide(
@@ -591,7 +591,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                     ? HBotColors.primary
                     : (Theme.of(context).brightness == Brightness.dark
                           ? Colors.transparent
-                          : HBotColors.borderLight),
+                          : context.hBorder),
               ),
             ),
           );
@@ -764,12 +764,12 @@ class _DevicesScreenState extends State<DevicesScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.home_outlined, size: 80, color: HBotColors.textTertiaryLight),
+            Icon(Icons.home_outlined, size: 80, color: context.hTextTertiary),
             const SizedBox(height: HBotSpacing.space6),
             Text(
               'No Home Selected',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -778,7 +778,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
               'Please select a home first to view and manage devices',
               style: Theme.of(
                 context,
-              ).textTheme.bodyLarge?.copyWith(color: HBotColors.textSecondaryLight),
+              ).textTheme.bodyLarge?.copyWith(color: context.hTextSecondary),
               textAlign: TextAlign.center,
             ),
           ],
@@ -792,7 +792,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Add Device'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -841,7 +841,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
+        backgroundColor: context.hCard,
         title: const Row(
           children: [
             Icon(Icons.warning, color: Colors.red),
@@ -855,21 +855,21 @@ class _DevicesScreenState extends State<DevicesScreen> {
           children: [
             Text(
               'Are you sure you want to delete "${device.deviceName}"?',
-              style: const TextStyle(color: HBotColors.textPrimaryLight, fontSize: 16),
+              style: TextStyle(color: context.hTextPrimary, fontSize: 16),
             ),
             const SizedBox(height: 12),
-            const Text(
+            Text(
               'This action cannot be undone. All device data, settings, and channel configurations will be permanently removed.',
-              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 14),
+              style: TextStyle(color: context.hTextSecondary, fontSize: 14),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
+            child: Text(
               'Cancel',
-              style: TextStyle(color: HBotColors.textSecondaryLight),
+              style: TextStyle(color: context.hTextSecondary),
             ),
           ),
           TextButton(
@@ -893,7 +893,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           content: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -901,7 +901,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
               SizedBox(width: 16),
               Text(
                 'Deleting device...',
-                style: TextStyle(color: HBotColors.textPrimaryLight),
+                style: TextStyle(color: context.hTextPrimary),
               ),
             ],
           ),
@@ -963,7 +963,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            backgroundColor: HBotColors.cardLight,
+            backgroundColor: context.hCard,
             title: Row(
               children: [
                 Icon(errorIcon, color: Colors.red),
@@ -973,7 +973,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
             ),
             content: Text(
               errorMessage,
-              style: const TextStyle(color: HBotColors.textPrimaryLight),
+              style: TextStyle(color: context.hTextPrimary),
             ),
             actions: [
               TextButton(

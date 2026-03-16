@@ -299,18 +299,18 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        backgroundColor: HBotColors.cardLight,
+        backgroundColor: context.hCard,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),
+          icon: Icon(Icons.arrow_back, color: context.hTextPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Shutter Calibration',
           style: TextStyle(
-            color: HBotColors.textPrimaryLight,
+            color: context.hTextPrimary,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -324,8 +324,8 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
             // Device name
             Text(
               widget.device.deviceName,
-              style: const TextStyle(
-                color: HBotColors.textPrimaryLight,
+              style: TextStyle(
+                color: context.hTextPrimary,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -398,8 +398,8 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                       icon: const Icon(Icons.refresh),
                       label: const Text('Reset'),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: HBotColors.textPrimaryLight,
-                        side: const BorderSide(color: HBotColors.textTertiaryLight),
+                        foregroundColor: context.hTextPrimary,
+                        side: BorderSide(color: context.hTextTertiary),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
                     ),
@@ -429,7 +429,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
 
   Widget _buildInstructionsCard() {
     return Card(
-      color: HBotColors.cardLight,
+      color: context.hCard,
       child: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
@@ -443,10 +443,10 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                   size: 24,
                 ),
                 const SizedBox(width: 8),
-                const Text(
+                Text(
                   'Calibration Instructions',
                   style: TextStyle(
-                    color: HBotColors.textPrimaryLight,
+                    color: context.hTextPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -454,13 +454,13 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
               ],
             ),
             const SizedBox(height: HBotSpacing.space4),
-            const Text(
+            Text(
               '1. Complete BOTH calibrations (close and open)\n'
               '2. Follow the instructions for each calibration\n'
               '3. Press STOP when the shutter reaches its limit\n'
               '4. Click "Apply Calibration" to save settings',
               style: TextStyle(
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -484,7 +484,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
     final canStart = !_isCalibrating;
 
     return Card(
-      color: isActive ? color.withOpacity(0.1) : HBotColors.cardLight,
+      color: isActive ? color.withOpacity(0.1) : context.hCard,
       child: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
@@ -498,7 +498,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                   child: Text(
                     title,
                     style: TextStyle(
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -538,8 +538,8 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
             const SizedBox(height: HBotSpacing.space4),
             Text(
               description,
-              style: const TextStyle(
-                color: HBotColors.textSecondaryLight,
+              style: TextStyle(
+                color: context.hTextSecondary,
                 fontSize: 14,
                 height: 1.4,
               ),
@@ -554,7 +554,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: color,
                   foregroundColor: Colors.white,
-                  disabledBackgroundColor: HBotColors.textTertiaryLight,
+                  disabledBackgroundColor: context.hTextTertiary,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
@@ -572,10 +572,10 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           children: [
-            const Text(
+            Text(
               'Calibration in Progress',
               style: TextStyle(
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -590,9 +590,9 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                 fontFeatures: [FontFeature.tabularFigures()],
               ),
             ),
-            const Text(
+            Text(
               'seconds',
-              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 16),
+              style: TextStyle(color: context.hTextSecondary, fontSize: 16),
             ),
           ],
         ),

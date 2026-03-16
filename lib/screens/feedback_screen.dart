@@ -149,10 +149,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         title: const Text('Send Feedback'),
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
         elevation: 0,
       ),
       body: ResponsiveShell(child: SingleChildScrollView(
@@ -165,14 +165,14 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               'We value your feedback',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
             const SizedBox(height: HBotSpacing.space2),
             Text(
               'Help us improve HBOT by sharing your thoughts, suggestions, or reporting issues',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
             ),
             const SizedBox(height: HBotSpacing.space6),
@@ -182,16 +182,16 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               'Your Feedback',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
             const SizedBox(height: HBotSpacing.space4),
             Container(
               decoration: BoxDecoration(
-                color: HBotColors.cardLight,
+                color: context.hCard,
                 borderRadius: HBotRadius.mediumRadius,
                 border: Border.all(
-                  color: HBotColors.textSecondaryLight.withOpacity(0.3),
+                  color: context.hTextSecondary.withOpacity(0.3),
                   width: 1,
                 ),
               ),
@@ -199,13 +199,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 controller: _feedbackController,
                 maxLines: 8,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: HBotColors.textPrimaryLight,
+                  color: context.hTextPrimary,
                 ),
                 decoration: InputDecoration(
                   hintText:
                       'Tell us what you think...\n\nYou can share:\n• Feature suggestions\n• Bug reports\n• General feedback\n• Questions or concerns',
                   hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: HBotColors.textSecondaryLight,
+                    color: context.hTextSecondary,
                   ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.all(HBotSpacing.space4),
@@ -219,7 +219,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               'Send via',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
             const SizedBox(height: HBotSpacing.space4),
@@ -295,7 +295,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(
                                 fontWeight: FontWeight.w600,
-                                color: HBotColors.textPrimaryLight,
+                                color: context.hTextPrimary,
                               ),
                         ),
                         const SizedBox(height: 4),
@@ -303,7 +303,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                           'We read every message and use your feedback to improve HBOT. We typically respond within 24 hours during business days.',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
-                                color: HBotColors.textPrimaryLight,
+                                color: context.hTextPrimary,
                               ),
                         ),
                       ],

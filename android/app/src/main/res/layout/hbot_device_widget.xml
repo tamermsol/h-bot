@@ -3,109 +3,186 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp"
-    android:background="@android:color/white">
+    android:padding="16dp"
+    android:background="#FFFFFF">
 
-    <TextView
-        android:id="@+id/widget_title"
+    <!-- Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="H-Bot Devices"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:textColor="#1F2937"
-        android:paddingBottom="8dp" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="12dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="H-Bot"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1F2937" />
+        <TextView
+            android:id="@+id/widget_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="#9CA3AF" />
+    </LinearLayout>
 
+    <!-- Device 0 -->
     <LinearLayout
         android:id="@+id/device_0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="6dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:gravity="center_vertical"
         android:visibility="gone">
+        <View
+            android:id="@+id/device_0_indicator"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="#9CA3AF" />
         <TextView
             android:id="@+id/device_0_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="13sp"
-            android:textColor="#374151" />
+            android:layout_marginStart="10dp"
+            android:textSize="14sp"
+            android:textColor="#374151"
+            android:maxLines="1"
+            android:ellipsize="end" />
         <TextView
-            android:id="@+id/device_0_state"
+            android:id="@+id/device_0_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#9CA3AF" />
     </LinearLayout>
 
+    <!-- Device 1 -->
     <LinearLayout
         android:id="@+id/device_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="6dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:gravity="center_vertical"
         android:visibility="gone">
+        <View
+            android:id="@+id/device_1_indicator"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="#9CA3AF" />
         <TextView
             android:id="@+id/device_1_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="13sp"
-            android:textColor="#374151" />
+            android:layout_marginStart="10dp"
+            android:textSize="14sp"
+            android:textColor="#374151"
+            android:maxLines="1"
+            android:ellipsize="end" />
         <TextView
-            android:id="@+id/device_1_state"
+            android:id="@+id/device_1_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#9CA3AF" />
     </LinearLayout>
 
+    <!-- Device 2 -->
     <LinearLayout
         android:id="@+id/device_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="6dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:gravity="center_vertical"
         android:visibility="gone">
+        <View
+            android:id="@+id/device_2_indicator"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="#9CA3AF" />
         <TextView
             android:id="@+id/device_2_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="13sp"
-            android:textColor="#374151" />
+            android:layout_marginStart="10dp"
+            android:textSize="14sp"
+            android:textColor="#374151"
+            android:maxLines="1"
+            android:ellipsize="end" />
         <TextView
-            android:id="@+id/device_2_state"
+            android:id="@+id/device_2_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#9CA3AF" />
     </LinearLayout>
 
+    <!-- Device 3 -->
     <LinearLayout
         android:id="@+id/device_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="6dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:gravity="center_vertical"
         android:visibility="gone">
+        <View
+            android:id="@+id/device_3_indicator"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="#9CA3AF" />
         <TextView
             android:id="@+id/device_3_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="13sp"
-            android:textColor="#374151" />
+            android:layout_marginStart="10dp"
+            android:textSize="14sp"
+            android:textColor="#374151"
+            android:maxLines="1"
+            android:ellipsize="end" />
         <TextView
-            android:id="@+id/device_3_state"
+            android:id="@+id/device_3_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="#9CA3AF" />
     </LinearLayout>
 
 </LinearLayout>

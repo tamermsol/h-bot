@@ -61,18 +61,18 @@ class SettingsTile extends StatelessWidget {
                           fontFamily: 'DM Sans',
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
-                          color: titleColor ?? HBotColors.textPrimaryLight,
+                          color: titleColor ?? context.hTextPrimary,
                         ),
                       ),
                       if (subtitle != null) ...[
                         const SizedBox(height: 2),
                         Text(
                           subtitle!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: 'DM Sans',
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: HBotColors.textTertiaryLight,
+                            color: context.hTextTertiary,
                           ),
                         ),
                       ],
@@ -83,11 +83,11 @@ class SettingsTile extends StatelessWidget {
                   const SizedBox(width: HBotSpacing.space2),
                   Text(
                     value!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      color: HBotColors.textSecondaryLight,
+                      color: context.hTextSecondary,
                     ),
                   ),
                 ],
@@ -145,12 +145,12 @@ class SettingsGroup extends StatelessWidget {
             ),
             child: Text(
               label!.toUpperCase(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'DM Sans',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.0,
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
             ),
           ),
@@ -159,9 +159,9 @@ class SettingsGroup extends StatelessWidget {
           margin: margin ??
               const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
           decoration: BoxDecoration(
-            color: HBotColors.cardLight,
+            color: context.hCard,
             borderRadius: HBotRadius.largeRadius,
-            border: Border.all(color: HBotColors.borderLight, width: 1),
+            border: Border.all(color: context.hBorder, width: 1),
           ),
           child: ClipRRect(
             borderRadius: HBotRadius.largeRadius,

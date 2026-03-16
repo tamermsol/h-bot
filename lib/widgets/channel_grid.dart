@@ -133,12 +133,12 @@ class _BulkButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: isPrimary
                 ? HBotColors.primary.withOpacity(0.1)
-                : HBotColors.surfaceLight.withOpacity(0.5),
+                : context.hSurface.withOpacity(0.5),
             borderRadius: HBotRadius.mediumRadius,
             border: Border.all(
               color: isPrimary
                   ? HBotColors.primary.withOpacity(0.3)
-                  : HBotColors.borderLight,
+                  : context.hBorder,
             ),
           ),
           child: Row(
@@ -149,7 +149,7 @@ class _BulkButton extends StatelessWidget {
                 size: compact ? 16 : 18,
                 color: isPrimary
                     ? HBotColors.primary
-                    : HBotColors.textSecondaryLight,
+                    : context.hTextSecondary,
               ),
               const SizedBox(width: 6),
               Text(
@@ -160,7 +160,7 @@ class _BulkButton extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: isPrimary
                       ? HBotColors.primary
-                      : HBotColors.textSecondaryLight,
+                      : context.hTextSecondary,
                 ),
               ),
             ],

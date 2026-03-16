@@ -19,9 +19,9 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = HBotColors.cardLight;
-    final textPrimary = HBotColors.textPrimaryLight;
-    final textSecondary = HBotColors.textSecondaryLight;
+    final cardColor = context.hCard;
+    final textPrimary = context.hTextPrimary;
+    final textSecondary = context.hTextSecondary;
 
     return GestureDetector(
       onTap: onTap,
@@ -31,7 +31,7 @@ class ProfileCard extends StatelessWidget {
           color: cardColor,
           borderRadius: BorderRadius.circular(HBotRadius.medium),
           border: Border.all(
-            color: HBotColors.borderLight,
+            color: context.hBorder,
             width: 1,
           ),
           boxShadow: [

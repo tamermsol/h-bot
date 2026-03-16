@@ -198,7 +198,7 @@ class _HomesScreenState extends State<HomesScreen> {
       builder: (context) {
         debugPrint('🔘 Dialog builder called');
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Create New Home'),
           content: TextField(
             controller: _nameController,
@@ -238,7 +238,7 @@ class _HomesScreenState extends State<HomesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Edit Home'),
           content: TextField(
             controller: _nameController,
@@ -271,7 +271,7 @@ class _HomesScreenState extends State<HomesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Delete Home'),
           content: Text(
             'Are you sure you want to delete "${home.name}"? This action cannot be undone and will delete all rooms and devices in this home.',
@@ -296,13 +296,13 @@ class _HomesScreenState extends State<HomesScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         title: const Text(
           'My Homes',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
         elevation: 0,
         actions: [
           IconButton(
@@ -329,12 +329,12 @@ class _HomesScreenState extends State<HomesScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.home_outlined, size: 80, color: HBotColors.textTertiaryLight),
+            Icon(Icons.home_outlined, size: 80, color: context.hTextTertiary),
             const SizedBox(height: HBotSpacing.space6),
             Text(
               'No Homes Yet',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -342,7 +342,7 @@ class _HomesScreenState extends State<HomesScreen> {
             Text(
               'Create your first home to start managing your smart devices',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -377,12 +377,12 @@ class _HomesScreenState extends State<HomesScreen> {
       itemBuilder: (context, index) {
         final home = _homes[index];
         return Card(
-          color: HBotColors.cardLight,
+          color: context.hCard,
           margin: const EdgeInsets.only(bottom: HBotSpacing.space4),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: HBotRadius.mediumRadius,
-            side: const BorderSide(color: HBotColors.borderLight),
+            side: BorderSide(color: context.hBorder),
           ),
           child: ListTile(
             leading: Container(
@@ -398,15 +398,15 @@ class _HomesScreenState extends State<HomesScreen> {
               home.name,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
             subtitle: Text(
               'Created ${_formatDate(home.createdAt)}',
-              style: const TextStyle(color: HBotColors.textSecondaryLight),
+              style: TextStyle(color: context.hTextSecondary),
             ),
             trailing: PopupMenuButton<String>(
-              icon: const Icon(Icons.more_vert, color: HBotColors.textTertiaryLight),
+              icon: Icon(Icons.more_vert, color: context.hTextTertiary),
               onSelected: (value) async {
                 switch (value) {
                   case 'edit':

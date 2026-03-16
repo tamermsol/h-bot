@@ -180,46 +180,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _openAlexaSkill() async {
-    // The alexa:// deep link opens directly in the Alexa app
-    // Format: alexa://skills/dp/{ASIN} — goes to skill detail page
-    const alexaAppDeepLink = 'alexa://skills/dp/B0GBZ7XB1N';
-    // Fallback web URL if Alexa app is not installed
-    const webFallback = 'https://www.amazon.com/dp/B0GBZ7XB1N';
+    // Deep links to open the skill page inside the Alexa app.
+    // Priority order:
+    // 1. Android intent URI (most reliable on Android — forces Alexa app)  
+    // 2. alexa:// custom scheme (works on iOS if Alexa installed)
+    // 3. Alexa web portal URL (intercepted by Alexa app via universal links)
+    // 4. Amazon.com fallback
+    
+    final isAndroid = Platform.isAndroid;
+    
+    final urisToTry = isAndroid 
+      ? [
+          // Android: intent URI forces the Alexa app package
+          'intent://skills/dp/B0GBZ7XB1N#Intent;package=com.amazon.dee.app;scheme=alexa;end',
+          // Alexa web portal — Alexa app registers as handler
+          'https://alexa.amazon.com/spa/skill-store/skills/dp/B0GBZ7XB1N',
+        ]
+      : [
+          // iOS: alexa:// scheme
+          'alexa://skills/dp/B0GBZ7XB1N',
+          // Universal link — Alexa app intercepts
+          'https://alexa.amazon.com/spa/skill-store/skills/dp/B0GBZ7XB1N',
+        ];
 
-    try {
-      final alexaUri = Uri.parse(alexaAppDeepLink);
-      final launched = await launchUrl(alexaUri, mode: LaunchMode.externalApplication);
-      if (!launched) {
-        // Alexa app not installed — show message and offer web fallback
-        if (mounted) {
-          final goToWeb = await showDialog<bool>(
-            context: context,
-            builder: (ctx) => AlertDialog(
-              title: const Text('Alexa App Required'),
-              content: const Text(
-                'To link your H-Bot account with Alexa, you need the Amazon Alexa app installed.\n\n'
-                'Would you like to view the skill on Amazon.com instead?',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(ctx, false),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(ctx, true),
-                  child: const Text('Open Amazon'),
-                ),
-              ],
-            ),
-          );
-          if (goToWeb == true) {
-            await launchUrl(Uri.parse(webFallback), mode: LaunchMode.externalApplication);
-          }
-        }
+    for (final uriStr in urisToTry) {
+      try {
+        final uri = Uri.parse(uriStr);
+        final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+        if (launched) return; // Success — opened in Alexa app
+      } catch (_) {
+        continue; // Try next URI
       }
-    } catch (e) {
-      // alexa:// scheme failed entirely — try web
-      await launchUrl(Uri.parse(webFallback), mode: LaunchMode.externalApplication);
+    }
+
+    // All deep links failed — Alexa app probably not installed
+    if (!mounted) return;
+    final goToWeb = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Alexa App Required'),
+        content: const Text(
+          'To enable and link the H-Bot skill, please install the Amazon Alexa app first.\n\n'
+          'Would you like to view the skill on Amazon.com instead?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Open Amazon'),
+          ),
+        ],
+      ),
+    );
+    if (goToWeb == true) {
+      await launchUrl(
+        Uri.parse('https://www.amazon.com/dp/B0GBZ7XB1N'),
+        mode: LaunchMode.externalApplication,
+      );
     }
   }
 
@@ -571,12 +591,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: HBotSpacing.space3),
             Text(
               _userName ?? 'Loading...',
-              style: const TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight),
+              style: TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: context.hTextPrimary),
             ),
             const SizedBox(height: HBotSpacing.space1),
             Text(
               _userEmail ?? '',
-              style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w400, color: HBotColors.textSecondaryLight),
+              style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w400, color: context.hTextSecondary),
             ),
           ],
         ),
@@ -635,10 +655,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   const Icon(Icons.email_outlined, size: 48, color: HBotColors.primary),
                   const SizedBox(height: HBotSpacing.space4),
-                  const Text(
+                  Text(
                     'We\'ll send a verification code to your email to confirm your identity.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: HBotColors.textSecondaryLight),
+                    style: TextStyle(fontSize: 14, color: context.hTextSecondary),
                   ),
                   const SizedBox(height: HBotSpacing.space4),
                   TextField(
@@ -688,7 +708,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     'Enter the 6-digit code sent to\n${emailController.text.trim()}',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 14, color: HBotColors.textSecondaryLight),
+                    style: TextStyle(fontSize: 14, color: context.hTextSecondary),
                   ),
                   const SizedBox(height: HBotSpacing.space4),
                   TextField(
@@ -756,10 +776,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   const Icon(Icons.lock_reset, size: 48, color: HBotColors.primary),
                   const SizedBox(height: HBotSpacing.space4),
-                  const Text(
+                  Text(
                     'Set your new password',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: HBotColors.textSecondaryLight),
+                    style: TextStyle(fontSize: 14, color: context.hTextSecondary),
                   ),
                   const SizedBox(height: HBotSpacing.space4),
                   TextField(
@@ -794,9 +814,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Text(errorMessage!, style: const TextStyle(color: HBotColors.error, fontSize: 13)),
                   ],
                   const SizedBox(height: HBotSpacing.space2),
-                  const Text(
+                  Text(
                     'Password must be at least 6 characters',
-                    style: TextStyle(fontSize: 12, color: HBotColors.textSecondaryLight),
+                    style: TextStyle(fontSize: 12, color: context.hTextSecondary),
                   ),
                 ],
               );
@@ -840,7 +860,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
 
             return AlertDialog(
-              backgroundColor: HBotColors.cardLight,
+              backgroundColor: context.hCard,
               title: Text(
                 step == 0 ? 'Change Password' : step == 1 ? 'Verify Email' : 'New Password',
                 style: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w600),
@@ -859,7 +879,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Sign Out'),
           content: const Text('Are you sure you want to sign out?'),
           actions: [

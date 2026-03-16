@@ -91,13 +91,13 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                   children: [
                     const Icon(Icons.bug_report, color: HBotColors.primary),
                     const SizedBox(width: HBotSpacing.space2),
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         'Connection Debug Information',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: HBotColors.textPrimaryLight,
+                          color: context.hTextPrimary,
                         ),
                       ),
                     ),
@@ -234,12 +234,12 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Server Configuration',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
             const SizedBox(height: HBotSpacing.space4),
@@ -266,9 +266,9 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
             width: 100,
             child: Text(
               '$label:',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -276,7 +276,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 12, color: HBotColors.textPrimaryLight),
+              style: TextStyle(fontSize: 12, color: context.hTextPrimary),
             ),
           ),
         ],
@@ -293,13 +293,13 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
           children: [
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Debug Messages',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                     ),
                   ),
                 ),
@@ -321,11 +321,11 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                 border: Border.all(color: Colors.grey[300]!),
               ),
               child: _debugMessages.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                         'No debug messages',
                         style: TextStyle(
-                          color: HBotColors.textSecondaryLight,
+                          color: context.hTextSecondary,
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -339,10 +339,10 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                           padding: const EdgeInsets.symmetric(vertical: 1),
                           child: Text(
                             message,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 10,
                               fontFamily: 'monospace',
-                              color: HBotColors.textPrimaryLight,
+                              color: context.hTextPrimary,
                             ),
                           ),
                         );

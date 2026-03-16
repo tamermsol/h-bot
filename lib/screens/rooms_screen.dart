@@ -114,7 +114,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
+        backgroundColor: context.hCard,
         title: const Text('Create New Room'),
         content: TextField(
           controller: _nameController,
@@ -236,7 +236,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Edit Room'),
           content: TextField(
             controller: _nameController,
@@ -269,7 +269,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Delete Room'),
           content: Text(
             'Are you sure you want to delete "${room.name}"? This action cannot be undone and will remove all devices in this room.',
@@ -298,7 +298,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Room Background Image'),
           content: SingleChildScrollView(
             child: BackgroundImagePicker(
@@ -357,7 +357,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: HBotColors.cardLight,
+              backgroundColor: context.hCard,
               title: const Text('Change Room Icon'),
               content: SizedBox(
                 width: double.maxFinite,
@@ -457,12 +457,12 @@ class _RoomsScreenState extends State<RoomsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+          ? context.hBackground
+          : context.hBackground,
       appBar: AppBar(
         backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+            ? context.hBackground
+            : context.hBackground,
         title: Text(
           widget.home.name,
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
@@ -490,12 +490,12 @@ class _RoomsScreenState extends State<RoomsScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.room_outlined, size: 80, color: HBotColors.textTertiaryLight),
+            Icon(Icons.room_outlined, size: 80, color: context.hTextTertiary),
             const SizedBox(height: HBotSpacing.space6),
             Text(
               'No Rooms Yet',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -503,7 +503,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
             Text(
               'Add rooms to organize your smart devices by location',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -535,7 +535,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         final room = _rooms[index];
         // Use EXACT same Card structure as Dashboard
         return Card(
-          color: HBotColors.cardLight,
+          color: context.hCard,
           margin: const EdgeInsets.symmetric(
             horizontal: 0,
             vertical: HBotSpacing.space2,
@@ -613,7 +613,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                                     room.backgroundImageUrl != null &&
                                         room.backgroundImageUrl!.isNotEmpty
                                     ? Colors.white
-                                    : HBotColors.textPrimaryLight,
+                                    : context.hTextPrimary,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -625,7 +625,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                                     room.backgroundImageUrl != null &&
                                         room.backgroundImageUrl!.isNotEmpty
                                     ? Colors.white70
-                                    : HBotColors.textSecondaryLight,
+                                    : context.hTextSecondary,
                               ),
                             ),
                           ],
@@ -645,7 +645,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                         room.backgroundImageUrl != null &&
                             room.backgroundImageUrl!.isNotEmpty
                         ? Colors.white
-                        : HBotColors.textTertiaryLight,
+                        : context.hTextTertiary,
                     size: 20,
                   ),
                   onSelected: (value) {

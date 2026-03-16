@@ -61,12 +61,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight, size: 20),
+          icon: Icon(Icons.arrow_back_ios, color: context.hTextPrimary, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -89,13 +89,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           const SizedBox(height: HBotSpacing.space7),
 
           // Title
-          const Text(
+          Text(
             'Reset password',
             style: TextStyle(
               fontFamily: 'DM Sans',
               fontSize: 24,
               fontWeight: FontWeight.w700,
-              color: HBotColors.textPrimaryLight,
+              color: context.hTextPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -103,7 +103,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           const SizedBox(height: HBotSpacing.space2),
 
           // Description
-          const SizedBox(
+          SizedBox(
             width: 280,
             child: Text(
               "Enter your email and we'll send you a link to reset your password",
@@ -111,7 +111,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 fontFamily: 'DM Sans',
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -182,9 +182,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: const Text('✉️', style: TextStyle(fontSize: 32)),
         ),
 
-        const Text(
+        Text(
           'Check your email',
-          style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+          style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: context.hTextPrimary),
           textAlign: TextAlign.center,
         ),
 
@@ -192,7 +192,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
         Text(
           "We've sent a reset link to\n${_emailController.text}",
-          style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight),
+          style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary),
           textAlign: TextAlign.center,
         ),
       ],

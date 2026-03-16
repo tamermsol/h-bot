@@ -43,9 +43,9 @@ class _SceneCardState extends State<SceneCard> {
         height: 72,
         padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
-          color: _isPressed ? HBotColors.cardHover : HBotColors.cardLight,
+          color: _isPressed ? HBotColors.cardHover : context.hCard,
           borderRadius: HBotRadius.largeRadius,
-          border: Border.all(color: HBotColors.borderLight, width: 1),
+          border: Border.all(color: context.hBorder, width: 1),
         ),
         child: Row(
           children: [
@@ -78,11 +78,11 @@ class _SceneCardState extends State<SceneCard> {
                 children: [
                   Text(
                     widget.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -91,11 +91,11 @@ class _SceneCardState extends State<SceneCard> {
                     const SizedBox(height: 2),
                     Text(
                       widget.subtitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        color: HBotColors.textSecondaryLight,
+                        color: context.hTextSecondary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

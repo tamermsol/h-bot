@@ -762,3 +762,17 @@ class AppTheme {
     );
   }
 }
+
+/// Extension on BuildContext for easy theme-aware color access.
+/// Use these instead of HBotColors.xxxLight directly.
+extension HBotThemeContext on BuildContext {
+  bool get isDark => Theme.of(this).brightness == Brightness.dark;
+  
+  Color get hBackground => isDark ? HBotColors.backgroundDark : HBotColors.backgroundLight;
+  Color get hCard => isDark ? HBotColors.cardDark : HBotColors.cardLight;
+  Color get hSurface => isDark ? HBotColors.backgroundDark : HBotColors.surfaceLight;
+  Color get hBorder => isDark ? HBotColors.borderDark : HBotColors.borderLight;
+  Color get hTextPrimary => isDark ? HBotColors.textPrimaryDark : HBotColors.textPrimaryLight;
+  Color get hTextSecondary => isDark ? HBotColors.textSecondaryDark : HBotColors.textSecondaryLight;
+  Color get hTextTertiary => isDark ? HBotColors.textSecondaryDark : HBotColors.textTertiaryLight;
+}

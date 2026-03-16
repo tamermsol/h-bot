@@ -162,7 +162,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
@@ -346,12 +346,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // Divider
                 Row(
                   children: [
-                    const Expanded(child: Divider(color: HBotColors.borderLight)),
+                    Expanded(child: Divider(color: context.hBorder)),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
                       child: Text('or', style: Theme.of(context).textTheme.bodySmall),
                     ),
-                    const Expanded(child: Divider(color: HBotColors.borderLight)),
+                    Expanded(child: Divider(color: context.hBorder)),
                   ],
                 ),
 

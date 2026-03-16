@@ -583,6 +583,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               setState(() {
                 // State update will trigger UI refresh via _getDeviceState
               });
+              // Also update home screen widget with latest states
+              _updateHomeWidget();
             }
           });
         }
@@ -952,19 +954,19 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   children: [
                     Text(
                       _selectedHome?.name ?? 'My Home',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
-                        color: HBotColors.textPrimaryLight,
+                        color: context.hTextPrimary,
                         letterSpacing: -0.3,
                       ),
                     ),
                     if (_homes.length > 1) ...[
                       const SizedBox(width: 4),
-                      const Icon(
+                      Icon(
                         Icons.keyboard_arrow_down,
-                        color: HBotColors.textSecondaryLight,
+                        color: context.hTextSecondary,
                         size: 20,
                       ),
                     ],
@@ -1019,21 +1021,21 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             children: [
               Text(
                 _greeting,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: HBotColors.textSecondaryLight,
+                  color: context.hTextSecondary,
                 ),
               ),
               const Spacer(),
               Text(
-                'v1.0.0 (117)',
+                'v1.0.0 (118)',
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 11,
                   fontWeight: FontWeight.w400,
-                  color: HBotColors.textTertiaryLight,
+                  color: context.hTextTertiary,
                 ),
               ),
             ],
@@ -1045,11 +1047,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           if (_devices.isNotEmpty)
             RichText(
               text: TextSpan(
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 13,
                   fontWeight: FontWeight.w400,
-                  color: HBotColors.textSecondaryLight,
+                  color: context.hTextSecondary,
                 ),
                 children: [
                   TextSpan(
@@ -1080,7 +1082,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Dashboard Background Image'),
           content: SingleChildScrollView(
             child: BackgroundImagePicker(
@@ -1130,26 +1132,26 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       margin: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
       height: 44,
       decoration: BoxDecoration(
-        color: HBotColors.cardLight,
+        color: context.hCard,
         borderRadius: HBotRadius.mediumRadius,
-        border: Border.all(color: HBotColors.borderLight, width: 1),
+        border: Border.all(color: context.hBorder, width: 1),
       ),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _searchController,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'DM Sans',
                 fontSize: 14,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
               decoration: InputDecoration(
                 hintText: 'Search devices...',
-                hintStyle: const TextStyle(
+                hintStyle: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 14,
-                  color: HBotColors.textTertiaryLight,
+                  color: context.hTextTertiary,
                 ),
                 prefixIcon: const Icon(Icons.search, color: HBotColors.iconDefault, size: 20),
                 suffixIcon: _searchQuery.isNotEmpty
@@ -1172,8 +1174,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           ),
           // Filter button
           Container(
-            decoration: const BoxDecoration(
-              border: Border(left: BorderSide(color: HBotColors.borderLight, width: 1)),
+            decoration: BoxDecoration(
+              border: Border(left: BorderSide(color: context.hBorder, width: 1)),
             ),
             child: IconButton(
               icon: const Icon(Icons.tune, color: HBotColors.iconDefault, size: 20),
@@ -1196,7 +1198,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       controller: _tabController,
       isScrollable: true,
       labelColor: Colors.white,
-      unselectedLabelColor: HBotColors.textSecondaryLight,
+      unselectedLabelColor: context.hTextSecondary,
       indicatorSize: TabBarIndicatorSize.tab,
       indicator: BoxDecoration(
         gradient: HBotColors.primaryGradient,
@@ -1352,20 +1354,20 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             const SizedBox(height: HBotSpacing.space5),
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'DM Sans',
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
             const SizedBox(height: HBotSpacing.space2),
             Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'DM Sans',
                 fontSize: 14,
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -1534,7 +1536,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         }
 
         return Card(
-          color: HBotColors.cardLight,
+          color: context.hCard,
           margin: isGridView
               ? EdgeInsets.zero
               : const EdgeInsets.symmetric(
@@ -1566,7 +1568,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                           child: Text(
                             device.deviceName,
                             style: TextStyle(
-                              color: HBotColors.textPrimaryLight,
+                              color: context.hTextPrimary,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -1642,8 +1644,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     int shutterDirection, // 0=stopped, 1=opening, -1=closing
     bool waitingForInitialState, // FETCH-FIRST: loading indicator flag
   ) {
-    final textPrimary = HBotColors.textPrimaryLight;
-    final textHint = HBotColors.textTertiaryLight;
+    final textPrimary = context.hTextPrimary;
+    final textHint = context.hTextTertiary;
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -1709,9 +1711,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           width: double.infinity,
           child: Text(
             device.deviceName,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'DM Sans',
-              color: HBotColors.textPrimaryLight,
+              color: context.hTextPrimary,
               fontSize: 13,
               fontWeight: FontWeight.w600,
               letterSpacing: -0.2,
@@ -1843,13 +1845,29 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   void _updateHomeWidget() {
-    // Send first 4 devices to home screen widget
-    final widgetDevices = _devices.take(4).map((d) => WidgetDevice(
-      id: d.id,
-      name: d.deviceName,
-      isOn: false, // Will be updated by state stream
-      type: d.deviceType.name,
-    )).toList();
+    // Send first 4 devices to home screen widget with actual MQTT state
+    final widgetDevices = _devices.take(4).map((d) {
+      bool isOn = false;
+      final mqttState = _mqttManager.getDeviceState(d.id);
+      if (mqttState != null) {
+        // Check POWER or POWER1..N for on state
+        if (mqttState['POWER'] == 'ON' || mqttState['POWER'] == true) {
+          isOn = true;
+        }
+        for (int i = 1; i <= d.effectiveChannels; i++) {
+          if (mqttState['POWER$i'] == 'ON' || mqttState['POWER$i'] == true) {
+            isOn = true;
+            break;
+          }
+        }
+      }
+      return WidgetDevice(
+        id: d.id,
+        name: d.deviceName,
+        isOn: isOn,
+        type: d.deviceType.name,
+      );
+    }).toList();
     HomeWidgetService.updateDeviceStates(widgetDevices);
   }
 
@@ -1913,8 +1931,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     bool isOnline,
   ) {
     final canControl = isControllable && _mqttConnected && isOnline;
-    final textPrimary = HBotColors.textPrimaryLight;
-    final textHint = HBotColors.textTertiaryLight;
+    final textPrimary = context.hTextPrimary;
+    final textHint = context.hTextTertiary;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -2099,7 +2117,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void _showOptionsMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: HBotColors.cardLight,
+      backgroundColor: context.hCard,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -2118,7 +2136,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: HBotColors.textTertiaryLight,
+                      color: context.hTextTertiary,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -2224,7 +2242,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   child: Text(
                     'Sort By',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: HBotColors.textSecondaryLight,
+                      color: context.hTextSecondary,
                     ),
                   ),
                 ),
@@ -2255,14 +2273,14 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         icon,
         color: isSelected
             ? HBotColors.primary
-            : HBotColors.textSecondaryLight,
+            : context.hTextSecondary,
       ),
       title: Text(
         label,
         style: TextStyle(
           color: isSelected
               ? HBotColors.primary
-              : HBotColors.textPrimaryLight,
+              : context.hTextPrimary,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
         ),
       ),
@@ -2281,7 +2299,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void _showHomeSelector() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: HBotColors.cardLight,
+      backgroundColor: context.hCard,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(HBotRadius.large),
@@ -2405,7 +2423,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void _showAddMenu() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: HBotColors.cardLight,
+      backgroundColor: context.hCard,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -2418,7 +2436,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: HBotColors.textTertiaryLight,
+                color: context.hTextTertiary,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -2599,7 +2617,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: Text('Add Device to ${_selectedHome!.name}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -2681,7 +2699,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Select Home for Device'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -2757,9 +2775,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: const Text('Create Home First'),
-          content: const Column(
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.home_outlined, size: 64, color: HBotColors.primary),
@@ -2773,7 +2791,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               Text(
                 'A home is a container for organizing your smart devices.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: HBotColors.textTertiaryLight),
+                style: TextStyle(color: context.hTextTertiary),
               ),
             ],
           ),
@@ -2820,7 +2838,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: Row(
             children: [
               Icon(

@@ -99,9 +99,9 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
         title: Text(
           widget.initialProfile != null ? 'Edit Wi-Fi Profile' : 'Home Wi-Fi',
         ),
@@ -125,9 +125,9 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                 widget.initialProfile != null
                     ? 'Update your Wi-Fi credentials'
                     : 'Enter your home Wi-Fi credentials for device provisioning',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
-                  color: HBotColors.textSecondaryLight,
+                  color: context.hTextSecondary,
                 ),
               ),
               const SizedBox(height: HBotSpacing.space6),
@@ -150,18 +150,18 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'Current Network',
                               style: TextStyle(
                                 fontSize: 12,
-                                color: HBotColors.textSecondaryLight,
+                                color: context.hTextSecondary,
                               ),
                             ),
                             Text(
                               _currentSSID!,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                color: HBotColors.textPrimaryLight,
+                                color: context.hTextPrimary,
                               ),
                             ),
                           ],
@@ -273,7 +273,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                   ),
                   child: Text(
                     _statusMessage,
-                    style: const TextStyle(color: HBotColors.textPrimaryLight),
+                    style: TextStyle(color: context.hTextPrimary),
                   ),
                 ),
                 const SizedBox(height: HBotSpacing.space4),

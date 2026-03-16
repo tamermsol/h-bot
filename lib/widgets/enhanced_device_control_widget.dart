@@ -374,10 +374,10 @@ class _EnhancedDeviceControlWidgetState
                 Expanded(
                   child: Text(
                     widget.device.deviceName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                     ),
                   ),
                 ),

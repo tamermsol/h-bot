@@ -504,7 +504,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
     return Container(
       padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: HBotColors.cardLight,
+        color: context.hCard,
         borderRadius: BorderRadius.circular(HBotRadius.medium),
       ),
       child: Column(
@@ -545,7 +545,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 ? Icons.curtains
                 : Icons.visibility_off,
             size: 20,
-            color: HBotColors.textSecondaryLight,
+            color: context.hTextSecondary,
           ),
           onSelected: (value) {
             setState(() {
@@ -865,7 +865,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
           child: ElevatedButton(
             onPressed: onPressed,
             style: ElevatedButton.styleFrom(
-              backgroundColor: HBotColors.cardLight,
+              backgroundColor: context.hCard,
               // ALL BUTTONS GREY by default, active button also grey (shadow provides the blue)
               foregroundColor: Colors.grey,
               padding: const EdgeInsets.symmetric(vertical: 16),
@@ -917,9 +917,9 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         // Slider
         Row(
           children: [
-            const Text(
+            Text(
               'Close',
-              style: TextStyle(fontSize: 12, color: HBotColors.textSecondaryLight),
+              style: TextStyle(fontSize: 12, color: context.hTextSecondary),
             ),
             Expanded(
               child: Slider(
@@ -929,7 +929,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 divisions: 100,
                 label: '${safeSliderValue.round()}%',
                 activeColor: HBotColors.primary,
-                inactiveColor: HBotColors.textSecondaryLight.withOpacity(0.3),
+                inactiveColor: context.hTextSecondary.withOpacity(0.3),
                 // Use debounced handler for onChanged to send commands while dragging
                 // This provides fast feedback (300ms) instead of waiting for onChangeEnd
                 onChanged: _isConnected ? _onSliderChanged : null,
@@ -937,9 +937,9 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 onChangeEnd: _isConnected ? _onSliderChangeEnd : null,
               ),
             ),
-            const Text(
+            Text(
               'Open',
-              style: TextStyle(fontSize: 12, color: HBotColors.textSecondaryLight),
+              style: TextStyle(fontSize: 12, color: context.hTextSecondary),
             ),
           ],
         ),

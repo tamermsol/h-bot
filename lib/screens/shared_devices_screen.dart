@@ -48,10 +48,10 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         title: const Text('Shared with Me'),
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
         actions: [
           IconButton(
             icon: const Icon(Icons.qr_code_scanner),
@@ -79,7 +79,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                 itemBuilder: (context, index) {
                   final shared = _sharedDevices[index];
                   return Card(
-                    color: HBotColors.cardLight,
+                    color: context.hCard,
                     margin: const EdgeInsets.only(bottom: 12),
                     child: ListTile(
                       leading: Container(
@@ -97,7 +97,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                         shared.deviceName ?? 'Unknown Device',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: HBotColors.textPrimaryLight,
+                          color: context.hTextPrimary,
                         ),
                       ),
                       subtitle: Column(
@@ -108,7 +108,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                             'Type: ${_getDeviceTypeName(shared.deviceType ?? '')}',
                             style: TextStyle(
                               fontSize: 13,
-                              color: HBotColors.textSecondaryLight,
+                              color: context.hTextSecondary,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -116,7 +116,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                             'Owner: ${shared.ownerEmail ?? 'Unknown'}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: HBotColors.textSecondaryLight,
+                              color: context.hTextSecondary,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -164,7 +164,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
             Icon(
               Icons.share_outlined,
               size: 80,
-              color: HBotColors.textTertiaryLight,
+              color: context.hTextTertiary,
             ),
             const SizedBox(height: 16),
             Text(
@@ -172,14 +172,14 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'Devices shared with you will appear here.\nControl them from your dashboard.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: HBotColors.textSecondaryLight),
+              style: TextStyle(color: context.hTextSecondary),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(

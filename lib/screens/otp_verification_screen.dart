@@ -104,14 +104,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent, elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: HBotColors.textPrimaryLight, size: 20),
+          icon: Icon(Icons.arrow_back_ios, color: context.hTextPrimary, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Verify Email', style: TextStyle(fontFamily: 'DM Sans', fontSize: 17, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
+        title: Text('Verify Email', style: TextStyle(fontFamily: 'DM Sans', fontSize: 17, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -133,14 +133,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
               const SizedBox(height: HBotSpacing.space5),
 
-              const Text('Verify Your Email',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+              Text('Verify Your Email',
+                style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: context.hTextPrimary),
                 textAlign: TextAlign.center,
               ),
 
               const SizedBox(height: HBotSpacing.space3),
 
-              const Text('We sent a code to', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight), textAlign: TextAlign.center),
+              Text('We sent a code to', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
               const SizedBox(height: 4),
               Text(widget.email, style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary), textAlign: TextAlign.center),
 
@@ -157,14 +157,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
                     maxLength: 1,
-                    style: const TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+                    style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: context.hTextPrimary),
                     decoration: InputDecoration(
                       counterText: '',
                       filled: true,
-                      fillColor: HBotColors.cardLight,
+                      fillColor: context.hCard,
                       contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                      border: OutlineInputBorder(borderRadius: HBotRadius.smallRadius, borderSide: const BorderSide(color: HBotColors.borderLight, width: 1)),
-                      enabledBorder: OutlineInputBorder(borderRadius: HBotRadius.smallRadius, borderSide: const BorderSide(color: HBotColors.borderLight, width: 1)),
+                      border: OutlineInputBorder(borderRadius: HBotRadius.smallRadius, borderSide: BorderSide(color: context.hBorder, width: 1)),
+                      enabledBorder: OutlineInputBorder(borderRadius: HBotRadius.smallRadius, borderSide: BorderSide(color: context.hBorder, width: 1)),
                       focusedBorder: OutlineInputBorder(borderRadius: HBotRadius.smallRadius, borderSide: const BorderSide(color: HBotColors.primary, width: 2)),
                     ),
                     onChanged: (value) {
@@ -203,7 +203,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               Center(
                 child: _resendCountdown > 0
                     ? Text('Resend code in 0:${_resendCountdown.toString().padLeft(2, '0')}',
-                        style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight))
+                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary))
                     : TextButton(
                         onPressed: _isResending ? null : _resendOtp,
                         child: _isResending
@@ -220,7 +220,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   onPressed: () => Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false,
                   ),
-                  child: const Text('Skip for now', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight)),
+                  child: Text('Skip for now', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary)),
                 ),
               ),
             ],

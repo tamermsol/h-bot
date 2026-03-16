@@ -208,12 +208,12 @@ class _DeviceSelectorState extends State<DeviceSelector> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.error_outline, size: 64, color: HBotColors.textTertiaryLight),
+              Icon(Icons.error_outline, size: 64, color: context.hTextTertiary),
               const SizedBox(height: HBotSpacing.space4),
               Text(
                 _errorMessage!,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: HBotColors.textSecondaryLight,
+                  color: context.hTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -262,14 +262,14 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                   labelStyle: TextStyle(
                     color: isSelected
                         ? widget.accentColor
-                        : HBotColors.textSecondaryLight,
+                        : context.hTextSecondary,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),
-                  backgroundColor: HBotColors.cardLight,
+                  backgroundColor: context.hCard,
                   side: BorderSide(
                     color: isSelected
                         ? widget.accentColor.withOpacity(0.5)
-                        : HBotColors.textTertiaryLight.withOpacity(0.3),
+                        : context.hTextTertiary.withOpacity(0.3),
                   ),
                 ),
               );
@@ -325,28 +325,28 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? widget.accentColor.withOpacity(0.2)
-                        : HBotColors.cardLight,
+                        : context.hCard,
                     borderRadius: BorderRadius.circular(HBotRadius.small),
                   ),
                   child: Icon(
                     device['icon'],
                     color: isSelected
                         ? widget.accentColor
-                        : HBotColors.textSecondaryLight,
+                        : context.hTextSecondary,
                     size: 20,
                   ),
                 ),
                 title: Text(
                   device['name'],
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: HBotColors.textPrimaryLight,
+                    color: context.hTextPrimary,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),
                 ),
                 subtitle: Text(
                   device['room'],
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: HBotColors.textTertiaryLight,
+                    color: context.hTextTertiary,
                   ),
                 ),
                 trailing: Checkbox(
@@ -361,7 +361,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                 },
                 tileColor: isSelected
                     ? widget.accentColor.withOpacity(0.1)
-                    : HBotColors.cardLight,
+                    : context.hCard,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(HBotRadius.medium),
                   side: BorderSide(

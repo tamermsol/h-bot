@@ -56,10 +56,10 @@ class HelpCenterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         title: const Text('Help Center'),
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
         elevation: 0,
       ),
       body: ResponsiveShell(child: SingleChildScrollView(
@@ -72,14 +72,14 @@ class HelpCenterScreen extends StatelessWidget {
               'We\'re here to help',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
             const SizedBox(height: HBotSpacing.space2),
             Text(
               'Get in touch with us through any of the following channels',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
             ),
             const SizedBox(height: HBotSpacing.space6),
@@ -89,7 +89,7 @@ class HelpCenterScreen extends StatelessWidget {
             const SizedBox(height: HBotSpacing.space4),
             Container(
               decoration: BoxDecoration(
-                color: HBotColors.cardLight,
+                color: context.hCard,
                 borderRadius: HBotRadius.mediumRadius,
               ),
               child: Column(
@@ -164,7 +164,7 @@ class HelpCenterScreen extends StatelessWidget {
                     child: Text(
                       'We typically respond within 24 hours during business days.',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: HBotColors.textPrimaryLight,
+                        color: context.hTextPrimary,
                       ),
                     ),
                   ),
@@ -183,7 +183,7 @@ class HelpCenterScreen extends StatelessWidget {
       title,
       style: Theme.of(context).textTheme.titleMedium?.copyWith(
         fontWeight: FontWeight.w600,
-        color: HBotColors.textPrimaryLight,
+        color: context.hTextPrimary,
       ),
     );
   }
@@ -209,19 +209,19 @@ class HelpCenterScreen extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontWeight: FontWeight.w500,
-          color: HBotColors.textPrimaryLight,
+          color: context.hTextPrimary,
         ),
       ),
       subtitle: Text(
         subtitle,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: HBotColors.textSecondaryLight,
+          color: context.hTextSecondary,
         ),
       ),
       trailing: Icon(
         Icons.arrow_forward_ios,
         size: 16,
-        color: HBotColors.textSecondaryLight,
+        color: context.hTextSecondary,
       ),
       onTap: onTap,
     );

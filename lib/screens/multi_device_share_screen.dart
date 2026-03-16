@@ -179,10 +179,10 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         title: const Text('Share Multiple Devices'),
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -200,7 +200,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                           child: Text(
                             '${_selectedDeviceIds.length} device(s) selected',
                             style: TextStyle(
-                              color: HBotColors.textPrimaryLight,
+                              color: context.hTextPrimary,
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                             ),
@@ -301,7 +301,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                       final isSelected = _selectedDeviceIds.contains(device.id);
 
                       return Card(
-                        color: HBotColors.cardLight,
+                        color: context.hCard,
                         margin: const EdgeInsets.only(bottom: 8),
                         child: CheckboxListTile(
                           value: isSelected,
@@ -317,21 +317,21 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                           title: Text(
                             device.deviceName,
                             style: TextStyle(
-                              color: HBotColors.textPrimaryLight,
+                              color: context.hTextPrimary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: Text(
                             device.deviceType.toString().split('.').last,
                             style: TextStyle(
-                              color: HBotColors.textSecondaryLight,
+                              color: context.hTextSecondary,
                             ),
                           ),
                           secondary: Icon(
                             Icons.devices,
                             color: isSelected
                                 ? HBotColors.primary
-                                : HBotColors.textSecondaryLight,
+                                : context.hTextSecondary,
                           ),
                           activeColor: HBotColors.primary,
                         ),

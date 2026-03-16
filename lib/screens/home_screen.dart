@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       body: Column(
         children: [
           ConnectivityBanner(isOnline: _isOnline),
@@ -93,10 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBottomNavigation() {
     return Container(
-      decoration: const BoxDecoration(
-        color: HBotColors.surfaceLight,
+      decoration: BoxDecoration(
+        color: context.hSurface,
         border: Border(
-          top: BorderSide(color: HBotColors.borderLight, width: 0.5),
+          top: BorderSide(color: context.hBorder, width: 0.5),
         ),
       ),
       child: SafeArea(

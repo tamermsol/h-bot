@@ -44,9 +44,9 @@ class SceneIconSelector extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: HBotColors.cardLight,
+        color: context.hCard,
         borderRadius: BorderRadius.circular(HBotRadius.medium),
-        border: Border.all(color: HBotColors.borderLight),
+        border: Border.all(color: context.hBorder),
       ),
       child: GridView.builder(
         shrinkWrap: true,
@@ -73,7 +73,7 @@ class SceneIconSelector extends StatelessWidget {
                 border: Border.all(
                   color: isSelected
                       ? HBotColors.primary
-                      : (HBotColors.borderLight),
+                      : (context.hBorder),
                   width: isSelected ? 2 : 1,
                 ),
               ),
@@ -81,7 +81,7 @@ class SceneIconSelector extends StatelessWidget {
                 icon,
                 color: isSelected
                     ? HBotColors.primary
-                    : HBotColors.textSecondaryLight,
+                    : context.hTextSecondary,
                 size: 24,
               ),
             ),

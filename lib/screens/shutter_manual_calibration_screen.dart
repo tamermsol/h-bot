@@ -146,18 +146,18 @@ class _ShutterManualCalibrationScreenState
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        backgroundColor: HBotColors.cardLight,
+        backgroundColor: context.hCard,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: HBotColors.textPrimaryLight),
+          icon: Icon(Icons.arrow_back, color: context.hTextPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Manual Calibration',
           style: TextStyle(
-            color: HBotColors.textPrimaryLight,
+            color: context.hTextPrimary,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -173,8 +173,8 @@ class _ShutterManualCalibrationScreenState
               // Device name
               Text(
                 widget.device.deviceName,
-                style: const TextStyle(
-                  color: HBotColors.textPrimaryLight,
+                style: TextStyle(
+                  color: context.hTextPrimary,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -236,7 +236,7 @@ class _ShutterManualCalibrationScreenState
 
   Widget _buildInstructionsCard() {
     return Card(
-      color: HBotColors.cardLight,
+      color: context.hCard,
       child: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
@@ -250,10 +250,10 @@ class _ShutterManualCalibrationScreenState
                   size: 24,
                 ),
                 const SizedBox(width: 8),
-                const Text(
+                Text(
                   'Manual Calibration',
                   style: TextStyle(
-                    color: HBotColors.textPrimaryLight,
+                    color: context.hTextPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -261,7 +261,7 @@ class _ShutterManualCalibrationScreenState
               ],
             ),
             const SizedBox(height: HBotSpacing.space4),
-            const Text(
+            Text(
               '1. Move your shutter to either fully open (100%) or fully closed (0%)\n'
               '2. Select the current position below\n'
               '3. Enter the time (in seconds) it takes to:\n'
@@ -269,7 +269,7 @@ class _ShutterManualCalibrationScreenState
               '   • Fully close from open position\n'
               '4. Click "Apply Calibration" to save',
               style: TextStyle(
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -282,24 +282,24 @@ class _ShutterManualCalibrationScreenState
 
   Widget _buildPositionSelector() {
     return Card(
-      color: HBotColors.cardLight,
+      color: context.hCard,
       child: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Current Shutter Position',
               style: TextStyle(
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: HBotSpacing.space4),
-            const Text(
+            Text(
               'Select where your shutter is right now:',
-              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 14),
+              style: TextStyle(color: context.hTextSecondary, fontSize: 14),
             ),
             const SizedBox(height: HBotSpacing.space4),
             Row(
@@ -351,21 +351,21 @@ class _ShutterManualCalibrationScreenState
         decoration: BoxDecoration(
           color: isSelected
               ? color.withOpacity(0.2)
-              : HBotColors.backgroundLight,
+              : context.hBackground,
           border: Border.all(
-            color: isSelected ? color : HBotColors.textTertiaryLight,
+            color: isSelected ? color : context.hTextTertiary,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(HBotRadius.medium),
         ),
         child: Column(
           children: [
-            Icon(icon, color: isSelected ? color : HBotColors.textTertiaryLight, size: 32),
+            Icon(icon, color: isSelected ? color : context.hTextTertiary, size: 32),
             const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? color : HBotColors.textSecondaryLight,
+                color: isSelected ? color : context.hTextSecondary,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
@@ -374,7 +374,7 @@ class _ShutterManualCalibrationScreenState
             Text(
               subtitle,
               style: TextStyle(
-                color: isSelected ? color : HBotColors.textTertiaryLight,
+                color: isSelected ? color : context.hTextTertiary,
                 fontSize: 12,
               ),
             ),
@@ -392,7 +392,7 @@ class _ShutterManualCalibrationScreenState
     required Color color,
   }) {
     return Card(
-      color: HBotColors.cardLight,
+      color: context.hCard,
       child: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
@@ -404,8 +404,8 @@ class _ShutterManualCalibrationScreenState
                 const SizedBox(width: 8),
                 Text(
                   label,
-                  style: const TextStyle(
-                    color: HBotColors.textPrimaryLight,
+                  style: TextStyle(
+                    color: context.hTextPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -417,14 +417,14 @@ class _ShutterManualCalibrationScreenState
               controller: controller,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              style: const TextStyle(color: HBotColors.textPrimaryLight, fontSize: 18),
+              style: TextStyle(color: context.hTextPrimary, fontSize: 18),
               decoration: InputDecoration(
                 hintText: hint,
-                hintStyle: const TextStyle(color: HBotColors.textTertiaryLight),
+                hintStyle: TextStyle(color: context.hTextTertiary),
                 suffixText: 'seconds',
-                suffixStyle: const TextStyle(color: HBotColors.textSecondaryLight),
+                suffixStyle: TextStyle(color: context.hTextSecondary),
                 filled: true,
-                fillColor: HBotColors.backgroundLight,
+                fillColor: context.hBackground,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(HBotRadius.small),
                   borderSide: BorderSide.none,

@@ -63,11 +63,11 @@ class _SmartInputFieldState extends State<SmartInputField> {
         if (widget.label != null) ...[
           Text(
             widget.label!,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'DM Sans',
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: HBotColors.textSecondaryLight,
+              color: context.hTextSecondary,
             ),
           ),
           const SizedBox(height: HBotSpacing.space1),
@@ -86,11 +86,11 @@ class _SmartInputFieldState extends State<SmartInputField> {
             enabled: widget.enabled,
             maxLines: widget.maxLines,
             autofocus: widget.autofocus,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'DM Sans',
               fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: HBotColors.textPrimaryLight,
+              color: context.hTextPrimary,
             ),
             decoration: InputDecoration(
               hintText: widget.hint,

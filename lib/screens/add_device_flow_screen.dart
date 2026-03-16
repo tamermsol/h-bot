@@ -622,7 +622,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                             fontFamily: 'DM Sans', fontSize: 13,
                             color: _detectMessage!.startsWith('✅') ? Colors.green.shade700 :
                                    _detectMessage!.startsWith('⚠️') ? Colors.orange.shade700 :
-                                   _detectMessage!.startsWith('❌') ? Colors.red.shade700 : HBotColors.textSecondaryLight,
+                                   _detectMessage!.startsWith('❌') ? Colors.red.shade700 : context.hTextSecondary,
                           ),
                           textAlign: TextAlign.center,
                         ),

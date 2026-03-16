@@ -41,10 +41,10 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.surfaceLight,
+      backgroundColor: context.hSurface,
       appBar: AppBar(
-        backgroundColor: HBotColors.surfaceLight,
-        foregroundColor: HBotColors.textPrimaryLight,
+        backgroundColor: context.hSurface,
+        foregroundColor: context.hTextPrimary,
         elevation: 0,
         title: Text(widget.deviceName != null
             ? '${widget.deviceName} History'
@@ -75,14 +75,14 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.history, size: 64, color: HBotColors.textTertiaryLight),
+          Icon(Icons.history, size: 64, color: context.hTextTertiary),
           const SizedBox(height: 16),
           Text(
             'No activity yet',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: HBotColors.textPrimaryLight,
+              color: context.hTextPrimary,
               fontFamily: 'DM Sans',
             ),
           ),
@@ -91,7 +91,7 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
             'Device events will appear here as they happen',
             style: TextStyle(
               fontSize: 14,
-              color: HBotColors.textSecondaryLight,
+              color: context.hTextSecondary,
               fontFamily: 'DM Sans',
             ),
           ),
@@ -125,7 +125,7 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: HBotColors.textTertiaryLight,
+                  color: context.hTextTertiary,
                   fontFamily: 'DM Sans',
                   letterSpacing: 0.5,
                 ),
@@ -143,9 +143,9 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: HBotColors.cardLight,
+        color: context.hCard,
         borderRadius: BorderRadius.circular(HBotRadius.medium),
-        border: Border.all(color: HBotColors.borderLight, width: 0.5),
+        border: Border.all(color: context.hBorder, width: 0.5),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,7 +164,7 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: HBotColors.textPrimaryLight,
+                          color: context.hTextPrimary,
                           fontFamily: 'DM Sans',
                         ),
                       ),
@@ -173,7 +173,7 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
                       _formatTime(event.timestamp),
                       style: TextStyle(
                         fontSize: 12,
-                        color: HBotColors.textTertiaryLight,
+                        color: context.hTextTertiary,
                         fontFamily: 'DM Sans',
                       ),
                     ),
@@ -184,7 +184,7 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
                   event.description,
                   style: TextStyle(
                     fontSize: 13,
-                    color: HBotColors.textSecondaryLight,
+                    color: context.hTextSecondary,
                     fontFamily: 'DM Sans',
                   ),
                 ),
@@ -194,7 +194,7 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
                     event.details!,
                     style: TextStyle(
                       fontSize: 11,
-                      color: HBotColors.textTertiaryLight,
+                      color: context.hTextTertiary,
                       fontFamily: 'DM Sans',
                     ),
                     maxLines: 2,
@@ -233,7 +233,7 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
+        backgroundColor: context.hCard,
         title: const Text('Clear Activity Log?'),
         content: const Text('This will permanently delete all logged events.'),
         actions: [

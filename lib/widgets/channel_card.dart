@@ -36,16 +36,16 @@ class ChannelCard extends StatelessWidget {
         curve: HBotCurves.standard,
         padding: const EdgeInsets.all(HBotSpacing.space3),
         decoration: BoxDecoration(
-          color: HBotColors.cardLight,
+          color: context.hCard,
           borderRadius: HBotRadius.mediumRadius,
           border: Border(
             left: BorderSide(
-              color: isOn ? HBotColors.primary : HBotColors.borderLight,
+              color: isOn ? HBotColors.primary : context.hBorder,
               width: isOn ? 3 : 1,
             ),
-            top: const BorderSide(color: HBotColors.borderLight, width: 1),
-            right: const BorderSide(color: HBotColors.borderLight, width: 1),
-            bottom: const BorderSide(color: HBotColors.borderLight, width: 1),
+            top: BorderSide(color: context.hBorder, width: 1),
+            right: BorderSide(color: context.hBorder, width: 1),
+            bottom: BorderSide(color: context.hBorder, width: 1),
           ),
         ),
         child: Opacity(
@@ -83,11 +83,11 @@ class ChannelCard extends StatelessWidget {
               // Channel name
               Text(
                 channelName,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: HBotColors.textPrimaryLight,
+                  color: context.hTextPrimary,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -104,7 +104,7 @@ class ChannelCard extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: isOn
                       ? HBotColors.primary
-                      : HBotColors.textSecondaryLight,
+                      : context.hTextSecondary,
                 ),
               ),
             ],

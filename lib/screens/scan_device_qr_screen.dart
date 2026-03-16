@@ -70,7 +70,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
+        backgroundColor: context.hCard,
         title: const Text('Add Shared Device?'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -134,7 +134,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
+        backgroundColor: context.hCard,
         title: const Text('Add Shared Devices?'),
         content: Column(
           mainAxisSize: MainAxisSize.min,

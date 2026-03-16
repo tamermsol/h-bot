@@ -47,7 +47,7 @@ class ResponsiveShell extends StatelessWidget {
     if (!HBotLayout.isTablet(context)) return child;
 
     return Container(
-      color: HBotColors.backgroundLight,
+      color: context.hBackground,
       child: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
@@ -86,7 +86,7 @@ class ResponsiveScaffold extends StatelessWidget {
     final isTablet = HBotLayout.isTablet(context);
 
     return Scaffold(
-      backgroundColor: backgroundColor ?? HBotColors.backgroundLight,
+      backgroundColor: backgroundColor ?? context.hBackground,
       extendBodyBehindAppBar: extendBodyBehindAppBar,
       appBar: appBar,
       body: isTablet

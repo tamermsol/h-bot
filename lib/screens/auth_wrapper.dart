@@ -17,8 +17,8 @@ class AuthWrapper extends StatelessWidget {
       builder: (context, snapshot) {
         // Show loading indicator while checking auth state
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            backgroundColor: HBotColors.backgroundLight,
+          return Scaffold(
+            backgroundColor: context.hBackground,
             body: Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF9500)),

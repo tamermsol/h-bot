@@ -119,11 +119,11 @@ class _ScenesScreenState extends State<ScenesScreen>
                 padding: const EdgeInsets.only(bottom: HBotSpacing.space4),
                 child: Text(
                   'Scenes',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'DM Sans',
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
-                    color: HBotColors.textPrimaryLight,
+                    color: context.hTextPrimary,
                     letterSpacing: -0.3,
                   ),
                 ),
@@ -177,9 +177,9 @@ class _ScenesScreenState extends State<ScenesScreen>
     return Container(
       margin: const EdgeInsets.only(bottom: HBotSpacing.space3),
       decoration: BoxDecoration(
-        color: HBotColors.cardLight,
+        color: context.hCard,
         borderRadius: HBotRadius.largeRadius,
-        border: Border.all(color: HBotColors.borderLight, width: 1),
+        border: Border.all(color: context.hBorder, width: 1),
       ),
       child: Material(
         color: Colors.transparent,
@@ -208,12 +208,12 @@ class _ScenesScreenState extends State<ScenesScreen>
                     children: [
                       Text(
                         scene.name,
-                        style: const TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight),
+                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w600, color: context.hTextPrimary),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         scene.isEnabled ? 'Enabled' : 'Disabled',
-                        style: const TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: HBotColors.textSecondaryLight),
+                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: context.hTextSecondary),
                       ),
                     ],
                   ),
@@ -283,9 +283,9 @@ class _ScenesScreenState extends State<ScenesScreen>
               child: const Icon(Icons.home_outlined, size: 32, color: HBotColors.primary),
             ),
             const SizedBox(height: HBotSpacing.space5),
-            const Text('No Home Selected', style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
+            Text('No Home Selected', style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
             const SizedBox(height: HBotSpacing.space2),
-            const Text('Select a home from the dashboard to manage scenes', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight), textAlign: TextAlign.center),
+            Text('Select a home from the dashboard to manage scenes', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
           ],
         ),
       ),
@@ -305,9 +305,9 @@ class _ScenesScreenState extends State<ScenesScreen>
               child: const Icon(Icons.auto_awesome_outlined, size: 32, color: HBotColors.primary),
             ),
             const SizedBox(height: HBotSpacing.space5),
-            const Text('No Scenes Yet', style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
+            Text('No Scenes Yet', style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
             const SizedBox(height: HBotSpacing.space2),
-            const Text('Create your first scene to automate your smart home', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: HBotColors.textSecondaryLight), textAlign: TextAlign.center),
+            Text('Create your first scene to automate your smart home', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
             const SizedBox(height: HBotSpacing.space6),
             Container(
               decoration: hbotPrimaryButtonDecoration(),
@@ -339,7 +339,7 @@ class _ScenesScreenState extends State<ScenesScreen>
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: HBotColors.cardLight,
+      backgroundColor: context.hCard,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(HBotSpacing.space6)),
       ),
@@ -373,11 +373,11 @@ class _ScenesScreenState extends State<ScenesScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(scene.name, style: const TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: HBotColors.textPrimaryLight)),
+                        Text(scene.name, style: TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
                         const SizedBox(height: 2),
                         Text(
                           scene.isEnabled ? 'Enabled' : 'Disabled',
-                          style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: scene.isEnabled ? sceneColor : HBotColors.textSecondaryLight),
+                          style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: scene.isEnabled ? sceneColor : context.hTextSecondary),
                         ),
                       ],
                     ),
@@ -414,8 +414,8 @@ class _ScenesScreenState extends State<ScenesScreen>
                 child: OutlinedButton(
                   onPressed: () { Navigator.pop(context); _showEditSceneDialog(scene); },
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: HBotColors.textPrimaryLight,
-                    side: const BorderSide(color: HBotColors.borderLight),
+                    foregroundColor: context.hTextPrimary,
+                    side: BorderSide(color: context.hBorder),
                     shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
                   ),
                   child: const Text('Edit Scene', style: TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w500)),
@@ -496,7 +496,7 @@ class _ScenesScreenState extends State<ScenesScreen>
   }
 
   void _showDeleteSceneDialog(Scene scene) {
-    final cardColor = HBotColors.cardLight;
+    final cardColor = context.hCard;
 
     showDialog(
       context: context,

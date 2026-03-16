@@ -29,13 +29,13 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         title: const Text(
           'HBOT Account',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
-        backgroundColor: HBotColors.backgroundLight,
+        backgroundColor: context.hBackground,
         elevation: 0,
       ),
       body: ResponsiveShell(child: SingleChildScrollView(
@@ -43,7 +43,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
           children: [
             // Email Address Section
             Container(
-              color: HBotColors.cardLight,
+              color: context.hCard,
               child: SettingsTile(
                 icon: Icons.email_outlined,
                 title: 'Email address',
@@ -59,7 +59,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
 
             // Delete Account Section
             Container(
-              color: HBotColors.cardLight,
+              color: context.hCard,
               child: SettingsTile(
                 icon: Icons.person_remove_outlined,
                 title: 'Delete Account',
@@ -101,10 +101,10 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: Text(
             'Email Address',
-            style: TextStyle(color: HBotColors.textPrimaryLight),
+            style: TextStyle(color: context.hTextPrimary),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -114,7 +114,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 widget.userEmail ?? 'No email',
                 style: TextStyle(
                   fontSize: 16,
-                  color: HBotColors.textPrimaryLight,
+                  color: context.hTextPrimary,
                 ),
               ),
             ],
@@ -137,14 +137,14 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: Row(
             children: [
               Icon(Icons.warning, color: HBotColors.error),
               const SizedBox(width: 8),
               Text(
                 'Delete Account',
-                style: TextStyle(color: HBotColors.textPrimaryLight),
+                style: TextStyle(color: context.hTextPrimary),
               ),
             ],
           ),
@@ -157,7 +157,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   'This action cannot be undone. Deleting your account will:',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: HBotColors.textPrimaryLight,
+                    color: context.hTextPrimary,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -235,7 +235,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               text,
               style: TextStyle(
                 fontSize: 14,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
           ),
@@ -252,10 +252,10 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          backgroundColor: HBotColors.cardLight,
+          backgroundColor: context.hCard,
           title: Text(
             'Final Confirmation',
-            style: TextStyle(color: HBotColors.textPrimaryLight),
+            style: TextStyle(color: context.hTextPrimary),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -265,7 +265,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 'To confirm deletion, please type:',
                 style: TextStyle(
                   fontSize: 14,
-                  color: HBotColors.textPrimaryLight,
+                  color: context.hTextPrimary,
                 ),
               ),
               const SizedBox(height: 8),
@@ -273,8 +273,8 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: Theme.of(context).brightness == Brightness.dark
-                      ? HBotColors.backgroundLight
-                      : HBotColors.surfaceLight,
+                      ? context.hBackground
+                      : context.hSurface,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -290,7 +290,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               const SizedBox(height: 12),
               TextField(
                 controller: confirmationController,
-                style: TextStyle(color: HBotColors.textPrimaryLight),
+                style: TextStyle(color: context.hTextPrimary),
                 decoration: InputDecoration(
                   hintText: 'Type here',
                   border: OutlineInputBorder(

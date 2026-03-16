@@ -57,16 +57,16 @@ class _DeviceCardState extends State<DeviceCard> {
           constraints: const BoxConstraints(minHeight: 140),
           padding: const EdgeInsets.all(HBotSpacing.space4),
           decoration: BoxDecoration(
-            color: _isPressed ? HBotColors.cardHover : HBotColors.cardLight,
+            color: _isPressed ? HBotColors.cardHover : context.hCard,
             borderRadius: HBotRadius.largeRadius,
             border: Border(
               left: BorderSide(
-                color: widget.isOn ? _activeColor : HBotColors.borderLight,
+                color: widget.isOn ? _activeColor : context.hBorder,
                 width: widget.isOn ? 3 : 1,
               ),
-              top: const BorderSide(color: HBotColors.borderLight, width: 1),
-              right: const BorderSide(color: HBotColors.borderLight, width: 1),
-              bottom: const BorderSide(color: HBotColors.borderLight, width: 1),
+              top: BorderSide(color: context.hBorder, width: 1),
+              right: BorderSide(color: context.hBorder, width: 1),
+              bottom: BorderSide(color: context.hBorder, width: 1),
             ),
           ),
           child: Opacity(
@@ -98,11 +98,11 @@ class _DeviceCardState extends State<DeviceCard> {
                 // Device name — centered
                 Text(
                   widget.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'DM Sans',
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: HBotColors.textPrimaryLight,
+                    color: context.hTextPrimary,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -119,7 +119,7 @@ class _DeviceCardState extends State<DeviceCard> {
                       fontWeight: FontWeight.w500,
                       color: widget.isOn
                           ? _activeColor
-                          : HBotColors.textSecondaryLight,
+                          : context.hTextSecondary,
                     ),
                   ),
                 ],
@@ -128,11 +128,11 @@ class _DeviceCardState extends State<DeviceCard> {
                   const SizedBox(height: 2),
                   Text(
                     widget.roomName!,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
-                      color: HBotColors.textSecondaryLight,
+                      color: context.hTextSecondary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

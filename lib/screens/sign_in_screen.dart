@@ -113,7 +113,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       body: ResponsiveShell(child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
@@ -272,8 +272,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 // Divider
                 Row(
                   children: [
-                    const Expanded(
-                      child: Divider(color: HBotColors.borderLight),
+                    Expanded(
+                      child: Divider(color: context.hBorder),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -284,8 +284,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
-                    const Expanded(
-                      child: Divider(color: HBotColors.borderLight),
+                    Expanded(
+                      child: Divider(color: context.hBorder),
                     ),
                   ],
                 ),
