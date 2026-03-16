@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 import 'dart:io';
 import '../theme/app_theme.dart';
@@ -175,6 +176,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  void _openAlexaSkill() async {
+    // Try Alexa app deep link first, fall back to Amazon web page
+    const alexaDeepLink = 'alexa://skills/dp/B0GBZ7XB1N';
+    const alexaWebUrl = 'https://www.amazon.com/Amir-Aboelezz-Hbot/dp/B0GBZ7XB1N';
+
+    try {
+      final deepLinkUri = Uri.parse(alexaDeepLink);
+      if (await canLaunchUrl(deepLinkUri)) {
+        await launchUrl(deepLinkUri, mode: LaunchMode.externalApplication);
+      } else {
+        await launchUrl(Uri.parse(alexaWebUrl), mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      await launchUrl(Uri.parse(alexaWebUrl), mode: LaunchMode.externalApplication);
+    }
+  }
+
   void _showAppearanceDialog() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -317,6 +335,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'WiFi Profiles',
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const WiFiProfileScreen())),
+                showDivider: false,
+              ),
+            ],
+          ),
+
+          // Integrations section
+          SettingsGroup(
+            label: 'Integrations',
+            children: [
+              SettingsTile(
+                icon: Icons.record_voice_over_outlined,
+                title: 'Amazon Alexa',
+                value: 'Control devices with voice',
+                onTap: _openAlexaSkill,
                 showDivider: false,
               ),
             ],
