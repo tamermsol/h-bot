@@ -180,48 +180,129 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _openAlexaSkill() async {
-    // Amazon's documented approach for opening a skill in the Alexa app:
-    // 1. The Alexa app on Android registers as a verified App Link handler
-    //    for alexa.amazon.com domain
-    // 2. The URL format /spa/skill-store/skills/dp/ASIN opens the skill page
-    // 3. On iOS, use the same URL — Alexa app handles it as a Universal Link
-    //
-    // Ref: Amazon Alexa Skills Kit App-to-App Account Linking docs
+    // Amazon doesn't provide a public deep link to open a specific skill page
+    // inside the Alexa app. The best UX is to show instructions + offer
+    // to open the Amazon product page where they can enable the skill.
 
-    const skillAsin = 'B0GBZ7XB1N';
-    
-    // URLs to try in order:
-    // 1. Alexa app's skill store page (handled as App Link / Universal Link)
-    // 2. Alexa SPA skill page (alternative format)
-    final urls = [
-      'https://alexa.amazon.com/spa/skill-store/skills/dp/$skillAsin',
-      'https://alexa.amazon.com/spa/skill/$skillAsin',
-    ];
-    
-    for (final url in urls) {
-      try {
-        final launched = await launchUrl(
-          Uri.parse(url),
-          mode: LaunchMode.externalApplication,
-        );
-        if (launched) return;
-      } catch (_) {
-        continue;
-      }
-    }
-
-    // Fallback: open Amazon product page
-    // This opens in Amazon Shopping app or browser
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Opening skill page in browser. For best experience, install the Amazon Alexa app.'),
-        duration: Duration(seconds: 3),
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: context.hCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40, height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: context.hTextSecondary.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Icon(Icons.mic, color: HBotColors.primary, size: 28),
+                const SizedBox(width: 12),
+                Text(
+                  'Enable H-Bot Alexa Skill',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: context.hTextPrimary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            _buildStep(context, '1', 'Open the Amazon Alexa app'),
+            _buildStep(context, '2', 'Tap "More" → "Skills & Games"'),
+            _buildStep(context, '3', 'Search for "H-Bot"'),
+            _buildStep(context, '4', 'Tap "Enable to Use" and link your account'),
+            const SizedBox(height: 20),
+            Text(
+              'Or enable it from the Amazon website:',
+              style: TextStyle(
+                fontSize: 14,
+                color: context.hTextSecondary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  launchUrl(
+                    Uri.parse('https://www.amazon.com/dp/B0GBZ7XB1N'),
+                    mode: LaunchMode.externalApplication,
+                  );
+                },
+                icon: const Icon(Icons.open_in_new, size: 18),
+                label: const Text('Open on Amazon'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: HBotColors.primary,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
-    await launchUrl(
-      Uri.parse('https://www.amazon.com/dp/$skillAsin'),
-      mode: LaunchMode.externalApplication,
+  }
+
+  Widget _buildStep(BuildContext context, String number, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 28, height: 28,
+            decoration: BoxDecoration(
+              color: HBotColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Center(
+              child: Text(
+                number,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: HBotColors.primary,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: context.hTextPrimary,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
