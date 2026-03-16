@@ -146,7 +146,8 @@ class DeviceManagementRepo {
     }
   }
 
-  /// Rename a device channel — upserts directly into device_channels table
+  /// Rename a device channel — stores in meta_json.channel_labels on devices table
+  /// (device_channels table has RLS that blocks client-side upserts)
   Future<void> renameChannel({
     required String deviceId,
     required int channelNo,
@@ -157,19 +158,35 @@ class DeviceManagementRepo {
       if (label.isEmpty) throw 'Channel label cannot be empty';
       debugPrint('🔄 Renaming channel: $deviceId/$channelNo to "$label"');
 
-      final isCustom = label != 'Channel $channelNo';
-      await supabase.from('device_channels').upsert(
-        {
-          'device_id': deviceId,
-          'channel_no': channelNo,
-          'label': label,
-          'label_is_custom': isCustom,
-          'updated_at': DateTime.now().toUtc().toIso8601String(),
-        },
-        onConflict: 'device_id,channel_no',
+      // Fetch current device to get existing meta_json
+      final device = await supabase
+          .from('devices')
+          .select('meta_json')
+          .eq('id', deviceId)
+          .maybeSingle();
+
+      if (device == null) throw 'Device not found';
+
+      final metaJson = Map<String, dynamic>.from(
+        (device['meta_json'] as Map<String, dynamic>?) ?? {},
+      );
+      final channelLabels = Map<String, dynamic>.from(
+        (metaJson['channel_labels'] as Map<String, dynamic>?) ?? {},
       );
 
-      debugPrint('✅ Channel renamed successfully');
+      final isCustom = label != 'Channel $channelNo';
+      channelLabels[channelNo.toString()] = {
+        'label': label,
+        'is_custom': isCustom,
+      };
+      metaJson['channel_labels'] = channelLabels;
+
+      await supabase
+          .from('devices')
+          .update({'meta_json': metaJson})
+          .eq('id', deviceId);
+
+      debugPrint('✅ Channel renamed successfully (stored in meta_json)');
     } catch (e) {
       debugPrint('❌ Channel rename failed: $e');
       if (e is String) rethrow;
@@ -177,7 +194,7 @@ class DeviceManagementRepo {
     }
   }
 
-  /// Update channel type (light or switch) — upserts directly into device_channels
+  /// Update channel type (light or switch) — stores in meta_json on devices table
   Future<void> updateChannelType({
     required String deviceId,
     required int channelNo,
@@ -189,17 +206,40 @@ class DeviceManagementRepo {
       }
       debugPrint('🔄 Updating channel type: $deviceId/$channelNo to "$channelType"');
 
-      await supabase.from('device_channels').upsert(
-        {
-          'device_id': deviceId,
-          'channel_no': channelNo,
-          'channel_type': channelType,
-          'updated_at': DateTime.now().toUtc().toIso8601String(),
-        },
-        onConflict: 'device_id,channel_no',
+      final device = await supabase
+          .from('devices')
+          .select('meta_json')
+          .eq('id', deviceId)
+          .maybeSingle();
+
+      if (device == null) throw 'Device not found';
+
+      final metaJson = Map<String, dynamic>.from(
+        (device['meta_json'] as Map<String, dynamic>?) ?? {},
+      );
+      final channelLabels = Map<String, dynamic>.from(
+        (metaJson['channel_labels'] as Map<String, dynamic>?) ?? {},
       );
 
-      debugPrint('✅ Channel type updated successfully');
+      final existing = channelLabels[channelNo.toString()];
+      if (existing is Map<String, dynamic>) {
+        existing['type'] = channelType;
+        channelLabels[channelNo.toString()] = existing;
+      } else {
+        channelLabels[channelNo.toString()] = {
+          'label': 'Channel $channelNo',
+          'is_custom': false,
+          'type': channelType,
+        };
+      }
+      metaJson['channel_labels'] = channelLabels;
+
+      await supabase
+          .from('devices')
+          .update({'meta_json': metaJson})
+          .eq('id', deviceId);
+
+      debugPrint('✅ Channel type updated successfully (stored in meta_json)');
     } catch (e) {
       debugPrint('❌ Channel type update failed: $e');
       if (e is String) rethrow;

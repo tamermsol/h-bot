@@ -34,7 +34,8 @@ class AlexaAccountLinkingService {
   static const String redirectUri = 'https://h-bot.tech/alexa/callback';
 
   /// Skill stage: 'live' for published skills, 'development' for testing
-  static const String skillStage = 'live';
+  /// Using 'development' since the skill may not be certified/published yet
+  static const String skillStage = 'development';
 
   // ─── Alexa App Detection ───────────────────────────────────────
   static const String _alexaPackageName = 'com.amazon.dee.app';
