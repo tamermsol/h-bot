@@ -180,64 +180,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _openAlexaSkill() async {
-    // Deep links to open the skill page inside the Alexa app.
-    // Priority order:
-    // 1. Android intent URI (most reliable on Android — forces Alexa app)  
-    // 2. alexa:// custom scheme (works on iOS if Alexa installed)
-    // 3. Alexa web portal URL (intercepted by Alexa app via universal links)
-    // 4. Amazon.com fallback
-    
-    final isAndroid = Platform.isAndroid;
-    
-    final urisToTry = isAndroid 
-      ? [
-          // Android: intent URI forces the Alexa app package
-          'intent://skills/dp/B0GBZ7XB1N#Intent;package=com.amazon.dee.app;scheme=alexa;end',
-          // Alexa web portal — Alexa app registers as handler
-          'https://alexa.amazon.com/spa/skill-store/skills/dp/B0GBZ7XB1N',
-        ]
-      : [
-          // iOS: alexa:// scheme
-          'alexa://skills/dp/B0GBZ7XB1N',
-          // Universal link — Alexa app intercepts
-          'https://alexa.amazon.com/spa/skill-store/skills/dp/B0GBZ7XB1N',
-        ];
+    // The Alexa app handles skill pages via its web portal URL.
+    // When opened with LaunchMode.externalApplication, Android shows
+    // a chooser. The Alexa app is a verified handler for alexa.amazon.com
+    // and will open the skill page directly.
+    //
+    // The URL format /spa/skill/ASIN is the canonical skill detail page.
+    // On iOS, use the alexa:// custom scheme first.
 
-    for (final uriStr in urisToTry) {
+    const skillAsin = 'B0GBZ7XB1N';
+
+    if (Platform.isIOS) {
+      // iOS: try alexa:// scheme first
       try {
-        final uri = Uri.parse(uriStr);
-        final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
-        if (launched) return; // Success — opened in Alexa app
-      } catch (_) {
-        continue; // Try next URI
-      }
+        final launched = await launchUrl(
+          Uri.parse('alexa://skills/$skillAsin'),
+          mode: LaunchMode.externalApplication,
+        );
+        if (launched) return;
+      } catch (_) {}
     }
 
-    // All deep links failed — Alexa app probably not installed
-    if (!mounted) return;
-    final goToWeb = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Alexa App Required'),
-        content: const Text(
-          'To enable and link the H-Bot skill, please install the Amazon Alexa app first.\n\n'
-          'Would you like to view the skill on Amazon.com instead?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Open Amazon'),
-          ),
-        ],
-      ),
-    );
-    if (goToWeb == true) {
+    // Use the Alexa web portal skill URL — this is the most reliable
+    // The Alexa app on Android registers as a handler for this domain
+    // and opens the skill detail page directly
+    try {
       await launchUrl(
-        Uri.parse('https://www.amazon.com/dp/B0GBZ7XB1N'),
+        Uri.parse('https://www.amazon.com/gp/product/$skillAsin'),
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (_) {
+      // Last resort: basic Amazon URL
+      await launchUrl(
+        Uri.parse('https://www.amazon.com/dp/$skillAsin'),
         mode: LaunchMode.externalApplication,
       );
     }
