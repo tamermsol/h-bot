@@ -146,86 +146,63 @@ class DeviceManagementRepo {
     }
   }
 
-  /// Rename a device channel
+  /// Rename a device channel — upserts directly into device_channels table
   Future<void> renameChannel({
     required String deviceId,
     required int channelNo,
     required String newLabel,
   }) async {
     try {
-      debugPrint('🔄 Renaming channel: $deviceId/$channelNo to "$newLabel"');
+      final label = newLabel.trim();
+      if (label.isEmpty) throw 'Channel label cannot be empty';
+      debugPrint('🔄 Renaming channel: $deviceId/$channelNo to "$label"');
 
-      await supabase.rpc(
-        'rename_channel',
-        params: {
-          'p_device_id': deviceId,
-          'p_channel_no': channelNo,
-          'p_label': newLabel.trim(),
+      final isCustom = label != 'Channel $channelNo';
+      await supabase.from('device_channels').upsert(
+        {
+          'device_id': deviceId,
+          'channel_no': channelNo,
+          'label': label,
+          'label_is_custom': isCustom,
+          'updated_at': DateTime.now().toUtc().toIso8601String(),
         },
+        onConflict: 'device_id,channel_no',
       );
 
       debugPrint('✅ Channel renamed successfully');
     } catch (e) {
       debugPrint('❌ Channel rename failed: $e');
-
-      if (e.toString().contains('Device not found') ||
-          e.toString().contains('device not found')) {
-        throw 'Device not found or access denied';
-      }
-      if (e.toString().contains('cannot be empty')) {
-        throw 'Channel label cannot be empty';
-      }
-      if (e.toString().contains('Invalid channel number')) {
-        throw 'Invalid channel number: $channelNo';
-      }
-      if (e.toString().contains('not authenticated')) {
-        throw 'Authentication required. Please log in and try again.';
-      }
+      if (e is String) rethrow;
       throw 'Failed to rename channel: $e';
     }
   }
 
-  /// Update channel type (light or switch)
+  /// Update channel type (light or switch) — upserts directly into device_channels
   Future<void> updateChannelType({
     required String deviceId,
     required int channelNo,
     required String channelType,
   }) async {
     try {
-      debugPrint(
-        '🔄 Updating channel type: $deviceId/$channelNo to "$channelType"',
-      );
-
       if (channelType != 'light' && channelType != 'switch') {
         throw 'Invalid channel type: must be light or switch';
       }
+      debugPrint('🔄 Updating channel type: $deviceId/$channelNo to "$channelType"');
 
-      await supabase.rpc(
-        'update_channel_type',
-        params: {
-          'p_device_id': deviceId,
-          'p_channel_no': channelNo,
-          'p_channel_type': channelType,
+      await supabase.from('device_channels').upsert(
+        {
+          'device_id': deviceId,
+          'channel_no': channelNo,
+          'channel_type': channelType,
+          'updated_at': DateTime.now().toUtc().toIso8601String(),
         },
+        onConflict: 'device_id,channel_no',
       );
 
       debugPrint('✅ Channel type updated successfully');
     } catch (e) {
       debugPrint('❌ Channel type update failed: $e');
-
-      if (e.toString().contains('Device not found') ||
-          e.toString().contains('device not found')) {
-        throw 'Device not found or access denied';
-      }
-      if (e.toString().contains('invalid channel type')) {
-        throw 'Invalid channel type: must be light or switch';
-      }
-      if (e.toString().contains('channel not found')) {
-        throw 'Channel not found';
-      }
-      if (e.toString().contains('not authenticated')) {
-        throw 'Authentication required. Please log in and try again.';
-      }
+      if (e is String) rethrow;
       throw 'Failed to update channel type: $e';
     }
   }

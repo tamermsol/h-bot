@@ -111,7 +111,7 @@ class AlexaAccountLinkingService {
   }
 
   /// Initiate the Alexa account linking flow.
-  /// Opens the Alexa app's consent screen (or LWA fallback in browser).
+  /// Tries the Alexa app's consent screen first, falls back to LWA in browser.
   /// Returns true if the URL was launched successfully.
   static Future<bool> initiateAccountLinking() async {
     if (!isConfigured) {
@@ -134,16 +134,33 @@ class AlexaAccountLinkingService {
       codeChallenge: pkce.challenge,
     );
 
-    // Open LWA OAuth consent page in browser
-    // This shows Amazon's "Link H-Bot with Alexa" authorization page
-    // (same approach as Tuya and other smart home apps)
+    // Try opening the Alexa app's consent page directly first
+    try {
+      final alexaUri = Uri.parse(alexaUrl);
+      final canOpen = await canLaunchUrl(alexaUri);
+      if (canOpen) {
+        final launched = await launchUrl(
+          alexaUri,
+          mode: LaunchMode.externalApplication,
+        );
+        if (launched) {
+          debugPrint('✅ Opened Alexa app consent page');
+          debugPrint('   URL: $alexaUrl');
+          return true;
+        }
+      }
+    } catch (e) {
+      debugPrint('⚠️ Alexa app not available: $e');
+    }
+
+    // Fallback: open LWA OAuth consent page in browser
     try {
       final launched = await launchUrl(
         Uri.parse(lwaUrl),
         mode: LaunchMode.externalApplication,
       );
       if (launched) {
-        debugPrint('✅ Opened LWA consent page for Alexa account linking');
+        debugPrint('✅ Opened LWA consent page (browser fallback)');
         debugPrint('   URL: $lwaUrl');
         return true;
       }

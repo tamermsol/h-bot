@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late int _currentIndex;
   bool _isOnline = true;
   Timer? _connectivityCheckTimer;
+  int _consecutiveOfflineChecks = 0;
 
   @override
   void initState() {
@@ -41,11 +42,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void _startConnectivityMonitoring() {
     // Delay initial check to avoid flash of "no internet" on app launch
     // while Android's network stack initializes
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 8), () {
       if (mounted) _checkConnectivity();
     });
     _connectivityCheckTimer = Timer.periodic(
-      const Duration(seconds: 10),
+      const Duration(seconds: 15),
       (_) => _checkConnectivity(),
     );
   }
@@ -53,8 +54,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _checkConnectivity() async {
     final hasInternet =
         await NetworkConnectivityService.hasInternetConnectivity();
-    if (mounted && hasInternet != _isOnline) {
-      setState(() => _isOnline = hasInternet);
+    if (hasInternet) {
+      _consecutiveOfflineChecks = 0;
+      if (mounted && !_isOnline) setState(() => _isOnline = true);
+    } else {
+      _consecutiveOfflineChecks++;
+      // Only show offline banner after 2 consecutive failures
+      if (_consecutiveOfflineChecks >= 2 && mounted && _isOnline) {
+        setState(() => _isOnline = false);
+      }
     }
   }
 
