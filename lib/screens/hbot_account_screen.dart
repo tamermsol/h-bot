@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import '../widgets/settings_tile.dart';
 import '../services/auth_service.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class HBOTAccountScreen extends StatefulWidget {
   final String? userEmail;
@@ -31,9 +32,9 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
     return Scaffold(
       backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text(
-          'HBOT Account',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+        title: Text(
+          AppStrings.get('hbot_account_title'),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         backgroundColor: context.hBackground,
         elevation: 0,
@@ -46,7 +47,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               color: context.hCard,
               child: SettingsTile(
                 icon: Icons.email_outlined,
-                title: 'Email address',
+                title: AppStrings.get('email_address'),
                 subtitle: _maskEmail(widget.userEmail ?? ''),
                 onTap: () {
                   // Show full email in a dialog
@@ -62,7 +63,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               color: context.hCard,
               child: SettingsTile(
                 icon: Icons.lock_outline,
-                title: 'Change Password',
+                title: AppStrings.get('change_password'),
                 subtitle: '',
                 onTap: () {
                   _showChangePasswordSheet();
@@ -77,7 +78,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               color: context.hCard,
               child: SettingsTile(
                 icon: Icons.person_remove_outlined,
-                title: 'Delete Account',
+                title: AppStrings.get('delete_account'),
                 subtitle: '',
                 titleColor: HBotColors.error,
                 onTap: () {
@@ -206,8 +207,8 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 if (mounted) {
                   Navigator.of(sheetContext).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Password changed successfully!'),
+                    SnackBar(
+                      content: Text(AppStrings.get('password_updated')),
                       backgroundColor: HBotColors.success,
                     ),
                   );
@@ -338,7 +339,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                     ),
                     const SizedBox(height: HBotSpacing.space4),
                     Text(
-                      'Change Password',
+                      AppStrings.get('change_password'),
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 20,
@@ -349,7 +350,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                     ),
                     const SizedBox(height: HBotSpacing.space3),
                     Text(
-                      "We'll send a verification code to your email",
+                      AppStrings.get('enter_otp'),
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 14,
@@ -381,7 +382,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       ),
                     ],
                     const SizedBox(height: HBotSpacing.space5),
-                    buildGradientButton(label: 'Send Code', onPressed: sendCode),
+                    buildGradientButton(label: AppStrings.get('send_code'), onPressed: sendCode),
                   ],
                 );
               } else if (step == 1) {
@@ -451,7 +452,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       ),
                     ],
                     const SizedBox(height: HBotSpacing.space5),
-                    buildGradientButton(label: 'Verify Code', onPressed: verifyOtp),
+                    buildGradientButton(label: AppStrings.get('verify'), onPressed: verifyOtp),
                   ],
                 );
               } else {
@@ -473,7 +474,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                     ),
                     const SizedBox(height: HBotSpacing.space4),
                     Text(
-                      'Set New Password',
+                      AppStrings.get('new_password'),
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 20,
@@ -493,7 +494,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                         color: ctx.hTextPrimary,
                       ),
                       decoration: InputDecoration(
-                        labelText: 'New Password',
+                        labelText: AppStrings.get('new_password'),
                         labelStyle: TextStyle(
                           fontFamily: 'DM Sans',
                           color: ctx.hTextSecondary,
@@ -532,7 +533,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                         color: ctx.hTextPrimary,
                       ),
                       decoration: InputDecoration(
-                        labelText: 'Confirm Password',
+                        labelText: AppStrings.get('confirm_password'),
                         labelStyle: TextStyle(
                           fontFamily: 'DM Sans',
                           color: ctx.hTextSecondary,
@@ -573,7 +574,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       ),
                     ],
                     const SizedBox(height: HBotSpacing.space5),
-                    buildGradientButton(label: 'Change Password', onPressed: submitNewPassword),
+                    buildGradientButton(label: AppStrings.get('change_password'), onPressed: submitNewPassword),
                   ],
                 );
               }
@@ -623,7 +624,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
         return AlertDialog(
           backgroundColor: context.hCard,
           title: Text(
-            'Email Address',
+            AppStrings.get('email_address'),
             style: TextStyle(color: context.hTextPrimary),
           ),
           content: Column(
@@ -644,7 +645,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Close'),
+              child: Text(AppStrings.get('close')),
             ),
           ],
         );
@@ -663,7 +664,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               Icon(Icons.warning, color: HBotColors.error),
               const SizedBox(width: 8),
               Text(
-                'Delete Account',
+                AppStrings.get('delete_account'),
                 style: TextStyle(color: context.hTextPrimary),
               ),
             ],
@@ -726,7 +727,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('cancel')),
             ),
             TextButton(
               onPressed: () {
@@ -734,7 +735,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 _showDeleteAccountConfirmation();
               },
               style: TextButton.styleFrom(foregroundColor: HBotColors.error),
-              child: const Text('Continue'),
+              child: Text(AppStrings.get('confirm')),
             ),
           ],
         );
@@ -825,7 +826,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               onPressed: () {
                 Navigator.of(dialogContext).pop();
               },
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('cancel')),
             ),
             TextButton(
               onPressed: () async {
@@ -834,15 +835,15 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   await _handleDeleteAccount();
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please type the exact confirmation text'),
+                    SnackBar(
+                      content: Text(AppStrings.get('fill_all_fields')),
                       backgroundColor: HBotColors.error,
                     ),
                   );
                 }
               },
               style: TextButton.styleFrom(foregroundColor: HBotColors.error),
-              child: const Text('Delete Account'),
+              child: Text(AppStrings.get('delete_account')),
             ),
           ],
         );
@@ -867,7 +868,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   ),
                 ),
                 SizedBox(width: 12),
-                Text('Deleting account...'),
+                Text(AppStrings.get('loading')),
               ],
             ),
             backgroundColor: HBotColors.error,
@@ -885,10 +886,10 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       // Show success message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Account deleted successfully'),
+          SnackBar(
+            content: Text(AppStrings.get('account_deleted')),
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
           ),
         );
       }
@@ -897,7 +898,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error deleting account: $e'),
+            content: Text('${AppStrings.get('account_delete_failed')}: $e'),
             backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 5),
           ),

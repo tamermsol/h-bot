@@ -4,6 +4,7 @@ import '../theme/app_theme.dart';
 import '../services/network_connectivity_service.dart';
 import '../widgets/connectivity_banner.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 import 'home_dashboard_screen.dart';
 import 'profile_screen.dart';
 import 'scenes_screen.dart';
@@ -116,21 +117,21 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 0,
             currentIndex: _currentIndex,
             onTap: (index) => setState(() => _currentIndex = index),
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: 'Home',
+                icon: const Icon(Icons.home_outlined),
+                activeIcon: const Icon(Icons.home),
+                label: AppStrings.get('nav_home'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.auto_awesome_outlined),
-                activeIcon: Icon(Icons.auto_awesome),
-                label: 'Scenes',
+                icon: const Icon(Icons.auto_awesome_outlined),
+                activeIcon: const Icon(Icons.auto_awesome),
+                label: AppStrings.get('nav_scenes'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                activeIcon: Icon(Icons.person),
-                label: 'Profile',
+                icon: const Icon(Icons.person_outline),
+                activeIcon: const Icon(Icons.person),
+                label: AppStrings.get('nav_profile'),
               ),
             ],
           ),

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:home_widget/home_widget.dart';
@@ -20,7 +21,9 @@ import 'services/location_trigger_monitor.dart';
 import 'services/device_state_cache.dart';
 import 'services/scene_command_executor.dart';
 import 'services/theme_service.dart';
+import 'services/locale_service.dart';
 import 'services/notification_service.dart';
+import 'l10n/app_strings.dart';
 
 /// Background callback for home widget toggle actions.
 /// This runs in a separate isolate when user taps toggle on widget.
@@ -147,8 +150,11 @@ void main() async {
   HomeWidget.registerInteractivityCallback(homeWidgetBackgroundCallback);
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeService(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeService()),
+        ChangeNotifierProvider(create: (_) => LocaleService()),
+      ],
       child: const SmartHomeApp(),
     ),
   );
@@ -225,9 +231,13 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeService>(
-      builder: (context, themeService, _) {
+    return Consumer2<ThemeService, LocaleService>(
+      builder: (context, themeService, localeService, _) {
         final isDark = themeService.isDarkMode;
+
+        // Keep AppStrings in sync with locale service
+        AppStrings.setLocale(localeService.locale);
+
         SystemChrome.setSystemUIOverlayStyle(
           SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
@@ -246,6 +256,13 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
           theme: AppTheme.lightTheme(),
           darkTheme: AppTheme.darkTheme(),
           themeMode: themeService.themeMode,
+          locale: localeService.isArabic ? const Locale('ar') : const Locale('en'),
+          supportedLocales: const [Locale('en'), Locale('ar')],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
           home: const SplashScreen(),
         );
       },

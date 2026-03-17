@@ -23,8 +23,11 @@ import '../widgets/background_image_picker.dart';
 import 'homes_screen.dart';
 import 'add_device_flow_screen.dart';
 import 'notifications_settings_screen.dart';
+import 'notifications_inbox_screen.dart';
+import '../services/broadcast_service.dart';
 import '../widgets/responsive_shell.dart';
 import 'device_control_screen.dart';
+import '../l10n/app_strings.dart';
 
 class HomeDashboardScreen extends StatefulWidget {
   final Function(String?)? onHomeNameChanged;
@@ -71,6 +74,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   bool _isGridView = true; // true = grid view (default per design), false = list view
   bool _hideOfflineDevices = false;
 
+  // Notification badge
+  int _unreadNotificationCount = 0;
+  final BroadcastService _broadcastService = BroadcastService();
+
   // SharedPreferences key for view preference
   static const String _viewPreferenceKey = 'dashboard_view_preference';
 
@@ -80,6 +87,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     WidgetsBinding.instance.addObserver(this); // Add lifecycle observer
     _loadViewPreference(); // Load saved view preference
     _loadData(); // Let _loadData handle MQTT initialization
+    _loadUnreadNotificationCount(); // Load notification badge
 
     // Listen to auth state changes to reload data when user becomes available
     _setupAuthListener();
@@ -123,6 +131,18 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       }
     } catch (e) {
       debugPrint('Error loading view preference: $e');
+    }
+  }
+
+  /// Load unread broadcast notification count for the bell badge.
+  Future<void> _loadUnreadNotificationCount() async {
+    try {
+      final count = await _broadcastService.getUnreadCount();
+      if (mounted) {
+        setState(() => _unreadNotificationCount = count);
+      }
+    } catch (e) {
+      debugPrint('Error loading unread notification count: $e');
     }
   }
 
@@ -185,10 +205,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       // Show a transient snackbar to indicate retry started
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Reconnecting...'),
+          SnackBar(
+            content: Text(AppStrings.get('reconnecting')),
             backgroundColor: Colors.blue,
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -224,7 +244,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     children: [
                       Icon(Icons.check_circle, color: Colors.white, size: 20),
                       SizedBox(width: 8),
-                      Text('Connection restored'),
+                      Text(AppStrings.get('connection_restored')),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -255,7 +275,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     children: [
                       Icon(Icons.error, color: Colors.white, size: 20),
                       SizedBox(width: 8),
-                      Text('Failed to restore connection'),
+                      Text(AppStrings.get('connection_failed')),
                     ],
                   ),
                   const SizedBox(height: 4),
@@ -299,7 +319,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   children: [
                     Icon(Icons.warning, color: Colors.white, size: 20),
                     SizedBox(width: 8),
-                    Text('Connection recovery error'),
+                    Text(AppStrings.get('connection_error')),
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -989,14 +1009,56 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   padding: const EdgeInsets.only(right: HBotSpacing.space2),
                   child: hbotStatusDot(color: HBotColors.error, size: 8),
                 ),
-              // Notification bell
-              IconButton(
-                icon: const Icon(Icons.notifications_outlined),
-                color: HBotColors.iconDefault,
-                iconSize: 24,
-                constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
+              // Notification bell with unread badge
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.notifications_outlined),
+                    color: HBotColors.iconDefault,
+                    iconSize: 24,
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const NotificationsInboxScreen(),
+                        ),
+                      );
+                      // Refresh badge after returning from inbox
+                      _loadUnreadNotificationCount();
+                    },
+                  ),
+                  if (_unreadNotificationCount > 0)
+                    Positioned(
+                      top: 4,
+                      right: 4,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: HBotColors.error,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          _unreadNotificationCount > 99
+                              ? '99+'
+                              : '$_unreadNotificationCount',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'DM Sans',
+                            height: 1.0,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
               ),
               // Settings menu
               PopupMenuButton<String>(
@@ -1008,16 +1070,16 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     case 'manage_homes': _showHomeSelector(); break;
                   }
                 },
-                itemBuilder: (_) => const [
+                itemBuilder: (_) => [
                   PopupMenuItem(value: 'add_device',
-                    child: ListTile(leading: Icon(Icons.add_circle_outline),
-                      title: Text('Add Device'), contentPadding: EdgeInsets.zero)),
+                    child: ListTile(leading: const Icon(Icons.add_circle_outline),
+                      title: Text(AppStrings.get('add_device')), contentPadding: EdgeInsets.zero)),
                   PopupMenuItem(value: 'background',
-                    child: ListTile(leading: Icon(Icons.wallpaper_outlined),
-                      title: Text('Background'), contentPadding: EdgeInsets.zero)),
+                    child: ListTile(leading: const Icon(Icons.wallpaper_outlined),
+                      title: Text(AppStrings.get('background')), contentPadding: EdgeInsets.zero)),
                   PopupMenuItem(value: 'manage_homes',
-                    child: ListTile(leading: Icon(Icons.home_work_outlined),
-                      title: Text('Manage Homes'), contentPadding: EdgeInsets.zero)),
+                    child: ListTile(leading: const Icon(Icons.home_work_outlined),
+                      title: Text(AppStrings.get('manage_homes')), contentPadding: EdgeInsets.zero)),
                 ],
               ),
             ],
@@ -1083,7 +1145,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Dashboard Background Image'),
+          title: Text(AppStrings.get('dashboard_background')),
           content: SingleChildScrollView(
             child: BackgroundImagePicker(
               currentImageUrl: _selectedHome!.backgroundImageUrl,
@@ -1119,7 +1181,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(AppStrings.get('close')),
             ),
           ],
         );
@@ -1225,32 +1287,30 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     if (_homes.isEmpty) {
       return _buildEmptyState(
         icon: Icons.home_outlined,
-        title: 'No homes yet',
-        subtitle: 'Create your first home to get started',
-        actionText: 'Create Home',
+        title: AppStrings.get('no_homes_title'),
+        subtitle: AppStrings.get('no_homes_subtitle'),
+        actionText: AppStrings.get('create_new_home'),
         onAction: _showAddMenu,
       );
     }
 
     if (_filteredDevices.isEmpty) {
-      // Show appropriate empty state message
-      String emptyTitle = 'No devices yet';
-      String emptySubtitle =
-          'Add your first device to start controlling your home';
+      String emptyTitle = AppStrings.get('no_devices_title');
+      String emptySubtitle = AppStrings.get('no_devices_subtitle');
 
       if (_searchQuery.isNotEmpty) {
-        emptyTitle = 'No devices found';
-        emptySubtitle = 'Try a different search term';
+        emptyTitle = AppStrings.get('search');
+        emptySubtitle = AppStrings.get('no_devices_subtitle');
       } else if (_hideOfflineDevices && _devices.isNotEmpty) {
-        emptyTitle = 'All devices are offline';
-        emptySubtitle = 'Check your device connections';
+        emptyTitle = AppStrings.get('no_devices_title');
+        emptySubtitle = AppStrings.get('no_devices_subtitle');
       }
 
       return _buildEmptyState(
         icon: Icons.devices_outlined,
         title: emptyTitle,
         subtitle: emptySubtitle,
-        actionText: 'Add Device',
+        actionText: AppStrings.get('add_device'),
         onAction: _showAddMenu,
       );
     }
@@ -2266,8 +2326,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                         color: HBotColors.primary,
                       ),
                     ),
-                    title: const Text('Dashboard Background'),
-                    subtitle: const Text('Set background image'),
+                    title: Text(AppStrings.get('dashboard_background')),
+                    subtitle: Text(AppStrings.get('background')),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       Navigator.pop(context);
@@ -2284,8 +2344,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     _isGridView ? Icons.grid_view : Icons.view_list,
                     color: HBotColors.primary,
                   ),
-                  title: const Text('View Mode'),
-                  subtitle: Text(_isGridView ? 'Grid View' : 'List View'),
+                  title: Text(AppStrings.get('view_mode')),
+                  subtitle: Text(_isGridView ? AppStrings.get('grid_view') : AppStrings.get('list_view')),
                   trailing: Switch(
                     value: _isGridView,
                     onChanged: (value) {
@@ -2314,7 +2374,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     Icons.visibility_off,
                     color: HBotColors.primaryLight,
                   ),
-                  title: const Text('Hide Offline Devices'),
+                  title: Text(AppStrings.get('hide_offline')),
                   trailing: Switch(
                     value: _hideOfflineDevices,
                     onChanged: (value) {
@@ -2341,21 +2401,17 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     vertical: HBotSpacing.space2,
                   ),
                   child: Text(
-                    'Sort By',
+                    AppStrings.get('sort_by'),
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: context.hTextSecondary,
                     ),
                   ),
                 ),
 
-                _buildSortOption('Name (A-Z)', 'name', Icons.sort_by_alpha),
-                _buildSortOption('Recently Added', 'recent', Icons.access_time),
-                _buildSortOption('Room', 'room', Icons.room_outlined),
-                _buildSortOption(
-                  'Device Type',
-                  'type',
-                  Icons.category_outlined,
-                ),
+                _buildSortOption(AppStrings.get('sort_name'), 'name', Icons.sort_by_alpha),
+                _buildSortOption(AppStrings.get('sort_recent'), 'recent', Icons.access_time),
+                _buildSortOption(AppStrings.get('sort_room'), 'room', Icons.room_outlined),
+                _buildSortOption(AppStrings.get('sort_type'), 'type', Icons.category_outlined),
 
                 const SizedBox(height: HBotSpacing.space4),
               ],
@@ -2414,7 +2470,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Select Home',
+                AppStrings.get('select_home'),
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
@@ -2565,10 +2621,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     color: HBotColors.primary,
                   ),
                 ),
-                title: const Text('Create Your First Home'),
-                subtitle: const Text(
-                  'Start by creating a home to organize your devices',
-                ),
+                title: Text(AppStrings.get('create_first_home')),
+                subtitle: Text(AppStrings.get('create_first_home_subtitle')),
                 onTap: () async {
                   Navigator.pop(context);
                   await Navigator.push(
@@ -2605,7 +2659,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Select a home first to add devices',
+                          AppStrings.get('select_home_first'),
                           style: TextStyle(color: Colors.orange[700]),
                         ),
                       ),
@@ -2626,11 +2680,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     color: HBotColors.primaryLight,
                   ),
                 ),
-                title: const Text('Add Device'),
+                title: Text(AppStrings.get('add_device')),
                 subtitle: Text(
                   _selectedHome != null
-                      ? 'Add a device to ${_selectedHome!.name}'
-                      : 'Add a device (select home first)',
+                      ? '${AppStrings.get('add_device_subtitle')} ${_selectedHome!.name}'
+                      : AppStrings.get('add_device_no_home'),
                 ),
                 enabled: _selectedHome != null,
                 onTap: () {
@@ -2651,8 +2705,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     color: HBotColors.primary,
                   ),
                 ),
-                title: const Text('Create New Home'),
-                subtitle: const Text('Add another home to manage'),
+                title: Text(AppStrings.get('create_new_home')),
+                subtitle: Text(AppStrings.get('create_new_home_subtitle')),
                 onTap: () async {
                   Navigator.pop(context);
                   await Navigator.push(
@@ -2719,14 +2773,14 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: Text('Add Device to ${_selectedHome!.name}'),
+          title: Text('${AppStrings.get('add_device')} - ${_selectedHome!.name}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 leading: const Icon(Icons.wifi, color: HBotColors.primary),
-                title: const Text('HBOT Device'),
-                subtitle: const Text('Add HBOT device via Wi-Fi'),
+                title: Text(AppStrings.get('hbot_device')),
+                subtitle: Text(AppStrings.get('hbot_device_subtitle')),
                 onTap: () {
                   Navigator.pop(context);
                   _addTasmotaDevice();
@@ -2738,7 +2792,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('cancel')),
             ),
           ],
         );
@@ -2801,20 +2855,20 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Select Home for Device'),
+          title: Text(AppStrings.get('select_home_for_device')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Please select a home where you want to add the device:',
-                style: TextStyle(fontSize: 16),
+              Text(
+                AppStrings.get('select_home_for_device_subtitle'),
+                style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 16),
               if (_homes.isNotEmpty) ...[
-                const Text(
-                  'Existing Homes:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  AppStrings.get('select_home'),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 ..._homes.map(
@@ -2839,8 +2893,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               ],
               ListTile(
                 leading: const Icon(Icons.add_home),
-                title: const Text('Create New Home'),
-                subtitle: const Text('Create a new home first'),
+                title: Text(AppStrings.get('create_new_home')),
+                subtitle: Text(AppStrings.get('create_new_home_subtitle')),
                 onTap: () async {
                   Navigator.pop(context);
                   await Navigator.push(
@@ -2863,7 +2917,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('cancel')),
             ),
           ],
         );
@@ -2877,20 +2931,20 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Create Home First'),
+          title: Text(AppStrings.get('create_home_first')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.home_outlined, size: 64, color: HBotColors.primary),
               SizedBox(height: 16),
               Text(
-                'You need to create a home before adding devices.',
+                AppStrings.get('create_home_first_subtitle'),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                'A home is a container for organizing your smart devices.',
+                AppStrings.get('create_first_home_subtitle'),
                 textAlign: TextAlign.center,
                 style: TextStyle(color: context.hTextTertiary),
               ),
@@ -2899,7 +2953,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('cancel')),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -2909,20 +2963,18 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   MaterialPageRoute(
                     builder: (context) => HomesScreen(
                       onHomeChanged: () {
-                        // Refresh the dashboard when homes change
                         _loadData();
                       },
                     ),
                   ),
                 );
-                // Reload data when returning from HomesScreen to catch any changes
                 _loadData();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.primary,
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Create Home'),
+              child: Text(AppStrings.get('create_new_home')),
             ),
           ],
         );
@@ -3033,7 +3085,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(AppStrings.get('close')),
             ),
             if (_mqttConnected)
               ElevatedButton(

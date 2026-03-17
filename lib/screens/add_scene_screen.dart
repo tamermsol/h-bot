@@ -12,6 +12,7 @@ import '../models/scene_step.dart';
 import '../models/scene_trigger.dart';
 import '../widgets/responsive_shell.dart';
 import '../repos/device_sharing_repo.dart';
+import '../l10n/app_strings.dart';
 
 class AddSceneScreen extends StatefulWidget {
   final String homeId;
@@ -323,14 +324,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       backgroundColor: context.hBackground,
       appBar: AppBar(
         title: Text(
-          _isEditMode ? 'Edit Scene' : 'Create New Scene',
+          _isEditMode ? AppStrings.get('edit_scene') : AppStrings.get('add_scene_title'),
           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         backgroundColor: context.hBackground,
         elevation: 0,
         actions: [
           if (_currentStep > 0)
-            TextButton(onPressed: _previousStep, child: const Text('Back')),
+            TextButton(onPressed: _previousStep, child: Text(AppStrings.get('previous'))),
         ],
       ),
       body: _isLoading
@@ -401,14 +402,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Basic Information',
+              AppStrings.get('scene_name'),
               style: Theme.of(
                 context,
               ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: HBotSpacing.space2),
             Text(
-              'Give your scene a name',
+              AppStrings.get('scene_name_hint'),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: context.hTextSecondary,
               ),
@@ -479,14 +480,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Appearance',
+            AppStrings.get('scene_icon'),
             style: Theme.of(
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: HBotSpacing.space2),
           Text(
-            'Choose an icon and color for your scene',
+            AppStrings.get('scene_color'),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: context.hTextSecondary,
             ),
@@ -495,7 +496,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
           // Icon selection
           Text(
-            'Icon',
+            AppStrings.get('scene_icon'),
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
@@ -514,7 +515,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
           // Color selection
           Text(
-            'Color',
+            AppStrings.get('scene_color'),
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
@@ -609,14 +610,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Trigger',
+            AppStrings.get('scene_triggers'),
             style: Theme.of(
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: HBotSpacing.space2),
           Text(
-            'How should this scene be activated?',
+            AppStrings.get('add_trigger'),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: context.hTextSecondary,
             ),
@@ -1282,7 +1283,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             children: [
               // All channels option
               FilterChip(
-                label: const Text('All Channels'),
+                label: Text(AppStrings.get('all_channels')),
                 selected: selectedChannels.length == channels,
                 onSelected: (selected) {
                   setState(() {

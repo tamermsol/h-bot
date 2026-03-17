@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/auth_service.dart';
 import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_strings.dart';
 import 'sign_up_screen.dart';
 import 'home_screen.dart';
 import 'forgot_password_screen.dart';
@@ -149,7 +150,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                 // Welcome text
                 Text(
-                  'Welcome back',
+                  AppStrings.get('welcome_back'),
                   style: Theme.of(context).textTheme.headlineLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -157,7 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 const SizedBox(height: HBotSpacing.space2),
 
                 Text(
-                  'Sign in to your smart home',
+                  AppStrings.get('sign_in_subtitle'),
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -167,18 +168,18 @@ class _SignInScreenState extends State<SignInScreen> {
                 // Email field
                 SmartInputField(
                   controller: _emailController,
-                  label: 'Email',
-                  hint: 'user@example.com',
+                  label: AppStrings.get('email'),
+                  hint: AppStrings.get('email_hint'),
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   enabled: !_isLoading,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return AppStrings.get('email_required');
                     }
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(value)) {
-                      return 'Please enter a valid email';
+                      return AppStrings.get('email_invalid');
                     }
                     return null;
                   },
@@ -189,7 +190,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 // Password field
                 SmartInputField(
                   controller: _passwordController,
-                  label: 'Password',
+                  label: AppStrings.get('password'),
                   hint: '••••••••',
                   obscureText: true,
                   textInputAction: TextInputAction.done,
@@ -197,10 +198,10 @@ class _SignInScreenState extends State<SignInScreen> {
                   onEditingComplete: _signInWithEmail,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
+                      return AppStrings.get('password_required');
                     }
                     if (value.length < 6) {
-                      return 'Password must be at least 6 characters';
+                      return AppStrings.get('password_short');
                     }
                     return null;
                   },
@@ -220,7 +221,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       );
                     },
                     child: Text(
-                      'Forgot password?',
+                      AppStrings.get('forgot_password'),
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
                             color: HBotColors.primary,
                           ),
@@ -255,8 +256,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                     AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
-                          : const Text(
-                              'Sign In',
+                          : Text(
+                              AppStrings.get('sign_in'),
                               style: TextStyle(
                                 fontFamily: 'DM Sans',
                                 fontSize: 16,
@@ -276,7 +277,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account? ",
+                      AppStrings.get('dont_have_account'),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     TextButton(
@@ -287,8 +288,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         );
                       },
-                      child: const Text(
-                        'Sign Up',
+                      child: Text(
+                        AppStrings.get('sign_up'),
                         style: TextStyle(
                           fontFamily: 'DM Sans',
                           fontSize: 14,

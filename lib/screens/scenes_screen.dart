@@ -7,6 +7,7 @@ import '../utils/error_handler.dart';
 import '../widgets/error_message_widget.dart';
 import 'add_scene_screen.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class ScenesScreen extends StatefulWidget {
   const ScenesScreen({super.key});
@@ -118,7 +119,7 @@ class _ScenesScreenState extends State<ScenesScreen>
               return Padding(
                 padding: const EdgeInsets.only(bottom: HBotSpacing.space4),
                 child: Text(
-                  'Scenes',
+                  AppStrings.get('scenes_title'),
                   style: TextStyle(
                     fontFamily: 'DM Sans',
                     fontSize: 24,
@@ -154,7 +155,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                     children: [
                       Icon(Icons.add, color: Colors.white, size: 20),
                       SizedBox(width: HBotSpacing.space2),
-                      Text('Add Scene', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
+                      Text(AppStrings.get('add_scene'), style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
                     ],
                   ),
                 ),
@@ -248,17 +249,17 @@ class _ScenesScreenState extends State<ScenesScreen>
                     PopupMenuItem(value: 'toggle', child: Row(children: [
                       Icon(scene.isEnabled ? Icons.pause : Icons.play_arrow, size: 20),
                       const SizedBox(width: 12),
-                      Text(scene.isEnabled ? 'Disable' : 'Enable'),
+                      Text(scene.isEnabled ? AppStrings.get('disable') : AppStrings.get('enable')),
                     ])),
-                    const PopupMenuItem(value: 'edit', child: Row(children: [
-                      Icon(Icons.edit_outlined, size: 20),
-                      SizedBox(width: 12),
-                      Text('Edit'),
+                    PopupMenuItem(value: 'edit', child: Row(children: [
+                      const Icon(Icons.edit_outlined, size: 20),
+                      const SizedBox(width: 12),
+                      Text(AppStrings.get('edit')),
                     ])),
-                    const PopupMenuItem(value: 'delete', child: Row(children: [
-                      Icon(Icons.delete_outline, size: 20, color: Colors.red),
-                      SizedBox(width: 12),
-                      Text('Delete', style: TextStyle(color: Colors.red)),
+                    PopupMenuItem(value: 'delete', child: Row(children: [
+                      const Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                      const SizedBox(width: 12),
+                      Text(AppStrings.get('delete'), style: const TextStyle(color: Colors.red)),
                     ])),
                   ],
                 ),
@@ -283,9 +284,9 @@ class _ScenesScreenState extends State<ScenesScreen>
               child: const Icon(Icons.home_outlined, size: 32, color: HBotColors.primary),
             ),
             const SizedBox(height: HBotSpacing.space5),
-            Text('No Home Selected', style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
+            Text(AppStrings.get('no_home_selected'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
             const SizedBox(height: HBotSpacing.space2),
-            Text('Select a home from the dashboard to manage scenes', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
+            Text(AppStrings.get('no_home_selected_subtitle'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
           ],
         ),
       ),
@@ -305,16 +306,16 @@ class _ScenesScreenState extends State<ScenesScreen>
               child: const Icon(Icons.auto_awesome_outlined, size: 32, color: HBotColors.primary),
             ),
             const SizedBox(height: HBotSpacing.space5),
-            Text('No Scenes Yet', style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
+            Text(AppStrings.get('no_scenes_title'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
             const SizedBox(height: HBotSpacing.space2),
-            Text('Create your first scene to automate your smart home', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
+            Text(AppStrings.get('no_scenes_subtitle'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
             const SizedBox(height: HBotSpacing.space6),
             Container(
               decoration: hbotPrimaryButtonDecoration(),
               child: ElevatedButton.icon(
                 onPressed: _showCreateSceneDialog,
                 icon: const Icon(Icons.add, size: 20),
-                label: const Text('Create Your First Scene'),
+                label: Text(AppStrings.get('create_first_scene')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
                   shadowColor: Colors.transparent,
@@ -395,7 +396,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                   child: ElevatedButton.icon(
                     onPressed: () { Navigator.pop(context); _runScene(scene); },
                     icon: const Icon(Icons.play_arrow, size: 20),
-                    label: const Text('Run Scene', style: TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w600)),
+                    label: Text(AppStrings.get('run_scene'), style: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w600)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       shadowColor: Colors.transparent,
@@ -418,7 +419,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                     side: BorderSide(color: context.hBorder),
                     shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
                   ),
-                  child: const Text('Edit Scene', style: TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w500)),
+                  child: Text(AppStrings.get('edit_scene'), style: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w500)),
                 ),
               ),
             ],
@@ -472,8 +473,8 @@ class _ScenesScreenState extends State<ScenesScreen>
   Future<void> _showEditSceneDialog(Scene scene) async {
     if (_currentHomeId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No home selected'),
+        SnackBar(
+          content: Text(AppStrings.get('no_home_for_scene')),
           backgroundColor: Colors.red,
         ),
       );
@@ -503,14 +504,14 @@ class _ScenesScreenState extends State<ScenesScreen>
       builder: (context) {
         return AlertDialog(
           backgroundColor: cardColor,
-          title: const Text('Delete Scene'),
+          title: Text(AppStrings.get('delete_scene')),
           content: Text(
             'Are you sure you want to delete "${scene.name}"? This action cannot be undone.',
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('cancel')),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -544,7 +545,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                 }
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('Delete'),
+              child: Text(AppStrings.get('delete')),
             ),
           ],
         );
@@ -559,8 +560,8 @@ class _ScenesScreenState extends State<ScenesScreen>
     if (_currentHomeId == null) {
       debugPrint('ScenesScreen: No home selected, showing error');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select a home first'),
+        SnackBar(
+          content: Text(AppStrings.get('select_home_for_scene')),
           backgroundColor: Colors.red,
         ),
       );

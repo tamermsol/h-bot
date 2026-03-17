@@ -4,6 +4,7 @@ import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import 'home_screen.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
@@ -54,7 +55,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     final otp = _getOtpCode();
     if (otp.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter the complete 6-digit code'), backgroundColor: HBotColors.error),
+        SnackBar(content: Text(AppStrings.get('otp_incomplete')), backgroundColor: HBotColors.error),
       );
       return;
     }
@@ -63,7 +64,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       await _authService.verifyOtp(widget.email, otp);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Email verified successfully!'), backgroundColor: HBotColors.success),
+          SnackBar(content: Text(AppStrings.get('otp_verified')), backgroundColor: HBotColors.success),
         );
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false,
@@ -72,7 +73,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Verification failed: ${e.toString()}'), backgroundColor: HBotColors.error),
+          SnackBar(content: Text('${AppStrings.get('otp_failed')}${e.toString()}'), backgroundColor: HBotColors.error),
         );
       }
     } finally {
@@ -86,14 +87,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       await _authService.resendOtp(widget.email);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Code sent! Check your email.'), backgroundColor: HBotColors.success),
+          SnackBar(content: Text(AppStrings.get('otp_resent')), backgroundColor: HBotColors.success),
         );
         _startCountdown();
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to resend: ${e.toString()}'), backgroundColor: HBotColors.error),
+          SnackBar(content: Text('${AppStrings.get('otp_resend_failed')}${e.toString()}'), backgroundColor: HBotColors.error),
         );
       }
     } finally {
@@ -111,7 +112,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           icon: Icon(Icons.arrow_back_ios, color: context.hTextPrimary, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Verify Email', style: TextStyle(fontFamily: 'DM Sans', fontSize: 17, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
+        title: Text(AppStrings.get('otp_title'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 17, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -133,14 +134,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
               const SizedBox(height: HBotSpacing.space5),
 
-              Text('Verify Your Email',
+              Text(AppStrings.get('verify_your_email'),
                 style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: context.hTextPrimary),
                 textAlign: TextAlign.center,
               ),
 
               const SizedBox(height: HBotSpacing.space3),
 
-              Text('We sent a code to', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
+              Text(AppStrings.get('otp_sent_to'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
               const SizedBox(height: 4),
               Text(widget.email, style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary), textAlign: TextAlign.center),
 
@@ -206,7 +207,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                     child: _isVerifying
                         ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
-                        : const Text('Verify Email', style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
+                        : Text(AppStrings.get('verify'), style: const TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
                   ),
                 ),
               ),
@@ -216,13 +217,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               // Resend countdown
               Center(
                 child: _resendCountdown > 0
-                    ? Text('Resend code in 0:${_resendCountdown.toString().padLeft(2, '0')}',
+                    ? Text('${AppStrings.get('resend_in')}0:${_resendCountdown.toString().padLeft(2, '0')}',
                         style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary))
                     : TextButton(
                         onPressed: _isResending ? null : _resendOtp,
                         child: _isResending
                             ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary)))
-                            : const Text('Resend Code', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary)),
+                            : Text(AppStrings.get('resend_code'), style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: HBotColors.primary)),
                       ),
               ),
 

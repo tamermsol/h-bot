@@ -4,6 +4,7 @@ import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import 'reset_password_screen.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -41,7 +42,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to send reset code: ${e.toString()}'),
+            content: Text('${AppStrings.get('reset_code_failed')}${e.toString()}'),
             backgroundColor: HBotColors.error,
           ),
         );
@@ -90,7 +91,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   const SizedBox(height: HBotSpacing.space5),
 
                   Text(
-                    'Reset password',
+                    AppStrings.get('reset_password'),
                     style: TextStyle(
                       fontFamily: 'DM Sans',
                       fontSize: 24,
@@ -105,7 +106,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   SizedBox(
                     width: 280,
                     child: Text(
-                      "Enter your email and we'll send you a verification code to reset your password",
+                      AppStrings.get('reset_password_body'),
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 14,
@@ -120,14 +121,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                   SmartInputField(
                     controller: _emailController,
-                    label: 'Email',
-                    hint: 'user@example.com',
+                    label: AppStrings.get('email'),
+                    hint: AppStrings.get('email_hint'),
                     keyboardType: TextInputType.emailAddress,
                     enabled: !_isLoading,
                     validator: (value) {
-                      if (value == null || value.isEmpty) return 'Please enter your email';
+                      if (value == null || value.isEmpty) return AppStrings.get('email_required');
                       if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                        return 'Please enter a valid email';
+                        return AppStrings.get('email_invalid');
                       }
                       return null;
                     },
@@ -153,7 +154,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 width: 20,
                                 child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
                               )
-                            : const Text('Send Reset Code', style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
+                            : Text(AppStrings.get('send_reset_code'), style: const TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
                       ),
                     ),
                   ),

@@ -14,6 +14,8 @@ import '../models/home.dart';
 import '../utils/error_handler.dart';
 import '../core/supabase_client.dart';
 import '../services/theme_service.dart';
+import '../services/locale_service.dart';
+import '../l10n/app_strings.dart';
 import 'sign_in_screen.dart';
 import 'profile_edit_screen.dart';
 import 'homes_screen.dart';
@@ -404,11 +406,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           // Home section
           SettingsGroup(
-            label: 'Home',
+            label: AppStrings.get('profile_smart_home'),
             children: [
               SettingsTile(
                 icon: Icons.home_work_outlined,
-                title: 'Manage Homes',
+                title: AppStrings.get('manage_homes_subtitle'),
                 onTap: () async {
                   await Navigator.push(context,
                       MaterialPageRoute(builder: (_) => HomesScreen(onHomeChanged: () => _loadStatistics())));
@@ -423,7 +425,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   if (homeId == null) {
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please select a home first'), backgroundColor: HBotColors.warning),
+                        SnackBar(content: Text(AppStrings.get('select_home_first')), backgroundColor: HBotColors.warning),
                       );
                     }
                     return;
@@ -456,12 +458,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           // Integrations section
           SettingsGroup(
-            label: 'Integrations',
+            label: AppStrings.get('profile_integrations'),
             children: [
               SettingsTile(
                 icon: Icons.record_voice_over_outlined,
-                title: 'Amazon Alexa',
-                subtitle: 'Control devices with voice',
+                title: AppStrings.get('alexa_integration'),
+                subtitle: AppStrings.get('alexa_subtitle'),
                 onTap: _openAlexaSkill,
                 showDivider: false,
               ),
@@ -470,26 +472,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           // App section
           SettingsGroup(
-            label: 'App',
+            label: AppStrings.get('profile_settings'),
             children: [
               SettingsTile(
                 icon: Icons.notifications_outlined,
-                title: 'Notifications',
+                title: AppStrings.get('notifications'),
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
               ),
               Consumer<ThemeService>(
                 builder: (context, themeService, _) => SettingsTile(
                   icon: Icons.palette_outlined,
-                  title: 'Appearance',
-                  value: themeService.isDarkMode ? 'Dark Mode' : 
-                         themeService.themeMode == ThemeMode.system ? 'System' : 'Light Mode',
+                  title: AppStrings.get('theme'),
+                  value: themeService.isDarkMode
+                      ? AppStrings.get('theme_subtitle_dark')
+                      : AppStrings.get('theme_subtitle_light'),
                   onTap: _showAppearanceDialog,
+                ),
+              ),
+              Consumer<LocaleService>(
+                builder: (context, localeService, _) => SettingsTile(
+                  icon: Icons.language_outlined,
+                  title: AppStrings.get('language'),
+                  value: localeService.isArabic
+                      ? AppStrings.get('language_subtitle_ar')
+                      : AppStrings.get('language_subtitle_en'),
+                  onTap: () => _showLanguagePicker(localeService),
                 ),
               ),
               SettingsTile(
                 icon: Icons.info_outline,
-                title: 'About',
+                title: AppStrings.get('profile_about'),
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const HelpCenterScreen())),
                 showDivider: false,
@@ -499,7 +512,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           // Account section
           SettingsGroup(
-            label: 'Account',
+            label: AppStrings.get('profile_account'),
             children: [
               SettingsTile(
                 icon: Icons.person_outline,
@@ -509,7 +522,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (_authService.canChangePassword())
                 SettingsTile(
                   icon: Icons.lock_outline,
-                  title: 'Change Password',
+                  title: AppStrings.get('change_password'),
                   onTap: _showChangePasswordDialog,
                 ),
               SettingsTile(
@@ -520,7 +533,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   if (homes.isEmpty) {
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Please create a home first'), backgroundColor: HBotColors.warning),
+                        SnackBar(content: Text(AppStrings.get('create_home_first')), backgroundColor: HBotColors.warning),
                       );
                     }
                     return;
@@ -545,12 +558,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SettingsTile(
                 icon: Icons.account_circle_outlined,
-                title: 'HBOT Account',
+                title: AppStrings.get('hbot_account'),
                 onTap: _openHBOTAccountScreen,
               ),
               SettingsTile(
                 icon: Icons.logout,
-                title: 'Sign Out',
+                title: AppStrings.get('sign_out'),
                 titleColor: HBotColors.error,
                 iconColor: HBotColors.error,
                 showChevron: false,
@@ -909,20 +922,102 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  void _showLanguagePicker(LocaleService localeService) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: context.hCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40, height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: context.hTextSecondary.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Text(
+              AppStrings.get('select_language'),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: context.hTextPrimary,
+                fontFamily: 'DM Sans',
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildLanguageOption(ctx, localeService, 'en', AppStrings.get('lang_english')),
+            const SizedBox(height: 8),
+            _buildLanguageOption(ctx, localeService, 'ar', AppStrings.get('lang_arabic')),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageOption(BuildContext ctx, LocaleService localeService, String code, String label) {
+    final isSelected = localeService.locale == code;
+    return InkWell(
+      onTap: () {
+        localeService.setLocale(code);
+        Navigator.of(ctx).pop();
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: isSelected ? HBotColors.primarySurface : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? HBotColors.primary : context.hBorder,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  color: isSelected ? HBotColors.primary : context.hTextPrimary,
+                  fontFamily: 'DM Sans',
+                ),
+              ),
+            ),
+            if (isSelected)
+              const Icon(Icons.check_circle, color: HBotColors.primary, size: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _showSignOutDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Sign Out'),
-          content: const Text('Are you sure you want to sign out?'),
+          title: Text(AppStrings.get('sign_out')),
+          content: Text(AppStrings.get('sign_out_confirm')),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('cancel')),
             ),
             TextButton(
               onPressed: () async {
@@ -930,7 +1025,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 await _handleSignOut();
               },
               style: TextButton.styleFrom(foregroundColor: HBotColors.error),
-              child: const Text('Sign Out'),
+              child: Text(AppStrings.get('sign_out')),
             ),
           ],
         );

@@ -8,6 +8,7 @@ import '../repos/device_management_repo.dart';
 import '../theme/app_theme.dart';
 import '../utils/channel_detection_utils.dart';
 import '../widgets/shutter_control_widget.dart';
+import '../l10n/app_strings.dart';
 import '../widgets/channel_grid.dart';
 import 'shutter_calibration_screen.dart';
 import 'shutter_manual_calibration_screen.dart';
@@ -593,7 +594,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                     color: context.hTextPrimary,
                   ),
                   title: Text(
-                    'Rename Device',
+                    AppStrings.get('rename_device'),
                     style: TextStyle(color: context.hTextPrimary),
                   ),
                   onTap: () {
@@ -607,7 +608,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                     color: context.hTextPrimary,
                   ),
                   title: Text(
-                    'Move to Room',
+                    AppStrings.get('move_to_room'),
                     style: TextStyle(color: context.hTextPrimary),
                   ),
                   onTap: () {
@@ -681,7 +682,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ),
                 ListTile(
                   leading: Icon(Icons.history, color: context.hTextPrimary),
-                  title: Text('Activity Log', style: TextStyle(color: context.hTextPrimary)),
+                  title: Text(AppStrings.get('activity_log'), style: TextStyle(color: context.hTextPrimary)),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(
@@ -711,9 +712,9 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 Divider(color: context.hTextTertiary),
                 ListTile(
                   leading: const Icon(Icons.delete, color: Colors.red),
-                  title: const Text(
-                    'Delete Device',
-                    style: TextStyle(color: Colors.red),
+                  title: Text(
+                    AppStrings.get('delete_device'),
+                    style: const TextStyle(color: Colors.red),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -975,12 +976,12 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: Text('Rename ${_getChannelName(channel)}'),
+        title: Text('${AppStrings.get('rename_channel')}: ${_getChannelName(channel)}'),
         content: TextField(
           controller: controller,
           style: TextStyle(color: context.hTextPrimary),
           decoration: InputDecoration(
-            hintText: 'Enter channel name',
+            hintText: AppStrings.get('rename_channel'),
             hintStyle: TextStyle(color: context.hTextTertiary),
           ),
           autofocus: true,
@@ -988,14 +989,14 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('cancel')),
           ),
           TextButton(
             onPressed: () {
               _updateChannelName(channel, controller.text);
               Navigator.pop(context);
             },
-            child: const Text('Save'),
+            child: Text(AppStrings.get('save')),
           ),
         ],
       ),
@@ -1010,14 +1011,14 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: Text('${_getChannelName(channel)} Options'),
+        title: Text('${_getChannelName(channel)} ${AppStrings.get('channel_options')}'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
               leading: const Icon(Icons.edit, color: HBotColors.primary),
               title: Text(
-                'Rename Channel',
+                AppStrings.get('rename_channel'),
                 style: TextStyle(color: context.hTextPrimary),
               ),
               onTap: () {
@@ -1069,7 +1070,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: Text(AppStrings.get('close')),
           ),
         ],
       ),
@@ -1199,24 +1200,24 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Rename Device'),
+        title: Text(AppStrings.get('rename_device')),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(
-            labelText: 'Device Name',
-            border: OutlineInputBorder(),
-            hintText: 'Enter a custom name for your device',
+          decoration: InputDecoration(
+            labelText: AppStrings.get('rename_device'),
+            border: const OutlineInputBorder(),
+            hintText: AppStrings.get('rename_device'),
           ),
           maxLength: 50,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('cancel')),
           ),
           TextButton(
             onPressed: () => _renameDevice(controller.text.trim()),
-            child: const Text('Save'),
+            child: Text(AppStrings.get('save')),
           ),
         ],
       ),
@@ -1227,7 +1228,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   Future<void> _renameDevice(String newName) async {
     if (newName.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Device name cannot be empty')),
+        SnackBar(content: Text(AppStrings.get('device_name_empty'))),
       );
       return;
     }
@@ -1250,7 +1251,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
             SizedBox(width: 12),
-            Text('Renaming device...'),
+            Text(AppStrings.get('loading')),
           ],
         ),
         duration: Duration(seconds: 10),
@@ -1267,8 +1268,8 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Device renamed successfully'),
+          SnackBar(
+            content: Text(AppStrings.get('device_renamed')),
             backgroundColor: Colors.green,
           ),
         );
@@ -1289,7 +1290,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to rename device: $e'),
+            content: Text('${AppStrings.get('device_rename_failed')}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -1301,8 +1302,8 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   void _showMoveToRoomDialog() async {
     if (_currentDevice.homeId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Cannot move device: No home assigned'),
+        SnackBar(
+          content: Text(AppStrings.get('no_home_assigned')),
           backgroundColor: Colors.red,
         ),
       );
@@ -1319,7 +1320,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         context: context,
         builder: (context) => AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Move to Room'),
+          title: Text(AppStrings.get('move_to_room')),
           content: SizedBox(
             width: double.maxFinite,
             child: ConstrainedBox(

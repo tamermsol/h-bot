@@ -3,6 +3,7 @@ import '../services/auth_service.dart';
 import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import '../models/profile.dart';
+import '../l10n/app_strings.dart';
 import 'home_screen.dart';
 import 'otp_verification_screen.dart';
 import '../widgets/responsive_shell.dart';
@@ -199,7 +200,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: HBotSpacing.space4),
 
                 Text(
-                  'Create account',
+                  AppStrings.get('sign_up'),
                   style: Theme.of(context).textTheme.headlineLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -207,7 +208,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: HBotSpacing.space2),
 
                 Text(
-                  'Set up your smart home',
+                  AppStrings.get('sign_up_subtitle'),
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -217,14 +218,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // Full Name
                 SmartInputField(
                   controller: _fullNameController,
-                  label: 'Full Name',
-                  hint: 'Your full name',
+                  label: AppStrings.get('full_name'),
+                  hint: AppStrings.get('full_name_hint'),
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
                   enabled: !_isLoading,
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please enter your full name';
-                    if (value.trim().length < 2) return 'Name must be at least 2 characters';
+                    if (value == null || value.isEmpty) return AppStrings.get('name_required');
+                    if (value.trim().length < 2) return AppStrings.get('name_required');
                     return null;
                   },
                 ),
@@ -234,15 +235,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // Email
                 SmartInputField(
                   controller: _emailController,
-                  label: 'Email',
-                  hint: 'user@example.com',
+                  label: AppStrings.get('email'),
+                  hint: AppStrings.get('email_hint'),
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   enabled: !_isLoading,
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please enter your email';
+                    if (value == null || value.isEmpty) return AppStrings.get('email_required');
                     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                      return 'Please enter a valid email';
+                      return AppStrings.get('email_invalid');
                     }
                     return null;
                   },
@@ -273,14 +274,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // Password
                 SmartInputField(
                   controller: _passwordController,
-                  label: 'Password',
+                  label: AppStrings.get('password'),
                   hint: '••••••••',
                   obscureText: true,
                   textInputAction: TextInputAction.next,
                   enabled: !_isLoading,
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please enter a password';
-                    if (value.length < 6) return 'Password must be at least 6 characters';
+                    if (value == null || value.isEmpty) return AppStrings.get('password_required');
+                    if (value.length < 6) return AppStrings.get('password_short');
                     return null;
                   },
                 ),
@@ -290,15 +291,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // Confirm Password
                 SmartInputField(
                   controller: _confirmPasswordController,
-                  label: 'Confirm Password',
+                  label: AppStrings.get('confirm_password'),
                   hint: '••••••••',
                   obscureText: true,
                   textInputAction: TextInputAction.done,
                   enabled: !_isLoading,
                   onEditingComplete: _signUpWithEmail,
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please confirm your password';
-                    if (value != _passwordController.text) return 'Passwords do not match';
+                    if (value == null || value.isEmpty) return AppStrings.get('password_required');
+                    if (value != _passwordController.text) return AppStrings.get('passwords_no_match');
                     return null;
                   },
                 ),
@@ -329,8 +330,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
-                          : const Text(
-                              'Create Account',
+                          : Text(
+                              AppStrings.get('sign_up'),
                               style: TextStyle(
                                 fontFamily: 'DM Sans',
                                 fontSize: 16,
@@ -360,11 +361,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have an account? ', style: Theme.of(context).textTheme.bodyMedium),
+                    Text('${AppStrings.get('already_have_account')} ', style: Theme.of(context).textTheme.bodyMedium),
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text(
-                        'Sign In',
+                      child: Text(
+                        AppStrings.get('sign_in'),
                         style: TextStyle(
                           fontFamily: 'DM Sans',
                           fontSize: 14,

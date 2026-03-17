@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class EmailConfirmationScreen extends StatefulWidget {
   final String email;
@@ -21,7 +22,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
       await _authService.resendEmailConfirmation(widget.email);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Confirmation email sent!'), backgroundColor: HBotColors.success),
+          SnackBar(content: Text(AppStrings.get('email_resent')), backgroundColor: HBotColors.success),
         );
       }
     } catch (e) {
@@ -45,7 +46,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
           icon: Icon(Icons.arrow_back_ios, color: context.hTextPrimary, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Email Confirmation', style: TextStyle(fontFamily: 'DM Sans', fontSize: 17, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
+        title: Text(AppStrings.get('email_confirmation_title'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 17, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -63,14 +64,14 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
 
               const SizedBox(height: HBotSpacing.space5),
 
-              Text('Check Your Email',
+              Text(AppStrings.get('check_your_email'),
                 style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: context.hTextPrimary),
                 textAlign: TextAlign.center,
               ),
 
               const SizedBox(height: HBotSpacing.space3),
 
-              Text("We've sent a confirmation email to",
+              Text(AppStrings.get('email_sent_to'),
                 style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary),
                 textAlign: TextAlign.center,
               ),
@@ -85,7 +86,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
                 child: Text(
-                  'Please check your inbox and click the confirmation link to activate your account.',
+                  AppStrings.get('email_confirmation_body'),
                   style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary),
                   textAlign: TextAlign.center,
                 ),
@@ -108,7 +109,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                     ),
                     child: _isResending
                         ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)))
-                        : const Text('Resend Email', style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
+                        : Text(AppStrings.get('resend_email'), style: const TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
                   ),
                 ),
               ),
