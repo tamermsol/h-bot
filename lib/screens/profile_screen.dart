@@ -596,6 +596,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 iconColor: HBotColors.error,
                 showChevron: false,
                 onTap: _showSignOutDialog,
+              ),
+              SettingsTile(
+                icon: Icons.delete_forever_outlined,
+                title: 'Delete Account',
+                titleColor: HBotColors.error,
+                iconColor: HBotColors.error,
+                showChevron: false,
+                onTap: _showDeleteAccountDialog,
                 showDivider: false,
               ),
             ],
@@ -966,6 +974,87 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       },
     );
+  }
+
+  void _showDeleteAccountDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: context.hCard,
+          title: Text(
+            'Delete Account',
+            style: TextStyle(color: context.hTextPrimary),
+          ),
+          content: Text(
+            'This action is permanent and cannot be undone. All your data, devices, and scenes will be deleted.\n\nAre you sure you want to delete your account?',
+            style: TextStyle(color: context.hTextSecondary),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _handleDeleteAccount();
+              },
+              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
+              child: const Text('Delete Account'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _handleDeleteAccount() async {
+    try {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              children: [
+                SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+                SizedBox(width: 12),
+                Text('Deleting account...'),
+              ],
+            ),
+            backgroundColor: HBotColors.error,
+            duration: Duration(seconds: 5),
+          ),
+        );
+      }
+
+      await AuthService().deleteAccount();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const SignInScreen()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error deleting account: $e'),
+            backgroundColor: HBotColors.error,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _handleSignOut() async {
