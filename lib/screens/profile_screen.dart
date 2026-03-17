@@ -629,7 +629,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       shape: BoxShape.circle,
                     ),
                     child: _avatarPath == null
-                        ? const Center(child: Text('😀', style: TextStyle(fontSize: 40)))
+                        ? const Center(child: Icon(Icons.person, size: 44, color: HBotColors.primary))
                         : ClipOval(
                             child: _avatarService.isCustomAvatar(_avatarPath)
                                 ? Image.file(File(_avatarPath!), fit: BoxFit.cover, width: 80, height: 80)
