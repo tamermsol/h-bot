@@ -3,6 +3,7 @@ import 'dart:async';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import 'sign_in_screen.dart';
+import '../widgets/smart_input_field.dart';
 import '../widgets/responsive_shell.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -26,8 +27,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   bool _isResetting = false;
   bool _isResending = false;
-  bool _obscureNewPassword = true;
-  bool _obscureConfirmPassword = true;
   int _resendCountdown = 60;
   Timer? _countdownTimer;
 
@@ -116,7 +115,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     setState(() => _isResetting = true);
 
     try {
-      // Verify OTP and reset password
       await _authService.verifyPasswordResetOtp(
         widget.email,
         otp,
@@ -130,8 +128,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             backgroundColor: Colors.green,
           ),
         );
-
-        // Navigate back to sign in screen
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const SignInScreen()),
           (route) => false,
@@ -191,300 +187,234 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 20),
+      body: ResponsiveShell(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: HBotSpacing.space4),
 
-              // Icon
-              const Icon(
-                Icons.lock_reset,
-                size: 80,
-                color: HBotColors.primary,
-              ),
-
-              const SizedBox(height: 32),
-
-              // Title
-              Text(
-                'Reset Password',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: context.hTextPrimary,
+                // Icon
+                Center(
+                  child: Container(
+                    width: 64,
+                    height: 64,
+                    decoration: const BoxDecoration(
+                      color: HBotColors.primarySurface,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.lock_reset_rounded, size: 32, color: HBotColors.primary),
+                  ),
                 ),
-                textAlign: TextAlign.center,
-              ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: HBotSpacing.space5),
 
-              // Subtitle
-              Text(
-                'Enter the 6-digit code sent to:',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: context.hTextSecondary,
+                Text(
+                  'Reset Password',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: context.hTextPrimary,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
 
-              const SizedBox(height: 8),
+                const SizedBox(height: HBotSpacing.space2),
 
-              Text(
-                widget.email,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: HBotColors.primary,
+                Text(
+                  'Enter the 6-digit code sent to:',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 14,
+                    color: context.hTextSecondary,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
 
-              const SizedBox(height: 40),
+                const SizedBox(height: 4),
 
-              // OTP Input Fields
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(6, (index) {
-                  return SizedBox(
-                    width: 50,
-                    height: 60,
-                    child: TextField(
-                      controller: _otpControllers[index],
-                      focusNode: _focusNodes[index],
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      maxLength: 1,
-                      obscureText: false,
-                      enableInteractiveSelection: false,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: context.hTextPrimary,
-                        letterSpacing: 0,
+                Text(
+                  widget.email,
+                  style: const TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: HBotColors.primary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+
+                const SizedBox(height: HBotSpacing.space6),
+
+                // OTP Input Fields
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(6, (index) {
+                    return Container(
+                      width: 48,
+                      height: 56,
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      child: TextField(
+                        controller: _otpControllers[index],
+                        focusNode: _focusNodes[index],
+                        textAlign: TextAlign.center,
+                        keyboardType: TextInputType.number,
+                        maxLength: 1,
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                          color: context.hTextPrimary,
+                        ),
+                        decoration: InputDecoration(
+                          counterText: '',
+                          filled: true,
+                          fillColor: context.hCard,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: context.hBorder),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(color: context.hBorder),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: HBotColors.primary, width: 2),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          if (value.isNotEmpty && index < 5) {
+                            _focusNodes[index + 1].requestFocus();
+                          } else if (value.isEmpty && index > 0) {
+                            _focusNodes[index - 1].requestFocus();
+                          }
+                        },
                       ),
-                      decoration: InputDecoration(
-                        counterText: '',
-                        filled: true,
-                        fillColor: context.hCard,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 16,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: context.hBorder,
-                            width: 1.5,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: context.hBorder,
-                            width: 1.5,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: HBotColors.primary,
-                            width: 2.5,
-                          ),
-                        ),
+                    );
+                  }),
+                ),
+
+                const SizedBox(height: HBotSpacing.space6),
+
+                // New Password
+                SmartInputField(
+                  controller: _newPasswordController,
+                  label: 'New Password',
+                  hint: 'At least 6 characters',
+                  obscureText: true,
+                  enabled: !_isResetting,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Please enter a new password';
+                    if (value.length < 6) return 'Password must be at least 6 characters';
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: HBotSpacing.space3),
+
+                // Confirm Password
+                SmartInputField(
+                  controller: _confirmPasswordController,
+                  label: 'Confirm Password',
+                  hint: 'Re-enter your password',
+                  obscureText: true,
+                  enabled: !_isResetting,
+                  validator: (value) {
+                    if (value != _newPasswordController.text) return 'Passwords do not match';
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: HBotSpacing.space2),
+
+                Text(
+                  'Password must be at least 6 characters',
+                  style: TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontSize: 12,
+                    color: context.hTextTertiary,
+                  ),
+                ),
+
+                const SizedBox(height: HBotSpacing.space6),
+
+                // Reset Button
+                SizedBox(
+                  height: 52,
+                  child: Container(
+                    decoration: hbotPrimaryButtonDecoration(disabled: _isResetting),
+                    child: ElevatedButton(
+                      onPressed: _isResetting ? null : _resetPassword,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
                       ),
-                      onChanged: (value) {
-                        if (value.isNotEmpty && index < 5) {
-                          _focusNodes[index + 1].requestFocus();
-                        } else if (value.isEmpty && index > 0) {
-                          _focusNodes[index - 1].requestFocus();
-                        }
-                      },
+                      child: _isResetting
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+                            )
+                          : const Text('Reset Password', style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
                     ),
-                  );
-                }),
-              ),
-
-              const SizedBox(height: 32),
-
-              // New Password Field
-              TextField(
-                controller: _newPasswordController,
-                obscureText: _obscureNewPassword,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'New Password',
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  filled: true,
-                  fillColor: context.hCard,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: context.hBorder),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: context.hBorder),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: HBotColors.primary,
-                      width: 2,
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureNewPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.white54,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureNewPassword = !_obscureNewPassword;
-                      });
-                    },
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: HBotSpacing.space5),
 
-              // Confirm Password Field
-              TextField(
-                controller: _confirmPasswordController,
-                obscureText: _obscureConfirmPassword,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: 'Confirm Password',
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  filled: true,
-                  fillColor: context.hCard,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: context.hBorder),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: context.hBorder),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: HBotColors.primary,
-                      width: 2,
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscureConfirmPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.white54,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureConfirmPassword = !_obscureConfirmPassword;
-                      });
-                    },
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              Text(
-                'Password must be at least 6 characters',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white.withOpacity(0.6),
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              // Reset Password Button
-              SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _isResetting ? null : _resetPassword,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: _isResetting
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.white,
-                            ),
-                          ),
-                        )
-                      : const Text(
-                          'Reset Password',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Resend Code
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Didn't receive the code? ",
-                    style: TextStyle(
-                      color: context.hTextSecondary,
-                      fontSize: 14,
-                    ),
-                  ),
-                  if (_resendCountdown > 0)
+                // Resend Code
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Text(
-                      'Resend in ${_resendCountdown}s',
+                      "Didn't receive the code? ",
                       style: TextStyle(
-                        color: context.hTextTertiary,
+                        fontFamily: 'DM Sans',
+                        color: context.hTextSecondary,
                         fontSize: 14,
                       ),
-                    )
-                  else
-                    TextButton(
-                      onPressed: _isResending ? null : _resendOtp,
-                      child: _isResending
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  HBotColors.primary,
+                    ),
+                    if (_resendCountdown > 0)
+                      Text(
+                        'Resend in ${_resendCountdown}s',
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          color: context.hTextTertiary,
+                          fontSize: 14,
+                        ),
+                      )
+                    else
+                      GestureDetector(
+                        onTap: _isResending ? null : _resendOtp,
+                        child: _isResending
+                            ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary)),
+                              )
+                            : const Text(
+                                'Resend',
+                                style: TextStyle(
+                                  fontFamily: 'DM Sans',
+                                  color: HBotColors.primary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                            )
-                          : const Text(
-                              'Resend',
-                              style: TextStyle(
-                                color: HBotColors.primary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                    ),
-                ],
-              ),
-            ],
+                      ),
+                  ],
+                ),
+
+                const SizedBox(height: HBotSpacing.space7),
+              ],
+            ),
           ),
         ),
       ),
