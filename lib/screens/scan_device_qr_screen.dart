@@ -222,23 +222,23 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
       final homes = await supabase.from('homes').select('id').limit(1);
 
       if (homes.isEmpty) {
-        // Create "Shared Devices" home
+        // Create default "My Home"
         final homeResponse = await supabase
             .from('homes')
-            .insert({'name': 'Shared Devices'})
+            .insert({'name': 'My Home'})
             .select()
             .single();
 
         final homeId = homeResponse['id'] as String;
 
-        // Create "Shared Devices" room
+        // Create a default room
         await supabase.from('rooms').insert({
           'home_id': homeId,
-          'name': 'Shared Devices',
+          'name': 'My Devices',
           'sort_order': 0,
         });
 
-        debugPrint('Created "Shared Devices" home and room for new user');
+        debugPrint('Created default "My Home" and room for new user');
       }
     } catch (e) {
       debugPrint('Error ensuring home/room: $e');

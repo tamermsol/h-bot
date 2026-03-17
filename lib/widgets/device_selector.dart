@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/smart_home_service.dart';
 import '../models/device.dart';
+import '../repos/device_sharing_repo.dart';
 
 class DeviceSelector extends StatefulWidget {
   final List<Map<String, dynamic>> selectedDevices;
@@ -75,16 +76,6 @@ class _DeviceSelectorState extends State<DeviceSelector> {
         );
       }
 
-      if (devices.isEmpty) {
-        debugPrint('DeviceSelector: No devices found');
-        setState(() {
-          _isLoading = false;
-          _errorMessage = 'No devices found in this home. Add devices first.';
-          _availableDevices = [];
-        });
-        return;
-      }
-
       // Get room names for better display
       final Map<String, String> roomNames = {};
       if (widget.homeId != null) {
@@ -100,22 +91,72 @@ class _DeviceSelectorState extends State<DeviceSelector> {
         }
       }
 
-      _availableDevices = devices.map((Device d) {
+      final List<Map<String, dynamic>> allDevices = devices.map((Device d) {
         final roomName = d.roomId != null
             ? roomNames[d.roomId] ?? 'Unknown Room'
             : 'No Room';
         return {
           'id': d.id,
-          'name': d.name,
-          'deviceName': d.name,
+          'name': d.deviceName,
+          'deviceName': d.deviceName,
           'type': _mapDeviceTypeToCategory(d.deviceType),
           'icon': _getIconForDeviceType(d.deviceType),
           'room': roomName,
-          'isOnline':
-              d.online ?? false, // Use device's online status from database
+          'isOnline': d.online ?? false,
           'device': d,
+          'isShared': false,
         };
       }).toList();
+
+      // Load shared devices and merge them
+      try {
+        final sharedDevices = await DeviceSharingRepo().getSharedWithMe();
+        debugPrint('DeviceSelector: Loaded ${sharedDevices.length} shared devices');
+
+        // Track existing device IDs to avoid duplicates
+        final existingIds = allDevices.map((d) => d['id'] as String).toSet();
+
+        for (final shared in sharedDevices) {
+          // Skip if already in the list (device might be in this home)
+          if (existingIds.contains(shared.deviceId)) continue;
+
+          // Fetch the full Device object for proper action configuration
+          try {
+            final fullDevice = await _service.getDeviceById(shared.deviceId);
+            if (fullDevice != null) {
+              allDevices.add({
+                'id': fullDevice.id,
+                'name': fullDevice.deviceName,
+                'deviceName': fullDevice.deviceName,
+                'type': _mapDeviceTypeToCategory(fullDevice.deviceType),
+                'icon': _getIconForDeviceType(fullDevice.deviceType),
+                'room': 'Shared',
+                'isOnline': fullDevice.online ?? false,
+                'device': fullDevice,
+                'isShared': true,
+              });
+              existingIds.add(shared.deviceId);
+            }
+          } catch (e) {
+            debugPrint('DeviceSelector: Failed to fetch shared device ${shared.deviceId}: $e');
+          }
+        }
+      } catch (e) {
+        debugPrint('DeviceSelector: Failed to load shared devices: $e');
+        // Non-fatal — continue with home devices only
+      }
+
+      if (allDevices.isEmpty) {
+        debugPrint('DeviceSelector: No devices found');
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'No devices found in this home. Add devices first.';
+          _availableDevices = [];
+        });
+        return;
+      }
+
+      _availableDevices = allDevices;
 
       debugPrint(
         'DeviceSelector: Prepared ${_availableDevices.length} devices for display',
@@ -313,8 +354,9 @@ class _DeviceSelectorState extends State<DeviceSelector> {
           itemCount: filteredDevices.length,
           itemBuilder: (context, index) {
             final device = filteredDevices[index];
+            final isShared = device['isShared'] as bool? ?? false;
             final isSelected = widget.selectedDevices.any(
-              (selected) => selected['name'] == device['name'],
+              (selected) => selected['id'] == device['id'],
             );
 
             return Container(
@@ -336,12 +378,32 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                     size: 20,
                   ),
                 ),
-                title: Text(
-                  device['name'],
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: context.hTextPrimary,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  ),
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        device['name'],
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: context.hTextPrimary,
+                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    if (isShared)
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: Colors.orange.withOpacity(0.4)),
+                        ),
+                        child: const Text(
+                          'Shared',
+                          style: TextStyle(fontSize: 10, color: Colors.orange, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                  ],
                 ),
                 subtitle: Text(
                   device['room'],
@@ -383,7 +445,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
       widget.selectedDevices,
     );
     final existingIndex = updatedDevices.indexWhere(
-      (selected) => selected['name'] == device['name'],
+      (selected) => selected['id'] == device['id'],
     );
 
     if (existingIndex >= 0) {

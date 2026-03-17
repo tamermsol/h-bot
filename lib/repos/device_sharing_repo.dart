@@ -107,6 +107,9 @@ class DeviceSharingRepo {
       final userId = supabase.auth.currentUser?.id;
       if (userId == null) throw 'User not authenticated';
 
+      // Auto-create "My Home" if the recipient has no homes yet
+      await _ensureUserHasHome();
+
       final response = await supabase
           .from('shared_devices')
           .insert({
@@ -121,6 +124,35 @@ class DeviceSharingRepo {
       return SharedDevice.fromJson(response);
     } catch (e) {
       throw 'Failed to share device: $e';
+    }
+  }
+
+  /// Ensure the current user has at least one home; create "My Home" if not.
+  Future<void> _ensureUserHasHome() async {
+    try {
+      final homes = await supabase.from('homes').select('id').limit(1);
+      if ((homes as List).isEmpty) {
+        // Create default "My Home"
+        final homeResponse = await supabase
+            .from('homes')
+            .insert({'name': 'My Home'})
+            .select()
+            .single();
+
+        final homeId = homeResponse['id'] as String;
+
+        // Create a default room
+        await supabase.from('rooms').insert({
+          'home_id': homeId,
+          'name': 'My Devices',
+          'sort_order': 0,
+        });
+
+        debugPrint('DeviceSharingRepo: Created default "My Home" for new user');
+      }
+    } catch (e) {
+      // Non-fatal — user might already have homes or RLS may block the check
+      debugPrint('DeviceSharingRepo: Could not ensure home exists: $e');
     }
   }
 

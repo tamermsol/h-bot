@@ -960,16 +960,10 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
 
   /// Set all channels on or off
   Future<void> _setAllChannels(bool on) async {
-    for (int i = 1; i <= widget.device.effectiveChannels; i++) {
-      try {
-        await _mqttManager.setChannelPower(
-          widget.device.id,
-          i,
-          on,
-        );
-      } catch (e) {
-        debugPrint('Failed to set channel $i: $e');
-      }
+    try {
+      await _mqttManager.setBulkPower(widget.device.id, on);
+    } catch (e) {
+      debugPrint('Failed to set all channels: $e');
     }
   }
 

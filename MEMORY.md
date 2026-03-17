@@ -92,6 +92,15 @@
 - H-Bot source copied to `/root/.openclaw/workspace-hbot/` (lib/, pubspec.yaml, ios/, android/, assets/)
 - Work from hbot workspace, not flutter workspace
 
+## GOLDEN RULES
+- **No MQTT/Tasmota anywhere user-facing** — App Store, Play Store, descriptions, keywords, screenshots, marketing. Use generic terms: "smart home devices", "real-time updates", "IoT devices"
+- Don't push to TestFlight unless asked — APK + git only (Tamer rule from 2026-03-17)
+
+## 2026-03-17 — Google Play Store Setup
+- AAB built (42.3MB), waiting for service account JSON key from Tim
+- Developer account ID: `6376157508824598411`
+- App Store version 1.0 (Build 142) WAITING_FOR_REVIEW with real screenshots, clean descriptions
+
 ## 2026-03-15 — Design System Migration Complete (Build 101)
 
 ### hbot-design branch status

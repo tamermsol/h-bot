@@ -156,7 +156,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     focusNode: _focusNodes[index],
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
-                    maxLength: 1,
+                    maxLength: 6,
                     style: TextStyle(fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700, color: context.hTextPrimary),
                     decoration: InputDecoration(
                       counterText: '',
@@ -168,6 +168,20 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       focusedBorder: OutlineInputBorder(borderRadius: HBotRadius.smallRadius, borderSide: const BorderSide(color: HBotColors.primary, width: 2)),
                     ),
                     onChanged: (value) {
+                      if (value.length > 1) {
+                        // Paste detected — distribute digits across all fields
+                        final digits = value.replaceAll(RegExp(r'[^0-9]'), '');
+                        for (int i = 0; i < 6; i++) {
+                          _otpControllers[i].text = i < digits.length ? digits[i] : '';
+                        }
+                        if (digits.length >= 6) {
+                          _focusNodes[5].requestFocus();
+                          _verifyOtp();
+                        } else if (digits.isNotEmpty) {
+                          _focusNodes[digits.length.clamp(0, 5)].requestFocus();
+                        }
+                        return;
+                      }
                       if (value.isNotEmpty && index < 5) _focusNodes[index + 1].requestFocus();
                       else if (value.isEmpty && index > 0) _focusNodes[index - 1].requestFocus();
                       if (index == 5 && value.isNotEmpty) _verifyOtp();
@@ -212,17 +226,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       ),
               ),
 
-              const SizedBox(height: HBotSpacing.space4),
 
-              // Skip
-              Center(
-                child: TextButton(
-                  onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (_) => const HomeScreen()), (route) => false,
-                  ),
-                  child: Text('Skip for now', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary)),
-                ),
-              ),
             ],
           ),
         ),

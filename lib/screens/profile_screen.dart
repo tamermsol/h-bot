@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../services/alexa_account_linking_service.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:io';
@@ -20,7 +18,6 @@ import 'sign_in_screen.dart';
 import 'profile_edit_screen.dart';
 import 'homes_screen.dart';
 import 'help_center_screen.dart';
-import 'activity_log_screen.dart';
 import 'notifications_settings_screen.dart';
 import 'feedback_screen.dart';
 import 'hbot_account_screen.dart';
@@ -230,37 +227,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             _buildStep(context, '2', 'Tap "More" → "Skills & Games"'),
             _buildStep(context, '3', 'Search for "H-Bot"'),
             _buildStep(context, '4', 'Tap "Enable to Use" and link your account'),
-            const SizedBox(height: 20),
-            Text(
-              'Or enable it from the Amazon website:',
-              style: TextStyle(
-                fontSize: 14,
-                color: context.hTextSecondary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                  launchUrl(
-                    Uri.parse('https://www.amazon.com/dp/B0GBZ7XB1N'),
-                    mode: LaunchMode.externalApplication,
-                  );
-                },
-                icon: const Icon(Icons.open_in_new, size: 18),
-                label: const Text('Open on Amazon'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: HBotColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -495,7 +461,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SettingsTile(
                 icon: Icons.record_voice_over_outlined,
                 title: 'Amazon Alexa',
-                value: 'Control devices with voice',
+                subtitle: 'Control devices with voice',
                 onTap: _openAlexaSkill,
                 showDivider: false,
               ),
@@ -511,13 +477,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'Notifications',
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
-              ),
-              SettingsTile(
-                icon: Icons.history,
-                title: 'Activity Log',
-                value: 'Device events & history',
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const ActivityLogScreen())),
               ),
               Consumer<ThemeService>(
                 builder: (context, themeService, _) => SettingsTile(
@@ -595,21 +554,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 titleColor: HBotColors.error,
                 iconColor: HBotColors.error,
                 showChevron: false,
-                onTap: _showSignOutDialog,
-              ),
-              SettingsTile(
-                icon: Icons.delete_forever_outlined,
-                title: 'Delete Account',
-                titleColor: HBotColors.error,
-                iconColor: HBotColors.error,
-                showChevron: false,
-                onTap: _showDeleteAccountDialog,
                 showDivider: false,
+                onTap: _showSignOutDialog,
               ),
             ],
           ),
 
           const SizedBox(height: HBotSpacing.space7),
+          Center(
+            child: Text(
+              'v1.0.0 (143)',
+              style: TextStyle(
+                fontSize: 11,
+                color: context.hTextTertiary,
+                fontFamily: 'DM Sans',
+              ),
+            ),
+          ),
+          const SizedBox(height: HBotSpacing.space5),
         ],
       ),
     );
@@ -974,87 +936,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       },
     );
-  }
-
-  void _showDeleteAccountDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: context.hCard,
-          title: Text(
-            'Delete Account',
-            style: TextStyle(color: context.hTextPrimary),
-          ),
-          content: Text(
-            'This action is permanent and cannot be undone. All your data, devices, and scenes will be deleted.\n\nAre you sure you want to delete your account?',
-            style: TextStyle(color: context.hTextSecondary),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () async {
-                Navigator.of(context).pop();
-                await _handleDeleteAccount();
-              },
-              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
-              child: const Text('Delete Account'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _handleDeleteAccount() async {
-    try {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Row(
-              children: [
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                ),
-                SizedBox(width: 12),
-                Text('Deleting account...'),
-              ],
-            ),
-            backgroundColor: HBotColors.error,
-            duration: Duration(seconds: 5),
-          ),
-        );
-      }
-
-      await AuthService().deleteAccount();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const SignInScreen()),
-          (route) => false,
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error deleting account: $e'),
-            backgroundColor: HBotColors.error,
-            duration: const Duration(seconds: 4),
-          ),
-        );
-      }
-    }
   }
 
   Future<void> _handleSignOut() async {

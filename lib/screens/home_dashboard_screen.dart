@@ -1037,16 +1037,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   color: context.hTextSecondary,
                 ),
               ),
-              const Spacer(),
-              Text(
-                'v1.0.0 (137)',
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 11,
-                  fontWeight: FontWeight.w400,
-                  color: context.hTextTertiary,
-                ),
-              ),
+
             ],
           ),
 

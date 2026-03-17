@@ -30,7 +30,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "store.msolapps.hbot"
+        applicationId = "tech.hbot.app"
         minSdk = 23
         targetSdk = 35
         versionCode = flutter.versionCode

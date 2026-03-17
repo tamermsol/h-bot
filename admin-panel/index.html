@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>H-Bot Admin Panel</title>
+  <style>
+    :root {
+      --bg: #0A0E14;
+      --surface: #131820;
+      --card: #1A2030;
+      --border: #252D3A;
+      --primary: #3B82F6;
+      --primary-hover: #2563EB;
+      --primary-gradient: linear-gradient(135deg, #3B82F6, #1D4ED8);
+      --text: #F0F2F5;
+      --text-secondary: #A0AAB8;
+      --text-muted: #6B7280;
+      --success: #22C55E;
+      --error: #EF4444;
+      --warning: #F59E0B;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+    /* Login Screen */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .login-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      background: var(--primary-gradient);
+      color: white;
+      font-weight: 700;
+    }
+
+    .login-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .login-subtitle {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--primary-gradient);
+      color: white;
+      padding: 14px 24px;
+      font-size: 15px;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-danger {
+      background: var(--error);
+      color: white;
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* Dashboard */
+    #dashboard {
+      display: none;
+    }
+
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topbar-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .topbar-badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: var(--primary);
+      color: white;
+      font-weight: 500;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-email {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .btn-logout {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .main-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Stats Row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Compose Section */
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      resize: vertical;
+      min-height: 100px;
+      transition: border-color 0.2s;
+    }
+
+    .form-textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23A0AAB8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+    }
+
+    .char-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    .send-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .preview-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .btn-send {
+      padding: 12px 32px;
+      font-size: 15px;
+    }
+
+    /* History */
+    .history-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(59, 130, 246, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .history-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--primary);
+    }
+
+    .history-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .history-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .history-body {
+      font-size: 13px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .history-time {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .history-target {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--primary);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+      z-index: 1000;
+      animation: slideIn 0.3s ease-out;
+      max-width: 400px;
+    }
+
+    .toast-success { background: var(--success); }
+    .toast-error { background: var(--error); }
+
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .stats-row { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .topbar { padding: 12px 16px; }
+      .main-content { padding: 20px 16px; }
+      .login-card { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">H</div>
+    <h1 class="login-title">H-Bot Admin</h1>
+    <p class="login-subtitle">Push Notification Management</p>
+
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="login-email" class="form-input" placeholder="admin@h-bot.tech" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary" id="login-btn">Sign In</button>
+      <p class="error-msg" id="login-error"></p>
+    </form>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">H</div>
+      <div>
+        <div class="topbar-title">H-Bot Admin</div>
+      </div>
+      <span class="topbar-badge">Push Notifications</span>
+    </div>
+    <div class="topbar-right">
+      <span class="user-email" id="user-email"></span>
+      <button class="btn btn-outline btn-logout" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Sent</div>
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-sub">All time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">This Week</div>
+        <div class="stat-value" id="stat-week">0</div>
+        <div class="stat-sub">Last 7 days</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Registered Users</div>
+        <div class="stat-value" id="stat-users">0</div>
+        <div class="stat-sub">Total app users</div>
+      </div>
+    </div>
+
+    <!-- Compose -->
+    <div class="section-card">
+      <div class="section-header">
+        <div>
+          <div class="section-title">📨 Broadcast Notification</div>
+          <div class="section-subtitle">Send to all H-Bot users</div>
+        </div>
+      </div>
+
+      <form id="compose-form" onsubmit="handleSend(event)">
+        <div class="form-row" style="margin-bottom: 16px;">
+          <div class="form-group">
+            <label class="form-label">Title *</label>
+            <input type="text" id="notif-title" class="form-input" placeholder="e.g. New Feature Available!" maxlength="100" required>
+            <div class="char-count"><span id="title-count">0</span>/100</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Target</label>
+            <select id="notif-target" class="form-select">
+              <option value="all">All Users</option>
+              <option value="ios">iOS Only</option>
+              <option value="android">Android Only</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Message *</label>
+          <textarea id="notif-body" class="form-textarea" placeholder="Write your notification message..." maxlength="500" required></textarea>
+          <div class="char-count"><span id="body-count">0</span>/500</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Deep Link (optional)</label>
+          <input type="text" id="notif-link" class="form-input" placeholder="e.g. hbot://scenes or https://h-bot.tech/promo">
+        </div>
+
+        <div class="send-row">
+          <div class="preview-text">Notification will be stored and visible in-app</div>
+          <button type="submit" class="btn btn-primary btn-send" id="send-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            Send Notification
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- History -->
+    <div class="section-card">
+      <div class="section-header">
+        <div>
+          <div class="section-title">📋 Recent Broadcasts</div>
+          <div class="section-subtitle">Last 20 notifications</div>
+        </div>
+        <button class="btn btn-outline" onclick="loadHistory()" style="padding: 8px 16px; font-size: 13px;">↻ Refresh</button>
+      </div>
+      <div id="history-list">
+        <div class="empty-state">
+          <div class="empty-state-icon">📭</div>
+          <p>No notifications sent yet</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Config
+  const SUPABASE_URL = 'https://mvmvqycvorstsftcldzs.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12bXZxeWN2b3JzdHNmdGNsZHpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwMDczNTQsImV4cCI6MjA3MDU4MzM1NH0.gA744wsXronSyRXHCS60DVcVqJ3_y0MgkqEhLsFxYDI';
+
+  // Hardcoded admin credentials (simple auth — not Supabase auth)
+  const ADMIN_EMAIL = 'info@h-bot.tech';
+  const ADMIN_PASS_HASH = '0f52d38c6bb62da990e8dbcd90a1783488bbc492e315804695c63b80d70b7107'; // sha256 of admin password
+
+  let session = null;
+  let serviceToken = null;
+
+  // Simple SHA-256
+  async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // Login
+  async function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    const errorEl = document.getElementById('login-error');
+    const btn = document.getElementById('login-btn');
+
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+    errorEl.style.display = 'none';
+
+    try {
+      // Verify admin credentials
+      const hash = await sha256(password);
+      if (email !== ADMIN_EMAIL || hash !== ADMIN_PASS_HASH) {
+        throw new Error('Invalid credentials');
+      }
+
+      // Sign in with Supabase to get a service token for API calls
+      const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (!res.ok) {
+        // Admin might not have a Supabase account — use anon key directly
+        session = { email };
+        serviceToken = SUPABASE_ANON;
+      } else {
+        const data = await res.json();
+        session = { email, access_token: data.access_token };
+        serviceToken = data.access_token;
+      }
+
+      // Save session
+      localStorage.setItem('hbot_admin_session', JSON.stringify(session));
+
+      showDashboard();
+    } catch (err) {
+      errorEl.textContent = err.message || 'Login failed';
+      errorEl.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
+  }
+
+  function handleLogout() {
+    session = null;
+    serviceToken = null;
+    localStorage.removeItem('hbot_admin_session');
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+
+  async function showDashboard() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('user-email').textContent = session.email;
+
+    await Promise.all([loadStats(), loadHistory()]);
+  }
+
+  // API helpers
+  async function supabaseGet(path) {
+    const token = serviceToken || SUPABASE_ANON;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      headers: {
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${token}`,
+        'Prefer': 'count=exact'
+      }
+    });
+    const count = res.headers.get('content-range')?.split('/')[1];
+    const data = await res.json();
+    return { data, count: count ? parseInt(count) : data.length };
+  }
+
+  async function supabasePost(path, body) {
+    const token = serviceToken || SUPABASE_ANON;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON,
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || 'API error');
+    }
+    return await res.json();
+  }
+
+  // Stats
+  async function loadStats() {
+    try {
+      const [total, week, users] = await Promise.all([
+        supabaseGet('broadcast_notifications?select=id&order=created_at.desc'),
+        supabaseGet(`broadcast_notifications?select=id&created_at=gte.${new Date(Date.now() - 7*24*60*60*1000).toISOString()}`),
+        supabaseGet('profiles?select=id')
+      ]);
+
+      document.getElementById('stat-total').textContent = total.count;
+      document.getElementById('stat-week').textContent = week.count;
+      document.getElementById('stat-users').textContent = users.count;
+    } catch (err) {
+      console.error('Stats error:', err);
+    }
+  }
+
+  // Send notification
+  async function handleSend(e) {
+    e.preventDefault();
+    const btn = document.getElementById('send-btn');
+    const title = document.getElementById('notif-title').value.trim();
+    const body = document.getElementById('notif-body').value.trim();
+    const target = document.getElementById('notif-target').value;
+    const link = document.getElementById('notif-link').value.trim();
+
+    if (!title || !body) return;
+
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Sending...';
+
+    try {
+      const payload = {
+        title,
+        body,
+        target,
+        sent_by: session.email,
+        data: link ? { deep_link: link } : {}
+      };
+
+      await supabasePost('broadcast_notifications', payload);
+
+      showToast('✅ Notification broadcast sent!', 'success');
+
+      // Reset form
+      document.getElementById('compose-form').reset();
+      document.getElementById('title-count').textContent = '0';
+      document.getElementById('body-count').textContent = '0';
+
+      // Reload
+      await Promise.all([loadStats(), loadHistory()]);
+    } catch (err) {
+      showToast('❌ Failed to send: ' + err.message, 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Send Notification';
+    }
+  }
+
+  // History
+  async function loadHistory() {
+    const container = document.getElementById('history-list');
+    try {
+      const { data } = await supabaseGet('broadcast_notifications?select=*&order=created_at.desc&limit=20');
+
+      if (!data.length) {
+        container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No notifications sent yet</p></div>';
+        return;
+      }
+
+      container.innerHTML = data.map(n => `
+        <div class="history-item">
+          <div class="history-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          </div>
+          <div class="history-content">
+            <div class="history-title">${escHtml(n.title)}</div>
+            <div class="history-body">${escHtml(n.body)}</div>
+            <div class="history-meta">
+              <span class="history-time">${timeAgo(n.created_at)}</span>
+              <span class="history-target">${n.target === 'all' ? 'All Users' : n.target.toUpperCase()}</span>
+              ${n.sent_by ? `<span class="history-time">by ${escHtml(n.sent_by)}</span>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    } catch (err) {
+      container.innerHTML = '<div class="empty-state"><p>Error loading history</p></div>';
+    }
+  }
+
+  // Helpers
+  function escHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s || '';
+    return d.innerHTML;
+  }
+
+  function timeAgo(iso) {
+    const d = new Date(iso);
+    const now = new Date();
+    const diff = (now - d) / 1000;
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
+    if (diff < 604800) return `${Math.floor(diff/86400)}d ago`;
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  }
+
+  // Char counters
+  document.addEventListener('DOMContentLoaded', () => {
+    const titleInput = document.getElementById('notif-title');
+    const bodyInput = document.getElementById('notif-body');
+
+    if (titleInput) titleInput.addEventListener('input', () => {
+      document.getElementById('title-count').textContent = titleInput.value.length;
+    });
+    if (bodyInput) bodyInput.addEventListener('input', () => {
+      document.getElementById('body-count').textContent = bodyInput.value.length;
+    });
+
+    // Check for saved session
+    const saved = localStorage.getItem('hbot_admin_session');
+    if (saved) {
+      try {
+        session = JSON.parse(saved);
+        serviceToken = session.access_token || SUPABASE_ANON;
+        showDashboard();
+      } catch (e) {
+        localStorage.removeItem('hbot_admin_session');
+      }
+    }
+  });
+</script>
+</body>
+</html>

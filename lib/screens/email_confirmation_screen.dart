@@ -113,22 +113,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
                 ),
               ),
 
-              const SizedBox(height: HBotSpacing.space3),
 
-              // Continue without — outlined
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: context.hTextPrimary,
-                    side: BorderSide(color: context.hBorder, width: 1.5),
-                    shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
-                  ),
-                  child: const Text('Continue Without Confirmation', style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
-                ),
-              ),
             ],
           ),
         ),

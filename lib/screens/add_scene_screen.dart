@@ -11,6 +11,7 @@ import '../models/scene.dart';
 import '../models/scene_step.dart';
 import '../models/scene_trigger.dart';
 import '../widgets/responsive_shell.dart';
+import '../repos/device_sharing_repo.dart';
 
 class AddSceneScreen extends StatefulWidget {
   final String homeId;
@@ -173,6 +174,15 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       // Load all devices to match device IDs with device objects
       final devices = await _service.getDevicesByHome(widget.homeId);
 
+      // Also load shared devices to support shared device steps
+      List<String> sharedDeviceIds = [];
+      try {
+        final sharedDevices = await DeviceSharingRepo().getSharedWithMe();
+        sharedDeviceIds = sharedDevices.map((s) => s.deviceId).toList();
+      } catch (e) {
+        debugPrint('⚠️ Could not load shared devices: $e');
+      }
+
       // Clear existing selections
       _selectedDevices.clear();
       _deviceActions.clear();
@@ -183,20 +193,35 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         final deviceId = actionJson['device_id'] as String?;
 
         if (deviceId != null) {
-          // Find the device
+          // First try to find device in home devices
+          Device? device;
+          bool isShared = false;
           try {
-            final device = devices.firstWhere((d) => d.id == deviceId);
+            device = devices.firstWhere((d) => d.id == deviceId);
+          } catch (_) {
+            // Not in home devices — try as a shared device
+            if (sharedDeviceIds.contains(deviceId)) {
+              try {
+                device = await _service.getDeviceById(deviceId);
+                isShared = true;
+              } catch (e) {
+                debugPrint('⚠️ Could not fetch shared device $deviceId: $e');
+              }
+            }
+          }
 
+          if (device != null) {
             // Add to selected devices with full device object (matching DeviceSelector format)
             _selectedDevices.add({
               'id': device.id,
-              'name': device.name,
-              'deviceName': device.name,
+              'name': device.deviceName,
+              'deviceName': device.deviceName,
               'type': device.deviceType.name,
-              'room': 'Unknown', // Room name would need to be fetched
+              'room': isShared ? 'Shared' : 'Unknown',
               'icon': _getDeviceIcon(device.deviceType.name),
               'isOnline': device.online ?? false,
               'device': device, // ✅ Include full device object
+              'isShared': isShared,
             });
 
             // Populate device action (make a deep copy to avoid reference issues)
@@ -205,8 +230,8 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             debugPrint(
               '🔧 Loaded device action for $deviceId: ${actionJson['type'] ?? actionJson['action_type']}',
             );
-          } catch (e) {
-            debugPrint('⚠️ Device not found: $deviceId - $e');
+          } else {
+            debugPrint('⚠️ Device not found: $deviceId');
           }
         }
       }
@@ -1215,7 +1240,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         Container(
           padding: const EdgeInsets.all(HBotSpacing.space4),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.hCard,
             borderRadius: HBotRadius.smallRadius,
             border: Border.all(color: context.hBorder),
           ),
@@ -1330,7 +1355,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         Container(
           padding: const EdgeInsets.all(HBotSpacing.space4),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.hCard,
             borderRadius: HBotRadius.smallRadius,
             border: Border.all(color: context.hBorder),
           ),
@@ -1440,7 +1465,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     return Container(
       padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.hCard,
         borderRadius: HBotRadius.smallRadius,
         border: Border.all(color: context.hBorder),
       ),
@@ -1646,7 +1671,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     return Container(
       padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.hCard,
         border: Border(
           top: BorderSide(
             color: context.hBorder,
@@ -1670,7 +1695,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 child: ElevatedButton(
                   onPressed: _isCreating ? null : _previousStep,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
+                    backgroundColor: context.hCard,
                     foregroundColor: context.hTextPrimary,
                     side: BorderSide(
                       color: context.hBorder,
@@ -2159,7 +2184,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         decoration: BoxDecoration(
           color: isSelected
               ? _selectedColor.withOpacity(0.2)
-              : (Colors.white),
+              : context.hCard,
           borderRadius: HBotRadius.smallRadius,
           border: Border.all(
             color: isSelected

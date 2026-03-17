@@ -195,10 +195,10 @@ class _ScenesScreenState extends State<ScenesScreen>
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: scene.isEnabled ? sceneColor.withOpacity(0.12) : HBotColors.neutral100,
+                    color: scene.isEnabled ? sceneColor.withOpacity(0.12) : context.hCard,
                     borderRadius: HBotRadius.mediumRadius,
                   ),
-                  child: Icon(iconData, color: scene.isEnabled ? sceneColor : HBotColors.neutral400, size: 24),
+                  child: Icon(iconData, color: scene.isEnabled ? sceneColor : context.hTextTertiary, size: 24),
                 ),
                 const SizedBox(width: HBotSpacing.space4),
                 // Scene info
@@ -224,11 +224,11 @@ class _ScenesScreenState extends State<ScenesScreen>
                   height: 40,
                   decoration: BoxDecoration(
                     gradient: scene.isEnabled ? HBotColors.primaryGradient : null,
-                    color: scene.isEnabled ? null : HBotColors.neutral200,
+                    color: scene.isEnabled ? null : context.hCard,
                     borderRadius: HBotRadius.fullRadius,
                   ),
                   child: IconButton(
-                    icon: Icon(Icons.play_arrow, color: scene.isEnabled ? Colors.white : HBotColors.neutral400, size: 20),
+                    icon: Icon(Icons.play_arrow, color: scene.isEnabled ? Colors.white : context.hTextTertiary, size: 20),
                     padding: EdgeInsets.zero,
                     onPressed: scene.isEnabled ? () => _executeScene(scene) : null,
                   ),
@@ -236,7 +236,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                 const SizedBox(width: HBotSpacing.space2),
                 // More menu
                 PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert, color: HBotColors.neutral400, size: 20),
+                  icon: Icon(Icons.more_vert, color: context.hTextTertiary, size: 20),
                   onSelected: (value) {
                     switch (value) {
                       case 'toggle': _toggleScene(scene);
@@ -355,7 +355,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                 child: Container(
                   width: 40, height: 4,
                   margin: const EdgeInsets.only(bottom: HBotSpacing.space5),
-                  decoration: BoxDecoration(color: HBotColors.neutral300, borderRadius: HBotRadius.fullRadius),
+                  decoration: BoxDecoration(color: context.hBorder, borderRadius: HBotRadius.fullRadius),
                 ),
               ),
               Row(
