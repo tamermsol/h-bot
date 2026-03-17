@@ -44,9 +44,9 @@ class AuthService {
     await _authRepo.signOut();
   }
 
-  // Reset password
+  // Reset password (sends OTP via our custom email system)
   Future<void> resetPassword(String email) async {
-    await _authRepo.resetPassword(email);
+    await _authRepo.sendPasswordResetOtp(email);
   }
 
   // Get current user profile

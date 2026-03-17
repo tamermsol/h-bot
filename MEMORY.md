@@ -117,3 +117,28 @@
 - Audit platform-specific Android code (auto-discovery, NsdManager vs Bonjour)
 - Dark mode tokens defined but not implemented
 - Visual polish pass needed
+
+## 2026-03-16 — Build 137 + App Store Submission WIP
+
+### Build 137
+- Google sign-in removed (email/password only)
+- Commit `b3b7426` on `hbot-design`
+- **Rule from Tamer: Don't push to TestFlight unless asked** — APK + git only
+
+### App Store Listing (version 1.0, build 136)
+- Name: **H-Bot Smart Home**, subtitle: **Smart Home Control**
+- Privacy policy: `https://aoperatingsystem.online/hbot-privacy`
+- Screenshots: iPhone 6.7", 5.5", iPad 12.9" — all uploaded
+- Pricing: FREE, Categories: Lifestyle + Utilities
+- Review detail + demo account configured
+
+### Blocked on submission
+- App Privacy questionnaire (must be done in ASC web UI — no API)
+- Demo account `test@hbot.app` needs manual creation in Supabase (email confirm failed)
+
+### ASC API Key Lessons
+- Use `reviewSubmissions` not deprecated `appStoreVersionSubmissions`
+- No API for app privacy / data usages — web only
+- iPad Pro 12.9" screenshots required
+- PNG alpha channel rejected — always use `PNG24:` format
+- Price schedule needs `included` array with inline appPrices

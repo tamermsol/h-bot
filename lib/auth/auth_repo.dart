@@ -215,7 +215,7 @@ class AuthRepo {
     return provider == 'email';
   }
 
-  /// Verify OTP code sent to email
+  /// Verify OTP code sent to email (uses Supabase Auth built-in OTP)
   Future<void> verifyOtp(String email, String token) async {
     try {
       debugPrint('🔐 Verifying OTP for email: $email');
@@ -227,7 +227,7 @@ class AuthRepo {
       );
 
       if (response.user == null) {
-        throw Exception('OTP verification failed');
+        throw Exception('Invalid or expired verification code. Please try again.');
       }
 
       debugPrint('✅ OTP verified successfully');
@@ -241,13 +241,23 @@ class AuthRepo {
   Future<void> resendOtp(String email) async {
     try {
       debugPrint('📧 Resending OTP to: $email');
-
-      // Resend the signup confirmation email with OTP
       await supabase.auth.resend(type: OtpType.signup, email: email);
-
       debugPrint('✅ OTP resent successfully');
     } catch (e) {
       debugPrint('❌ Failed to resend OTP: $e');
+      throw _handleAuthException(e);
+    }
+  }
+
+  /// Send password reset OTP
+  Future<void> sendPasswordResetOtp(String email) async {
+    try {
+      debugPrint('📧 Sending password reset OTP to: $email');
+      // This uses Supabase's built-in recovery flow which sends an OTP via custom SMTP
+      await supabase.auth.resetPasswordForEmail(email);
+      debugPrint('✅ Password reset OTP sent');
+    } catch (e) {
+      debugPrint('❌ Failed to send reset OTP: $e');
       throw _handleAuthException(e);
     }
   }
@@ -269,7 +279,7 @@ class AuthRepo {
       );
 
       if (response.user == null) {
-        throw Exception('OTP verification failed');
+        throw Exception('Invalid or expired reset code. Please try again.');
       }
 
       debugPrint('✅ OTP verified, updating password');
