@@ -240,7 +240,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
                       Icon(Icons.check_circle, color: Colors.white, size: 20),
                       SizedBox(width: 8),
@@ -271,7 +271,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
                       Icon(Icons.error, color: Colors.white, size: 20),
                       SizedBox(width: 8),
@@ -315,7 +315,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   children: [
                     Icon(Icons.warning, color: Colors.white, size: 20),
                     SizedBox(width: 8),

@@ -1242,19 +1242,19 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
 
     // Show loading indicator
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         content: Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 16,
               height: 16,
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             Text(AppStrings.get('loading')),
           ],
         ),
-        duration: Duration(seconds: 10),
+        duration: const Duration(seconds: 10),
       ),
     );
 

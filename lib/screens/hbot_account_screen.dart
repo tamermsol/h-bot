@@ -857,9 +857,9 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 16,
                   height: 16,
                   child: CircularProgressIndicator(
@@ -867,7 +867,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Text(AppStrings.get('loading')),
               ],
             ),

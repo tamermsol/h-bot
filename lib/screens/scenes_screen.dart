@@ -148,14 +148,14 @@ class _ScenesScreenState extends State<ScenesScreen>
               child: InkWell(
                 borderRadius: HBotRadius.mediumRadius,
                 onTap: _showCreateSceneDialog,
-                child: const Padding(
+                child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: HBotSpacing.space5, vertical: HBotSpacing.space3),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.add, color: Colors.white, size: 20),
                       SizedBox(width: HBotSpacing.space2),
-                      Text(AppStrings.get('add_scene'), style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
+                      Text(AppStrings.get('add_scene'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
                     ],
                   ),
                 ),
