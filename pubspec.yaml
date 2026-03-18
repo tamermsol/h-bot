@@ -73,7 +73,7 @@ dependencies:
 
   # QR Code generation and scanning for device sharing
   qr_flutter: ^4.1.0
-  mobile_scanner: ^5.2.3
+  mobile_scanner: ^6.0.11
   
   # Biometric authentication for device sharing
   local_auth: ^2.2.0
