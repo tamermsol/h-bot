@@ -12,6 +12,7 @@ import '../models/scene_step.dart';
 import '../models/scene_trigger.dart';
 import '../widgets/responsive_shell.dart';
 import '../repos/device_sharing_repo.dart';
+import '../repos/devices_repo.dart';
 import '../l10n/app_strings.dart';
 
 class AddSceneScreen extends StatefulWidget {
@@ -175,11 +176,13 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       // Load all devices to match device IDs with device objects
       final devices = await _service.getDevicesByHome(widget.homeId);
 
-      // Also load shared devices to support shared device steps
+      // Also load shared devices using the same approach as the dashboard
+      List<Device> sharedDeviceObjects = [];
       List<String> sharedDeviceIds = [];
       try {
-        final sharedDevices = await DeviceSharingRepo().getSharedWithMe();
-        sharedDeviceIds = sharedDevices.map((s) => s.deviceId).toList();
+        final devicesRepo = DevicesRepo();
+        sharedDeviceObjects = await devicesRepo.listSharedDevices();
+        sharedDeviceIds = sharedDeviceObjects.map((d) => d.id).toList();
       } catch (e) {
         debugPrint('⚠️ Could not load shared devices: $e');
       }
@@ -203,10 +206,10 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             // Not in home devices — try as a shared device
             if (sharedDeviceIds.contains(deviceId)) {
               try {
-                device = await _service.getDeviceById(deviceId);
+                device = sharedDeviceObjects.firstWhere((d) => d.id == deviceId);
                 isShared = true;
               } catch (e) {
-                debugPrint('⚠️ Could not fetch shared device $deviceId: $e');
+                debugPrint('⚠️ Could not find shared device $deviceId in loaded list');
               }
             }
           }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/smart_home_service.dart';
 import '../models/device.dart';
+import '../repos/devices_repo.dart';
 import '../repos/device_sharing_repo.dart';
 
 class DeviceSelector extends StatefulWidget {
@@ -108,38 +109,31 @@ class _DeviceSelectorState extends State<DeviceSelector> {
         };
       }).toList();
 
-      // Load shared devices and merge them
+      // Load shared devices using the same approach as the dashboard
+      // (queries through shared_devices table join, which respects RLS properly)
       try {
-        final sharedDevices = await DeviceSharingRepo().getSharedWithMe();
-        debugPrint('DeviceSelector: Loaded ${sharedDevices.length} shared devices');
+        final devicesRepo = DevicesRepo();
+        final sharedDevicesList = await devicesRepo.listSharedDevices();
+        debugPrint('DeviceSelector: Loaded ${sharedDevicesList.length} shared devices');
 
         // Track existing device IDs to avoid duplicates
         final existingIds = allDevices.map((d) => d['id'] as String).toSet();
 
-        for (final shared in sharedDevices) {
-          // Skip if already in the list (device might be in this home)
-          if (existingIds.contains(shared.deviceId)) continue;
+        for (final device in sharedDevicesList) {
+          if (existingIds.contains(device.id)) continue;
 
-          // Fetch the full Device object for proper action configuration
-          try {
-            final fullDevice = await _service.getDeviceById(shared.deviceId);
-            if (fullDevice != null) {
-              allDevices.add({
-                'id': fullDevice.id,
-                'name': fullDevice.deviceName,
-                'deviceName': fullDevice.deviceName,
-                'type': _mapDeviceTypeToCategory(fullDevice.deviceType),
-                'icon': _getIconForDeviceType(fullDevice.deviceType),
-                'room': 'Shared',
-                'isOnline': fullDevice.online ?? false,
-                'device': fullDevice,
-                'isShared': true,
-              });
-              existingIds.add(shared.deviceId);
-            }
-          } catch (e) {
-            debugPrint('DeviceSelector: Failed to fetch shared device ${shared.deviceId}: $e');
-          }
+          allDevices.add({
+            'id': device.id,
+            'name': device.deviceName,
+            'deviceName': device.deviceName,
+            'type': _mapDeviceTypeToCategory(device.deviceType),
+            'icon': _getIconForDeviceType(device.deviceType),
+            'room': 'Shared',
+            'isOnline': device.online ?? false,
+            'device': device,
+            'isShared': true,
+          });
+          existingIds.add(device.id);
         }
       } catch (e) {
         debugPrint('DeviceSelector: Failed to load shared devices: $e');
