@@ -81,7 +81,7 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
 
   String _relativeTime(DateTime dt) {
     final diff = DateTime.now().difference(dt);
-    if (diff.inSeconds < 60) return 'Just now';
+    if (diff.inSeconds < 60) return AppStrings.get('notifications_just_now');
     if (diff.inMinutes < 60) return '${diff.inMinutes}${AppStrings.get("notifications_minutes_ago")}';
     if (diff.inHours < 24) return '${diff.inHours}${AppStrings.get("notifications_hours_ago")}';
     if (diff.inDays == 1) return AppStrings.get('notifications_yesterday');

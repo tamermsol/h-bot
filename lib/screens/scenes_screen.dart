@@ -213,7 +213,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        scene.isEnabled ? 'Enabled' : 'Disabled',
+                        scene.isEnabled ? AppStrings.get('scene_enabled') : AppStrings.get('scene_disabled'),
                         style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: context.hTextSecondary),
                       ),
                     ],
@@ -377,7 +377,7 @@ class _ScenesScreenState extends State<ScenesScreen>
                         Text(scene.name, style: TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
                         const SizedBox(height: 2),
                         Text(
-                          scene.isEnabled ? 'Enabled' : 'Disabled',
+                          scene.isEnabled ? AppStrings.get('scene_enabled') : AppStrings.get('scene_disabled'),
                           style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: scene.isEnabled ? sceneColor : context.hTextSecondary),
                         ),
                       ],
