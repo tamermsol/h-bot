@@ -27,19 +27,36 @@ class DevicesRepo {
   Future<List<Device>> listSharedDevices() async {
     try {
       final userId = supabase.auth.currentUser?.id;
-      if (userId == null) return [];
+      if (userId == null) {
+        debugPrint('listSharedDevices: No authenticated user');
+        return [];
+      }
+      debugPrint('listSharedDevices: Fetching for user $userId');
 
       // Use RPC function (SECURITY DEFINER) to bypass view/RLS complexity
       final response = await supabase.rpc('get_shared_devices');
+      debugPrint('listSharedDevices: RPC response type=${response.runtimeType}, value=$response');
 
-      final devices = (response as List)
-          .map((json) => Device.fromJson(json as Map<String, dynamic>))
-          .toList();
+      if (response == null) return [];
 
-      debugPrint('Loaded ${devices.length} shared devices via RPC');
+      final List<dynamic> data = response is List ? response : [response];
+      final List<Device> devices = [];
+
+      for (final json in data) {
+        try {
+          final map = json as Map<String, dynamic>;
+          devices.add(Device.fromJson(map));
+        } catch (parseErr) {
+          debugPrint('listSharedDevices: Failed to parse device: $parseErr');
+          debugPrint('listSharedDevices: Raw JSON: $json');
+        }
+      }
+
+      debugPrint('listSharedDevices: Loaded ${devices.length} shared devices via RPC');
       return devices;
-    } catch (e) {
-      debugPrint('Failed to load shared devices: $e');
+    } catch (e, stack) {
+      debugPrint('listSharedDevices: FAILED: $e');
+      debugPrint('listSharedDevices: Stack: $stack');
       return [];
     }
   }
