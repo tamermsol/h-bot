@@ -214,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Link H-Bot with Alexa',
+                    AppStrings.get('alexa_link_title'),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -225,10 +225,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            _buildStep(context, '1', 'Open the Amazon Alexa app'),
-            _buildStep(context, '2', 'Tap "More" → "Skills & Games"'),
-            _buildStep(context, '3', 'Search for "H-Bot"'),
-            _buildStep(context, '4', 'Tap "Enable to Use" and link your account'),
+            _buildStep(context, '1', AppStrings.get('alexa_step_1')),
+            _buildStep(context, '2', AppStrings.get('alexa_step_2')),
+            _buildStep(context, '3', AppStrings.get('alexa_step_3')),
+            _buildStep(context, '4', AppStrings.get('alexa_step_4')),
           ],
         ),
       ),

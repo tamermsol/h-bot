@@ -906,6 +906,20 @@ class AppStrings {
       'notifications_minutes_ago': 'm ago',
       'notifications_hours_ago': 'h ago',
       'notifications_days_ago': 'd ago',
+    
+      'alexa_link_title': 'Link H-Bot with Alexa',
+      'alexa_step_1': 'Open the Amazon Alexa app',
+      'alexa_step_2': 'Tap "More" → "Skills & Games"',
+      'alexa_step_3': 'Search for "H-Bot"',
+      'alexa_step_4': 'Tap "Enable to Use" and link your account',
+      'help_were_here_to_help': 'We\'re here to help',
+      'help_get_in_touch': 'Get in touch with us through any of the following channels',
+      'help_contact_information': 'Contact Information',
+      'help_website': 'Website',
+      'help_email': 'Email',
+      'help_phone': 'Phone',
+      'help_whatsapp': 'WhatsApp',
+      'help_response_time': 'We typically respond within 24 hours during business days.',
     },
 
     // ── Arabic ────────────────────────────────────────────────────────────────
@@ -1797,6 +1811,20 @@ class AppStrings {
       'notifications_minutes_ago': 'د',
       'notifications_hours_ago': 'س',
       'notifications_days_ago': 'ي',
+    
+      'alexa_link_title': 'ربط H-Bot مع Alexa',
+      'alexa_step_1': 'افتح تطبيق Amazon Alexa',
+      'alexa_step_2': 'اضغط على "المزيد" ← "المهارات والألعاب"',
+      'alexa_step_3': 'ابحث عن "H-Bot"',
+      'alexa_step_4': 'اضغط على "تمكين للاستخدام" واربط حسابك',
+      'help_were_here_to_help': 'نحن هنا لمساعدتك',
+      'help_get_in_touch': 'تواصل معنا عبر أي من القنوات التالية',
+      'help_contact_information': 'معلومات الاتصال',
+      'help_website': 'الموقع الإلكتروني',
+      'help_email': 'البريد الإلكتروني',
+      'help_phone': 'الهاتف',
+      'help_whatsapp': 'WhatsApp',
+      'help_response_time': 'نستجيب عادةً خلال 24 ساعة في أيام العمل.',
     },
   };
 }

@@ -70,7 +70,7 @@ class HelpCenterScreen extends StatelessWidget {
           children: [
             // Header
             Text(
-              'We\'re here to help',
+              AppStrings.get('help_were_here_to_help'),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: context.hTextPrimary,
@@ -78,7 +78,7 @@ class HelpCenterScreen extends StatelessWidget {
             ),
             const SizedBox(height: HBotSpacing.space2),
             Text(
-              'Get in touch with us through any of the following channels',
+              AppStrings.get('help_get_in_touch'),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: context.hTextSecondary,
               ),
@@ -86,7 +86,7 @@ class HelpCenterScreen extends StatelessWidget {
             const SizedBox(height: HBotSpacing.space6),
 
             // Contact Information Section
-            _buildSectionHeader(context, 'Contact Information'),
+            _buildSectionHeader(context, AppStrings.get('help_contact_information')),
             const SizedBox(height: HBotSpacing.space4),
             Container(
               decoration: BoxDecoration(
@@ -98,7 +98,7 @@ class HelpCenterScreen extends StatelessWidget {
                   _buildContactTile(
                     context,
                     icon: Icons.language,
-                    title: 'Website',
+                    title: AppStrings.get('help_website'),
                     subtitle: 'https://h-bot.tech/',
                     onTap: () =>
                         _launchUrl(context, 'https://h-bot.tech/', 'website'),
@@ -107,7 +107,7 @@ class HelpCenterScreen extends StatelessWidget {
                   _buildContactTile(
                     context,
                     icon: Icons.email_outlined,
-                    title: 'Email',
+                    title: AppStrings.get('help_email'),
                     subtitle: 'support@h-bot.tech',
                     onTap: () => _launchUrl(
                       context,
@@ -119,7 +119,7 @@ class HelpCenterScreen extends StatelessWidget {
                   _buildContactTile(
                     context,
                     icon: Icons.phone_outlined,
-                    title: 'Phone',
+                    title: AppStrings.get('help_phone'),
                     subtitle: '+20 12 81167100',
                     onTap: () =>
                         _launchUrl(context, 'tel:+201281167100', 'phone'),
@@ -128,7 +128,7 @@ class HelpCenterScreen extends StatelessWidget {
                   _buildContactTile(
                     context,
                     icon: Icons.chat_outlined,
-                    title: 'WhatsApp',
+                    title: AppStrings.get('help_whatsapp'),
                     subtitle: '+20 12 81167100',
                     onTap: () => _launchUrl(
                       context,
@@ -163,7 +163,7 @@ class HelpCenterScreen extends StatelessWidget {
                   const SizedBox(width: HBotSpacing.space4),
                   Expanded(
                     child: Text(
-                      'We typically respond within 24 hours during business days.',
+                      AppStrings.get('help_response_time'),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: context.hTextPrimary,
                       ),
