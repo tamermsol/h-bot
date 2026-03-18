@@ -4,6 +4,7 @@ import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 /// Screen for calibrating shutter open/close durations
 class ShutterCalibrationScreen extends StatefulWidget {
@@ -140,7 +141,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to send command: $e'),
+            content: Text(AppStrings.get('shutter_calibration_failed_to_send_command_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -151,8 +152,8 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
   Future<void> _applyCalibration() async {
     if (_openDuration == null || _closeDuration == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please complete both calibrations first'),
+        SnackBar(
+          content: Text(AppStrings.get('shutter_calibration_please_complete_both_calibrations_first')),
           backgroundColor: Colors.orange,
         ),
       );
@@ -217,7 +218,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to apply calibration: $e'),
+            content: Text(AppStrings.get('shutter_calibration_failed_to_apply_calibration_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -278,7 +279,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to reset calibration: $e'),
+            content: Text(AppStrings.get('shutter_calibration_failed_to_reset_calibration_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -396,7 +397,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                     child: OutlinedButton.icon(
                       onPressed: _resetCalibration,
                       icon: const Icon(Icons.refresh),
-                      label: const Text('Reset'),
+                      label: Text(AppStrings.get('shutter_calibration_reset')),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: context.hTextPrimary,
                         side: BorderSide(color: context.hTextTertiary),
@@ -410,7 +411,7 @@ class _ShutterCalibrationScreenState extends State<ShutterCalibrationScreen> {
                     child: ElevatedButton.icon(
                       onPressed: _applyCalibration,
                       icon: const Icon(Icons.check),
-                      label: const Text('Apply Calibration'),
+                      label: Text(AppStrings.get('shutter_calibration_apply_calibration')),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: HBotColors.primary,
                         foregroundColor: Colors.white,

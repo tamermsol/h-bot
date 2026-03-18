@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/activity_log_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class ActivityLogScreen extends StatefulWidget {
   final String? deviceId;
@@ -234,12 +235,12 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Clear Activity Log?'),
-        content: const Text('This will permanently delete all logged events.'),
+        title: Text(AppStrings.get('activity_log_clear_activity_log')),
+        content: Text(AppStrings.get('activity_log_this_will_permanently_delete_all_logged_')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('activity_log_cancel')),
           ),
           TextButton(
             onPressed: () async {
@@ -251,7 +252,7 @@ class _ActivityLogScreenState extends State<ActivityLogScreen> {
               }
               _loadEvents();
             },
-            child: const Text('Clear', style: TextStyle(color: Colors.red)),
+            child: Text(AppStrings.get('activity_log_clear'), style: TextStyle(color: Colors.red)),
           ),
         ],
       ),

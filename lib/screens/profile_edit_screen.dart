@@ -4,6 +4,7 @@ import '../widgets/smart_input_field.dart';
 import '../services/auth_service.dart';
 import '../models/profile.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   final Profile? initialProfile;
@@ -60,7 +61,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Profile updated successfully!'),
+            content: Text(AppStrings.get('profile_edit_profile_updated_successfully')),
             backgroundColor: HBotColors.success,
           ),
         );
@@ -70,7 +71,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error updating profile: $e'),
+            content: Text(AppStrings.get('profile_edit_error_updating_profile_e')),
             backgroundColor: HBotColors.error,
           ),
         );
@@ -88,7 +89,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return Scaffold(
       backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        title: Text(AppStrings.get('profile_edit_edit_profile')),
         backgroundColor: context.hBackground,
         elevation: 0,
         actions: [
@@ -158,7 +159,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               // Full Name Field
               SmartInputField(
                 controller: _fullNameController,
-                label: 'Full Name',
+                label: AppStrings.get('profile_edit_full_name'),
                 keyboardType: TextInputType.name,
                 validator: (value) {
                   if (value != null && value.isNotEmpty) {
@@ -175,7 +176,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               // Phone Number Field
               SmartInputField(
                 controller: _phoneController,
-                label: 'Phone Number (Optional)',
+                label: AppStrings.get('profile_edit_phone_number_optional'),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value != null && value.isNotEmpty) {

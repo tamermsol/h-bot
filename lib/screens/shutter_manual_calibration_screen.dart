@@ -4,6 +4,7 @@ import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 /// Screen for manual shutter calibration by entering times directly
 class ShutterManualCalibrationScreen extends StatefulWidget {
@@ -42,8 +43,8 @@ class _ShutterManualCalibrationScreenState
 
     if (_currentPosition == ShutterPosition.unknown) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select current shutter position'),
+        SnackBar(
+          content: Text(AppStrings.get('shutter_manual_calibration_please_select_current_shutter_position')),
           backgroundColor: Colors.orange,
         ),
       );
@@ -121,7 +122,7 @@ class _ShutterManualCalibrationScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to apply calibration: $e'),
+            content: Text(AppStrings.get('shutter_manual_calibration_failed_to_apply_calibration_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -193,7 +194,7 @@ class _ShutterManualCalibrationScreenState
               // Open time input
               _buildTimeInput(
                 controller: _openTimeController,
-                label: 'Open Duration (seconds)',
+                label: AppStrings.get('shutter_manual_calibration_open_duration_seconds'),
                 hint: 'Enter time to fully open',
                 icon: Icons.arrow_upward,
                 color: Colors.green,
@@ -203,7 +204,7 @@ class _ShutterManualCalibrationScreenState
               // Close time input
               _buildTimeInput(
                 controller: _closeTimeController,
-                label: 'Close Duration (seconds)',
+                label: AppStrings.get('shutter_manual_calibration_close_duration_seconds'),
                 hint: 'Enter time to fully close',
                 icon: Icons.arrow_downward,
                 color: Colors.red,
@@ -307,7 +308,7 @@ class _ShutterManualCalibrationScreenState
                 Expanded(
                   child: _buildPositionButton(
                     position: ShutterPosition.fullyClosed,
-                    label: 'Fully Closed',
+                    label: AppStrings.get('shutter_manual_calibration_fully_closed'),
                     subtitle: '0%',
                     icon: Icons.arrow_downward,
                     color: Colors.red,
@@ -317,7 +318,7 @@ class _ShutterManualCalibrationScreenState
                 Expanded(
                   child: _buildPositionButton(
                     position: ShutterPosition.fullyOpen,
-                    label: 'Fully Open',
+                    label: AppStrings.get('shutter_manual_calibration_fully_open'),
                     subtitle: '100%',
                     icon: Icons.arrow_upward,
                     color: Colors.green,

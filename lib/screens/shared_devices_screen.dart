@@ -4,6 +4,7 @@ import '../models/shared_device.dart';
 import '../repos/device_sharing_repo.dart';
 import 'scan_device_qr_screen.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class SharedDevicesScreen extends StatefulWidget {
   const SharedDevicesScreen({super.key});
@@ -36,7 +37,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading shared devices: $e'),
+            content: Text(AppStrings.get('shared_devices_error_loading_shared_devices_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -50,7 +51,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
     return Scaffold(
       backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text('Shared with Me'),
+        title: Text(AppStrings.get('shared_devices_shared_with_me')),
         backgroundColor: context.hBackground,
         actions: [
           IconButton(
@@ -63,7 +64,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                 ),
               ).then((_) => _loadSharedDevices());
             },
-            tooltip: 'Scan QR Code',
+            tooltip: AppStrings.get('shared_devices_scan_qr_code_2'),
           ),
         ],
       ),
@@ -192,7 +193,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                 ).then((_) => _loadSharedDevices());
               },
               icon: const Icon(Icons.qr_code_scanner),
-              label: const Text('Scan QR Code'),
+              label: Text(AppStrings.get('shared_devices_scan_qr_code')),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.primary,
                 padding: const EdgeInsets.symmetric(

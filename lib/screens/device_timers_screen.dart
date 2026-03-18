@@ -7,6 +7,7 @@ import '../theme/app_theme.dart';
 import '../services/mqtt_device_manager.dart';
 import 'add_timer_screen.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class DeviceTimersScreen extends StatefulWidget {
   final Device device;
@@ -358,7 +359,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Delete Timer'),
+        title: Text(AppStrings.get('device_timers_delete_timer')),
         content: Text(
           'Are you sure you want to delete this timer?\n\n'
           'This will free $slotsFreed timer slot${slotsFreed > 1 ? 's' : ''}.',
@@ -366,12 +367,12 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('device_timers_cancel')),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: HBotColors.error),
-            child: const Text('Delete'),
+            child: Text(AppStrings.get('device_timers_delete')),
           ),
         ],
       ),
@@ -447,7 +448,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to update timer: $e'),
+            content: Text(AppStrings.get('device_timers_failed_to_update_timer_e')),
             backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 3),
           ),
@@ -624,7 +625,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: _addTimer,
-              tooltip: 'Add Timer',
+              tooltip: AppStrings.get('device_timers_add_timer'),
             ),
         ],
       ),

@@ -6,7 +6,7 @@ import '../theme/app_theme.dart';
 import '../services/smart_home_service.dart';
 import '../models/device.dart';
 import '../repos/devices_repo.dart';
-import '../repos/device_sharing_repo.dart';
+import '../l10n/app_strings.dart';
 
 class DeviceSelector extends StatefulWidget {
   final List<Map<String, dynamic>> selectedDevices;
@@ -220,7 +220,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
   Widget build(BuildContext context) {
     // Show loading state
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: Padding(
           padding: EdgeInsets.all(HBotSpacing.space6),
           child: Column(
@@ -228,7 +228,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
             children: [
               CircularProgressIndicator(),
               SizedBox(height: HBotSpacing.space4),
-              Text('Loading devices...'),
+              Text(AppStrings.get('device_selector_loading_devices')),
             ],
           ),
         ),
@@ -256,7 +256,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
               ElevatedButton.icon(
                 onPressed: _loadDevices,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                label: Text(AppStrings.get('device_selector_retry')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: widget.accentColor,
                 ),

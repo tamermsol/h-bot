@@ -5,6 +5,7 @@ import '../theme/app_theme.dart';
 import 'sign_in_screen.dart';
 import '../widgets/smart_input_field.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String email;
@@ -74,8 +75,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final otp = _getOtpCode();
     if (otp.length != 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter the complete 6-digit code'),
+        SnackBar(
+          content: Text(AppStrings.get('reset_password_please_enter_the_complete_6digit_code')),
           backgroundColor: HBotColors.error,
         ),
       );
@@ -84,8 +85,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     if (_newPasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a new password'),
+        SnackBar(
+          content: Text(AppStrings.get('reset_password_please_enter_a_new_password')),
           backgroundColor: HBotColors.error,
         ),
       );
@@ -94,8 +95,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     if (_newPasswordController.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Password must be at least 6 characters'),
+        SnackBar(
+          content: Text(AppStrings.get('reset_password_password_must_be_at_least_6_characters')),
           backgroundColor: HBotColors.error,
         ),
       );
@@ -104,8 +105,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
     if (_newPasswordController.text != _confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Passwords do not match'),
+        SnackBar(
+          content: Text(AppStrings.get('reset_password_passwords_do_not_match')),
           backgroundColor: HBotColors.error,
         ),
       );
@@ -123,8 +124,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Password reset successfully!'),
+          SnackBar(
+            content: Text(AppStrings.get('reset_password_password_reset_successfully')),
             backgroundColor: Colors.green,
           ),
         );
@@ -154,8 +155,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       await _authService.resetPassword(widget.email);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Reset code sent! Please check your email.'),
+          SnackBar(
+            content: Text(AppStrings.get('reset_password_reset_code_sent_please_check_your_email')),
             backgroundColor: Colors.green,
           ),
         );
@@ -304,7 +305,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 // New Password
                 SmartInputField(
                   controller: _newPasswordController,
-                  label: 'New Password',
+                  label: AppStrings.get('reset_password_new_password'),
                   hint: 'At least 6 characters',
                   obscureText: true,
                   enabled: !_isResetting,
@@ -320,7 +321,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 // Confirm Password
                 SmartInputField(
                   controller: _confirmPasswordController,
-                  label: 'Confirm Password',
+                  label: AppStrings.get('reset_password_confirm_password'),
                   hint: 'Re-enter your password',
                   obscureText: true,
                   enabled: !_isResetting,
@@ -362,7 +363,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               width: 20,
                               child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
                             )
-                          : const Text('Reset Password', style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
+                          : Text(AppStrings.get('reset_password_reset_password'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
                     ),
                   ),
                 ),

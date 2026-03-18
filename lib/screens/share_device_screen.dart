@@ -9,6 +9,7 @@ import '../models/device_share_request.dart';
 import '../models/shared_device.dart';
 import '../repos/device_sharing_repo.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class ShareDeviceScreen extends StatefulWidget {
   final Device device;
@@ -54,7 +55,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading data: $e'),
+            content: Text(AppStrings.get('share_device_error_loading_data_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -119,8 +120,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       debugPrint('Authentication error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Authentication cancelled or failed'),
+          SnackBar(
+            content: Text(AppStrings.get('share_device_authentication_cancelled_or_failed')),
             backgroundColor: Colors.orange,
           ),
         );
@@ -131,8 +132,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     if (!authenticated) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Authentication required to generate QR code'),
+          SnackBar(
+            content: Text(AppStrings.get('share_device_authentication_required_to_generate_qr_c')),
             backgroundColor: Colors.orange,
           ),
         );
@@ -153,7 +154,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error generating QR: $e'),
+            content: Text(AppStrings.get('share_device_error_generating_qr_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -168,7 +169,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Choose Authentication Method'),
+        title: Text(AppStrings.get('share_device_choose_authentication_method')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -179,8 +180,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                   color: HBotColors.primary,
                   size: 32,
                 ),
-                title: const Text('Biometric'),
-                subtitle: const Text('Fingerprint, face, or iris'),
+                title: Text(AppStrings.get('share_device_biometric')),
+                subtitle: Text(AppStrings.get('share_device_fingerprint_face_or_iris')),
                 onTap: () => Navigator.pop(context, 'biometric'),
               ),
             ListTile(
@@ -189,8 +190,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                 color: HBotColors.primary,
                 size: 32,
               ),
-              title: const Text('Device Password'),
-              subtitle: const Text('PIN, password, or pattern'),
+              title: Text(AppStrings.get('share_device_device_password')),
+              subtitle: Text(AppStrings.get('share_device_pin_password_or_pattern')),
               onTap: () => Navigator.pop(context, 'password'),
             ),
           ],
@@ -198,7 +199,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('share_device_cancel')),
           ),
         ],
       ),
@@ -213,8 +214,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       await _repo.approveRequest(request.id, permission);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Request approved!'),
+          SnackBar(
+            content: Text(AppStrings.get('share_device_request_approved')),
             backgroundColor: Colors.green,
           ),
         );
@@ -223,7 +224,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text(AppStrings.get('share_device_error_e')), backgroundColor: Colors.red),
         );
       }
     }
@@ -234,8 +235,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       await _repo.rejectRequest(request.id);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Request rejected'),
+          SnackBar(
+            content: Text(AppStrings.get('share_device_request_rejected')),
             backgroundColor: Colors.orange,
           ),
         );
@@ -244,7 +245,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text(AppStrings.get('share_device_error_e_2')), backgroundColor: Colors.red),
         );
       }
     }
@@ -255,7 +256,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Choose Permission Level'),
+        title: Text(AppStrings.get('share_device_choose_permission_level')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -264,8 +265,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                 Icons.visibility,
                 color: HBotColors.primary,
               ),
-              title: const Text('View Only'),
-              subtitle: const Text('Can see device status'),
+              title: Text(AppStrings.get('share_device_view_only')),
+              subtitle: Text(AppStrings.get('share_device_can_see_device_status')),
               onTap: () => Navigator.pop(context, PermissionLevel.view),
             ),
             ListTile(
@@ -273,8 +274,8 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                 Icons.touch_app,
                 color: HBotColors.primary,
               ),
-              title: const Text('Control'),
-              subtitle: const Text('Can control the device'),
+              title: Text(AppStrings.get('share_device_control')),
+              subtitle: Text(AppStrings.get('share_device_can_control_the_device')),
               onTap: () => Navigator.pop(context, PermissionLevel.control),
             ),
           ],
@@ -289,13 +290,13 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
     return Scaffold(
       backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text('Share Device'),
+        title: Text(AppStrings.get('share_device_share_device')),
         backgroundColor: context.hBackground,
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _loadData,
-            tooltip: 'Refresh',
+            tooltip: AppStrings.get('share_device_refresh'),
           ),
         ],
       ),
@@ -432,7 +433,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                                 setState(() => _invitation = null);
                               },
                               icon: const Icon(Icons.close),
-                              label: const Text('Cancel QR Code'),
+                              label: Text(AppStrings.get('share_device_cancel_qr_code')),
                             ),
                           ],
                         ),
@@ -535,7 +536,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                                   context: context,
                                   builder: (context) => AlertDialog(
                                     backgroundColor: context.hCard,
-                                    title: const Text('Revoke Access?'),
+                                    title: Text(AppStrings.get('share_device_revoke_access')),
                                     content: const Text(
                                       'This user will no longer have access to this device.',
                                     ),
@@ -543,7 +544,7 @@ class _ShareDeviceScreenState extends State<ShareDeviceScreen> {
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.pop(context, false),
-                                        child: const Text('Cancel'),
+                                        child: Text(AppStrings.get('share_device_cancel_2')),
                                       ),
                                       TextButton(
                                         onPressed: () =>

@@ -11,6 +11,7 @@ import '../widgets/background_container.dart';
 import '../widgets/room_icon_picker.dart';
 import 'devices_screen.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class RoomsScreen extends StatefulWidget {
   final Home home;
@@ -54,7 +55,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load rooms: $e'),
+            content: Text(AppStrings.get('rooms_failed_to_load_rooms_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -65,8 +66,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
   Future<void> _createRoom() async {
     if (_nameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a room name'),
+        SnackBar(
+          content: Text(AppStrings.get('rooms_please_enter_a_room_name')),
           backgroundColor: Colors.red,
         ),
       );
@@ -102,7 +103,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to create room: $e'),
+            content: Text(AppStrings.get('rooms_failed_to_create_room_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -115,26 +116,26 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Create New Room'),
+        title: Text(AppStrings.get('rooms_create_new_room')),
         content: TextField(
           controller: _nameController,
-          decoration: const InputDecoration(
-            labelText: 'Room Name',
-            hintText: 'e.g., Living Room, Kitchen, etc.',
+          decoration: InputDecoration(
+            labelText: AppStrings.get('rooms_room_name'),
+            hintText: AppStrings.get('rooms_eg_living_room_kitchen_etc'),
           ),
           autofocus: true,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('rooms_cancel')),
           ),
           ElevatedButton(
             onPressed: _createRoom,
             style: ElevatedButton.styleFrom(
               backgroundColor: HBotColors.primary,
             ),
-            child: const Text('Create'),
+            child: Text(AppStrings.get('rooms_create')),
           ),
         ],
       ),
@@ -144,8 +145,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
   Future<void> _editRoom(Room room) async {
     if (_nameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a room name'),
+        SnackBar(
+          content: Text(AppStrings.get('rooms_please_enter_a_room_name_2')),
           backgroundColor: Colors.red,
         ),
       );
@@ -185,7 +186,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to update room: $e'),
+            content: Text(AppStrings.get('rooms_failed_to_update_room_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -222,7 +223,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to delete room: $e'),
+            content: Text(AppStrings.get('rooms_failed_to_delete_room_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -237,26 +238,26 @@ class _RoomsScreenState extends State<RoomsScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Edit Room'),
+          title: Text(AppStrings.get('rooms_edit_room')),
           content: TextField(
             controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Room Name',
-              hintText: 'e.g., Living Room, Kitchen, etc.',
+            decoration: InputDecoration(
+              labelText: AppStrings.get('rooms_room_name_2'),
+              hintText: AppStrings.get('rooms_eg_living_room_kitchen_etc_2'),
             ),
             autofocus: true,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('rooms_cancel_2')),
             ),
             ElevatedButton(
               onPressed: () => _editRoom(room),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.primary,
               ),
-              child: const Text('Save'),
+              child: Text(AppStrings.get('rooms_save')),
             ),
           ],
         );
@@ -270,19 +271,19 @@ class _RoomsScreenState extends State<RoomsScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Delete Room'),
+          title: Text(AppStrings.get('rooms_delete_room')),
           content: Text(
             'Are you sure you want to delete "${room.name}"? This action cannot be undone and will remove all devices in this room.',
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('rooms_cancel_3')),
             ),
             ElevatedButton(
               onPressed: () => _deleteRoom(room),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('Delete'),
+              child: Text(AppStrings.get('rooms_delete')),
             ),
           ],
         );
@@ -299,7 +300,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Room Background Image'),
+          title: Text(AppStrings.get('rooms_room_background_image')),
           content: SingleChildScrollView(
             child: BackgroundImagePicker(
               currentImageUrl: room.backgroundImageUrl,
@@ -328,7 +329,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Failed to update background: $e'),
+                        content: Text(AppStrings.get('rooms_failed_to_update_background_e')),
                         backgroundColor: Colors.red,
                       ),
                     );
@@ -340,7 +341,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(AppStrings.get('rooms_close')),
             ),
           ],
         );
@@ -358,7 +359,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
           builder: (context, setState) {
             return AlertDialog(
               backgroundColor: context.hCard,
-              title: const Text('Change Room Icon'),
+              title: Text(AppStrings.get('rooms_change_room_icon')),
               content: SizedBox(
                 width: double.maxFinite,
                 child: SingleChildScrollView(
@@ -375,7 +376,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
+                  child: Text(AppStrings.get('rooms_cancel_4')),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -396,8 +397,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
                       if (mounted) {
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Room icon updated successfully!'),
+                          SnackBar(
+                            content: Text(AppStrings.get('rooms_room_icon_updated_successfully')),
                             backgroundColor: HBotColors.primary,
                           ),
                         );
@@ -406,7 +407,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Failed to update icon: $e'),
+                            content: Text(AppStrings.get('rooms_failed_to_update_icon_e')),
                             backgroundColor: Colors.red,
                           ),
                         );
@@ -416,7 +417,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: HBotColors.primary,
                   ),
-                  child: const Text('Save'),
+                  child: Text(AppStrings.get('rooms_save_2')),
                 ),
               ],
             );
@@ -511,7 +512,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
             ElevatedButton.icon(
               onPressed: _showCreateRoomDialog,
               icon: const Icon(Icons.add),
-              label: const Text('Add Your First Room'),
+              label: Text(AppStrings.get('rooms_add_your_first_room')),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.primary,
                 foregroundColor: Colors.white,
@@ -665,27 +666,27 @@ class _RoomsScreenState extends State<RoomsScreen> {
                     }
                   },
                   itemBuilder: (context) => [
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'edit',
                       child: ListTile(
                         leading: Icon(Icons.edit_outlined),
-                        title: Text('Edit Room'),
+                        title: Text(AppStrings.get('rooms_edit_room_2')),
                         contentPadding: EdgeInsets.zero,
                       ),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'icon',
                       child: ListTile(
                         leading: Icon(Icons.category_outlined),
-                        title: Text('Change Icon'),
+                        title: Text(AppStrings.get('rooms_change_icon')),
                         contentPadding: EdgeInsets.zero,
                       ),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'background',
                       child: ListTile(
                         leading: Icon(Icons.image_outlined),
-                        title: Text('Background Image'),
+                        title: Text(AppStrings.get('rooms_background_image')),
                         contentPadding: EdgeInsets.zero,
                       ),
                     ),

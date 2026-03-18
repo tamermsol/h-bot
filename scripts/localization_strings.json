@@ -1,0 +1,2138 @@
+{
+  "activity_log_clear_activity_log": {
+    "en": "Clear Activity Log?",
+    "ar": "[AR] Clear Activity Log?",
+    "screen": "screens/activity_log_screen.dart",
+    "line": 237
+  },
+  "activity_log_clear_activity_log_2": {
+    "en": "Clear Activity Log?",
+    "ar": "[AR] Clear Activity Log?",
+    "screen": "screens/activity_log_screen.dart",
+    "line": 237
+  },
+  "activity_log_this_will_permanently_delete_all_logged_": {
+    "en": "This will permanently delete all logged events.",
+    "ar": "[AR] This will permanently delete all logged events.",
+    "screen": "screens/activity_log_screen.dart",
+    "line": 238
+  },
+  "activity_log_this_will_permanently_delete_all_logged__2": {
+    "en": "This will permanently delete all logged events.",
+    "ar": "[AR] This will permanently delete all logged events.",
+    "screen": "screens/activity_log_screen.dart",
+    "line": 238
+  },
+  "activity_log_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/activity_log_screen.dart",
+    "line": 242
+  },
+  "activity_log_clear": {
+    "en": "Clear",
+    "ar": "[AR] Clear",
+    "screen": "screens/activity_log_screen.dart",
+    "line": 254
+  },
+  "add_device_flow_debug_log": {
+    "en": "Debug Log",
+    "ar": "[AR] Debug Log",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 301
+  },
+  "add_device_flow_log_copied_to_clipboard": {
+    "en": "Log copied to clipboard",
+    "ar": "[AR] Log copied to clipboard",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 308
+  },
+  "add_device_flow_log_copied_to_clipboard_2": {
+    "en": "Log copied to clipboard",
+    "ar": "[AR] Log copied to clipboard",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 308
+  },
+  "add_device_flow_copy": {
+    "en": "Copy",
+    "ar": "نسخ",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 311
+  },
+  "add_device_flow_share": {
+    "en": "Share",
+    "ar": "مشاركة",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 318
+  },
+  "add_device_flow_wifi_network_name_ssid": {
+    "en": "WiFi Network Name (SSID)",
+    "ar": "[AR] WiFi Network Name (SSID)",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 566
+  },
+  "add_device_flow_password": {
+    "en": "Password",
+    "ar": "كلمة المرور",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 587
+  },
+  "add_device_flow_open_app_settings": {
+    "en": "Open App Settings",
+    "ar": "[AR] Open App Settings",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 636
+  },
+  "add_device_flow_password_2": {
+    "en": "Password",
+    "ar": "كلمة المرور",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 657
+  },
+  "add_device_flow_save_wifi_for_future_devices": {
+    "en": "Save WiFi for future devices",
+    "ar": "[AR] Save WiFi for future devices",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 688
+  },
+  "add_device_flow_wrong_network": {
+    "en": "Wrong Network?",
+    "ar": "[AR] Wrong Network?",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 1480
+  },
+  "add_device_flow_wrong_network_2": {
+    "en": "Wrong Network?",
+    "ar": "[AR] Wrong Network?",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 1480
+  },
+  "add_device_flow_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 1487
+  },
+  "add_device_flow_continue_anyway": {
+    "en": "Continue Anyway",
+    "ar": "[AR] Continue Anyway",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 1494
+  },
+  "add_device_flow_device_name_eg_hallway_light": {
+    "en": "Device Name (e.g. Hallway Light)",
+    "ar": "[AR] Device Name (e.g. Hallway Light)",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 1803
+  },
+  "add_device_flow_edit_device_name": {
+    "en": "Edit Device Name",
+    "ar": "تعديل اسم الجهاز",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2577
+  },
+  "add_device_flow_edit_device_name_2": {
+    "en": "Edit Device Name",
+    "ar": "تعديل اسم الجهاز",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2577
+  },
+  "add_device_flow_enter_device_name": {
+    "en": "Enter device name",
+    "ar": "[AR] Enter device name",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2580
+  },
+  "add_device_flow_cancel_2": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2586
+  },
+  "add_device_flow_save": {
+    "en": "Save",
+    "ar": "حفظ",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2593
+  },
+  "add_device_flow_failed_to_update_device_name_e": {
+    "en": "Failed to update device name: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2630
+  },
+  "add_device_flow_failed_to_update_device_name_e_2": {
+    "en": "Failed to update device name: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2630
+  },
+  "add_device_flow_choose_room": {
+    "en": "Choose Room",
+    "ar": "[AR] Choose Room",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2647
+  },
+  "add_device_flow_choose_room_2": {
+    "en": "Choose Room",
+    "ar": "[AR] Choose Room",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2647
+  },
+  "add_device_flow_no_room": {
+    "en": "No Room",
+    "ar": "بدون غرفة",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2666
+  },
+  "add_device_flow_no_room_2": {
+    "en": "No Room",
+    "ar": "بدون غرفة",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2666
+  },
+  "add_device_flow_place_device_in_the_main_area": {
+    "en": "Place device in the main area",
+    "ar": "[AR] Place device in the main area",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2667
+  },
+  "add_device_flow_place_device_in_the_main_area_2": {
+    "en": "Place device in the main area",
+    "ar": "[AR] Place device in the main area",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2667
+  },
+  "add_device_flow_cancel_3": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2710
+  },
+  "add_device_flow_unable_to_move_device_please_try_again": {
+    "en": "Unable to move device. Please try again.",
+    "ar": "[AR] Unable to move device. Please try again.",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2762
+  },
+  "add_device_flow_unable_to_move_device_please_try_again_2": {
+    "en": "Unable to move device. Please try again.",
+    "ar": "[AR] Unable to move device. Please try again.",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2762
+  },
+  "add_device_flow_network_issue": {
+    "en": "Network Issue",
+    "ar": "[AR] Network Issue",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2783
+  },
+  "add_device_flow_check_your_wifi_connection": {
+    "en": "• Check your Wi-Fi connection",
+    "ar": "[AR] • Check your Wi-Fi connection",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2807
+  },
+  "add_device_flow_try_turning_wifi_off_and_on": {
+    "en": "• Try turning Wi-Fi off and on",
+    "ar": "[AR] • Try turning Wi-Fi off and on",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2811
+  },
+  "add_device_flow_check_if_other_apps_can_access_the_inter": {
+    "en": "• Check if other apps can access the internet",
+    "ar": "[AR] • Check if other apps can access the internet",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2812
+  },
+  "add_device_flow_cancel_4": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2828
+  },
+  "add_device_flow_wifi_settings": {
+    "en": "Wi-Fi Settings",
+    "ar": "[AR] Wi-Fi Settings",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2835
+  },
+  "add_device_flow_retry": {
+    "en": "Retry",
+    "ar": "إعادة المحاولة",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2842
+  },
+  "add_device_flow_device_setup_error": {
+    "en": "Device Setup Error",
+    "ar": "[AR] Device Setup Error",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2863
+  },
+  "add_device_flow_try_the_setup_process_again": {
+    "en": "• Try the setup process again",
+    "ar": "[AR] • Try the setup process again",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2887
+  },
+  "add_device_flow_reset_the_device_and_start_over": {
+    "en": "• Reset the device and start over",
+    "ar": "[AR] • Reset the device and start over",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2888
+  },
+  "add_device_flow_check_if_the_device_is_already_added": {
+    "en": "• Check if the device is already added",
+    "ar": "[AR] • Check if the device is already added",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2889
+  },
+  "add_device_flow_contact_support_if_the_issue_persists": {
+    "en": "• Contact support if the issue persists",
+    "ar": "[AR] • Contact support if the issue persists",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2890
+  },
+  "add_device_flow_cancel_5": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2906
+  },
+  "add_device_flow_try_again": {
+    "en": "Try Again",
+    "ar": "[AR] Try Again",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2913
+  },
+  "add_device_flow_wifi_settings_2": {
+    "en": "Wi-Fi Settings",
+    "ar": "[AR] Wi-Fi Settings",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2937
+  },
+  "add_device_flow_wifi_settings_3": {
+    "en": "Wi-Fi Settings",
+    "ar": "[AR] Wi-Fi Settings",
+    "screen": "screens/add_device_flow_screen.dart",
+    "line": 2937
+  },
+  "add_timer_window_min": {
+    "en": "$_window min",
+    "ar": "[AR] $_window min",
+    "screen": "screens/add_timer_screen.dart",
+    "line": 648
+  },
+  "devices_failed_to_load_devices_e": {
+    "en": "Failed to load devices: $e",
+    "ar": "فشل في التحميل",
+    "screen": "screens/devices_screen.dart",
+    "line": 95
+  },
+  "devices_failed_to_load_devices_e_2": {
+    "en": "Failed to load devices: $e",
+    "ar": "فشل في التحميل",
+    "screen": "screens/devices_screen.dart",
+    "line": 95
+  },
+  "devices_close": {
+    "en": "Close",
+    "ar": "إغلاق",
+    "screen": "screens/devices_screen.dart",
+    "line": 507
+  },
+  "devices_stop": {
+    "en": "Stop",
+    "ar": "إيقاف",
+    "screen": "screens/devices_screen.dart",
+    "line": 525
+  },
+  "devices_open": {
+    "en": "Open",
+    "ar": "فتح",
+    "screen": "screens/devices_screen.dart",
+    "line": 549
+  },
+  "devices_connection_lost_please_check_your_networ": {
+    "en": "Connection lost. Please check your network.",
+    "ar": "[AR] Connection lost. Please check your network.",
+    "screen": "screens/devices_screen.dart",
+    "line": 670
+  },
+  "devices_failed_to_control_shutter_etostring": {
+    "en": "Failed to control shutter: ${e.toString()}",
+    "ar": "فشل في control shutter: ${e.tostring()}",
+    "screen": "screens/devices_screen.dart",
+    "line": 701
+  },
+  "devices_failed_to_control_shutter_etostring_2": {
+    "en": "Failed to control shutter: ${e.toString()}",
+    "ar": "فشل في control shutter: ${e.tostring()}",
+    "screen": "screens/devices_screen.dart",
+    "line": 701
+  },
+  "devices_connection_lost_please_check_your_networ_2": {
+    "en": "Connection lost. Please check your network.",
+    "ar": "[AR] Connection lost. Please check your network.",
+    "screen": "screens/devices_screen.dart",
+    "line": 732
+  },
+  "devices_failed_to_control_device_etostring": {
+    "en": "Failed to control device: ${e.toString()}",
+    "ar": "فشل في control device: ${e.tostring()}",
+    "screen": "screens/devices_screen.dart",
+    "line": 752
+  },
+  "devices_failed_to_control_device_etostring_2": {
+    "en": "Failed to control device: ${e.toString()}",
+    "ar": "فشل في control device: ${e.tostring()}",
+    "screen": "screens/devices_screen.dart",
+    "line": 752
+  },
+  "devices_add_device": {
+    "en": "Add Device",
+    "ar": "إضافة الجهاز",
+    "screen": "screens/devices_screen.dart",
+    "line": 796
+  },
+  "devices_add_device_2": {
+    "en": "Add Device",
+    "ar": "إضافة الجهاز",
+    "screen": "screens/devices_screen.dart",
+    "line": 796
+  },
+  "devices_hbot_device": {
+    "en": "HBOT Device",
+    "ar": "[AR] HBOT Device",
+    "screen": "screens/devices_screen.dart",
+    "line": 802
+  },
+  "devices_hbot_device_2": {
+    "en": "HBOT Device",
+    "ar": "[AR] HBOT Device",
+    "screen": "screens/devices_screen.dart",
+    "line": 802
+  },
+  "devices_add_hbot_device_via_wifi": {
+    "en": "Add HBOT device via Wi-Fi",
+    "ar": "إضافة HBOT device via Wi-Fi",
+    "screen": "screens/devices_screen.dart",
+    "line": 803
+  },
+  "devices_add_hbot_device_via_wifi_2": {
+    "en": "Add HBOT device via Wi-Fi",
+    "ar": "إضافة HBOT device via Wi-Fi",
+    "screen": "screens/devices_screen.dart",
+    "line": 803
+  },
+  "devices_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/devices_screen.dart",
+    "line": 814
+  },
+  "devices_delete_device": {
+    "en": "Delete Device",
+    "ar": "حذف الجهاز",
+    "screen": "screens/devices_screen.dart",
+    "line": 849
+  },
+  "devices_delete": {
+    "en": "Delete",
+    "ar": "حذف",
+    "screen": "screens/devices_screen.dart",
+    "line": 881
+  },
+  "devices_device": {
+    "en": "Device ",
+    "ar": "[AR] Device ",
+    "screen": "screens/devices_screen.dart",
+    "line": 929
+  },
+  "devices_device_2": {
+    "en": "Device ",
+    "ar": "[AR] Device ",
+    "screen": "screens/devices_screen.dart",
+    "line": 929
+  },
+  "devices_delete_failed": {
+    "en": "Delete Failed",
+    "ar": "حذف Failed",
+    "screen": "screens/devices_screen.dart",
+    "line": 971
+  },
+  "device_timers_delete_timer": {
+    "en": "Delete Timer",
+    "ar": "حذف المؤقت",
+    "screen": "screens/device_timers_screen.dart",
+    "line": 361
+  },
+  "device_timers_delete_timer_2": {
+    "en": "Delete Timer",
+    "ar": "حذف المؤقت",
+    "screen": "screens/device_timers_screen.dart",
+    "line": 361
+  },
+  "device_timers_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/device_timers_screen.dart",
+    "line": 369
+  },
+  "device_timers_delete": {
+    "en": "Delete",
+    "ar": "حذف",
+    "screen": "screens/device_timers_screen.dart",
+    "line": 374
+  },
+  "device_timers_failed_to_update_timer_e": {
+    "en": "Failed to update timer: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/device_timers_screen.dart",
+    "line": 450
+  },
+  "device_timers_failed_to_update_timer_e_2": {
+    "en": "Failed to update timer: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/device_timers_screen.dart",
+    "line": 450
+  },
+  "device_timers_widgetdevicename_timers": {
+    "en": "${widget.device.name} Timers",
+    "ar": "[AR] ${widget.device.name} Timers",
+    "screen": "screens/device_timers_screen.dart",
+    "line": 595
+  },
+  "device_timers_add_timer": {
+    "en": "Add Timer",
+    "ar": "إضافة المؤقت",
+    "screen": "screens/device_timers_screen.dart",
+    "line": 627
+  },
+  "feedback_send_feedback": {
+    "en": "Send Feedback",
+    "ar": "[AR] Send Feedback",
+    "screen": "screens/feedback_screen.dart",
+    "line": 154
+  },
+  "feedback_send_feedback_2": {
+    "en": "Send Feedback",
+    "ar": "[AR] Send Feedback",
+    "screen": "screens/feedback_screen.dart",
+    "line": 154
+  },
+  "feedback_send_via_email": {
+    "en": "Send via Email",
+    "ar": "[AR] Send via Email",
+    "screen": "screens/feedback_screen.dart",
+    "line": 233
+  },
+  "feedback_send_via_whatsapp": {
+    "en": "Send via WhatsApp",
+    "ar": "[AR] Send via WhatsApp",
+    "screen": "screens/feedback_screen.dart",
+    "line": 254
+  },
+  "help_center_help_center": {
+    "en": "Help Center",
+    "ar": "مركز المساعدة",
+    "screen": "screens/help_center_screen.dart",
+    "line": 61
+  },
+  "help_center_help_center_2": {
+    "en": "Help Center",
+    "ar": "مركز المساعدة",
+    "screen": "screens/help_center_screen.dart",
+    "line": 61
+  },
+  "homes_failed_to_load_homes_e": {
+    "en": "Failed to load homes: $e",
+    "ar": "فشل في التحميل",
+    "screen": "screens/homes_screen.dart",
+    "line": 48
+  },
+  "homes_failed_to_load_homes_e_2": {
+    "en": "Failed to load homes: $e",
+    "ar": "فشل في التحميل",
+    "screen": "screens/homes_screen.dart",
+    "line": 48
+  },
+  "homes_please_enter_a_home_name": {
+    "en": "Please enter a home name",
+    "ar": "يرجى إدخال اسم المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 63
+  },
+  "homes_please_enter_a_home_name_2": {
+    "en": "Please enter a home name",
+    "ar": "يرجى إدخال اسم المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 63
+  },
+  "homes_home": {
+    "en": "Home ",
+    "ar": "[AR] Home ",
+    "screen": "screens/homes_screen.dart",
+    "line": 84
+  },
+  "homes_home_2": {
+    "en": "Home ",
+    "ar": "[AR] Home ",
+    "screen": "screens/homes_screen.dart",
+    "line": 84
+  },
+  "homes_failed_to_create_home_e": {
+    "en": "Failed to create home: $e",
+    "ar": "فشل في الإنشاء",
+    "screen": "screens/homes_screen.dart",
+    "line": 97
+  },
+  "homes_failed_to_create_home_e_2": {
+    "en": "Failed to create home: $e",
+    "ar": "فشل في الإنشاء",
+    "screen": "screens/homes_screen.dart",
+    "line": 97
+  },
+  "homes_please_enter_a_home_name_3": {
+    "en": "Please enter a home name",
+    "ar": "يرجى إدخال اسم المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 109
+  },
+  "homes_please_enter_a_home_name_4": {
+    "en": "Please enter a home name",
+    "ar": "يرجى إدخال اسم المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 109
+  },
+  "homes_failed_to_update_home_e": {
+    "en": "Failed to update home: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/homes_screen.dart",
+    "line": 151
+  },
+  "homes_failed_to_update_home_e_2": {
+    "en": "Failed to update home: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/homes_screen.dart",
+    "line": 151
+  },
+  "homes_home_3": {
+    "en": "Home ",
+    "ar": "[AR] Home ",
+    "screen": "screens/homes_screen.dart",
+    "line": 172
+  },
+  "homes_home_4": {
+    "en": "Home ",
+    "ar": "[AR] Home ",
+    "screen": "screens/homes_screen.dart",
+    "line": 172
+  },
+  "homes_failed_to_delete_home_e": {
+    "en": "Failed to delete home: $e",
+    "ar": "فشل في الحذف",
+    "screen": "screens/homes_screen.dart",
+    "line": 185
+  },
+  "homes_failed_to_delete_home_e_2": {
+    "en": "Failed to delete home: $e",
+    "ar": "فشل في الحذف",
+    "screen": "screens/homes_screen.dart",
+    "line": 185
+  },
+  "homes_create_new_home": {
+    "en": "Create New Home",
+    "ar": "إنشاء منزل جديد",
+    "screen": "screens/homes_screen.dart",
+    "line": 202
+  },
+  "homes_create_new_home_2": {
+    "en": "Create New Home",
+    "ar": "إنشاء منزل جديد",
+    "screen": "screens/homes_screen.dart",
+    "line": 202
+  },
+  "homes_home_name": {
+    "en": "Home Name",
+    "ar": "اسم المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 206
+  },
+  "homes_eg_my_house_office_etc": {
+    "en": "e.g., My House, Office, etc.",
+    "ar": "[AR] e.g., My House, Office, etc.",
+    "screen": "screens/homes_screen.dart",
+    "line": 207
+  },
+  "homes_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/homes_screen.dart",
+    "line": 217
+  },
+  "homes_create": {
+    "en": "Create",
+    "ar": "إنشاء",
+    "screen": "screens/homes_screen.dart",
+    "line": 227
+  },
+  "homes_edit_home": {
+    "en": "Edit Home",
+    "ar": "تعديل المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 242
+  },
+  "homes_edit_home_2": {
+    "en": "Edit Home",
+    "ar": "تعديل المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 242
+  },
+  "homes_home_name_2": {
+    "en": "Home Name",
+    "ar": "اسم المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 246
+  },
+  "homes_eg_my_house_office_etc_2": {
+    "en": "e.g., My House, Office, etc.",
+    "ar": "[AR] e.g., My House, Office, etc.",
+    "screen": "screens/homes_screen.dart",
+    "line": 247
+  },
+  "homes_cancel_2": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/homes_screen.dart",
+    "line": 254
+  },
+  "homes_save": {
+    "en": "Save",
+    "ar": "حفظ",
+    "screen": "screens/homes_screen.dart",
+    "line": 261
+  },
+  "homes_delete_home": {
+    "en": "Delete Home",
+    "ar": "حذف المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 275
+  },
+  "homes_delete_home_2": {
+    "en": "Delete Home",
+    "ar": "حذف المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 275
+  },
+  "homes_cancel_3": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/homes_screen.dart",
+    "line": 282
+  },
+  "homes_delete": {
+    "en": "Delete",
+    "ar": "حذف",
+    "screen": "screens/homes_screen.dart",
+    "line": 287
+  },
+  "homes_create_your_first_home": {
+    "en": "Create Your First Home",
+    "ar": "[AR] Create Your First Home",
+    "screen": "screens/homes_screen.dart",
+    "line": 356
+  },
+  "homes_manage_rooms": {
+    "en": "Manage Rooms",
+    "ar": "[AR] Manage Rooms",
+    "screen": "screens/homes_screen.dart",
+    "line": 443
+  },
+  "homes_manage_rooms_2": {
+    "en": "Manage Rooms",
+    "ar": "[AR] Manage Rooms",
+    "screen": "screens/homes_screen.dart",
+    "line": 443
+  },
+  "homes_edit_home_3": {
+    "en": "Edit Home",
+    "ar": "تعديل المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 451
+  },
+  "homes_edit_home_4": {
+    "en": "Edit Home",
+    "ar": "تعديل المنزل",
+    "screen": "screens/homes_screen.dart",
+    "line": 451
+  },
+  "multi_device_share_error_loading_devices_e": {
+    "en": "Error loading devices: $e",
+    "ar": "[AR] Error loading devices: $e",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 52
+  },
+  "multi_device_share_error_loading_devices_e_2": {
+    "en": "Error loading devices: $e",
+    "ar": "[AR] Error loading devices: $e",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 52
+  },
+  "multi_device_share_please_select_at_least_one_device": {
+    "en": "Please select at least one device",
+    "ar": "[AR] Please select at least one device",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 64
+  },
+  "multi_device_share_please_select_at_least_one_device_2": {
+    "en": "Please select at least one device",
+    "ar": "[AR] Please select at least one device",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 64
+  },
+  "multi_device_share_authentication_failed_e": {
+    "en": "Authentication failed: $e",
+    "ar": "[AR] Authentication failed: $e",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 93
+  },
+  "multi_device_share_authentication_failed_e_2": {
+    "en": "Authentication failed: $e",
+    "ar": "[AR] Authentication failed: $e",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 93
+  },
+  "multi_device_share_authentication_required": {
+    "en": "Authentication required",
+    "ar": "[AR] Authentication required",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 105
+  },
+  "multi_device_share_authentication_required_2": {
+    "en": "Authentication required",
+    "ar": "[AR] Authentication required",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 105
+  },
+  "multi_device_share_error_generating_qr_e": {
+    "en": "Error generating QR: $e",
+    "ar": "[AR] Error generating QR: $e",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 148
+  },
+  "multi_device_share_error_generating_qr_e_2": {
+    "en": "Error generating QR: $e",
+    "ar": "[AR] Error generating QR: $e",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 148
+  },
+  "multi_device_share_error_canceling_qr_e": {
+    "en": "Error canceling QR: $e",
+    "ar": "[AR] Error canceling QR: $e",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 170
+  },
+  "multi_device_share_error_canceling_qr_e_2": {
+    "en": "Error canceling QR: $e",
+    "ar": "[AR] Error canceling QR: $e",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 170
+  },
+  "multi_device_share_share_multiple_devices": {
+    "en": "Share Multiple Devices",
+    "ar": "[AR] Share Multiple Devices",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 184
+  },
+  "multi_device_share_share_multiple_devices_2": {
+    "en": "Share Multiple Devices",
+    "ar": "[AR] Share Multiple Devices",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 184
+  },
+  "multi_device_share_cancel_qr_code": {
+    "en": "Cancel QR Code",
+    "ar": "[AR] Cancel QR Code",
+    "screen": "screens/multi_device_share_screen.dart",
+    "line": 288
+  },
+  "notifications_settings_permission_denied": {
+    "en": "Permission Denied",
+    "ar": "[AR] Permission Denied",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 142
+  },
+  "notifications_settings_permission_denied_2": {
+    "en": "Permission Denied",
+    "ar": "[AR] Permission Denied",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 142
+  },
+  "notifications_settings_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 149
+  },
+  "notifications_settings_try_again": {
+    "en": "Try Again",
+    "ar": "[AR] Try Again",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 156
+  },
+  "notifications_settings_permission_required": {
+    "en": "Permission Required",
+    "ar": "[AR] Permission Required",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 168
+  },
+  "notifications_settings_permission_required_2": {
+    "en": "Permission Required",
+    "ar": "[AR] Permission Required",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 168
+  },
+  "notifications_settings_cancel_2": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 175
+  },
+  "notifications_settings_open_settings": {
+    "en": "Open Settings",
+    "ar": "[AR] Open Settings",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 182
+  },
+  "notifications_settings_notifications": {
+    "en": "Notifications",
+    "ar": "الإشعارات",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 195
+  },
+  "notifications_settings_notifications_2": {
+    "en": "Notifications",
+    "ar": "الإشعارات",
+    "screen": "screens/notifications_settings_screen.dart",
+    "line": 195
+  },
+  "profile_edit_profile_updated_successfully": {
+    "en": "Profile updated successfully!",
+    "ar": "تم بنجاح",
+    "screen": "screens/profile_edit_screen.dart",
+    "line": 63
+  },
+  "profile_edit_profile_updated_successfully_2": {
+    "en": "Profile updated successfully!",
+    "ar": "تم بنجاح",
+    "screen": "screens/profile_edit_screen.dart",
+    "line": 63
+  },
+  "profile_edit_error_updating_profile_e": {
+    "en": "Error updating profile: $e",
+    "ar": "[AR] Error updating profile: $e",
+    "screen": "screens/profile_edit_screen.dart",
+    "line": 73
+  },
+  "profile_edit_error_updating_profile_e_2": {
+    "en": "Error updating profile: $e",
+    "ar": "[AR] Error updating profile: $e",
+    "screen": "screens/profile_edit_screen.dart",
+    "line": 73
+  },
+  "profile_edit_edit_profile": {
+    "en": "Edit Profile",
+    "ar": "تعديل الملف الشخصي",
+    "screen": "screens/profile_edit_screen.dart",
+    "line": 91
+  },
+  "profile_edit_edit_profile_2": {
+    "en": "Edit Profile",
+    "ar": "تعديل الملف الشخصي",
+    "screen": "screens/profile_edit_screen.dart",
+    "line": 91
+  },
+  "profile_edit_full_name": {
+    "en": "Full Name",
+    "ar": "[AR] Full Name",
+    "screen": "screens/profile_edit_screen.dart",
+    "line": 161
+  },
+  "profile_edit_phone_number_optional": {
+    "en": "Phone Number (Optional)",
+    "ar": "[AR] Phone Number (Optional)",
+    "screen": "screens/profile_edit_screen.dart",
+    "line": 178
+  },
+  "reset_password_please_enter_the_complete_6digit_code": {
+    "en": "Please enter the complete 6-digit code",
+    "ar": "يرجى إدخال complete 6-digit code",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 78
+  },
+  "reset_password_please_enter_the_complete_6digit_code_2": {
+    "en": "Please enter the complete 6-digit code",
+    "ar": "يرجى إدخال complete 6-digit code",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 78
+  },
+  "reset_password_please_enter_a_new_password": {
+    "en": "Please enter a new password",
+    "ar": "يرجى إدخال new password",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 88
+  },
+  "reset_password_please_enter_a_new_password_2": {
+    "en": "Please enter a new password",
+    "ar": "يرجى إدخال new password",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 88
+  },
+  "reset_password_password_must_be_at_least_6_characters": {
+    "en": "Password must be at least 6 characters",
+    "ar": "[AR] Password must be at least 6 characters",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 98
+  },
+  "reset_password_password_must_be_at_least_6_characters_2": {
+    "en": "Password must be at least 6 characters",
+    "ar": "[AR] Password must be at least 6 characters",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 98
+  },
+  "reset_password_passwords_do_not_match": {
+    "en": "Passwords do not match",
+    "ar": "[AR] Passwords do not match",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 108
+  },
+  "reset_password_passwords_do_not_match_2": {
+    "en": "Passwords do not match",
+    "ar": "[AR] Passwords do not match",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 108
+  },
+  "reset_password_password_reset_successfully": {
+    "en": "Password reset successfully!",
+    "ar": "[AR] Password reset successfully!",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 127
+  },
+  "reset_password_password_reset_successfully_2": {
+    "en": "Password reset successfully!",
+    "ar": "[AR] Password reset successfully!",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 127
+  },
+  "reset_password_failed_to_reset_password_etostring": {
+    "en": "Failed to reset password: ${e.toString()}",
+    "ar": "فشل في إعادة التعيين",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 140
+  },
+  "reset_password_failed_to_reset_password_etostring_2": {
+    "en": "Failed to reset password: ${e.toString()}",
+    "ar": "فشل في إعادة التعيين",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 140
+  },
+  "reset_password_reset_code_sent_please_check_your_email": {
+    "en": "Reset code sent! Please check your email.",
+    "ar": "[AR] Reset code sent! Please check your email.",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 158
+  },
+  "reset_password_reset_code_sent_please_check_your_email_2": {
+    "en": "Reset code sent! Please check your email.",
+    "ar": "[AR] Reset code sent! Please check your email.",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 158
+  },
+  "reset_password_failed_to_resend_code_etostring": {
+    "en": "Failed to resend code: ${e.toString()}",
+    "ar": "فشل في الإرسال",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 168
+  },
+  "reset_password_failed_to_resend_code_etostring_2": {
+    "en": "Failed to resend code: ${e.toString()}",
+    "ar": "فشل في الإرسال",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 168
+  },
+  "reset_password_new_password": {
+    "en": "New Password",
+    "ar": "[AR] New Password",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 307
+  },
+  "reset_password_confirm_password": {
+    "en": "Confirm Password",
+    "ar": "[AR] Confirm Password",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 323
+  },
+  "reset_password_reset_password": {
+    "en": "Reset Password",
+    "ar": "[AR] Reset Password",
+    "screen": "screens/reset_password_screen.dart",
+    "line": 365
+  },
+  "rooms_failed_to_load_rooms_e": {
+    "en": "Failed to load rooms: $e",
+    "ar": "فشل في التحميل",
+    "screen": "screens/rooms_screen.dart",
+    "line": 57
+  },
+  "rooms_failed_to_load_rooms_e_2": {
+    "en": "Failed to load rooms: $e",
+    "ar": "فشل في التحميل",
+    "screen": "screens/rooms_screen.dart",
+    "line": 57
+  },
+  "rooms_please_enter_a_room_name": {
+    "en": "Please enter a room name",
+    "ar": "يرجى إدخال اسم الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 69
+  },
+  "rooms_please_enter_a_room_name_2": {
+    "en": "Please enter a room name",
+    "ar": "يرجى إدخال اسم الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 69
+  },
+  "rooms_room": {
+    "en": "Room ",
+    "ar": "[AR] Room ",
+    "screen": "screens/rooms_screen.dart",
+    "line": 90
+  },
+  "rooms_room_2": {
+    "en": "Room ",
+    "ar": "[AR] Room ",
+    "screen": "screens/rooms_screen.dart",
+    "line": 90
+  },
+  "rooms_failed_to_create_room_e": {
+    "en": "Failed to create room: $e",
+    "ar": "فشل في الإنشاء",
+    "screen": "screens/rooms_screen.dart",
+    "line": 105
+  },
+  "rooms_failed_to_create_room_e_2": {
+    "en": "Failed to create room: $e",
+    "ar": "فشل في الإنشاء",
+    "screen": "screens/rooms_screen.dart",
+    "line": 105
+  },
+  "rooms_create_new_room": {
+    "en": "Create New Room",
+    "ar": "إنشاء غرفة جديدة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 118
+  },
+  "rooms_create_new_room_2": {
+    "en": "Create New Room",
+    "ar": "إنشاء غرفة جديدة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 118
+  },
+  "rooms_room_name": {
+    "en": "Room Name",
+    "ar": "اسم الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 122
+  },
+  "rooms_eg_living_room_kitchen_etc": {
+    "en": "e.g., Living Room, Kitchen, etc.",
+    "ar": "[AR] e.g., Living Room, Kitchen, etc.",
+    "screen": "screens/rooms_screen.dart",
+    "line": 123
+  },
+  "rooms_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/rooms_screen.dart",
+    "line": 130
+  },
+  "rooms_create": {
+    "en": "Create",
+    "ar": "إنشاء",
+    "screen": "screens/rooms_screen.dart",
+    "line": 137
+  },
+  "rooms_please_enter_a_room_name_3": {
+    "en": "Please enter a room name",
+    "ar": "يرجى إدخال اسم الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 148
+  },
+  "rooms_please_enter_a_room_name_4": {
+    "en": "Please enter a room name",
+    "ar": "يرجى إدخال اسم الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 148
+  },
+  "rooms_room_3": {
+    "en": "Room ",
+    "ar": "[AR] Room ",
+    "screen": "screens/rooms_screen.dart",
+    "line": 173
+  },
+  "rooms_room_4": {
+    "en": "Room ",
+    "ar": "[AR] Room ",
+    "screen": "screens/rooms_screen.dart",
+    "line": 173
+  },
+  "rooms_failed_to_update_room_e": {
+    "en": "Failed to update room: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/rooms_screen.dart",
+    "line": 188
+  },
+  "rooms_failed_to_update_room_e_2": {
+    "en": "Failed to update room: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/rooms_screen.dart",
+    "line": 188
+  },
+  "rooms_room_5": {
+    "en": "Room ",
+    "ar": "[AR] Room ",
+    "screen": "screens/rooms_screen.dart",
+    "line": 209
+  },
+  "rooms_room_6": {
+    "en": "Room ",
+    "ar": "[AR] Room ",
+    "screen": "screens/rooms_screen.dart",
+    "line": 209
+  },
+  "rooms_failed_to_delete_room_e": {
+    "en": "Failed to delete room: $e",
+    "ar": "فشل في الحذف",
+    "screen": "screens/rooms_screen.dart",
+    "line": 225
+  },
+  "rooms_failed_to_delete_room_e_2": {
+    "en": "Failed to delete room: $e",
+    "ar": "فشل في الحذف",
+    "screen": "screens/rooms_screen.dart",
+    "line": 225
+  },
+  "rooms_edit_room": {
+    "en": "Edit Room",
+    "ar": "تعديل الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 240
+  },
+  "rooms_edit_room_2": {
+    "en": "Edit Room",
+    "ar": "تعديل الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 240
+  },
+  "rooms_room_name_2": {
+    "en": "Room Name",
+    "ar": "اسم الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 244
+  },
+  "rooms_eg_living_room_kitchen_etc_2": {
+    "en": "e.g., Living Room, Kitchen, etc.",
+    "ar": "[AR] e.g., Living Room, Kitchen, etc.",
+    "screen": "screens/rooms_screen.dart",
+    "line": 245
+  },
+  "rooms_cancel_2": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/rooms_screen.dart",
+    "line": 252
+  },
+  "rooms_save": {
+    "en": "Save",
+    "ar": "حفظ",
+    "screen": "screens/rooms_screen.dart",
+    "line": 259
+  },
+  "rooms_delete_room": {
+    "en": "Delete Room",
+    "ar": "حذف الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 273
+  },
+  "rooms_delete_room_2": {
+    "en": "Delete Room",
+    "ar": "حذف الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 273
+  },
+  "rooms_cancel_3": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/rooms_screen.dart",
+    "line": 280
+  },
+  "rooms_delete": {
+    "en": "Delete",
+    "ar": "حذف",
+    "screen": "screens/rooms_screen.dart",
+    "line": 285
+  },
+  "rooms_room_background_image": {
+    "en": "Room Background Image",
+    "ar": "[AR] Room Background Image",
+    "screen": "screens/rooms_screen.dart",
+    "line": 302
+  },
+  "rooms_room_background_image_2": {
+    "en": "Room Background Image",
+    "ar": "[AR] Room Background Image",
+    "screen": "screens/rooms_screen.dart",
+    "line": 302
+  },
+  "rooms_failed_to_update_background_e": {
+    "en": "Failed to update background: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/rooms_screen.dart",
+    "line": 331
+  },
+  "rooms_failed_to_update_background_e_2": {
+    "en": "Failed to update background: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/rooms_screen.dart",
+    "line": 331
+  },
+  "rooms_close": {
+    "en": "Close",
+    "ar": "إغلاق",
+    "screen": "screens/rooms_screen.dart",
+    "line": 343
+  },
+  "rooms_change_room_icon": {
+    "en": "Change Room Icon",
+    "ar": "[AR] Change Room Icon",
+    "screen": "screens/rooms_screen.dart",
+    "line": 361
+  },
+  "rooms_change_room_icon_2": {
+    "en": "Change Room Icon",
+    "ar": "[AR] Change Room Icon",
+    "screen": "screens/rooms_screen.dart",
+    "line": 361
+  },
+  "rooms_cancel_4": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/rooms_screen.dart",
+    "line": 378
+  },
+  "rooms_room_icon_updated_successfully": {
+    "en": "Room icon updated successfully!",
+    "ar": "تم بنجاح",
+    "screen": "screens/rooms_screen.dart",
+    "line": 400
+  },
+  "rooms_room_icon_updated_successfully_2": {
+    "en": "Room icon updated successfully!",
+    "ar": "تم بنجاح",
+    "screen": "screens/rooms_screen.dart",
+    "line": 400
+  },
+  "rooms_failed_to_update_icon_e": {
+    "en": "Failed to update icon: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/rooms_screen.dart",
+    "line": 409
+  },
+  "rooms_failed_to_update_icon_e_2": {
+    "en": "Failed to update icon: $e",
+    "ar": "فشل في التحديث",
+    "screen": "screens/rooms_screen.dart",
+    "line": 409
+  },
+  "rooms_save_2": {
+    "en": "Save",
+    "ar": "حفظ",
+    "screen": "screens/rooms_screen.dart",
+    "line": 419
+  },
+  "rooms_add_your_first_room": {
+    "en": "Add Your First Room",
+    "ar": "إضافة Your First Room",
+    "screen": "screens/rooms_screen.dart",
+    "line": 514
+  },
+  "rooms_edit_room_3": {
+    "en": "Edit Room",
+    "ar": "تعديل الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 672
+  },
+  "rooms_edit_room_4": {
+    "en": "Edit Room",
+    "ar": "تعديل الغرفة",
+    "screen": "screens/rooms_screen.dart",
+    "line": 672
+  },
+  "rooms_change_icon": {
+    "en": "Change Icon",
+    "ar": "[AR] Change Icon",
+    "screen": "screens/rooms_screen.dart",
+    "line": 680
+  },
+  "rooms_change_icon_2": {
+    "en": "Change Icon",
+    "ar": "[AR] Change Icon",
+    "screen": "screens/rooms_screen.dart",
+    "line": 680
+  },
+  "rooms_background_image": {
+    "en": "Background Image",
+    "ar": "[AR] Background Image",
+    "screen": "screens/rooms_screen.dart",
+    "line": 688
+  },
+  "rooms_background_image_2": {
+    "en": "Background Image",
+    "ar": "[AR] Background Image",
+    "screen": "screens/rooms_screen.dart",
+    "line": 688
+  },
+  "scan_device_qr_error_e": {
+    "en": "Error: $e",
+    "ar": "[AR] Error: $e",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 52
+  },
+  "scan_device_qr_error_e_2": {
+    "en": "Error: $e",
+    "ar": "[AR] Error: $e",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 52
+  },
+  "scan_device_qr_add_shared_device": {
+    "en": "Add Shared Device?",
+    "ar": "إضافة Shared Device?",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 74
+  },
+  "scan_device_qr_add_shared_device_2": {
+    "en": "Add Shared Device?",
+    "ar": "إضافة Shared Device?",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 74
+  },
+  "scan_device_qr_device_devicename": {
+    "en": "Device: $deviceName",
+    "ar": "[AR] Device: $deviceName",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 79
+  },
+  "scan_device_qr_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 90
+  },
+  "scan_device_qr_add_device": {
+    "en": "Add Device",
+    "ar": "إضافة الجهاز",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 97
+  },
+  "scan_device_qr_device_added_successfully_check_your_das": {
+    "en": "Device added successfully! Check your dashboard.",
+    "ar": "[AR] Device added successfully! Check your dashboard.",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 122
+  },
+  "scan_device_qr_device_added_successfully_check_your_das_2": {
+    "en": "Device added successfully! Check your dashboard.",
+    "ar": "[AR] Device added successfully! Check your dashboard.",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 122
+  },
+  "scan_device_qr_add_shared_devices": {
+    "en": "Add Shared Devices?",
+    "ar": "إضافة Shared Devices?",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 138
+  },
+  "scan_device_qr_add_shared_devices_2": {
+    "en": "Add Shared Devices?",
+    "ar": "إضافة Shared Devices?",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 138
+  },
+  "scan_device_qr_devicecount_devices_will_be_added": {
+    "en": "$deviceCount device(s) will be added:",
+    "ar": "[AR] $deviceCount device(s) will be added:",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 143
+  },
+  "scan_device_qr_cancel_2": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 166
+  },
+  "scan_device_qr_add_all": {
+    "en": "Add All",
+    "ar": "إضافة All",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 173
+  },
+  "scan_device_qr_scan_device_qr_code": {
+    "en": "Scan Device QR Code",
+    "ar": "[AR] Scan Device QR Code",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 254
+  },
+  "scan_device_qr_scan_device_qr_code_2": {
+    "en": "Scan Device QR Code",
+    "ar": "[AR] Scan Device QR Code",
+    "screen": "screens/scan_device_qr_screen.dart",
+    "line": 254
+  },
+  "shared_devices_error_loading_shared_devices_e": {
+    "en": "Error loading shared devices: $e",
+    "ar": "[AR] Error loading shared devices: $e",
+    "screen": "screens/shared_devices_screen.dart",
+    "line": 39
+  },
+  "shared_devices_error_loading_shared_devices_e_2": {
+    "en": "Error loading shared devices: $e",
+    "ar": "[AR] Error loading shared devices: $e",
+    "screen": "screens/shared_devices_screen.dart",
+    "line": 39
+  },
+  "shared_devices_shared_with_me": {
+    "en": "Shared with Me",
+    "ar": "مشترك معي",
+    "screen": "screens/shared_devices_screen.dart",
+    "line": 53
+  },
+  "shared_devices_shared_with_me_2": {
+    "en": "Shared with Me",
+    "ar": "مشترك معي",
+    "screen": "screens/shared_devices_screen.dart",
+    "line": 53
+  },
+  "shared_devices_scan_qr_code": {
+    "en": "Scan QR Code",
+    "ar": "[AR] Scan QR Code",
+    "screen": "screens/shared_devices_screen.dart",
+    "line": 66
+  },
+  "shared_devices_scan_qr_code_2": {
+    "en": "Scan QR Code",
+    "ar": "[AR] Scan QR Code",
+    "screen": "screens/shared_devices_screen.dart",
+    "line": 195
+  },
+  "share_device_error_loading_data_e": {
+    "en": "Error loading data: $e",
+    "ar": "[AR] Error loading data: $e",
+    "screen": "screens/share_device_screen.dart",
+    "line": 57
+  },
+  "share_device_error_loading_data_e_2": {
+    "en": "Error loading data: $e",
+    "ar": "[AR] Error loading data: $e",
+    "screen": "screens/share_device_screen.dart",
+    "line": 57
+  },
+  "share_device_authentication_cancelled_or_failed": {
+    "en": "Authentication cancelled or failed",
+    "ar": "[AR] Authentication cancelled or failed",
+    "screen": "screens/share_device_screen.dart",
+    "line": 123
+  },
+  "share_device_authentication_cancelled_or_failed_2": {
+    "en": "Authentication cancelled or failed",
+    "ar": "[AR] Authentication cancelled or failed",
+    "screen": "screens/share_device_screen.dart",
+    "line": 123
+  },
+  "share_device_authentication_required_to_generate_qr_c": {
+    "en": "Authentication required to generate QR code",
+    "ar": "[AR] Authentication required to generate QR code",
+    "screen": "screens/share_device_screen.dart",
+    "line": 135
+  },
+  "share_device_authentication_required_to_generate_qr_c_2": {
+    "en": "Authentication required to generate QR code",
+    "ar": "[AR] Authentication required to generate QR code",
+    "screen": "screens/share_device_screen.dart",
+    "line": 135
+  },
+  "share_device_error_generating_qr_e": {
+    "en": "Error generating QR: $e",
+    "ar": "[AR] Error generating QR: $e",
+    "screen": "screens/share_device_screen.dart",
+    "line": 156
+  },
+  "share_device_error_generating_qr_e_2": {
+    "en": "Error generating QR: $e",
+    "ar": "[AR] Error generating QR: $e",
+    "screen": "screens/share_device_screen.dart",
+    "line": 156
+  },
+  "share_device_choose_authentication_method": {
+    "en": "Choose Authentication Method",
+    "ar": "[AR] Choose Authentication Method",
+    "screen": "screens/share_device_screen.dart",
+    "line": 171
+  },
+  "share_device_choose_authentication_method_2": {
+    "en": "Choose Authentication Method",
+    "ar": "[AR] Choose Authentication Method",
+    "screen": "screens/share_device_screen.dart",
+    "line": 171
+  },
+  "share_device_biometric": {
+    "en": "Biometric",
+    "ar": "[AR] Biometric",
+    "screen": "screens/share_device_screen.dart",
+    "line": 182
+  },
+  "share_device_biometric_2": {
+    "en": "Biometric",
+    "ar": "[AR] Biometric",
+    "screen": "screens/share_device_screen.dart",
+    "line": 182
+  },
+  "share_device_fingerprint_face_or_iris": {
+    "en": "Fingerprint, face, or iris",
+    "ar": "[AR] Fingerprint, face, or iris",
+    "screen": "screens/share_device_screen.dart",
+    "line": 183
+  },
+  "share_device_fingerprint_face_or_iris_2": {
+    "en": "Fingerprint, face, or iris",
+    "ar": "[AR] Fingerprint, face, or iris",
+    "screen": "screens/share_device_screen.dart",
+    "line": 183
+  },
+  "share_device_device_password": {
+    "en": "Device Password",
+    "ar": "[AR] Device Password",
+    "screen": "screens/share_device_screen.dart",
+    "line": 192
+  },
+  "share_device_device_password_2": {
+    "en": "Device Password",
+    "ar": "[AR] Device Password",
+    "screen": "screens/share_device_screen.dart",
+    "line": 192
+  },
+  "share_device_pin_password_or_pattern": {
+    "en": "PIN, password, or pattern",
+    "ar": "[AR] PIN, password, or pattern",
+    "screen": "screens/share_device_screen.dart",
+    "line": 193
+  },
+  "share_device_pin_password_or_pattern_2": {
+    "en": "PIN, password, or pattern",
+    "ar": "[AR] PIN, password, or pattern",
+    "screen": "screens/share_device_screen.dart",
+    "line": 193
+  },
+  "share_device_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/share_device_screen.dart",
+    "line": 201
+  },
+  "share_device_request_approved": {
+    "en": "Request approved!",
+    "ar": "[AR] Request approved!",
+    "screen": "screens/share_device_screen.dart",
+    "line": 217
+  },
+  "share_device_request_approved_2": {
+    "en": "Request approved!",
+    "ar": "[AR] Request approved!",
+    "screen": "screens/share_device_screen.dart",
+    "line": 217
+  },
+  "share_device_error_e": {
+    "en": "Error: $e",
+    "ar": "[AR] Error: $e",
+    "screen": "screens/share_device_screen.dart",
+    "line": 226
+  },
+  "share_device_error_e_2": {
+    "en": "Error: $e",
+    "ar": "[AR] Error: $e",
+    "screen": "screens/share_device_screen.dart",
+    "line": 226
+  },
+  "share_device_request_rejected": {
+    "en": "Request rejected",
+    "ar": "[AR] Request rejected",
+    "screen": "screens/share_device_screen.dart",
+    "line": 238
+  },
+  "share_device_request_rejected_2": {
+    "en": "Request rejected",
+    "ar": "[AR] Request rejected",
+    "screen": "screens/share_device_screen.dart",
+    "line": 238
+  },
+  "share_device_error_e_3": {
+    "en": "Error: $e",
+    "ar": "[AR] Error: $e",
+    "screen": "screens/share_device_screen.dart",
+    "line": 247
+  },
+  "share_device_error_e_4": {
+    "en": "Error: $e",
+    "ar": "[AR] Error: $e",
+    "screen": "screens/share_device_screen.dart",
+    "line": 247
+  },
+  "share_device_choose_permission_level": {
+    "en": "Choose Permission Level",
+    "ar": "[AR] Choose Permission Level",
+    "screen": "screens/share_device_screen.dart",
+    "line": 258
+  },
+  "share_device_choose_permission_level_2": {
+    "en": "Choose Permission Level",
+    "ar": "[AR] Choose Permission Level",
+    "screen": "screens/share_device_screen.dart",
+    "line": 258
+  },
+  "share_device_view_only": {
+    "en": "View Only",
+    "ar": "عرض فقط",
+    "screen": "screens/share_device_screen.dart",
+    "line": 267
+  },
+  "share_device_view_only_2": {
+    "en": "View Only",
+    "ar": "عرض فقط",
+    "screen": "screens/share_device_screen.dart",
+    "line": 267
+  },
+  "share_device_can_see_device_status": {
+    "en": "Can see device status",
+    "ar": "[AR] Can see device status",
+    "screen": "screens/share_device_screen.dart",
+    "line": 268
+  },
+  "share_device_can_see_device_status_2": {
+    "en": "Can see device status",
+    "ar": "[AR] Can see device status",
+    "screen": "screens/share_device_screen.dart",
+    "line": 268
+  },
+  "share_device_control": {
+    "en": "Control",
+    "ar": "تحكم",
+    "screen": "screens/share_device_screen.dart",
+    "line": 276
+  },
+  "share_device_control_2": {
+    "en": "Control",
+    "ar": "تحكم",
+    "screen": "screens/share_device_screen.dart",
+    "line": 276
+  },
+  "share_device_can_control_the_device": {
+    "en": "Can control the device",
+    "ar": "[AR] Can control the device",
+    "screen": "screens/share_device_screen.dart",
+    "line": 277
+  },
+  "share_device_can_control_the_device_2": {
+    "en": "Can control the device",
+    "ar": "[AR] Can control the device",
+    "screen": "screens/share_device_screen.dart",
+    "line": 277
+  },
+  "share_device_share_device": {
+    "en": "Share Device",
+    "ar": "مشاركة الجهاز",
+    "screen": "screens/share_device_screen.dart",
+    "line": 292
+  },
+  "share_device_share_device_2": {
+    "en": "Share Device",
+    "ar": "مشاركة الجهاز",
+    "screen": "screens/share_device_screen.dart",
+    "line": 292
+  },
+  "share_device_refresh": {
+    "en": "Refresh",
+    "ar": "تحديث",
+    "screen": "screens/share_device_screen.dart",
+    "line": 298
+  },
+  "share_device_cancel_qr_code": {
+    "en": "Cancel QR Code",
+    "ar": "[AR] Cancel QR Code",
+    "screen": "screens/share_device_screen.dart",
+    "line": 435
+  },
+  "share_device_revoke_access": {
+    "en": "Revoke Access?",
+    "ar": "[AR] Revoke Access?",
+    "screen": "screens/share_device_screen.dart",
+    "line": 538
+  },
+  "share_device_revoke_access_2": {
+    "en": "Revoke Access?",
+    "ar": "[AR] Revoke Access?",
+    "screen": "screens/share_device_screen.dart",
+    "line": 538
+  },
+  "share_device_cancel_2": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "screens/share_device_screen.dart",
+    "line": 546
+  },
+  "shutter_calibration_failed_to_send_command_e": {
+    "en": "Failed to send command: $e",
+    "ar": "فشل في الإرسال",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 143
+  },
+  "shutter_calibration_failed_to_send_command_e_2": {
+    "en": "Failed to send command: $e",
+    "ar": "فشل في الإرسال",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 143
+  },
+  "shutter_calibration_please_complete_both_calibrations_first": {
+    "en": "Please complete both calibrations first",
+    "ar": "[AR] Please complete both calibrations first",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 155
+  },
+  "shutter_calibration_please_complete_both_calibrations_first_2": {
+    "en": "Please complete both calibrations first",
+    "ar": "[AR] Please complete both calibrations first",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 155
+  },
+  "shutter_calibration_failed_to_apply_calibration_e": {
+    "en": "Failed to apply calibration: $e",
+    "ar": "فشل في apply calibration",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 220
+  },
+  "shutter_calibration_failed_to_apply_calibration_e_2": {
+    "en": "Failed to apply calibration: $e",
+    "ar": "فشل في apply calibration",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 220
+  },
+  "shutter_calibration_failed_to_reset_calibration_e": {
+    "en": "Failed to reset calibration: $e",
+    "ar": "فشل في إعادة التعيين",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 281
+  },
+  "shutter_calibration_failed_to_reset_calibration_e_2": {
+    "en": "Failed to reset calibration: $e",
+    "ar": "فشل في إعادة التعيين",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 281
+  },
+  "shutter_calibration_reset": {
+    "en": "Reset",
+    "ar": "إعادة تعيين",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 399
+  },
+  "shutter_calibration_apply_calibration": {
+    "en": "Apply Calibration",
+    "ar": "[AR] Apply Calibration",
+    "screen": "screens/shutter_calibration_screen.dart",
+    "line": 413
+  },
+  "shutter_manual_calibration_please_select_current_shutter_position": {
+    "en": "Please select current shutter position",
+    "ar": "[AR] Please select current shutter position",
+    "screen": "screens/shutter_manual_calibration_screen.dart",
+    "line": 46
+  },
+  "shutter_manual_calibration_please_select_current_shutter_position_2": {
+    "en": "Please select current shutter position",
+    "ar": "[AR] Please select current shutter position",
+    "screen": "screens/shutter_manual_calibration_screen.dart",
+    "line": 46
+  },
+  "shutter_manual_calibration_failed_to_apply_calibration_e": {
+    "en": "Failed to apply calibration: $e",
+    "ar": "فشل في apply calibration",
+    "screen": "screens/shutter_manual_calibration_screen.dart",
+    "line": 124
+  },
+  "shutter_manual_calibration_failed_to_apply_calibration_e_2": {
+    "en": "Failed to apply calibration: $e",
+    "ar": "فشل في apply calibration",
+    "screen": "screens/shutter_manual_calibration_screen.dart",
+    "line": 124
+  },
+  "shutter_manual_calibration_open_duration_seconds": {
+    "en": "Open Duration (seconds)",
+    "ar": "[AR] Open Duration (seconds)",
+    "screen": "screens/shutter_manual_calibration_screen.dart",
+    "line": 196
+  },
+  "shutter_manual_calibration_close_duration_seconds": {
+    "en": "Close Duration (seconds)",
+    "ar": "[AR] Close Duration (seconds)",
+    "screen": "screens/shutter_manual_calibration_screen.dart",
+    "line": 206
+  },
+  "shutter_manual_calibration_fully_closed": {
+    "en": "Fully Closed",
+    "ar": "[AR] Fully Closed",
+    "screen": "screens/shutter_manual_calibration_screen.dart",
+    "line": 310
+  },
+  "shutter_manual_calibration_fully_open": {
+    "en": "Fully Open",
+    "ar": "[AR] Fully Open",
+    "screen": "screens/shutter_manual_calibration_screen.dart",
+    "line": 320
+  },
+  "wifi_profile_wifi_network_ssid": {
+    "en": "Wi-Fi Network (SSID)",
+    "ar": "[AR] Wi-Fi Network (SSID)",
+    "screen": "screens/wifi_profile_screen.dart",
+    "line": 181
+  },
+  "wifi_profile_enter_your_wifi_network_name": {
+    "en": "Enter your Wi-Fi network name",
+    "ar": "[AR] Enter your Wi-Fi network name",
+    "screen": "screens/wifi_profile_screen.dart",
+    "line": 182
+  },
+  "wifi_profile_wifi_password": {
+    "en": "Wi-Fi Password",
+    "ar": "[AR] Wi-Fi Password",
+    "screen": "screens/wifi_profile_screen.dart",
+    "line": 197
+  },
+  "wifi_profile_enter_your_wifi_password": {
+    "en": "Enter your Wi-Fi password",
+    "ar": "[AR] Enter your Wi-Fi password",
+    "screen": "screens/wifi_profile_screen.dart",
+    "line": 198
+  },
+  "wifi_profile_save_to_my_account_for_future_devices": {
+    "en": "Save to my account for future devices",
+    "ar": "[AR] Save to my account for future devices",
+    "screen": "screens/wifi_profile_screen.dart",
+    "line": 228
+  },
+  "wifi_profile_save_to_my_account_for_future_devices_2": {
+    "en": "Save to my account for future devices",
+    "ar": "[AR] Save to my account for future devices",
+    "screen": "screens/wifi_profile_screen.dart",
+    "line": 228
+  },
+  "wifi_profile_set_as_default_wifi_profile": {
+    "en": "Set as default Wi-Fi profile",
+    "ar": "[AR] Set as default Wi-Fi profile",
+    "screen": "screens/wifi_profile_screen.dart",
+    "line": 244
+  },
+  "wifi_profile_set_as_default_wifi_profile_2": {
+    "en": "Set as default Wi-Fi profile",
+    "ar": "[AR] Set as default Wi-Fi profile",
+    "screen": "screens/wifi_profile_screen.dart",
+    "line": 244
+  },
+  "device_selector_loading_devices": {
+    "en": "Loading devices...",
+    "ar": "[AR] Loading devices...",
+    "screen": "widgets/device_selector.dart",
+    "line": 231
+  },
+  "device_selector_retry": {
+    "en": "Retry",
+    "ar": "إعادة المحاولة",
+    "screen": "widgets/device_selector.dart",
+    "line": 259
+  },
+  "shutter_control_failed_to_open_shutter_e": {
+    "en": "Failed to open shutter: $e",
+    "ar": "فشل في open shutter",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 352
+  },
+  "shutter_control_failed_to_open_shutter_e_2": {
+    "en": "Failed to open shutter: $e",
+    "ar": "فشل في open shutter",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 352
+  },
+  "shutter_control_failed_to_close_shutter_e": {
+    "en": "Failed to close shutter: $e",
+    "ar": "فشل في close shutter",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 381
+  },
+  "shutter_control_failed_to_close_shutter_e_2": {
+    "en": "Failed to close shutter: $e",
+    "ar": "فشل في close shutter",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 381
+  },
+  "shutter_control_failed_to_stop_shutter_e": {
+    "en": "Failed to stop shutter: $e",
+    "ar": "فشل في stop shutter",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 410
+  },
+  "shutter_control_failed_to_stop_shutter_e_2": {
+    "en": "Failed to stop shutter: $e",
+    "ar": "فشل في stop shutter",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 410
+  },
+  "shutter_control_failed_to_set_position_e": {
+    "en": "Failed to set position: $e",
+    "ar": "فشل في set position",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 488
+  },
+  "shutter_control_failed_to_set_position_e_2": {
+    "en": "Failed to set position: $e",
+    "ar": "فشل في set position",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 488
+  },
+  "shutter_control_shutter": {
+    "en": "Shutter",
+    "ar": "مصراع",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 564
+  },
+  "shutter_control_curtain": {
+    "en": "Curtain",
+    "ar": "[AR] Curtain",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 574
+  },
+  "shutter_control_none": {
+    "en": "None",
+    "ar": "[AR] None",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 584
+  },
+  "shutter_control_close": {
+    "en": "Close",
+    "ar": "إغلاق",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 812
+  },
+  "shutter_control_stop": {
+    "en": "Stop",
+    "ar": "إيقاف",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 820
+  },
+  "shutter_control_open": {
+    "en": "Open",
+    "ar": "فتح",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 828
+  },
+  "shutter_control_safeslidervalueround": {
+    "en": "${safeSliderValue.round()}%",
+    "ar": "[AR] ${safeSliderValue.round()}%",
+    "screen": "widgets/shutter_control_widget.dart",
+    "line": 930
+  },
+  "background_image_picker_gallery": {
+    "en": "Gallery",
+    "ar": "[AR] Gallery",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 104
+  },
+  "background_image_picker_camera": {
+    "en": "Camera",
+    "ar": "[AR] Camera",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 116
+  },
+  "background_image_picker_remove_background": {
+    "en": "Remove Background",
+    "ar": "[AR] Remove Background",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 134
+  },
+  "background_image_picker_background_image_updated_successfully": {
+    "en": "Background image updated successfully!",
+    "ar": "تم بنجاح",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 238
+  },
+  "background_image_picker_background_image_updated_successfully_2": {
+    "en": "Background image updated successfully!",
+    "ar": "تم بنجاح",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 238
+  },
+  "background_image_picker_failed_to_save_image_e": {
+    "en": "Failed to save image: $e",
+    "ar": "فشل في الحفظ",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 248
+  },
+  "background_image_picker_failed_to_save_image_e_2": {
+    "en": "Failed to save image: $e",
+    "ar": "فشل في الحفظ",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 248
+  },
+  "background_image_picker_remove_background_2": {
+    "en": "Remove Background",
+    "ar": "[AR] Remove Background",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 260
+  },
+  "background_image_picker_remove_background_3": {
+    "en": "Remove Background",
+    "ar": "[AR] Remove Background",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 260
+  },
+  "background_image_picker_cancel": {
+    "en": "Cancel",
+    "ar": "إلغاء",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 267
+  },
+  "background_image_picker_remove": {
+    "en": "Remove",
+    "ar": "إزالة",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 274
+  },
+  "background_image_picker_background_removed_successfully": {
+    "en": "Background removed successfully!",
+    "ar": "تم بنجاح",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 288
+  },
+  "background_image_picker_background_removed_successfully_2": {
+    "en": "Background removed successfully!",
+    "ar": "تم بنجاح",
+    "screen": "widgets/background_image_picker.dart",
+    "line": 288
+  }
+}

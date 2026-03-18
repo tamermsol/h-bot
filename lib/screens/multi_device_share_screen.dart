@@ -8,6 +8,7 @@ import '../models/device_share_invitation.dart';
 import '../repos/device_sharing_repo.dart';
 import '../repos/devices_repo.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class MultiDeviceShareScreen extends StatefulWidget {
   final String homeId;
@@ -49,7 +50,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading devices: $e'),
+            content: Text(AppStrings.get('multi_device_share_error_loading_devices_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -60,8 +61,8 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
   Future<void> _generateMultiDeviceQR() async {
     if (_selectedDeviceIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select at least one device'),
+        SnackBar(
+          content: Text(AppStrings.get('multi_device_share_please_select_at_least_one_device')),
           backgroundColor: Colors.orange,
         ),
       );
@@ -90,7 +91,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Authentication failed: $e'),
+            content: Text(AppStrings.get('multi_device_share_authentication_failed_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -101,8 +102,8 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
     if (!authenticated) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Authentication required'),
+          SnackBar(
+            content: Text(AppStrings.get('multi_device_share_authentication_required')),
             backgroundColor: Colors.orange,
           ),
         );
@@ -145,7 +146,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error generating QR: $e'),
+            content: Text(AppStrings.get('multi_device_share_error_generating_qr_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -167,7 +168,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error canceling QR: $e'),
+            content: Text(AppStrings.get('multi_device_share_error_canceling_qr_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -181,7 +182,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
     return Scaffold(
       backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text('Share Multiple Devices'),
+        title: Text(AppStrings.get('multi_device_share_share_multiple_devices')),
         backgroundColor: context.hBackground,
       ),
       body: _isLoading
@@ -285,7 +286,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                         TextButton.icon(
                           onPressed: _cancelQR,
                           icon: const Icon(Icons.close),
-                          label: const Text('Cancel QR Code'),
+                          label: Text(AppStrings.get('multi_device_share_cancel_qr_code')),
                         ),
                       ],
                     ),

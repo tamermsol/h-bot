@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/background_image_service.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_strings.dart';
 
 class BackgroundImagePicker extends StatelessWidget {
   final String? currentImageUrl;
@@ -101,7 +102,7 @@ class BackgroundImagePicker extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () => _pickFromGallery(context),
                 icon: const Icon(Icons.photo_library),
-                label: const Text('Gallery'),
+                label: Text(AppStrings.get('background_image_picker_gallery')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primaryLight,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -113,7 +114,7 @@ class BackgroundImagePicker extends StatelessWidget {
               child: ElevatedButton.icon(
                 onPressed: () => _pickFromCamera(context),
                 icon: const Icon(Icons.camera_alt),
-                label: const Text('Camera'),
+                label: Text(AppStrings.get('background_image_picker_camera')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primaryLight,
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -131,7 +132,7 @@ class BackgroundImagePicker extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: () => _removeImage(context),
               icon: const Icon(Icons.delete),
-              label: const Text('Remove Background'),
+              label: Text(AppStrings.get('background_image_picker_remove_background')),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.error,
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -234,8 +235,8 @@ class BackgroundImagePicker extends StatelessWidget {
         Navigator.pop(context); // Close loading
         onImageSelected(imagePath);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Background image updated successfully!'),
+          SnackBar(
+            content: Text(AppStrings.get('background_image_picker_background_image_updated_successfully')),
             backgroundColor: HBotColors.primary,
           ),
         );
@@ -245,7 +246,7 @@ class BackgroundImagePicker extends StatelessWidget {
         Navigator.pop(context); // Close loading
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to save image: $e'),
+            content: Text(AppStrings.get('background_image_picker_failed_to_save_image_e')),
             backgroundColor: HBotColors.error,
           ),
         );
@@ -257,21 +258,21 @@ class BackgroundImagePicker extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Remove Background'),
+        title: Text(AppStrings.get('background_image_picker_remove_background_2')),
         content: const Text(
           'Are you sure you want to remove the background image?',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('background_image_picker_cancel')),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: HBotColors.error,
             ),
-            child: const Text('Remove'),
+            child: Text(AppStrings.get('background_image_picker_remove')),
           ),
         ],
       ),
@@ -284,8 +285,8 @@ class BackgroundImagePicker extends StatelessWidget {
     if (context.mounted) {
       onImageSelected(null);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Background removed successfully!'),
+        SnackBar(
+          content: Text(AppStrings.get('background_image_picker_background_removed_successfully')),
           backgroundColor: HBotColors.primary,
         ),
       );

@@ -5,6 +5,7 @@ import '../theme/app_theme.dart';
 import '../repos/device_sharing_repo.dart';
 import '../models/shared_device.dart';
 import '../core/supabase_client.dart';
+import '../l10n/app_strings.dart';
 
 class ScanDeviceQRScreen extends StatefulWidget {
   const ScanDeviceQRScreen({super.key});
@@ -49,7 +50,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+        SnackBar(content: Text(AppStrings.get('scan_device_qr_error_e')), backgroundColor: Colors.red),
       );
       setState(() => _isProcessing = false);
     }
@@ -71,7 +72,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Add Shared Device?'),
+        title: Text(AppStrings.get('scan_device_qr_add_shared_device')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,14 +88,14 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('scan_device_qr_cancel')),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: HBotColors.primary,
             ),
-            child: const Text('Add Device'),
+            child: Text(AppStrings.get('scan_device_qr_add_device')),
           ),
         ],
       ),
@@ -118,8 +119,8 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     if (!mounted) return;
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Device added successfully! Check your dashboard.'),
+      SnackBar(
+        content: Text(AppStrings.get('scan_device_qr_device_added_successfully_check_your_das')),
         backgroundColor: Colors.green,
       ),
     );
@@ -135,7 +136,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Add Shared Devices?'),
+        title: Text(AppStrings.get('scan_device_qr_add_shared_devices')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,14 +164,14 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('scan_device_qr_cancel_2')),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: HBotColors.primary,
             ),
-            child: const Text('Add All'),
+            child: Text(AppStrings.get('scan_device_qr_add_all')),
           ),
         ],
       ),
@@ -251,7 +252,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Scan Device QR Code'),
+        title: Text(AppStrings.get('scan_device_qr_scan_device_qr_code')),
         backgroundColor: Colors.black,
         actions: [
           IconButton(

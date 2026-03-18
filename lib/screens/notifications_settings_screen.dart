@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_shell.dart';
 import '../services/notification_service.dart';
+import '../l10n/app_strings.dart';
 
 class NotificationsSettingsScreen extends StatefulWidget {
   const NotificationsSettingsScreen({super.key});
@@ -139,21 +140,21 @@ class _NotificationsSettingsScreenState
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Permission Denied'),
+        title: Text(AppStrings.get('notifications_settings_permission_denied')),
         content: const Text(
           'Notification permission was denied. You can enable it later from your device settings or try again.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('notifications_settings_cancel')),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               _toggleNotifications(true); // Try again
             },
-            child: const Text('Try Again'),
+            child: Text(AppStrings.get('notifications_settings_try_again')),
           ),
         ],
       ),
@@ -165,21 +166,21 @@ class _NotificationsSettingsScreenState
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Text('Permission Required'),
+        title: Text(AppStrings.get('notifications_settings_permission_required')),
         content: const Text(
           'Notification permission is permanently denied. Please enable it from your device settings to receive notifications.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('notifications_settings_cancel_2')),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               openAppSettings(); // Open device settings
             },
-            child: const Text('Open Settings'),
+            child: Text(AppStrings.get('notifications_settings_open_settings')),
           ),
         ],
       ),
@@ -192,7 +193,7 @@ class _NotificationsSettingsScreenState
     return Scaffold(
       backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text(AppStrings.get('notifications_settings_notifications')),
         backgroundColor: context.hBackground,
         elevation: 0,
       ),

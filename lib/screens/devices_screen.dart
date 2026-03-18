@@ -11,6 +11,7 @@ import '../models/device.dart';
 import 'add_device_flow_screen.dart';
 import 'device_control_screen.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class DevicesScreen extends StatefulWidget {
   final Home? home;
@@ -92,7 +93,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load devices: $e'),
+            content: Text(AppStrings.get('devices_failed_to_load_devices_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -504,7 +505,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                           : textPrimary.withOpacity(0.3))
                     : textHint,
                 padding: EdgeInsets.zero,
-                tooltip: 'Close',
+                tooltip: AppStrings.get('devices_close'),
                 iconSize: 16,
               ),
             ),
@@ -522,7 +523,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                     ? textPrimary
                     : textHint,
                 padding: EdgeInsets.zero,
-                tooltip: 'Stop',
+                tooltip: AppStrings.get('devices_stop'),
                 iconSize: 16,
               ),
             ),
@@ -546,7 +547,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                           : textPrimary.withOpacity(0.3))
                     : textHint,
                 padding: EdgeInsets.zero,
-                tooltip: 'Open',
+                tooltip: AppStrings.get('devices_open'),
                 iconSize: 16,
               ),
             ),
@@ -662,12 +663,12 @@ class _DevicesScreenState extends State<DevicesScreen> {
     try {
       if (!_mqttConnected) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Row(
               children: [
                 Icon(Icons.wifi_off, color: Colors.white),
                 SizedBox(width: 8),
-                Text('Connection lost. Please check your network.'),
+                Text(AppStrings.get('devices_connection_lost_please_check_your_networ')),
               ],
             ),
             backgroundColor: Colors.red,
@@ -724,12 +725,12 @@ class _DevicesScreenState extends State<DevicesScreen> {
       // Check MQTT connection
       if (!_mqttConnected) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Row(
               children: [
                 Icon(Icons.wifi_off, color: Colors.white),
                 SizedBox(width: 8),
-                Text('Connection lost. Please check your network.'),
+                Text(AppStrings.get('devices_connection_lost_please_check_your_networ_2')),
               ],
             ),
             backgroundColor: Colors.red,
@@ -793,14 +794,14 @@ class _DevicesScreenState extends State<DevicesScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Add Device'),
+          title: Text(AppStrings.get('devices_add_device')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
                 leading: const Icon(Icons.wifi, color: HBotColors.primary),
-                title: const Text('HBOT Device'),
-                subtitle: const Text('Add HBOT device via Wi-Fi'),
+                title: Text(AppStrings.get('devices_hbot_device')),
+                subtitle: Text(AppStrings.get('devices_add_hbot_device_via_wifi')),
                 onTap: () {
                   Navigator.pop(context);
                   _addTasmotaDevice();
@@ -811,7 +812,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('devices_cancel')),
             ),
           ],
         );
@@ -842,11 +843,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Row(
+        title: Row(
           children: [
             Icon(Icons.warning, color: Colors.red),
             SizedBox(width: 8),
-            Text('Delete Device'),
+            Text(AppStrings.get('devices_delete_device')),
           ],
         ),
         content: Column(
@@ -878,7 +879,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
               _deleteDevice(device);
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(AppStrings.get('devices_delete')),
           ),
         ],
       ),
@@ -968,7 +969,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
               children: [
                 Icon(errorIcon, color: Colors.red),
                 const SizedBox(width: 8),
-                const Text('Delete Failed'),
+                Text(AppStrings.get('devices_delete_failed')),
               ],
             ),
             content: Text(

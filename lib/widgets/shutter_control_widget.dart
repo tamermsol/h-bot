@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_strings.dart';
 
 /// Widget for controlling shutter devices with slider and buttons
 class ShutterControlWidget extends StatefulWidget {
@@ -349,7 +350,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to open shutter: $e'),
+            content: Text(AppStrings.get('shutter_control_failed_to_open_shutter_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -378,7 +379,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to close shutter: $e'),
+            content: Text(AppStrings.get('shutter_control_failed_to_close_shutter_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -407,7 +408,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to stop shutter: $e'),
+            content: Text(AppStrings.get('shutter_control_failed_to_stop_shutter_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -485,7 +486,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to set position: $e'),
+            content: Text(AppStrings.get('shutter_control_failed_to_set_position_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -555,33 +556,33 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
             _saveAnimationPreference(value);
           },
           itemBuilder: (context) => [
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'shutter',
               child: Row(
                 children: [
                   Icon(Icons.window, size: 20),
                   SizedBox(width: 8),
-                  Text('Shutter'),
+                  Text(AppStrings.get('shutter_control_shutter')),
                 ],
               ),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'curtain',
               child: Row(
                 children: [
                   Icon(Icons.curtains, size: 20),
                   SizedBox(width: 8),
-                  Text('Curtain'),
+                  Text(AppStrings.get('shutter_control_curtain')),
                 ],
               ),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
               value: 'none',
               child: Row(
                 children: [
                   Icon(Icons.visibility_off, size: 20),
                   SizedBox(width: 8),
-                  Text('None'),
+                  Text(AppStrings.get('shutter_control_none')),
                 ],
               ),
             ),
@@ -809,7 +810,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         // Close button (highlighted when closing)
         _buildControlButton(
           icon: Icons.arrow_circle_down,
-          label: 'Close',
+          label: AppStrings.get('shutter_control_close'),
           onPressed: _isConnected ? _closeShutter : null,
           isHighlighted: isClosing,
         ),
@@ -817,7 +818,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         // Stop button (highlighted when stopped)
         _buildControlButton(
           icon: Icons.pause_circle,
-          label: 'Stop',
+          label: AppStrings.get('shutter_control_stop'),
           onPressed: _isConnected ? _stopShutter : null,
           isHighlighted: isStopped,
         ),
@@ -825,7 +826,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         // Open button (highlighted when opening)
         _buildControlButton(
           icon: Icons.arrow_circle_up,
-          label: 'Open',
+          label: AppStrings.get('shutter_control_open'),
           onPressed: _isConnected ? _openShutter : null,
           isHighlighted: isOpening,
         ),

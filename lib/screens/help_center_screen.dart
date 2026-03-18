@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class HelpCenterScreen extends StatelessWidget {
   const HelpCenterScreen({super.key});
@@ -58,7 +59,7 @@ class HelpCenterScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text('Help Center'),
+        title: Text(AppStrings.get('help_center_help_center')),
         backgroundColor: context.hBackground,
         elevation: 0,
       ),

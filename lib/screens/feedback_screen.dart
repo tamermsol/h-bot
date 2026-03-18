@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -151,7 +152,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     return Scaffold(
       backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text('Send Feedback'),
+        title: Text(AppStrings.get('feedback_send_feedback')),
         backgroundColor: context.hBackground,
         elevation: 0,
       ),
@@ -230,7 +231,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               child: ElevatedButton.icon(
                 onPressed: _isSending ? null : _sendEmailFeedback,
                 icon: const Icon(Icons.email_outlined),
-                label: const Text('Send via Email'),
+                label: Text(AppStrings.get('feedback_send_via_email')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
                   foregroundColor: Colors.white,
@@ -251,7 +252,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               child: OutlinedButton.icon(
                 onPressed: _isSending ? null : _sendWhatsAppFeedback,
                 icon: const Icon(Icons.chat_outlined),
-                label: const Text('Send via WhatsApp'),
+                label: Text(AppStrings.get('feedback_send_via_whatsapp')),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: HBotColors.primary,
                   side: const BorderSide(color: HBotColors.primary),

@@ -29,6 +29,7 @@ import '../widgets/wifi_permission_gate.dart';
 import '../widgets/enhanced_device_control_widget.dart';
 import '../theme/app_theme.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 /// Complete device pairing flow: Wi-Fi Setup → Device Discovery → Provisioning → Success
 class AddDeviceFlowScreen extends StatefulWidget {
@@ -298,24 +299,24 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 children: [
                   Icon(Icons.bug_report, size: 20),
                   const SizedBox(width: 8),
-                  const Text('Debug Log', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  Text(AppStrings.get('add_device_flow_debug_log'), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                   const Spacer(),
                   IconButton(
                     icon: Icon(Icons.copy, size: 20),
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: _debugLog));
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Log copied to clipboard'), duration: Duration(seconds: 1)),
+                        SnackBar(content: Text(AppStrings.get('add_device_flow_log_copied_to_clipboard')), duration: Duration(seconds: 1)),
                       );
                     },
-                    tooltip: 'Copy',
+                    tooltip: AppStrings.get('add_device_flow_copy'),
                   ),
                   IconButton(
                     icon: Icon(Icons.share, size: 20),
                     onPressed: () {
                       Share.share('H-Bot Device Pairing Log:\n\n$_debugLog');
                     },
-                    tooltip: 'Share',
+                    tooltip: AppStrings.get('add_device_flow_share'),
                   ),
                   IconButton(
                     icon: Icon(Icons.close, size: 20),
@@ -562,8 +563,8 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       child: TextField(
                         controller: _ssidController,
                         style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
-                        decoration: const InputDecoration(
-                          hintText: 'WiFi Network Name (SSID)',
+                        decoration: InputDecoration(
+                          hintText: AppStrings.get('add_device_flow_wifi_network_name_ssid'),
                           hintStyle: TextStyle(fontFamily: 'DM Sans', color: Color(0xFF9CA3AF)),
                           border: InputBorder.none,
                           filled: false,
@@ -584,7 +585,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                         obscureText: !_passwordVisible,
                         style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
                         decoration: InputDecoration(
-                          hintText: 'Password',
+                          hintText: AppStrings.get('add_device_flow_password'),
                           hintStyle: const TextStyle(fontFamily: 'DM Sans', color: Color(0xFF9CA3AF)),
                           border: InputBorder.none,
                           filled: false,
@@ -633,7 +634,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                             try { await Geolocator.openAppSettings(); } catch (_) { await Geolocator.openLocationSettings(); }
                           },
                           icon: Icon(Icons.settings, size: 16),
-                          label: const Text('Open App Settings'),
+                          label: Text(AppStrings.get('add_device_flow_open_app_settings')),
                           style: TextButton.styleFrom(foregroundColor: const Color(0xFF0883FD)),
                         ),
                     ],
@@ -654,7 +655,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     obscureText: !_passwordVisible,
                     style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
                     decoration: InputDecoration(
-                      hintText: 'Password',
+                      hintText: AppStrings.get('add_device_flow_password_2'),
                       hintStyle: const TextStyle(fontFamily: 'DM Sans', color: Color(0xFF9CA3AF)),
                       border: InputBorder.none,
                       filled: false,
@@ -685,7 +686,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Text('Save WiFi for future devices', style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF6B7280))),
+                  Text(AppStrings.get('add_device_flow_save_wifi_for_future_devices'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF6B7280))),
                 ],
               ),
 
@@ -1477,21 +1478,21 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
         final proceed = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Wrong Network?'),
+            title: Text(AppStrings.get('add_device_flow_wrong_network')),
             content: Text(
               'You appear to be connected to "$ssid" instead of a device network (hbot-XXXX).\n\nMake sure you\'re connected to the correct network in Settings, or tap Continue to try anyway.',
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancel'),
+                child: Text(AppStrings.get('add_device_flow_cancel')),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context, true),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
                 ),
-                child: const Text('Continue Anyway'),
+                child: Text(AppStrings.get('add_device_flow_continue_anyway')),
               ),
             ],
           ),
@@ -1799,8 +1800,8 @@ Troubleshooting:
                 child: TextField(
                   controller: _deviceNameController,
                   style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
-                  decoration: const InputDecoration(
-                    hintText: 'Device Name (e.g. Hallway Light)',
+                  decoration: InputDecoration(
+                    hintText: AppStrings.get('add_device_flow_device_name_eg_hallway_light'),
                     hintStyle: TextStyle(fontFamily: 'DM Sans', color: Color(0xFF9CA3AF)),
                     border: InputBorder.none,
                     filled: false,
@@ -2574,23 +2575,23 @@ Troubleshooting:
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Edit Device Name'),
+        title: Text(AppStrings.get('add_device_flow_edit_device_name')),
         content: TextField(
           controller: _deviceNameController,
-          decoration: const InputDecoration(hintText: 'Enter device name'),
+          decoration: InputDecoration(hintText: AppStrings.get('add_device_flow_enter_device_name')),
           autofocus: true,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('add_device_flow_cancel_2')),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               _updateDeviceName();
             },
-            child: const Text('Save'),
+            child: Text(AppStrings.get('add_device_flow_save')),
           ),
         ],
       ),
@@ -2627,7 +2628,7 @@ Troubleshooting:
       // Show error to user
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update device name: $e')),
+          SnackBar(content: Text(AppStrings.get('add_device_flow_failed_to_update_device_name_e'))),
         );
       }
     }
@@ -2644,7 +2645,7 @@ Troubleshooting:
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Choose Room'),
+        title: Text(AppStrings.get('add_device_flow_choose_room')),
         content: SizedBox(
           width: double.maxFinite,
           child: ConstrainedBox(
@@ -2663,8 +2664,8 @@ Troubleshooting:
                         // No room option
                         ListTile(
                           leading: Icon(Icons.device_hub),
-                          title: const Text('No Room'),
-                          subtitle: const Text('Place device in the main area'),
+                          title: Text(AppStrings.get('add_device_flow_no_room')),
+                          subtitle: Text(AppStrings.get('add_device_flow_place_device_in_the_main_area')),
                           onTap: () {
                             Navigator.pop(context);
                             _assignDeviceToRoom(null);
@@ -2707,7 +2708,7 @@ Troubleshooting:
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('add_device_flow_cancel_3')),
           ),
         ],
       ),
@@ -2758,8 +2759,8 @@ Troubleshooting:
       _addDebugLog('Error moving device to room: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Unable to move device. Please try again.'),
+          SnackBar(
+            content: Text(AppStrings.get('add_device_flow_unable_to_move_device_please_try_again')),
             backgroundColor: HBotColors.error,
           ),
         );
@@ -2780,7 +2781,7 @@ Troubleshooting:
             children: [
               Icon(Icons.wifi_off, color: HBotColors.warning),
               SizedBox(width: 8),
-              Text('Network Issue'),
+              Text(AppStrings.get('add_device_flow_network_issue')),
             ],
           ),
           content: Column(
@@ -2804,12 +2805,12 @@ Troubleshooting:
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
-                    const Text('• Check your Wi-Fi connection'),
+                    Text(AppStrings.get('add_device_flow_check_your_wifi_connection')),
                     const Text(
                       '• Make sure you\'re connected to your home network',
                     ),
-                    const Text('• Try turning Wi-Fi off and on'),
-                    const Text('• Check if other apps can access the internet'),
+                    Text(AppStrings.get('add_device_flow_try_turning_wifi_off_and_on')),
+                    Text(AppStrings.get('add_device_flow_check_if_other_apps_can_access_the_inter')),
                   ],
                 ),
               ),
@@ -2825,21 +2826,21 @@ Troubleshooting:
                   _isLoading = false;
                 });
               },
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('add_device_flow_cancel_4')),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 _checkWiFiSettings();
               },
-              child: const Text('Wi-Fi Settings'),
+              child: Text(AppStrings.get('add_device_flow_wifi_settings')),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 _checkConnectivityAndRetry();
               },
-              child: const Text('Retry'),
+              child: Text(AppStrings.get('add_device_flow_retry')),
             ),
           ],
         );
@@ -2860,7 +2861,7 @@ Troubleshooting:
             children: [
               Icon(Icons.device_hub, color: HBotColors.error),
               SizedBox(width: 8),
-              Text('Device Setup Error'),
+              Text(AppStrings.get('add_device_flow_device_setup_error')),
             ],
           ),
           content: Column(
@@ -2876,7 +2877,7 @@ Troubleshooting:
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: HBotColors.errorLight),
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -2884,10 +2885,10 @@ Troubleshooting:
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 8),
-                    Text('• Try the setup process again'),
-                    Text('• Reset the device and start over'),
-                    Text('• Check if the device is already added'),
-                    Text('• Contact support if the issue persists'),
+                    Text(AppStrings.get('add_device_flow_try_the_setup_process_again')),
+                    Text(AppStrings.get('add_device_flow_reset_the_device_and_start_over')),
+                    Text(AppStrings.get('add_device_flow_check_if_the_device_is_already_added')),
+                    Text(AppStrings.get('add_device_flow_contact_support_if_the_issue_persists')),
                   ],
                 ),
               ),
@@ -2903,14 +2904,14 @@ Troubleshooting:
                   _isLoading = false;
                 });
               },
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('add_device_flow_cancel_5')),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 _retryDeviceCreation();
               },
-              child: const Text('Try Again'),
+              child: Text(AppStrings.get('add_device_flow_try_again')),
             ),
           ],
         );
@@ -2934,7 +2935,7 @@ Troubleshooting:
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Wi-Fi Settings'),
+        title: Text(AppStrings.get('add_device_flow_wifi_settings_2')),
         content: const Text(
           'Please go to your device\'s Wi-Fi settings and:\n\n'
           '1. Make sure Wi-Fi is enabled\n'

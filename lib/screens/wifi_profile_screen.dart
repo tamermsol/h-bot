@@ -5,6 +5,7 @@ import '../models/wifi_profile.dart';
 import '../services/smart_home_service.dart';
 import '../core/supabase_client.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 /// Screen for managing Wi-Fi profiles for device provisioning
 class WiFiProfileScreen extends StatefulWidget {
@@ -177,9 +178,9 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
 
               TextFormField(
                 controller: _ssidController,
-                decoration: const InputDecoration(
-                  labelText: 'Wi-Fi Network (SSID)',
-                  hintText: 'Enter your Wi-Fi network name',
+                decoration: InputDecoration(
+                  labelText: AppStrings.get('wifi_profile_wifi_network_ssid'),
+                  hintText: AppStrings.get('wifi_profile_enter_your_wifi_network_name'),
                   prefixIcon: Icon(Icons.wifi),
                 ),
                 validator: (value) {
@@ -194,8 +195,8 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
               TextFormField(
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  labelText: 'Wi-Fi Password',
-                  hintText: 'Enter your Wi-Fi password',
+                  labelText: AppStrings.get('wifi_profile_wifi_password'),
+                  hintText: AppStrings.get('wifi_profile_enter_your_wifi_password'),
                   prefixIcon: const Icon(Icons.lock),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -225,7 +226,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
 
               if (widget.initialProfile == null) ...[
                 CheckboxListTile(
-                  title: const Text('Save to my account for future devices'),
+                  title: Text(AppStrings.get('wifi_profile_save_to_my_account_for_future_devices')),
                   subtitle: const Text(
                     'Reuse these credentials when adding more devices',
                   ),
@@ -241,7 +242,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
 
                 if (_saveToAccount) ...[
                   CheckboxListTile(
-                    title: const Text('Set as default Wi-Fi profile'),
+                    title: Text(AppStrings.get('wifi_profile_set_as_default_wifi_profile')),
                     subtitle: const Text(
                       'Use this network by default for new devices',
                     ),

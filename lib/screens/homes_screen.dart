@@ -4,6 +4,7 @@ import '../services/smart_home_service.dart';
 import '../models/home.dart';
 import 'rooms_screen.dart';
 import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class HomesScreen extends StatefulWidget {
   final VoidCallback? onHomeChanged;
@@ -45,7 +46,7 @@ class _HomesScreenState extends State<HomesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load homes: $e'),
+            content: Text(AppStrings.get('homes_failed_to_load_homes_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -59,8 +60,8 @@ class _HomesScreenState extends State<HomesScreen> {
     if (_nameController.text.trim().isEmpty) {
       debugPrint('❌ Home name is empty');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a home name'),
+        SnackBar(
+          content: Text(AppStrings.get('homes_please_enter_a_home_name')),
           backgroundColor: Colors.red,
         ),
       );
@@ -94,7 +95,7 @@ class _HomesScreenState extends State<HomesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to create home: $e'),
+            content: Text(AppStrings.get('homes_failed_to_create_home_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -105,8 +106,8 @@ class _HomesScreenState extends State<HomesScreen> {
   Future<void> _editHome(Home home) async {
     if (_nameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a home name'),
+        SnackBar(
+          content: Text(AppStrings.get('homes_please_enter_a_home_name_2')),
           backgroundColor: Colors.red,
         ),
       );
@@ -148,7 +149,7 @@ class _HomesScreenState extends State<HomesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to update home: $e'),
+            content: Text(AppStrings.get('homes_failed_to_update_home_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -182,7 +183,7 @@ class _HomesScreenState extends State<HomesScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to delete home: $e'),
+            content: Text(AppStrings.get('homes_failed_to_delete_home_e')),
             backgroundColor: Colors.red,
           ),
         );
@@ -199,12 +200,12 @@ class _HomesScreenState extends State<HomesScreen> {
         debugPrint('🔘 Dialog builder called');
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Create New Home'),
+          title: Text(AppStrings.get('homes_create_new_home')),
           content: TextField(
             controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Home Name',
-              hintText: 'e.g., My House, Office, etc.',
+            decoration: InputDecoration(
+              labelText: AppStrings.get('homes_home_name'),
+              hintText: AppStrings.get('homes_eg_my_house_office_etc'),
             ),
             autofocus: true,
           ),
@@ -214,7 +215,7 @@ class _HomesScreenState extends State<HomesScreen> {
                 debugPrint('🔘 Cancel button pressed');
                 Navigator.pop(context);
               },
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('homes_cancel')),
             ),
             ElevatedButton(
               onPressed: () {
@@ -224,7 +225,7 @@ class _HomesScreenState extends State<HomesScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.primary,
               ),
-              child: const Text('Create'),
+              child: Text(AppStrings.get('homes_create')),
             ),
           ],
         );
@@ -239,26 +240,26 @@ class _HomesScreenState extends State<HomesScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Edit Home'),
+          title: Text(AppStrings.get('homes_edit_home')),
           content: TextField(
             controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Home Name',
-              hintText: 'e.g., My House, Office, etc.',
+            decoration: InputDecoration(
+              labelText: AppStrings.get('homes_home_name_2'),
+              hintText: AppStrings.get('homes_eg_my_house_office_etc_2'),
             ),
             autofocus: true,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('homes_cancel_2')),
             ),
             ElevatedButton(
               onPressed: () => _editHome(home),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.primary,
               ),
-              child: const Text('Save'),
+              child: Text(AppStrings.get('homes_save')),
             ),
           ],
         );
@@ -272,19 +273,19 @@ class _HomesScreenState extends State<HomesScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: context.hCard,
-          title: const Text('Delete Home'),
+          title: Text(AppStrings.get('homes_delete_home')),
           content: Text(
             'Are you sure you want to delete "${home.name}"? This action cannot be undone and will delete all rooms and devices in this home.',
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('homes_cancel_3')),
             ),
             ElevatedButton(
               onPressed: () => _deleteHome(home),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('Delete'),
+              child: Text(AppStrings.get('homes_delete')),
             ),
           ],
         );
@@ -353,7 +354,7 @@ class _HomesScreenState extends State<HomesScreen> {
                 _showCreateHomeDialog();
               },
               icon: const Icon(Icons.add),
-              label: const Text('Create Your First Home'),
+              label: Text(AppStrings.get('homes_create_your_first_home')),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.primary,
                 foregroundColor: Colors.white,
@@ -436,19 +437,19 @@ class _HomesScreenState extends State<HomesScreen> {
                 }
               },
               itemBuilder: (context) => [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'rooms',
                   child: ListTile(
                     leading: Icon(Icons.room_outlined),
-                    title: Text('Manage Rooms'),
+                    title: Text(AppStrings.get('homes_manage_rooms')),
                     contentPadding: EdgeInsets.zero,
                   ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'edit',
                   child: ListTile(
                     leading: Icon(Icons.edit_outlined),
-                    title: Text('Edit Home'),
+                    title: Text(AppStrings.get('homes_edit_home_2')),
                     contentPadding: EdgeInsets.zero,
                   ),
                 ),
