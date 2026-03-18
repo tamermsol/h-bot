@@ -190,7 +190,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                child: Text(AppStrings.get('common_ok')),
               ),
             ],
           ),
@@ -287,7 +287,7 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('OK'),
+                  child: Text(AppStrings.get('common_ok')),
                 ),
               ],
             ),

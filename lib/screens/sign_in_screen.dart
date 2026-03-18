@@ -92,18 +92,18 @@ class _SignInScreenState extends State<SignInScreen> {
           );
         } else if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Google sign-in was cancelled.')),
+            SnackBar(content: Text(AppStrings.get('sign_in_google_signin_was_cancelled'))),
           );
         }
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Google sign-in was cancelled.')),
+          SnackBar(content: Text(AppStrings.get('sign_in_google_sign_in_was_cancelled'))),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Google sign-in error: ${e.toString()}')),
+          SnackBar(content: Text('${AppStrings.get("error_google_sign_in")}: ${e.toString()}')),
         );
       }
     } finally {

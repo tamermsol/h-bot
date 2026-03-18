@@ -1,0 +1,1135 @@
+{
+  "activity_log_no_activity_yet": {
+    "en": "No activity yet",
+    "screen": "screens/activity_log_screen.dart"
+  },
+  "activity_log_device_events_will_appear_here_as_they_happen": {
+    "en": "Device events will appear here as they happen",
+    "screen": "screens/activity_log_screen.dart"
+  },
+  "add_device_flow_add_device": {
+    "en": "Add Device",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_set_up_wifi": {
+    "en": "Set Up WiFi",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_choose_a_saved_profile_or_enter_credentials_manually": {
+    "en": "Choose a saved profile or enter credentials manually",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_enter_manually_instead": {
+    "en": "Enter manually instead",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_continue": {
+    "en": "Continue",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_connect_to_your_device": {
+    "en": "Connect to Your Device",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_follow_these_steps_on_your_phone": {
+    "en": "Follow these steps on your phone",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_open_wifi_settings": {
+    "en": "Open WiFi Settings",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_waiting_for_connection": {
+    "en": "Waiting for connection...",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_scan_qr_code_instead": {
+    "en": "Scan QR Code Instead",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_refresh": {
+    "en": "Refresh",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_device_connected": {
+    "en": "Device Connected!",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_give_your_device_a_name_and_assign_it": {
+    "en": "Give your device a name and assign it to a room",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_go_to_dashboard": {
+    "en": "Go to Dashboard",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_add_another_device": {
+    "en": "Add Another Device",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_available_rooms": {
+    "en": "Available Rooms:",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_no_rooms_available_you_can_create_rooms_from": {
+    "en": "No rooms available. You can create rooms from the home screen.",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_troubleshooting_steps": {
+    "en": "Troubleshooting Steps:",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_what_you_can_try": {
+    "en": "What you can try:",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_device_flow_please_go_to_your_device": {
+    "en": "Please go to your device\\",
+    "screen": "screens/add_device_flow_screen.dart"
+  },
+  "add_scene_failed_to_load_scene_data_e": {
+    "en": "Failed to load scene data: $e",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_activation_time": {
+    "en": "Activation Time",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_repeat": {
+    "en": "Repeat",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_select_days": {
+    "en": "Select Days",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_trigger_type": {
+    "en": "Trigger Type",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_location": {
+    "en": "Location",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_radius": {
+    "en": "Radius",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_scene_will_trigger_when_you_are_within_this": {
+    "en": "Scene will trigger when you are within this distance",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_select_devices": {
+    "en": "Select Devices",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_choose_which_devices_this_scene_will_control": {
+    "en": "Choose which devices this scene will control",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_configure_device_actions": {
+    "en": "Configure Device Actions",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_set_what_each_device_should_do_when_this": {
+    "en": "Set what each device should do when this scene is activated",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_no_devices_selected": {
+    "en": "No devices selected",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_go_back_and_select_devices_first": {
+    "en": "Go back and select devices first",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_action": {
+    "en": "Action",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_channels": {
+    "en": "Channels",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_channel_channelnum": {
+    "en": "Channel $channelNum",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_0": {
+    "en": "0%",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_50": {
+    "en": "50%",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_100": {
+    "en": "100%",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_no_actions_available_for_this_device_type": {
+    "en": "No actions available for this device type",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_review_scene": {
+    "en": "Review Scene",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_review_your_scene_configuration_before_creating": {
+    "en": "Review your scene configuration before creating",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_previous": {
+    "en": "Previous",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_please_enter_a_scene_name": {
+    "en": "Please enter a scene name",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_please_select_an_activation_time_for_timebased_trigger": {
+    "en": "Please select an activation time for time-based trigger",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_please_select_when_to_trigger_arrive_or_leave": {
+    "en": "Please select when to trigger (arrive or leave)",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_please_detect_your_current_location": {
+    "en": "Please detect your current location",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_location_services_are_disabled_please_enable_them": {
+    "en": "Location services are disabled. Please enable them.",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_location_permissions_are_denied": {
+    "en": "Location permissions are denied",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_location_permissions_are_permanently_denied_please_enable_them": {
+    "en": "Location permissions are permanently denied. Please enable them in settings.",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_location_detected_positionlatitudetostringasfixed6_positionlongitudetostringasfixed6": {
+    "en": "Location detected: ${position.latitude.toStringAsFixed(6)}, ${position.longitude.toStringAsFixed(6)}",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_scene_failed_to_detect_location_e": {
+    "en": "Failed to detect location: $e",
+    "screen": "screens/add_scene_screen.dart"
+  },
+  "add_timer_save": {
+    "en": "Save",
+    "screen": "screens/add_timer_screen.dart"
+  },
+  "add_timer_all_channels": {
+    "en": "All Channels",
+    "screen": "screens/add_timer_screen.dart"
+  },
+  "add_timer_ch_channel": {
+    "en": "CH $channel",
+    "screen": "screens/add_timer_screen.dart"
+  },
+  "add_timer_repeat": {
+    "en": "Repeat",
+    "screen": "screens/add_timer_screen.dart"
+  },
+  "add_timer_timer_will_repeat_on_selected_days": {
+    "en": "Timer will repeat on selected days",
+    "screen": "screens/add_timer_screen.dart"
+  },
+  "add_timer_advanced_options": {
+    "en": "Advanced Options",
+    "screen": "screens/add_timer_screen.dart"
+  },
+  "add_timer_random_offset": {
+    "en": "Random Offset",
+    "screen": "screens/add_timer_screen.dart"
+  },
+  "add_timer_add_window_minutes_random_delay_for_security": {
+    "en": "Add ±$_window minutes random delay for security",
+    "screen": "screens/add_timer_screen.dart"
+  },
+  "device_control_failed_to_control_channel_channel_e": {
+    "en": "Failed to control channel $channel: $e",
+    "screen": "widgets/device_control_widget.dart"
+  },
+  "device_control_auto_calibrate_shutter": {
+    "en": "Auto Calibrate Shutter",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_measure_time_automatically": {
+    "en": "Measure time automatically",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_manual_calibrate_shutter": {
+    "en": "Manual Calibrate Shutter",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_enter_times_directly": {
+    "en": "Enter times directly",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_share_device": {
+    "en": "Share Device",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_share_with_other_users_via_qr_code": {
+    "en": "Share with other users via QR code",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_device_information": {
+    "en": "Device Information",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_light": {
+    "en": "Light",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_switch": {
+    "en": "Switch",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_channel_channel_renamed_successfully": {
+    "en": "Channel $channel renamed successfully",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_failed_to_rename_channel_e": {
+    "en": "Failed to rename channel: $e",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_channel_channel_changed_to_typename": {
+    "en": "Channel $channel changed to $typeName",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_failed_to_update_channel_type_e": {
+    "en": "Failed to update channel type: $e",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_select_a_room_for_this_device": {
+    "en": "Select a room for this device:",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_no_room": {
+    "en": "No Room",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_place_device_in_the_main_area": {
+    "en": "Place device in the main area",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_no_rooms_available_create_rooms_from_the_home": {
+    "en": "No rooms available. Create rooms from the home screen.",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_cancel": {
+    "en": "Cancel",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_failed_to_load_rooms_e": {
+    "en": "Failed to load rooms: $e",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_moving_device": {
+    "en": "Moving device...",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_failed_to_move_device_e": {
+    "en": "Failed to move device: $e",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_delete_device": {
+    "en": "Delete Device",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_this_action_cannot_be_undone_all_device_data": {
+    "en": "This action cannot be undone. All device data, settings, and channel configurations will be permanently removed.",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_delete": {
+    "en": "Delete",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_deleting_device": {
+    "en": "Deleting device...",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_delete_failed": {
+    "en": "Delete Failed",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_not_connected_please_check_your_connection": {
+    "en": "Not connected. Please check your connection.",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_device_status_refreshed": {
+    "en": "Device status refreshed",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_failed_to_refresh_e": {
+    "en": "Failed to refresh: $e",
+    "screen": "screens/device_control_screen.dart"
+  },
+  "device_control_set_timers": {
+    "en": "Set Timers",
+    "screen": "screens/device_control_screen.dart",
+    "prop": "tooltip"
+  },
+  "device_control_refresh_device_status": {
+    "en": "Refresh device status",
+    "screen": "screens/device_control_screen.dart",
+    "prop": "tooltip"
+  },
+  "device_timers_timer_limit_reached": {
+    "en": "Timer Limit Reached",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_hbot_devices_support_a_maximum_of_16_local": {
+    "en": "HBOT devices support a maximum of 16 local timer slots.",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_currently_occupied_occupiedindiceslength16_slots": {
+    "en": "Currently occupied: ${_occupiedIndices.length}/16 slots",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_to_add_more_timers_please_delete_an_existing": {
+    "en": "To add more timers, please delete an existing timer or use Scene Control for advanced automation.",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_not_enough_contiguous_slots": {
+    "en": "Not Enough Contiguous Slots",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_options": {
+    "en": "Options:",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_create_a_singlechannel_timer_instead": {
+    "en": "• Create a single-channel timer instead",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_delete_an_existing_timer_to_free_more_slots": {
+    "en": "• Delete an existing timer to free more slots",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_use_scene_control_for_unlimited_timers": {
+    "en": "• Use Scene Control for unlimited timers",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_disabled_conflictingtimerslength_conflicting_timers": {
+    "en": "Disabled ${conflictingTimers.length} conflicting timer(s)",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_no_timers_set": {
+    "en": "No Timers Set",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_tap_to_create_your_first_timer": {
+    "en": "Tap + to create your first timer",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_up_to_16_local_timers_supported": {
+    "en": "Up to 16 local timers supported",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_once_only": {
+    "en": "Once only • ",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_slots_timerindextimerindex_slotsused_1": {
+    "en": "Slots ${timer.index}-${timer.index + slotsUsed - 1}",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_are_you_sure_you_want_to_delete_this": {
+    "en": "Are you sure you want to delete this timer?\\n\\n",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "device_timers_timer_deleted_and_disabled_on_devicen": {
+    "en": "Timer deleted and disabled on device\\n",
+    "screen": "screens/device_timers_screen.dart"
+  },
+  "devices_no_devices_found": {
+    "en": "No devices found",
+    "screen": "screens/devices_screen.dart"
+  },
+  "devices_try_adjusting_your_search_or_filter": {
+    "en": "Try adjusting your search or filter",
+    "screen": "screens/devices_screen.dart"
+  },
+  "devices_failed_to_control_shutter_etostring": {
+    "en": "Failed to control shutter: ${e.toString()}",
+    "screen": "screens/devices_screen.dart"
+  },
+  "devices_device_devicedevicename_is_not_configured_for_control": {
+    "en": "Device ${device.deviceName} is not configured for control",
+    "screen": "screens/devices_screen.dart"
+  },
+  "devices_failed_to_control_device_etostring": {
+    "en": "Failed to control device: ${e.toString()}",
+    "screen": "screens/devices_screen.dart"
+  },
+  "devices_no_home_selected": {
+    "en": "No Home Selected",
+    "screen": "screens/devices_screen.dart"
+  },
+  "devices_please_select_a_home_first_to_view_and": {
+    "en": "Please select a home first to view and manage devices",
+    "screen": "screens/devices_screen.dart"
+  },
+  "devices_this_action_cannot_be_undone_all_device_data": {
+    "en": "This action cannot be undone. All device data, settings, and channel configurations will be permanently removed.",
+    "screen": "screens/devices_screen.dart"
+  },
+  "devices_deleting_device": {
+    "en": "Deleting device...",
+    "screen": "screens/devices_screen.dart"
+  },
+  "email_confirmation_": {
+    "en": "✉️",
+    "screen": "screens/email_confirmation_screen.dart"
+  },
+  "feedback_we_value_your_feedback": {
+    "en": "We value your feedback",
+    "screen": "screens/feedback_screen.dart"
+  },
+  "feedback_help_us_improve_hbot_by_sharing_your_thoughts": {
+    "en": "Help us improve HBOT by sharing your thoughts, suggestions, or reporting issues",
+    "screen": "screens/feedback_screen.dart"
+  },
+  "feedback_your_feedback": {
+    "en": "Your Feedback",
+    "screen": "screens/feedback_screen.dart"
+  },
+  "feedback_send_via": {
+    "en": "Send via",
+    "screen": "screens/feedback_screen.dart"
+  },
+  "feedback_your_feedback_matters": {
+    "en": "Your feedback matters",
+    "screen": "screens/feedback_screen.dart"
+  },
+  "feedback_we_read_every_message_and_use_your_feedback": {
+    "en": "We read every message and use your feedback to improve HBOT. We typically respond within 24 hours during business days.",
+    "screen": "screens/feedback_screen.dart"
+  },
+  "feedback_tell_us_what_you_thinknnyou_can_sharen_feature": {
+    "en": "Tell us what you think...\\n\\nYou can share:\\n• Feature suggestions\\n• Bug reports\\n• General feedback\\n• Questions or concerns",
+    "screen": "screens/feedback_screen.dart",
+    "prop": "hintText"
+  },
+  "hbot_account_enter_verification_code": {
+    "en": "Enter Verification Code",
+    "screen": "screens/hbot_account_screen.dart"
+  },
+  "hbot_account_we_sent_a_6digit_code_to": {
+    "en": "We sent a 6-digit code to",
+    "screen": "screens/hbot_account_screen.dart"
+  },
+  "hbot_account_this_action_cannot_be_undone_deleting_your_account": {
+    "en": "This action cannot be undone. Deleting your account will:",
+    "screen": "screens/hbot_account_screen.dart"
+  },
+  "hbot_account_this_action_is_permanent_and_cannot_be_reversed": {
+    "en": "This action is permanent and cannot be reversed",
+    "screen": "screens/hbot_account_screen.dart"
+  },
+  "hbot_account_final_confirmation": {
+    "en": "Final Confirmation",
+    "screen": "screens/hbot_account_screen.dart"
+  },
+  "hbot_account_to_confirm_deletion_please_type": {
+    "en": "To confirm deletion, please type:",
+    "screen": "screens/hbot_account_screen.dart"
+  },
+  "hbot_account_delete_my_account": {
+    "en": "DELETE MY ACCOUNT",
+    "screen": "screens/hbot_account_screen.dart"
+  },
+  "hbot_account_type_here": {
+    "en": "Type here",
+    "screen": "screens/hbot_account_screen.dart",
+    "prop": "hintText"
+  },
+  "help_center_get_in_touch_with_us_through_any_of": {
+    "en": "Get in touch with us through any of the following channels",
+    "screen": "screens/help_center_screen.dart"
+  },
+  "help_center_we_typically_respond_within_24_hours_during_business": {
+    "en": "We typically respond within 24 hours during business days.",
+    "screen": "screens/help_center_screen.dart"
+  },
+  "home_dashboard_error_connecting_to_devices": {
+    "en": "Error connecting to devices",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_unable_to_refresh_devices_please_check_your_connection": {
+    "en": "Unable to refresh devices. Please check your connection.",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_refreshed_controllabledeviceslength_devices": {
+    "en": "Refreshed ${controllableDevices.length} devices",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_unable_to_refresh_devices_please_try_again": {
+    "en": "Unable to refresh devices. Please try again.",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_failed_to_update_background_e": {
+    "en": "Failed to update background: $e",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_no_realtime_no_topic": {
+    "en": "No realtime (no topic)",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_connection_lost_please_check_your_network": {
+    "en": "Connection lost. Please check your network.",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_failed_to_control_shutter_etostring": {
+    "en": "Failed to control shutter: ${e.toString()}",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_device_devicename_is_not_configured_for_control": {
+    "en": "Device ${device.name} is not configured for control",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_failed_to_control_devicename_etostring": {
+    "en": "Failed to control ${device.name}: ${e.toString()}",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_view_filter_options": {
+    "en": "View & Filter Options",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_unable_to_load_home_data_please_check_your": {
+    "en": "Unable to load home data. Please check your connection and try again.",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_connection_diagnostics": {
+    "en": "Connection Diagnostics",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_debug_messages": {
+    "en": "Debug Messages:",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_refresh_states": {
+    "en": "Refresh States",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_retry_connection": {
+    "en": "Retry Connection",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_item": {
+    "en": "• $item",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_search_devices": {
+    "en": "Search devices...",
+    "screen": "screens/home_dashboard_screen.dart",
+    "prop": "hintText"
+  },
+  "home_dashboard_filter_and_sort": {
+    "en": "Filter and sort",
+    "screen": "screens/home_dashboard_screen.dart",
+    "prop": "tooltip"
+  },
+  "home_dashboard_close": {
+    "en": "Close",
+    "screen": "screens/home_dashboard_screen.dart",
+    "prop": "tooltip"
+  },
+  "home_dashboard_stop": {
+    "en": "Stop",
+    "screen": "screens/home_dashboard_screen.dart",
+    "prop": "tooltip"
+  },
+  "home_dashboard_open": {
+    "en": "Open",
+    "screen": "screens/home_dashboard_screen.dart",
+    "prop": "tooltip"
+  },
+  "home_dashboard_diagnose": {
+    "en": "Diagnose",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_details": {
+    "en": "Details",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_retry": {
+    "en": "Retry",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_debug": {
+    "en": "Debug",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "home_dashboard_all": {
+    "en": "All",
+    "screen": "screens/home_dashboard_screen.dart"
+  },
+  "homes_my_homes": {
+    "en": "My Homes",
+    "screen": "screens/homes_screen.dart"
+  },
+  "homes_no_homes_yet": {
+    "en": "No Homes Yet",
+    "screen": "screens/homes_screen.dart"
+  },
+  "homes_create_your_first_home_to_start_managing_your": {
+    "en": "Create your first home to start managing your smart devices",
+    "screen": "screens/homes_screen.dart"
+  },
+  "homes_created_formatdatehomecreatedat": {
+    "en": "Created ${_formatDate(home.createdAt)}",
+    "screen": "screens/homes_screen.dart"
+  },
+  "multi_device_share_clear": {
+    "en": "Clear",
+    "screen": "screens/multi_device_share_screen.dart"
+  },
+  "multi_device_share_generate": {
+    "en": "Generate",
+    "screen": "screens/multi_device_share_screen.dart"
+  },
+  "multi_device_share_sharing_selecteddeviceidslength_devices": {
+    "en": "Sharing ${_selectedDeviceIds.length} device(s)",
+    "screen": "screens/multi_device_share_screen.dart"
+  },
+  "notifications_inbox_notifications": {
+    "en": "Notifications",
+    "screen": "screens/notifications_inbox_screen.dart"
+  },
+  "notifications_inbox_mark_all_read": {
+    "en": "Mark all read",
+    "screen": "screens/notifications_inbox_screen.dart"
+  },
+  "notifications_inbox_no_notifications_yet": {
+    "en": "No notifications yet",
+    "screen": "screens/notifications_inbox_screen.dart"
+  },
+  "notifications_inbox_close": {
+    "en": "Close",
+    "screen": "screens/notifications_inbox_screen.dart"
+  },
+  "notifications_settings_notification_permission_was_denied_you_can_enable_it": {
+    "en": "Notification permission was denied. You can enable it later from your device settings or try again.",
+    "screen": "screens/notifications_settings_screen.dart"
+  },
+  "notifications_settings_notification_permission_is_permanently_denied_please_enable_it": {
+    "en": "Notification permission is permanently denied. Please enable it from your device settings to receive notifications.",
+    "screen": "screens/notifications_settings_screen.dart"
+  },
+  "notifications_settings_notification_preferences": {
+    "en": "Notification Preferences",
+    "screen": "screens/notifications_settings_screen.dart"
+  },
+  "notifications_settings_manage_how_you_receive_notifications_from_hbot": {
+    "en": "Manage how you receive notifications from HBOT",
+    "screen": "screens/notifications_settings_screen.dart"
+  },
+  "notifications_settings_enable_notifications": {
+    "en": "Enable Notifications",
+    "screen": "screens/notifications_settings_screen.dart"
+  },
+  "notifications_settings_notification_permission_is_required_to_receive_alerts_enable": {
+    "en": "Notification permission is required to receive alerts. Enable notifications above to grant permission.",
+    "screen": "screens/notifications_settings_screen.dart"
+  },
+  "notifications_settings_notification_types": {
+    "en": "Notification Types",
+    "screen": "screens/notifications_settings_screen.dart"
+  },
+  "profile_edit_save": {
+    "en": "Save",
+    "screen": "screens/profile_edit_screen.dart"
+  },
+  "profile_edit_update_your_profile_information_phone_numbers_must_be": {
+    "en": "Update your profile information. Phone numbers must be in E.164 format (e.g., +1234567890).",
+    "screen": "screens/profile_edit_screen.dart"
+  },
+  "profile_edit_update_profile": {
+    "en": "Update Profile",
+    "screen": "screens/profile_edit_screen.dart"
+  },
+  "profile_link_hbot_with_alexa": {
+    "en": "Link H-Bot with Alexa",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_appearance": {
+    "en": "Appearance",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_light": {
+    "en": "Light",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_dark": {
+    "en": "Dark",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_system": {
+    "en": "System",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_could_not_load_home_e": {
+    "en": "Could not load home: $e",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_cancel": {
+    "en": "Cancel",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_send_code": {
+    "en": "Send Code",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_enter_the_6digit_code_sent_tonemailcontrollertexttrim": {
+    "en": "Enter the 6-digit code sent to\\n${emailController.text.trim()}",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_code_resent": {
+    "en": "Code resent",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_resend_code": {
+    "en": "Resend Code",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_back": {
+    "en": "Back",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_verify": {
+    "en": "Verify",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_set_your_new_password": {
+    "en": "Set your new password",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_password_must_be_at_least_6_characters": {
+    "en": "Password must be at least 6 characters",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_password_changed_successfully": {
+    "en": "Password changed successfully!",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_change_password": {
+    "en": "Change Password",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_signing_out": {
+    "en": "Signing out...",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_error_signing_out_e": {
+    "en": "Error signing out: $e",
+    "screen": "screens/profile_screen.dart"
+  },
+  "profile_email_address": {
+    "en": "Email Address",
+    "screen": "screens/profile_screen.dart",
+    "prop": "labelText"
+  },
+  "profile_verification_code": {
+    "en": "Verification Code",
+    "screen": "screens/profile_screen.dart",
+    "prop": "labelText"
+  },
+  "profile_new_password": {
+    "en": "New Password",
+    "screen": "screens/profile_screen.dart",
+    "prop": "labelText"
+  },
+  "profile_confirm_new_password": {
+    "en": "Confirm New Password",
+    "screen": "screens/profile_screen.dart",
+    "prop": "labelText"
+  },
+  "reset_password_failed_to_reset_password_etostring": {
+    "en": "Failed to reset password: ${e.toString()}",
+    "screen": "screens/reset_password_screen.dart"
+  },
+  "reset_password_failed_to_resend_code_etostring": {
+    "en": "Failed to resend code: ${e.toString()}",
+    "screen": "screens/reset_password_screen.dart"
+  },
+  "reset_password_enter_the_6digit_code_sent_to": {
+    "en": "Enter the 6-digit code sent to:",
+    "screen": "screens/reset_password_screen.dart"
+  },
+  "reset_password_resend_in_resendcountdowns": {
+    "en": "Resend in ${_resendCountdown}s",
+    "screen": "screens/reset_password_screen.dart"
+  },
+  "reset_password_resend": {
+    "en": "Resend",
+    "screen": "screens/reset_password_screen.dart"
+  },
+  "rooms_no_rooms_yet": {
+    "en": "No Rooms Yet",
+    "screen": "screens/rooms_screen.dart"
+  },
+  "rooms_add_rooms_to_organize_your_smart_devices_by": {
+    "en": "Add rooms to organize your smart devices by location",
+    "screen": "screens/rooms_screen.dart"
+  },
+  "rooms_tap_to_manage_devices": {
+    "en": "Tap to manage devices",
+    "screen": "screens/rooms_screen.dart"
+  },
+  "scan_device_qr_device_devicename": {
+    "en": "Device: $deviceName",
+    "screen": "screens/scan_device_qr_screen.dart"
+  },
+  "scan_device_qr_this_device_will_be_added_to_your_dashboard": {
+    "en": "This device will be added to your dashboard immediately.",
+    "screen": "screens/scan_device_qr_screen.dart"
+  },
+  "scan_device_qr_and_deviceslength_5_more": {
+    "en": "... and ${devices.length - 5} more",
+    "screen": "screens/scan_device_qr_screen.dart"
+  },
+  "scan_device_qr_point_your_camera_at_the_qr_codenshared_by": {
+    "en": "Point your camera at the QR code\\nshared by the device owner",
+    "screen": "screens/scan_device_qr_screen.dart"
+  },
+  "share_device_biometric_not_available_please_use_device_password": {
+    "en": "Biometric not available. Please use device password.",
+    "screen": "screens/share_device_screen.dart"
+  },
+  "share_device_share_via_qr_code": {
+    "en": "Share via QR Code",
+    "screen": "screens/share_device_screen.dart"
+  },
+  "share_device_choose_biometric_or_device_password_for_authentication": {
+    "en": "Choose biometric or device password for authentication",
+    "screen": "screens/share_device_screen.dart"
+  },
+  "share_device_expires_invitationexpiresattolocaltostringsubstring0_16": {
+    "en": "Expires: ${_invitation!.expiresAt.toLocal().toString().substring(0, 16)}",
+    "screen": "screens/share_device_screen.dart"
+  },
+  "share_device_pending_requests_pendingrequestslength": {
+    "en": "Pending Requests (${_pendingRequests.length})",
+    "screen": "screens/share_device_screen.dart"
+  },
+  "share_device_shared_with_sharedwithlength": {
+    "en": "Shared With (${_sharedWith.length})",
+    "screen": "screens/share_device_screen.dart"
+  },
+  "share_device_permission_sharedpermissionlevelname": {
+    "en": "Permission: ${shared.permissionLevel.name}",
+    "screen": "screens/share_device_screen.dart"
+  },
+  "share_device_this_user_will_no_longer_have_access_to": {
+    "en": "This user will no longer have access to this device.",
+    "screen": "screens/share_device_screen.dart"
+  },
+  "share_device_revoke": {
+    "en": "Revoke",
+    "screen": "screens/share_device_screen.dart"
+  },
+  "shared_devices_no_shared_devices": {
+    "en": "No Shared Devices",
+    "screen": "screens/shared_devices_screen.dart"
+  },
+  "shared_devices_devices_shared_with_you_will_appear_herencontrol_them": {
+    "en": "Devices shared with you will appear here.\\nControl them from your dashboard.",
+    "screen": "screens/shared_devices_screen.dart"
+  },
+  "shutter_calibration_calibration_applied_successfullynopen_opendurations_close_closedurationsndevice_is_restarting": {
+    "en": "Calibration applied successfully!\\nOpen: ${_openDuration}s, Close: ${_closeDuration}s\\nDevice is restarting...",
+    "screen": "screens/shutter_calibration_screen.dart"
+  },
+  "shutter_calibration_calibration_reset_to_100s_for_both_directionsndevice_is": {
+    "en": "Calibration reset to 100s for both directions.\\nDevice is restarting...",
+    "screen": "screens/shutter_calibration_screen.dart"
+  },
+  "shutter_calibration_calibration_instructions": {
+    "en": "Calibration Instructions",
+    "screen": "screens/shutter_calibration_screen.dart"
+  },
+  "shutter_calibration_calibration_in_progress": {
+    "en": "Calibration in Progress",
+    "screen": "screens/shutter_calibration_screen.dart"
+  },
+  "shutter_manual_calibration_calibration_applied_successfullynopen_opentimes_close_closetimesndevice_is_restarting": {
+    "en": "Calibration applied successfully!\\nOpen: ${openTime}s, Close: ${closeTime}s\\nDevice is restarting...",
+    "screen": "screens/shutter_manual_calibration_screen.dart"
+  },
+  "shutter_manual_calibration_manual_calibration": {
+    "en": "Manual Calibration",
+    "screen": "screens/shutter_manual_calibration_screen.dart"
+  },
+  "shutter_manual_calibration_apply_calibration": {
+    "en": "Apply Calibration",
+    "screen": "screens/shutter_manual_calibration_screen.dart"
+  },
+  "shutter_manual_calibration_current_shutter_position": {
+    "en": "Current Shutter Position",
+    "screen": "screens/shutter_manual_calibration_screen.dart"
+  },
+  "shutter_manual_calibration_select_where_your_shutter_is_right_now": {
+    "en": "Select where your shutter is right now:",
+    "screen": "screens/shutter_manual_calibration_screen.dart"
+  },
+  "sign_in_google_signin_was_cancelled": {
+    "en": "Google sign-in was cancelled.",
+    "screen": "screens/sign_in_screen.dart"
+  },
+  "sign_in_google_signin_error_etostring": {
+    "en": "Google sign-in error: ${e.toString()}",
+    "screen": "screens/sign_in_screen.dart"
+  },
+  "sign_up_google_signup_was_cancelled_or_failed_please_try": {
+    "en": "Google sign-up was cancelled or failed. Please try again.",
+    "screen": "screens/sign_up_screen.dart"
+  },
+  "sign_up_by_creating_an_account_you_agree_to_our": {
+    "en": "By creating an account, you agree to our Terms of Service and Privacy Policy",
+    "screen": "screens/sign_up_screen.dart"
+  },
+  "sign_up_phone_optional": {
+    "en": "Phone (Optional)",
+    "screen": "screens/sign_up_screen.dart"
+  },
+  "splash_hbot": {
+    "en": "H-Bot",
+    "screen": "screens/splash_screen.dart"
+  },
+  "splash_smart_home_simplified": {
+    "en": "Smart Home, Simplified",
+    "screen": "screens/splash_screen.dart"
+  },
+  "wifi_profile_current_network": {
+    "en": "Current Network",
+    "screen": "screens/wifi_profile_screen.dart"
+  },
+  "wifi_profile_reuse_these_credentials_when_adding_more_devices": {
+    "en": "Reuse these credentials when adding more devices",
+    "screen": "screens/wifi_profile_screen.dart"
+  },
+  "wifi_profile_use_this_network_by_default_for_new_devices": {
+    "en": "Use this network by default for new devices",
+    "screen": "screens/wifi_profile_screen.dart"
+  },
+  "avatar_picker_dialog_choose_avatar": {
+    "en": "Choose Avatar",
+    "screen": "widgets/avatar_picker_dialog.dart"
+  },
+  "avatar_picker_dialog_default_avatars": {
+    "en": "Default Avatars",
+    "screen": "widgets/avatar_picker_dialog.dart"
+  },
+  "avatar_picker_dialog_cancel": {
+    "en": "Cancel",
+    "screen": "widgets/avatar_picker_dialog.dart"
+  },
+  "avatar_picker_dialog_gallery": {
+    "en": "Gallery",
+    "screen": "widgets/avatar_picker_dialog.dart"
+  },
+  "avatar_picker_dialog_camera": {
+    "en": "Camera",
+    "screen": "widgets/avatar_picker_dialog.dart"
+  },
+  "background_image_picker_choose_a_default_background": {
+    "en": "Choose a Default Background",
+    "screen": "widgets/background_image_picker.dart"
+  },
+  "background_image_picker_or_use_your_own_image": {
+    "en": "Or Use Your Own Image",
+    "screen": "widgets/background_image_picker.dart"
+  },
+  "background_image_picker_are_you_sure_you_want_to_remove_the": {
+    "en": "Are you sure you want to remove the background image?",
+    "screen": "widgets/background_image_picker.dart"
+  },
+  "channel_grid_all_on": {
+    "en": "All On",
+    "screen": "widgets/channel_grid.dart"
+  },
+  "channel_grid_all_off": {
+    "en": "All Off",
+    "screen": "widgets/channel_grid.dart"
+  },
+  "connectivity_banner_no_internet_connection": {
+    "en": "No internet connection",
+    "screen": "widgets/connectivity_banner.dart"
+  },
+  "device_control_no_realtime_data_available": {
+    "en": "No realtime data available",
+    "screen": "widgets/device_control_widget.dart"
+  },
+  "device_control_power": {
+    "en": "Power",
+    "screen": "widgets/device_control_widget.dart"
+  },
+  "device_selector_shared": {
+    "en": "Shared",
+    "screen": "widgets/device_selector.dart"
+  },
+  "enhanced_device_control_failed_to_control_channel_channel_e": {
+    "en": "Failed to control channel $channel: $e",
+    "screen": "widgets/enhanced_device_control_widget.dart"
+  },
+  "enhanced_device_control_failed_to_turn_all_channels_on": {
+    "en": "Failed to turn all channels on",
+    "screen": "widgets/enhanced_device_control_widget.dart"
+  },
+  "enhanced_device_control_failed_to_turn_all_channels_off": {
+    "en": "Failed to turn all channels off",
+    "screen": "widgets/enhanced_device_control_widget.dart"
+  },
+  "enhanced_device_control_power": {
+    "en": "Power",
+    "screen": "widgets/enhanced_device_control_widget.dart"
+  },
+  "error_message_try_again": {
+    "en": "Try Again",
+    "screen": "widgets/error_message_widget.dart"
+  },
+  "wifi_permission_gate_failed_to_request_permissions_e": {
+    "en": "Failed to request permissions: $e",
+    "screen": "widgets/wifi_permission_gate.dart"
+  },
+  "wifi_permission_gate_could_not_open_location_settings_please_enable_manually": {
+    "en": "Could not open location settings. Please enable manually.",
+    "screen": "widgets/wifi_permission_gate.dart"
+  },
+  "wifi_permission_gate_could_not_open_app_settings_please_enable_permissions": {
+    "en": "Could not open app settings. Please enable permissions manually.",
+    "screen": "widgets/wifi_permission_gate.dart"
+  },
+  "wifi_permission_gate_checking_permissions": {
+    "en": "Checking permissions...",
+    "screen": "widgets/wifi_permission_gate.dart"
+  },
+  "wifi_permission_gate_turn_on_location_services": {
+    "en": "Turn On Location Services",
+    "screen": "widgets/wifi_permission_gate.dart"
+  },
+  "wifi_permission_gate_open_app_settings": {
+    "en": "Open App Settings",
+    "screen": "widgets/wifi_permission_gate.dart"
+  },
+  "wifi_permission_gate_grant_permissions": {
+    "en": "Grant Permissions",
+    "screen": "widgets/wifi_permission_gate.dart"
+  },
+  "wifi_permission_gate_check_again": {
+    "en": "Check Again",
+    "screen": "widgets/wifi_permission_gate.dart"
+  },
+  "wifi_permission_gate_continue_without_autodetect": {
+    "en": "Continue Without Auto-Detect",
+    "screen": "widgets/wifi_permission_gate.dart"
+  }
+}

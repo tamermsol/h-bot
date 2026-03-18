@@ -813,7 +813,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 controller: confirmationController,
                 style: TextStyle(color: context.hTextPrimary),
                 decoration: InputDecoration(
-                  hintText: 'Type here',
+                  hintText: AppStrings.get('hbot_account_type_here'),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

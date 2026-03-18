@@ -335,7 +335,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to control channel $channel: $e'),
+            content: Text('${AppStrings.get("error_control_channel")}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -511,12 +511,12 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   ),
                 );
               },
-              tooltip: 'Set Timers',
+              tooltip: AppStrings.get('device_control_set_timers'),
             ),
           IconButton(
             icon: Icon(Icons.refresh, color: context.hTextPrimary),
             onPressed: _refreshDeviceStatus,
-            tooltip: 'Refresh device status',
+            tooltip: AppStrings.get('device_control_refresh_device_status'),
           ),
           IconButton(
             icon: Icon(
@@ -1105,7 +1105,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Channel $channel renamed successfully'),
+            content: Text('${AppStrings.get("success_channel_renamed")}'),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
           ),
@@ -1120,7 +1120,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to rename channel: $e'),
+            content: Text('${AppStrings.get("error_rename_channel")}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -1153,7 +1153,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         final typeName = newType == 'light' ? 'Light' : 'Switch';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Channel $channel changed to $typeName'),
+            content: Text('${AppStrings.get("success_channel_type_changed")}'),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
           ),
@@ -1168,7 +1168,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to update channel type: $e'),
+            content: Text('${AppStrings.get("error_update_channel_type")}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -1410,7 +1410,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text(AppStrings.get('device_control_cancel')),
             ),
           ],
         ),
@@ -1420,7 +1420,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load rooms: $e'),
+            content: Text('${AppStrings.get("error_load_rooms")}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -1434,7 +1434,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       // Show loading indicator
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Row(
               children: [
                 SizedBox(
@@ -1446,7 +1446,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   ),
                 ),
                 SizedBox(width: 12),
-                Text('Moving device...'),
+                Text(AppStrings.get('device_control_moving_device')),
               ],
             ),
             duration: Duration(seconds: 2),
@@ -1501,7 +1501,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to move device: $e'),
+            content: Text('${AppStrings.get("error_move_device")}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -1517,11 +1517,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
-        title: const Row(
+        title: Row(
           children: [
             Icon(Icons.warning, color: Colors.red),
             SizedBox(width: 8),
-            Text('Delete Device'),
+            Text(AppStrings.get('device_control_delete_device')),
           ],
         ),
         content: Column(
@@ -1556,7 +1556,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               _deleteDevice();
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(AppStrings.get('device_control_delete')),
           ),
         ],
       ),
@@ -1653,7 +1653,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               children: [
                 Icon(errorIcon, color: Colors.red),
                 const SizedBox(width: 8),
-                const Text('Delete Failed'),
+                Text(AppStrings.get('device_control_delete_failed')),
               ],
             ),
             content: Text(
@@ -1663,7 +1663,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                child: Text(AppStrings.get('common_ok')),
               ),
             ],
           ),
@@ -1732,8 +1732,8 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Device status refreshed'),
+          SnackBar(
+            content: Text(AppStrings.get('device_control_device_status_refreshed')),
             backgroundColor: Colors.green,
             duration: Duration(seconds: 2),
           ),
@@ -1744,7 +1744,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to refresh: $e'),
+            content: Text('${AppStrings.get("error_refresh")}: $e'),
             backgroundColor: Colors.red,
           ),
         );

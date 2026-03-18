@@ -8,6 +8,7 @@ import '../widgets/mqtt_debug_sheet.dart';
 import '../widgets/shutter_control_widget.dart';
 import '../widgets/channel_grid.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_strings.dart';
 
 /// Enhanced widget for controlling devices with the new MQTT device manager
 class EnhancedDeviceControlWidget extends StatefulWidget {
@@ -306,7 +307,7 @@ class _EnhancedDeviceControlWidgetState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to control channel $channel: $e'),
+            content: Text('${AppStrings.get("error_control_channel")}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -322,8 +323,8 @@ class _EnhancedDeviceControlWidgetState
       debugPrint('❌ Error turning all channels on: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to turn all channels on'),
+          SnackBar(
+            content: Text(AppStrings.get('enhanced_device_control_failed_to_turn_all_channels_on')),
             backgroundColor: Colors.red,
           ),
         );
@@ -339,8 +340,8 @@ class _EnhancedDeviceControlWidgetState
       debugPrint('❌ Error turning all channels off: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to turn all channels off'),
+          SnackBar(
+            content: Text(AppStrings.get('enhanced_device_control_failed_to_turn_all_channels_off')),
             backgroundColor: Colors.red,
           ),
         );
@@ -408,7 +409,7 @@ class _EnhancedDeviceControlWidgetState
     final isConnected = _connectionState == MqttConnectionState.connected;
 
     return SwitchListTile(
-      title: const Text('Power'),
+      title: Text(AppStrings.get('enhanced_device_control_power')),
       value: isOn,
       onChanged: isConnected ? (value) => _setChannelState(1, value) : null,
     );

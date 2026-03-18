@@ -282,12 +282,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppTheme.getCardColor(context),
-        title: const Text('Appearance'),
+        title: Text(AppStrings.get('profile_appearance')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             RadioListTile<ThemeMode>(
-              title: const Text('Light'),
+              title: Text(AppStrings.get('profile_light')),
               value: ThemeMode.light,
               groupValue: themeService.themeMode,
               onChanged: (v) {
@@ -296,7 +296,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             RadioListTile<ThemeMode>(
-              title: const Text('Dark'),
+              title: Text(AppStrings.get('profile_dark')),
               value: ThemeMode.dark,
               groupValue: themeService.themeMode,
               onChanged: (v) {
@@ -305,7 +305,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
             RadioListTile<ThemeMode>(
-              title: const Text('System'),
+              title: Text(AppStrings.get('profile_system')),
               value: ThemeMode.system,
               groupValue: themeService.themeMode,
               onChanged: (v) {
@@ -440,7 +440,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   } catch (e) {
                     if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Could not load home: $e'), backgroundColor: HBotColors.error),
+                        SnackBar(content: Text('${AppStrings.get("error_load_home")}: $e'), backgroundColor: HBotColors.error),
                       );
                     }
                   }
@@ -713,7 +713,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     controller: emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      labelText: 'Email Address',
+                      labelText: AppStrings.get('profile_email_address'),
                       prefixIcon: const Icon(Icons.email_outlined),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
                     ),
@@ -725,7 +725,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               );
               actions = [
-                TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Cancel')),
+                TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: Text(AppStrings.get('profile_cancel'))),
                 TextButton(
                   onPressed: isLoading ? null : () async {
                     if (emailController.text.isEmpty) {
@@ -743,7 +743,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
                   child: isLoading
                       ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Text('Send Code'),
+                      : Text(AppStrings.get('profile_send_code')),
                 ),
               ];
             } else if (step == 1) {
@@ -766,7 +766,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     maxLength: 6,
                     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 8),
                     decoration: InputDecoration(
-                      labelText: 'Verification Code',
+                      labelText: AppStrings.get('profile_verification_code'),
                       counterText: '',
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
                     ),
@@ -784,19 +784,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         setState(() => isLoading = false);
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Code resent'), backgroundColor: Colors.green),
+                            SnackBar(content: Text(AppStrings.get('profile_code_resent')), backgroundColor: Colors.green),
                           );
                         }
                       } catch (e) {
                         setState(() { isLoading = false; errorMessage = 'Failed to resend: $e'; });
                       }
                     },
-                    child: const Text('Resend Code'),
+                    child: Text(AppStrings.get('profile_resend_code')),
                   ),
                 ],
               );
               actions = [
-                TextButton(onPressed: () => setState(() { step = 0; errorMessage = null; }), child: const Text('Back')),
+                TextButton(onPressed: () => setState(() { step = 0; errorMessage = null; }), child: Text(AppStrings.get('profile_back'))),
                 TextButton(
                   onPressed: isLoading ? null : () async {
                     if (otpController.text.length != 6) {
@@ -814,7 +814,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
                   child: isLoading
                       ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Text('Verify'),
+                      : Text(AppStrings.get('profile_verify')),
                 ),
               ];
             } else {
@@ -834,7 +834,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     controller: newPasswordController,
                     obscureText: obscureNew,
                     decoration: InputDecoration(
-                      labelText: 'New Password',
+                      labelText: AppStrings.get('profile_new_password'),
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(obscureNew ? Icons.visibility_off : Icons.visibility),
@@ -848,7 +848,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     controller: confirmPasswordController,
                     obscureText: obscureConfirm,
                     decoration: InputDecoration(
-                      labelText: 'Confirm New Password',
+                      labelText: AppStrings.get('profile_confirm_new_password'),
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(obscureConfirm ? Icons.visibility_off : Icons.visibility),
@@ -869,7 +869,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               );
               actions = [
-                TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Cancel')),
+                TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: Text(AppStrings.get('common_cancel'))),
                 TextButton(
                   onPressed: isLoading ? null : () async {
                     final newPw = newPasswordController.text;
@@ -892,7 +892,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.of(dialogContext).pop();
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Password changed successfully!'), backgroundColor: Colors.green),
+                          SnackBar(content: Text(AppStrings.get('profile_password_changed_successfully')), backgroundColor: Colors.green),
                         );
                       }
                     } catch (e) {
@@ -902,7 +902,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
                   child: isLoading
                       ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Text('Change Password'),
+                      : Text(AppStrings.get('profile_change_password')),
                 ),
               ];
             }
@@ -1039,7 +1039,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
                 SizedBox(
                   width: 16,
@@ -1050,7 +1050,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 SizedBox(width: 12),
-                Text('Signing out...'),
+                Text(AppStrings.get('profile_signing_out')),
               ],
             ),
             backgroundColor: HBotColors.primary,
@@ -1074,7 +1074,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error signing out: $e'),
+            content: Text('${AppStrings.get("error_signing_out")}: $e'),
             backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 4),
           ),

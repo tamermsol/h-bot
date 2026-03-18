@@ -138,7 +138,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to reset password: ${e.toString()}'),
+            content: Text('${AppStrings.get("error_reset_password")}: ${e.toString()}'),
             backgroundColor: HBotColors.error,
           ),
         );
@@ -166,7 +166,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to resend code: ${e.toString()}'),
+            content: Text('${AppStrings.get("error_resend_code")}: ${e.toString()}'),
             backgroundColor: HBotColors.error,
           ),
         );

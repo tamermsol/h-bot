@@ -77,7 +77,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Device: $deviceName'),
+            Text('${AppStrings.get("scan_qr_device")}: $deviceName'),
             const SizedBox(height: 8),
             const Text(
               'This device will be added to your dashboard immediately.',

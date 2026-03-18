@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import 'channel_card.dart';
+import '../l10n/app_strings.dart';
 
 /// Grid of channel controls with optional bulk actions
 /// Always 2-column layout. Scrollable for 8+ channels.
@@ -79,7 +80,7 @@ class ChannelGrid extends StatelessWidget {
             children: [
               Expanded(
                 child: _BulkButton(
-                  label: 'All On',
+                  label: AppStrings.get('channel_grid_all_on'),
                   icon: Icons.flash_on,
                   onTap: canControl ? onAllOn : null,
                   isPrimary: true,
@@ -89,7 +90,7 @@ class ChannelGrid extends StatelessWidget {
               SizedBox(width: compact ? HBotSpacing.space2 : HBotSpacing.space3),
               Expanded(
                 child: _BulkButton(
-                  label: 'All Off',
+                  label: AppStrings.get('channel_grid_all_off'),
                   icon: Icons.flash_off,
                   onTap: canControl ? onAllOff : null,
                   isPrimary: false,

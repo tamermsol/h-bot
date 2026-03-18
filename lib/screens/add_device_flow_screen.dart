@@ -2946,7 +2946,7 @@ Troubleshooting:
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+            child: Text(AppStrings.get('common_ok')),
           ),
         ],
       ),

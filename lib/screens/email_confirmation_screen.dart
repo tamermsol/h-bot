@@ -59,7 +59,7 @@ class _EmailConfirmationScreenState extends State<EmailConfirmationScreen> {
               Container(
                 width: 64, height: 64,
                 decoration: const BoxDecoration(color: HBotColors.primarySurface, shape: BoxShape.circle),
-                child: const Center(child: Text('✉️', style: TextStyle(fontSize: 32))),
+                child: Center(child: Text(AppStrings.get('email_confirmation_'), style: TextStyle(fontSize: 32))),
               ),
 
               const SizedBox(height: HBotSpacing.space5),

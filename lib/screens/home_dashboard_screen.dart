@@ -296,7 +296,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               backgroundColor: Colors.red,
               duration: const Duration(seconds: 5),
               action: SnackBarAction(
-                label: 'Diagnose',
+                label: AppStrings.get('home_dashboard_diagnose'),
                 textColor: Colors.white,
                 onPressed: _showMqttDebugInfo,
               ),
@@ -334,7 +334,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 5),
             action: SnackBarAction(
-              label: 'Details',
+              label: AppStrings.get('home_dashboard_details'),
               textColor: Colors.white,
               onPressed: _showMqttDebugInfo,
             ),
@@ -636,10 +636,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text('Error connecting to devices'),
+                content: Text(AppStrings.get('home_dashboard_error_connecting_to_devices')),
                 backgroundColor: Colors.red,
                 action: SnackBarAction(
-                  label: 'Retry',
+                  label: AppStrings.get('home_dashboard_retry'),
                   textColor: Colors.white,
                   onPressed: () => _registerDevicesWithMqtt(),
                 ),
@@ -772,7 +772,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Refreshed ${controllableDevices.length} devices'),
+              content: Text('${AppStrings.get("dashboard_refreshed")} ${controllableDevices.length} ${AppStrings.get("common_devices")}'),
               backgroundColor: Colors.green,
               duration: const Duration(seconds: 1),
             ),
@@ -783,8 +783,8 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       debugPrint('Error refreshing device states: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Unable to refresh devices. Please try again.'),
+          SnackBar(
+            content: Text(AppStrings.get('home_dashboard_unable_to_refresh_devices_please_try_again')),
             backgroundColor: Colors.red,
           ),
         );
@@ -1169,7 +1169,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Failed to update background: $e'),
+                        content: Text('${AppStrings.get("error_update_background")}: $e'),
                         backgroundColor: Colors.red,
                       ),
                     );
@@ -1209,7 +1209,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 color: context.hTextPrimary,
               ),
               decoration: InputDecoration(
-                hintText: 'Search devices...',
+                hintText: AppStrings.get('home_dashboard_search_devices'),
                 hintStyle: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 14,
@@ -1242,7 +1242,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             child: IconButton(
               icon: const Icon(Icons.tune, color: HBotColors.iconDefault, size: 20),
               onPressed: _showOptionsMenu,
-              tooltip: 'Filter and sort',
+              tooltip: AppStrings.get('home_dashboard_filter_and_sort'),
               padding: const EdgeInsets.all(10),
               constraints: const BoxConstraints(),
             ),
@@ -1273,7 +1273,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       labelPadding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
       tabAlignment: TabAlignment.start,
       tabs: [
-        const Tab(text: 'All'),
+        Tab(text: AppStrings.get('home_dashboard_all')),
         ..._rooms.map((room) => Tab(text: room.name)),
       ],
     );
@@ -1825,7 +1825,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                                 : textPrimary.withOpacity(0.3))
                           : textHint,
                       padding: EdgeInsets.zero,
-                      tooltip: 'Close',
+                      tooltip: AppStrings.get('home_dashboard_close'),
                       iconSize: 16, // Reduced from 18 to 16
                     ),
                   ),
@@ -1843,7 +1843,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                           ? textPrimary
                           : textHint,
                       padding: EdgeInsets.zero,
-                      tooltip: 'Stop',
+                      tooltip: AppStrings.get('home_dashboard_stop'),
                       iconSize: 16, // Reduced from 18 to 16
                     ),
                   ),
@@ -1867,7 +1867,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                                 : textPrimary.withOpacity(0.3))
                           : textHint,
                       padding: EdgeInsets.zero,
-                      tooltip: 'Open',
+                      tooltip: AppStrings.get('home_dashboard_open'),
                       iconSize: 16, // Reduced from 18 to 16
                     ),
                   ),
@@ -2169,12 +2169,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     try {
       if (!_mqttConnected) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Row(
               children: [
                 Icon(Icons.wifi_off, color: Colors.white),
                 SizedBox(width: 8),
-                Text('Connection lost. Please check your network.'),
+                Text(AppStrings.get('home_dashboard_connection_lost_please_check_your_network')),
               ],
             ),
             backgroundColor: Colors.red,
@@ -2205,7 +2205,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to control shutter: ${e.toString()}'),
+            content: Text('${AppStrings.get("error_control_shutter")}: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -2232,11 +2232,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       if (!_mqttConnected) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
                 Icon(Icons.wifi_off, color: Colors.white),
                 SizedBox(width: 8),
-                Text('Connection lost. Please check your network.'),
+                Text(AppStrings.get('dashboard_connection_lost_please_check_your_network')),
               ],
             ),
             backgroundColor: Colors.red,
@@ -2262,10 +2262,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to control ${device.name}: ${e.toString()}'),
+            content: Text('${AppStrings.get("error_control_device")}: ${device.name} - ${e.toString()}'),
             backgroundColor: Colors.red,
             action: SnackBarAction(
-              label: 'Debug',
+              label: AppStrings.get('home_dashboard_debug'),
               textColor: Colors.white,
               onPressed: _showMqttDebugInfo,
             ),
@@ -2999,7 +2999,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 color: _mqttConnected ? Colors.green : Colors.red,
               ),
               const SizedBox(width: 8),
-              Text('Connection Diagnostics'),
+              Text(AppStrings.get('home_dashboard_connection_diagnostics')),
             ],
           ),
           content: SingleChildScrollView(
@@ -3093,7 +3093,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   Navigator.pop(context);
                   _refreshDeviceStates();
                 },
-                child: const Text('Refresh States'),
+                child: Text(AppStrings.get('home_dashboard_refresh_states')),
               ),
             if (!_mqttConnected)
               ElevatedButton(
@@ -3101,7 +3101,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   Navigator.pop(context);
                   _retryMqttConnection();
                 },
-                child: const Text('Retry Connection'),
+                child: Text(AppStrings.get('home_dashboard_retry_connection')),
               ),
           ],
         );

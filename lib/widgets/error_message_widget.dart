@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/error_handler.dart';
+import '../l10n/app_strings.dart';
 
 /// Widget to display user-friendly error messages
 class ErrorMessageWidget extends StatelessWidget {
@@ -48,7 +49,7 @@ class ErrorMessageWidget extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: const Text('Try Again'),
+              label: Text(AppStrings.get('error_message_try_again')),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFF9500),
                 foregroundColor: Colors.white,

@@ -88,7 +88,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Room "${room.name}" created successfully!'),
+            content: Text('${AppStrings.get("success_room_created")}: ${room.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );
@@ -171,7 +171,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Room "${updatedRoom.name}" updated successfully!'),
+            content: Text('${AppStrings.get("success_room_updated")}: ${updatedRoom.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );
@@ -207,7 +207,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Room "${room.name}" deleted successfully!'),
+            content: Text('${AppStrings.get("success_room_deleted")}: ${room.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );

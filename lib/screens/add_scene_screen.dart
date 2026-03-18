@@ -250,7 +250,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load scene data: $e'),
+            content: Text('${AppStrings.get("error_load_scene_data")}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -1313,7 +1313,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 final channelNum = i + 1;
                 final isSelected = selectedChannels.contains(channelNum);
                 return FilterChip(
-                  label: Text('Channel $channelNum'),
+                  label: Text('${AppStrings.get("scene_channel")} $channelNum'),
                   selected: isSelected,
                   onSelected: (selected) {
                     setState(() {
@@ -1413,7 +1413,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                         : context.hTextTertiary.withOpacity(0.3),
                   ),
                 ),
-                child: const Text('0%'),
+                child: Text(AppStrings.get('add_scene_0')),
               ),
             ),
             const SizedBox(width: HBotSpacing.space2),
@@ -1434,7 +1434,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                         : context.hTextTertiary.withOpacity(0.3),
                   ),
                 ),
-                child: const Text('50%'),
+                child: Text(AppStrings.get('add_scene_50')),
               ),
             ),
             const SizedBox(width: HBotSpacing.space2),
@@ -1455,7 +1455,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                         : context.hTextTertiary.withOpacity(0.3),
                   ),
                 ),
-                child: const Text('100%'),
+                child: Text(AppStrings.get('add_scene_100')),
               ),
             ),
           ],
@@ -1816,8 +1816,8 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   Future<void> _createScene() async {
     if (_nameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a scene name'),
+        SnackBar(
+          content: Text(AppStrings.get('add_scene_please_enter_a_scene_name')),
           backgroundColor: Colors.red,
         ),
       );
@@ -1841,8 +1841,8 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     if (_selectedTrigger == 'Location Based') {
       if (_selectedLocationTriggerType == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please select when to trigger (arrive or leave)'),
+          SnackBar(
+            content: Text(AppStrings.get('add_scene_please_select_when_to_trigger_arrive_or_leave')),
             backgroundColor: Colors.red,
           ),
         );
@@ -1850,8 +1850,8 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       }
       if (_selectedLatitude == null || _selectedLongitude == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please detect your current location'),
+          SnackBar(
+            content: Text(AppStrings.get('add_scene_please_detect_your_current_location')),
             backgroundColor: Colors.red,
           ),
         );
@@ -2068,7 +2068,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Repeat', style: Theme.of(context).textTheme.headlineSmall),
+            Text(AppStrings.get('add_scene_repeat'), style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: HBotSpacing.space4),
             ..._repeatOptions.map(
               (option) => ListTile(
@@ -2253,8 +2253,8 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         if (permission == LocationPermission.denied) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Location permissions are denied'),
+              SnackBar(
+                content: Text(AppStrings.get('add_scene_location_permissions_are_denied')),
                 backgroundColor: Colors.red,
               ),
             );
@@ -2304,7 +2304,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to detect location: $e'),
+            content: Text('${AppStrings.get("error_detect_location")}: $e'),
             backgroundColor: Colors.red,
           ),
         );

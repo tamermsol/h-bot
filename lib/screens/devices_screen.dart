@@ -699,7 +699,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to control shutter: ${e.toString()}'),
+            content: Text('${AppStrings.get("error_control_shutter")}: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -750,7 +750,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to control device: ${e.toString()}'),
+            content: Text('${AppStrings.get("error_control_device")}: ${e.toString()}'),
             backgroundColor: Colors.red,
           ),
         );
@@ -927,7 +927,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Device "${device.deviceName}" deleted successfully'),
+            content: Text('${AppStrings.get("success_device_deleted")}: ${device.deviceName}'),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 3),
           ),
@@ -979,7 +979,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                child: Text(AppStrings.get('common_ok')),
               ),
             ],
           ),

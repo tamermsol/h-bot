@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 import 'auth_wrapper.dart';
+import '../l10n/app_strings.dart';
 
 /// Splash screen — dark gradient background with animated logo + text
 class SplashScreen extends StatefulWidget {

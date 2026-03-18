@@ -254,7 +254,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // Phone
                 SmartInputField(
                   controller: _phoneController,
-                  label: 'Phone (Optional)',
+                  label: AppStrings.get('sign_up_phone_optional'),
                   hint: '+1234567890',
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,

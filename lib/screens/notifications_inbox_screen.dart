@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/broadcast_service.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_strings.dart';
 
 /// In-app notification center connected to admin panel broadcasts.
 class NotificationsInboxScreen extends StatefulWidget {

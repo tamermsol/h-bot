@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/avatar_service.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_strings.dart';
 
 class AvatarPickerDialog extends StatelessWidget {
   final String? currentAvatarPath;
@@ -82,13 +83,13 @@ class AvatarPickerDialog extends StatelessWidget {
                 _buildOptionButton(
                   context,
                   icon: Icons.photo_library,
-                  label: 'Gallery',
+                  label: AppStrings.get('avatar_picker_dialog_gallery'),
                   onTap: () => Navigator.pop(context, 'gallery'),
                 ),
                 _buildOptionButton(
                   context,
                   icon: Icons.camera_alt,
-                  label: 'Camera',
+                  label: AppStrings.get('avatar_picker_dialog_camera'),
                   onTap: () => Navigator.pop(context, 'camera'),
                 ),
               ],

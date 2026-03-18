@@ -82,7 +82,7 @@ class _HomesScreenState extends State<HomesScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Home "${home.name}" created successfully!'),
+            content: Text('${AppStrings.get("success_home_created")}: ${home.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );
@@ -170,7 +170,7 @@ class _HomesScreenState extends State<HomesScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Home "${home.name}" deleted successfully!'),
+            content: Text('${AppStrings.get("success_home_deleted")}: ${home.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );

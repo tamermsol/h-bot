@@ -6,6 +6,7 @@ import '../services/tasmota_mqtt_service.dart';
 import '../repos/devices_repo.dart';
 import '../theme/app_theme.dart';
 import '../utils/channel_detection_utils.dart';
+import '../l10n/app_strings.dart';
 
 /// Widget for controlling multi-channel Tasmota devices with MQTT
 class DeviceControlWidget extends StatefulWidget {
@@ -199,7 +200,7 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to control channel $channel: $e'),
+            content: Text('${AppStrings.get("error_control_channel")}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -281,7 +282,7 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
     final isOn = _channelStates[1] ?? false;
 
     return SwitchListTile(
-      title: const Text('Power'),
+      title: Text(AppStrings.get('device_control_power')),
       value: isOn,
       onChanged: _isConnected ? (value) => _toggleChannel(1) : null,
     );
