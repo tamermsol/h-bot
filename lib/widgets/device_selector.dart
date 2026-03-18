@@ -141,10 +141,10 @@ class _DeviceSelectorState extends State<DeviceSelector> {
       }
 
       if (allDevices.isEmpty) {
-        debugPrint('DeviceSelector: No devices found');
+        debugPrint('DeviceSelector: No devices found (home + shared)');
         setState(() {
           _isLoading = false;
-          _errorMessage = 'No devices found in this home. Add devices first.';
+          _errorMessage = AppStrings.get('no_devices_found');
           _availableDevices = [];
         });
         return;

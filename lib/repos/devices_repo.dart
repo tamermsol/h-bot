@@ -29,31 +29,14 @@ class DevicesRepo {
       final userId = supabase.auth.currentUser?.id;
       if (userId == null) return [];
 
-      // Step 1: Get shared device IDs
-      final sharedRows = await supabase
-          .from('shared_devices')
-          .select('device_id')
-          .eq('shared_with_id', userId);
+      // Use RPC function (SECURITY DEFINER) to bypass view/RLS complexity
+      final response = await supabase.rpc('get_shared_devices');
 
-      final deviceIds = (sharedRows as List)
-          .map((row) => row['device_id'] as String)
+      final devices = (response as List)
+          .map((json) => Device.fromJson(json as Map<String, dynamic>))
           .toList();
 
-      if (deviceIds.isEmpty) return [];
-
-      debugPrint('Shared device IDs for user: $deviceIds');
-
-      // Step 2: Fetch devices directly (RLS "Users can view shared devices" policy allows this)
-      final devicesResponse = await supabase
-          .from('devices_with_channels')
-          .select('*')
-          .inFilter('id', deviceIds);
-
-      final devices = (devicesResponse as List)
-          .map((json) => Device.fromJson(json))
-          .toList();
-
-      debugPrint('Loaded ${devices.length} shared devices');
+      debugPrint('Loaded ${devices.length} shared devices via RPC');
       return devices;
     } catch (e) {
       debugPrint('Failed to load shared devices: $e');

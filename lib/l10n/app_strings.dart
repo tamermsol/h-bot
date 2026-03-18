@@ -988,6 +988,8 @@ class AppStrings {
       'scene_create_failed': 'Failed to create scene',
       'scene_location_disabled': 'Location services are disabled. Please enable them.',
       'scene_location_denied': 'Location permissions are permanently denied. Please enable them in settings.',
+    
+      'no_devices_found': 'No devices found. Add devices first.',
     },
 
     // ── Arabic ────────────────────────────────────────────────────────────────
@@ -1961,6 +1963,8 @@ class AppStrings {
       'scene_create_failed': 'فشل إنشاء السيناريو',
       'scene_location_disabled': 'خدمات الموقع معطّلة. يرجى تفعيلها.',
       'scene_location_denied': 'أذونات الموقع مرفوضة بشكل دائم. يرجى تفعيلها من الإعدادات.',
+    
+      'no_devices_found': 'لم يتم العثور على أجهزة. أضف أجهزة أولاً.',
     },
   };
 }

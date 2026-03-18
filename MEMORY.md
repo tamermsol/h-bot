@@ -127,6 +127,40 @@
 - Dark mode tokens defined but not implemented
 - Visual polish pass needed
 
+## 2026-03-18 — FCM Push Notifications Complete
+
+### Architecture
+- Firebase project: `hbot-app-6c521` (HBOT APP)
+- FCM API server: systemd `hbot-fcm` on port 8099, proxied at `/hbot/api/`
+- Endpoints: `/hbot/api/push` (POST), `/hbot/api/token-count` (GET), `/hbot/api/health` (GET)
+- Server script: `/var/www/html/hbot/api/fcm-server.py`
+- Firebase Admin SDK: `/root/.firebase/firebase-admin-sdk.json`
+- APNs key: `/root/.firebase/AuthKey_7KXU88V423.p8` (Key ID: `7KXU88V423`, Team ID: `6U3ELYT3M7`)
+- Supabase table: `fcm_tokens` with RLS
+- Admin panel sends FCM push + saves to `broadcast_notifications`
+- Tim confirmed push working ✅
+
+### Flutter client FCM
+- `firebase_core` + `firebase_messaging` in pubspec
+- `lib/services/fcm_service.dart` — token registration, permissions, background/foreground
+- `Firebase.initializeApp()` in `main.dart`, `FcmService().initialize()` in `HomeScreen.initState()`
+- `google-services.json` (Android) + `GoogleService-Info.plist` (iOS) in place
+- `com.google.gms.google-services` plugin in `android/settings.gradle.kts` + `android/app/build.gradle.kts`
+
+### Shared Devices Bug Fix
+- Root cause: single-query join `shared_devices → devices_with_channels(*)` blocked by RLS for non-owners
+- Fix: two-step query (get IDs from `shared_devices`, then fetch from `devices_with_channels` with `.inFilter`)
+- Commit: `1e5fbf2`
+
+### Scene Localization — Fully Complete
+- ~650 total localization keys (en + ar)
+- All scene screen strings: triggers, repeat, days, location, device selection, actions, review, errors
+- Latest commit: `1e5fbf2` on `hbot-design`
+
+### Current APK
+- Latest: `hbot-latest.apk` at `https://aoperatingsystem.online/hbot/hbot-latest.apk`
+- Includes: FCM, shared devices fix, full scene localization
+
 ## 2026-03-16 — Build 137 + App Store Submission WIP
 
 ### Build 137
