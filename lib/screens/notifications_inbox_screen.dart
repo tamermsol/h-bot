@@ -205,7 +205,7 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
               ),
               const SizedBox(height: HBotSpacing.space5),
               Text(
-                'No notifications yet',
+                AppStrings.get('notifications_inbox_no_notifications_yet'),
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 18,
@@ -215,7 +215,7 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
               ),
               const SizedBox(height: HBotSpacing.space2),
               Text(
-                "You're all caught up!",
+                AppStrings.get('notifications_inbox_all_caught_up'),
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 14,

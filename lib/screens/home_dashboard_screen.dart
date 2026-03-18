@@ -74,8 +74,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   bool _isGridView = true; // true = grid view (default per design), false = list view
   bool _hideOfflineDevices = false;
 
-  // Notification badge
+  // Notification badge — hidden until first load completes
   int _unreadNotificationCount = 0;
+  bool _notificationBadgeLoaded = false;
   final BroadcastService _broadcastService = BroadcastService();
 
   // SharedPreferences key for view preference
@@ -139,7 +140,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     try {
       final count = await _broadcastService.getUnreadCount();
       if (mounted) {
-        setState(() => _unreadNotificationCount = count);
+        setState(() {
+          _unreadNotificationCount = count;
+          _notificationBadgeLoaded = true;
+        });
       }
     } catch (e) {
       debugPrint('Error loading unread notification count: $e');
@@ -982,7 +986,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      _selectedHome?.name ?? AppStrings.get('my_home_default'),
+                      (_selectedHome?.name == 'My Home' ? AppStrings.get('my_home_default') : _selectedHome?.name) ?? AppStrings.get('my_home_default'),
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 24,
@@ -1029,7 +1033,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                       _loadUnreadNotificationCount();
                     },
                   ),
-                  if (_unreadNotificationCount > 0)
+                  if (_notificationBadgeLoaded && _unreadNotificationCount > 0)
                     Positioned(
                       top: 4,
                       right: 4,
@@ -2478,7 +2482,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               const SizedBox(height: HBotSpacing.space4),
               ..._homes.map(
                 (home) => ListTile(
-                  title: Text(home.name),
+                  title: Text(home.name == 'My Home' ? AppStrings.get('my_home_default') : home.name),
                   trailing: _selectedHome?.id == home.id
                       ? Icon(Icons.check, color: HBotColors.primary)
                       : null,
@@ -2874,7 +2878,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 ..._homes.map(
                   (home) => ListTile(
                     leading: const Icon(Icons.home),
-                    title: Text(home.name),
+                    title: Text(home.name == 'My Home' ? AppStrings.get('my_home_default') : home.name),
                     onTap: () {
                       debugPrint('User selected home: ${home.name}');
                       Navigator.pop(context);
