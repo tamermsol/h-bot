@@ -44,6 +44,11 @@ class AuthService {
     await _authRepo.signOut();
   }
 
+  // Check if email exists in the system
+  Future<bool> checkEmailExists(String email) async {
+    return await _authRepo.checkEmailExists(email);
+  }
+
   // Reset password (sends OTP via our custom email system)
   Future<void> resetPassword(String email) async {
     await _authRepo.sendPasswordResetOtp(email);

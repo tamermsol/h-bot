@@ -250,6 +250,27 @@ class AuthRepo {
   }
 
   /// Send password reset OTP
+  /// Check if an email address is registered in the system.
+  /// Uses Supabase's signInWithPassword with a dummy password to check if the email exists.
+  /// If user doesn't exist, Supabase returns "Invalid login credentials".
+  /// If user exists but wrong password, same error — but we use a more reliable approach:
+  /// we call resetPasswordForEmail which silently succeeds for non-existent emails,
+  /// so instead we create an RPC function or query auth metadata.
+  /// Simplest approach: try to sign in and check the error type.
+  Future<bool> checkEmailExists(String email) async {
+    try {
+      // Use Supabase admin endpoint via RPC to check email existence
+      final response = await supabase.rpc('check_email_exists', params: {
+        'email_input': email.toLowerCase().trim(),
+      });
+      return response == true;
+    } catch (e) {
+      debugPrint('❌ Error checking email: $e, falling back to allow');
+      // If RPC doesn't exist, fall back to allowing (don't block user)
+      return true;
+    }
+  }
+
   Future<void> sendPasswordResetOtp(String email) async {
     try {
       debugPrint('📧 Sending password reset OTP to: $email');

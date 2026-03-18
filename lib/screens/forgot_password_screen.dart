@@ -29,12 +29,28 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
 
+    final email = _emailController.text.trim();
+
     try {
-      await _authService.resetPassword(_emailController.text.trim());
+      // Validate email exists before sending OTP
+      final exists = await _authService.checkEmailExists(email);
+      if (!exists) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppStrings.get('reset_email_not_found')),
+              backgroundColor: HBotColors.error,
+            ),
+          );
+        }
+        return;
+      }
+
+      await _authService.resetPassword(email);
       if (mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (_) => ResetPasswordScreen(email: _emailController.text.trim()),
+            builder: (_) => ResetPasswordScreen(email: email),
           ),
         );
       }

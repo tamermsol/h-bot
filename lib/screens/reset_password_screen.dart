@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:async';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
@@ -65,6 +66,22 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         });
       }
     });
+  }
+
+  void _handleOtpPaste(String value, int startIndex) {
+    // Extract only digits
+    final digits = value.replaceAll(RegExp(r'[^0-9]'), '');
+    for (int i = 0; i < digits.length && (startIndex + i) < 6; i++) {
+      _otpControllers[startIndex + i].text = digits[i];
+    }
+    // Focus the next empty field or the last one
+    final nextEmpty = _otpControllers.indexWhere((c) => c.text.isEmpty);
+    if (nextEmpty >= 0 && nextEmpty < 6) {
+      _focusNodes[nextEmpty].requestFocus();
+    } else {
+      _focusNodes[5].requestFocus();
+    }
+    setState(() {});
   }
 
   String _getOtpCode() {
@@ -263,7 +280,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         focusNode: _focusNodes[index],
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
-                        maxLength: 1,
+                        maxLength: 6, // Allow paste of full OTP
                         style: TextStyle(
                           fontFamily: 'DM Sans',
                           fontSize: 24,
@@ -289,6 +306,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           ),
                         ),
                         onChanged: (value) {
+                          // Handle paste — if user pastes a full OTP code
+                          if (value.length > 1) {
+                            _handleOtpPaste(value, index);
+                            return;
+                          }
                           if (value.isNotEmpty && index < 5) {
                             _focusNodes[index + 1].requestFocus();
                           } else if (value.isEmpty && index > 0) {
