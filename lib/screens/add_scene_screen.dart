@@ -265,7 +265,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     final sortedDays = List<int>.from(days)..sort();
 
     if (sortedDays.length == 7) {
-      return 'Every day';
+      return AppStrings.get('repeat_every_day');
     } else if (sortedDays.length == 5 &&
         sortedDays[0] == 1 &&
         sortedDays[4] == 5) {
@@ -273,11 +273,11 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     } else if (sortedDays.length == 2 &&
         sortedDays[0] == 6 &&
         sortedDays[1] == 7) {
-      return 'Weekend';
+      return AppStrings.get('repeat_weekend');
     } else if (sortedDays.length == 1) {
-      return 'Once only';
+      return AppStrings.get('repeat_once_only');
     } else {
-      return 'Custom';
+      return AppStrings.get('repeat_custom');
     }
   }
 
@@ -765,13 +765,13 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Repeat',
+                    AppStrings.get('scene_repeat'),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   TextButton(
                     onPressed: () => _showRepeatOptions(),
                     child: Text(
-                      _selectedRepeat,
+                      _getRepeatDisplayName(_selectedRepeat),
                       style: TextStyle(color: _selectedColor),
                     ),
                   ),
@@ -803,13 +803,13 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        _buildDayChip('Mon', 1),
-                        _buildDayChip('Tue', 2),
-                        _buildDayChip('Wed', 3),
-                        _buildDayChip('Thu', 4),
-                        _buildDayChip('Fri', 5),
-                        _buildDayChip('Sat', 6),
-                        _buildDayChip('Sun', 7),
+                        _buildDayChip(AppStrings.get('day_mon'), 1),
+                        _buildDayChip(AppStrings.get('day_tue'), 2),
+                        _buildDayChip(AppStrings.get('day_wed'), 3),
+                        _buildDayChip(AppStrings.get('day_thu'), 4),
+                        _buildDayChip(AppStrings.get('day_fri'), 5),
+                        _buildDayChip(AppStrings.get('day_sat'), 6),
+                        _buildDayChip(AppStrings.get('day_sun'), 7),
                       ],
                     ),
                   ],
@@ -845,7 +845,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       Expanded(
                         child: _buildLocationTriggerTypeButton(
                           'arrive',
-                          'When I Arrive',
+                          AppStrings.get('trigger_arrive'),
                           Icons.location_on,
                         ),
                       ),
@@ -853,7 +853,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       Expanded(
                         child: _buildLocationTriggerTypeButton(
                           'leave',
-                          'When I Leave',
+                          AppStrings.get('trigger_leave'),
                           Icons.location_off,
                         ),
                       ),
@@ -879,7 +879,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Location',
+                    AppStrings.get('scene_location'),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: HBotSpacing.space2),
@@ -977,7 +977,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Radius',
+                        AppStrings.get('scene_radius'),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
@@ -1004,7 +1004,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     },
                   ),
                   Text(
-                    'Scene will trigger when you are within this distance',
+                    AppStrings.get('scene_trigger_distance'),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: context.hTextSecondary,
                     ),
@@ -1034,7 +1034,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           ),
           const SizedBox(height: HBotSpacing.space2),
           Text(
-            'Choose which devices this scene will control',
+            AppStrings.get('scene_choose_devices'),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: context.hTextSecondary,
             ),
@@ -1072,7 +1072,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           ),
           const SizedBox(height: HBotSpacing.space2),
           Text(
-            'Set what each device should do when this scene is activated',
+            AppStrings.get('scene_set_actions'),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: context.hTextSecondary,
             ),
@@ -1093,14 +1093,14 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                     ),
                     const SizedBox(height: HBotSpacing.space4),
                     Text(
-                      'No devices selected',
+                      AppStrings.get('scene_no_devices_selected'),
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         color: context.hTextSecondary,
                       ),
                     ),
                     const SizedBox(height: HBotSpacing.space2),
                     Text(
-                      'Go back and select devices first',
+                      AppStrings.get('scene_go_back_select'),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: context.hTextTertiary,
                       ),
@@ -1196,7 +1196,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       ),
                     ),
                     Text(
-                      deviceMap['room'] as String? ?? 'No Room',
+                      deviceMap['room'] as String? ?? AppStrings.get('scene_no_room'),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: context.hTextTertiary,
                       ),
@@ -1232,7 +1232,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Action',
+          AppStrings.get('scene_action'),
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
             color: context.hTextPrimary,
@@ -1273,7 +1273,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         if (channels > 1) ...[
           const SizedBox(height: HBotSpacing.space4),
           Text(
-            'Channels',
+            AppStrings.get('scene_channels'),
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
               color: context.hTextPrimary,
@@ -1483,7 +1483,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           const SizedBox(width: HBotSpacing.space2),
           Expanded(
             child: Text(
-              'No actions available for this device type',
+              AppStrings.get('scene_no_actions'),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: context.hTextTertiary,
               ),
@@ -1509,7 +1509,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           ),
           const SizedBox(height: HBotSpacing.space2),
           Text(
-            'Review your scene configuration before creating',
+            AppStrings.get('scene_review_config'),
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: context.hTextSecondary,
             ),
@@ -1594,7 +1594,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                           ? _selectedTime!.format(context)
                           : _selectedTrigger == 'Location Based' &&
                                 _selectedLocationTriggerType != null
-                          ? '${_selectedLocationTriggerType == 'arrive' ? 'Arrive' : 'Leave'} (${_selectedRadius.toInt()}m)'
+                          ? '${_selectedLocationTriggerType == 'arrive' ? AppStrings.get('trigger_arrive') : AppStrings.get('trigger_leave')} (${_selectedRadius.toInt()}m)'
                           : _selectedTrigger,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: context.hTextSecondary,
@@ -1613,22 +1613,22 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
           const SizedBox(height: HBotSpacing.space2),
 
-          _buildSummarySection('Trigger', [
+          _buildSummarySection(AppStrings.get('scene_summary_trigger'), [
             'Type: $_selectedTrigger',
             if (_selectedTrigger == 'Time Based' && _selectedTime != null)
               'Time: ${_selectedTime!.format(context)}',
             if (_selectedTrigger == 'Location Based') ...[
               if (_selectedLocationTriggerType != null)
-                'When: ${_selectedLocationTriggerType == 'arrive' ? 'I Arrive' : 'I Leave'}',
+                '${AppStrings.get('scene_summary_trigger')}: ${_selectedLocationTriggerType == 'arrive' ? AppStrings.get('trigger_arrive') : AppStrings.get('trigger_leave')}',
               if (_selectedLatitude != null && _selectedLongitude != null)
-                'Location: ${_selectedLatitude!.toStringAsFixed(6)}, ${_selectedLongitude!.toStringAsFixed(6)}',
-              'Radius: ${_selectedRadius.toInt()}m',
+                '${AppStrings.get('scene_location')}: ${_selectedLatitude!.toStringAsFixed(6)}, ${_selectedLongitude!.toStringAsFixed(6)}',
+              '${AppStrings.get('scene_radius')}: ${_selectedRadius.toInt()}m',
             ],
           ]),
 
           const SizedBox(height: HBotSpacing.space2),
 
-          _buildSummarySection('Devices', [
+          _buildSummarySection(AppStrings.get('scene_summary_devices'), [
             '${_selectedDevices.length} devices selected',
             ..._selectedDevices.map((device) => '• ${device['name']}'),
           ]),
@@ -1904,7 +1904,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Scene "${_nameController.text.trim()}" updated with ${_deviceActions.length} device action${_deviceActions.length != 1 ? 's' : ''}!',
+                AppStrings.get('scene_updated_success'),
               ),
               backgroundColor: HBotColors.primary,
             ),
@@ -1947,7 +1947,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                'Scene "${_nameController.text.trim()}" created with ${_deviceActions.length} device action${_deviceActions.length != 1 ? 's' : ''}!',
+                AppStrings.get('scene_created_success'),
               ),
               backgroundColor: HBotColors.primary,
             ),
@@ -2072,7 +2072,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             const SizedBox(height: HBotSpacing.space4),
             ..._repeatOptions.map(
               (option) => ListTile(
-                title: Text(option),
+                title: Text(_getRepeatDisplayName(option)),
                 trailing: _selectedRepeat == option
                     ? Icon(Icons.check, color: _selectedColor)
                     : null,
@@ -2162,6 +2162,23 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         return AppStrings.get('trigger_sensor_triggered');
       default:
         return trigger;
+    }
+  }
+
+  String _getRepeatDisplayName(String option) {
+    switch (option) {
+      case 'Once only':
+        return AppStrings.get('repeat_once_only');
+      case 'Every day':
+        return AppStrings.get('repeat_every_day');
+      case 'Weekdays':
+        return AppStrings.get('repeat_weekdays');
+      case 'Weekend':
+        return AppStrings.get('repeat_weekend');
+      case 'Custom':
+        return AppStrings.get('repeat_custom');
+      default:
+        return option;
     }
   }
 
