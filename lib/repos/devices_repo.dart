@@ -27,36 +27,82 @@ class DevicesRepo {
   Future<List<Device>> listSharedDevices() async {
     try {
       final userId = supabase.auth.currentUser?.id;
-      if (userId == null) {
-        debugPrint('listSharedDevices: No authenticated user');
-        return [];
-      }
-      debugPrint('listSharedDevices: Fetching for user $userId');
+      if (userId == null) return [];
 
-      // Use RPC function (SECURITY DEFINER) to bypass view/RLS complexity
-      final response = await supabase.rpc('get_shared_devices');
-      debugPrint('listSharedDevices: RPC response type=${response.runtimeType}, value=$response');
+      // Step 1: Get shared device IDs from shared_devices table
+      final sharedRows = await supabase
+          .from('shared_devices')
+          .select('device_id')
+          .eq('shared_with_id', userId);
 
-      if (response == null) return [];
+      final deviceIds = (sharedRows as List)
+          .map((row) => row['device_id'] as String)
+          .toList();
 
-      final List<dynamic> data = response is List ? response : [response];
-      final List<Device> devices = [];
+      debugPrint('listSharedDevices: Found ${deviceIds.length} shared device IDs for user $userId');
+      if (deviceIds.isEmpty) return [];
 
-      for (final json in data) {
-        try {
-          final map = json as Map<String, dynamic>;
-          devices.add(Device.fromJson(map));
-        } catch (parseErr) {
-          debugPrint('listSharedDevices: Failed to parse device: $parseErr');
-          debugPrint('listSharedDevices: Raw JSON: $json');
+      // Step 2: Try RPC first (bypasses all RLS)
+      try {
+        final rpcResponse = await supabase.rpc('get_shared_devices');
+        if (rpcResponse != null && rpcResponse is List && rpcResponse.isNotEmpty) {
+          final devices = rpcResponse
+              .map((json) => Device.fromJson(json as Map<String, dynamic>))
+              .toList();
+          debugPrint('listSharedDevices: Got ${devices.length} via RPC');
+          return devices;
         }
+      } catch (rpcErr) {
+        debugPrint('listSharedDevices: RPC failed: $rpcErr');
       }
 
-      debugPrint('listSharedDevices: Loaded ${devices.length} shared devices via RPC');
-      return devices;
-    } catch (e, stack) {
+      // Step 3: Fallback — query devices table directly with inFilter
+      try {
+        final devicesResponse = await supabase
+            .from('devices')
+            .select('*')
+            .inFilter('id', deviceIds)
+            .eq('is_deleted', false);
+
+        final devices = (devicesResponse as List).map((json) {
+          // devices table uses 'inserted_at' not 'created_at', map it
+          final map = Map<String, dynamic>.from(json);
+          if (!map.containsKey('created_at') && map.containsKey('inserted_at')) {
+            map['created_at'] = map['inserted_at'];
+          }
+          return Device.fromJson(map);
+        }).toList();
+        debugPrint('listSharedDevices: Got ${devices.length} via direct query');
+        return devices;
+      } catch (directErr) {
+        debugPrint('listSharedDevices: Direct query failed: $directErr');
+      }
+
+      // Step 4: Last resort — build minimal Device objects from shared_devices join
+      try {
+        final joinResponse = await supabase
+            .from('shared_devices')
+            .select('device_id, devices!inner(id, display_name, device_type, home_id, room_id, topic_base, mac_address, owner_user_id, online, channels, channel_count, inserted_at, updated_at, is_deleted)')
+            .eq('shared_with_id', userId);
+
+        final devices = (joinResponse as List).where((item) {
+          return item['devices'] != null;
+        }).map((item) {
+          final d = Map<String, dynamic>.from(item['devices']);
+          d['name'] = d['display_name'] ?? 'Shared Device';
+          d['created_at'] = d['inserted_at'] ?? DateTime.now().toIso8601String();
+          d['tasmota_topic_base'] = d['topic_base'];
+          return Device.fromJson(d);
+        }).toList();
+        debugPrint('listSharedDevices: Got ${devices.length} via join fallback');
+        return devices;
+      } catch (joinErr) {
+        debugPrint('listSharedDevices: Join fallback failed: $joinErr');
+      }
+
+      return [];
+    } catch (e) {
       debugPrint('listSharedDevices: FAILED: $e');
-      debugPrint('listSharedDevices: Stack: $stack');
       return [];
     }
   }
