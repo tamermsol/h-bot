@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show debugPrint;
+import 'package:flutter/widgets.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Model for a broadcast notification from the admin panel.
@@ -7,6 +8,11 @@ class BroadcastNotification {
   final String id;
   final String title;
   final String body;
+  final String? titleEn;
+  final String? bodyEn;
+  final String? titleAr;
+  final String? bodyAr;
+  final String? imageUrl;
   final String target;
   final Map<String, dynamic> data;
   final DateTime createdAt;
@@ -17,6 +23,11 @@ class BroadcastNotification {
     required this.id,
     required this.title,
     required this.body,
+    this.titleEn,
+    this.bodyEn,
+    this.titleAr,
+    this.bodyAr,
+    this.imageUrl,
     required this.target,
     required this.data,
     required this.createdAt,
@@ -24,11 +35,30 @@ class BroadcastNotification {
     required this.readBy,
   });
 
+  /// Returns localized title based on current app locale
+  String get localizedTitle {
+    final locale = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+    if (locale == 'ar' && titleAr != null && titleAr!.isNotEmpty) return titleAr!;
+    return titleEn ?? title;
+  }
+
+  /// Returns localized body based on current app locale
+  String get localizedBody {
+    final locale = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+    if (locale == 'ar' && bodyAr != null && bodyAr!.isNotEmpty) return bodyAr!;
+    return bodyEn ?? body;
+  }
+
   factory BroadcastNotification.fromMap(Map<String, dynamic> map) {
     return BroadcastNotification(
       id: map['id'] as String,
       title: map['title'] as String,
       body: map['body'] as String,
+      titleEn: map['title_en'] as String?,
+      bodyEn: map['body_en'] as String?,
+      titleAr: map['title_ar'] as String?,
+      bodyAr: map['body_ar'] as String?,
+      imageUrl: map['image_url'] as String?,
       target: map['target'] as String? ?? 'all',
       data: Map<String, dynamic>.from(map['data'] as Map? ?? {}),
       createdAt: DateTime.parse(map['created_at'] as String),

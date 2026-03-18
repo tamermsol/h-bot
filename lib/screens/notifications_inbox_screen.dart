@@ -51,8 +51,8 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
           if (userId != null) {
             final updated = BroadcastNotification(
               id: n.id,
-              title: n.title,
-              body: n.body,
+              title: n.localizedTitle,
+              body: n.localizedBody,
               target: n.target,
               data: n.data,
               createdAt: n.createdAt,
@@ -262,7 +262,7 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
                           children: [
                             Expanded(
                               child: Text(
-                                n.title,
+                                n.localizedTitle,
                                 style: TextStyle(
                                   fontFamily: 'DM Sans',
                                   fontSize: 15,
@@ -288,7 +288,7 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          n.body,
+                          n.localizedBody,
                           style: TextStyle(
                             fontFamily: 'DM Sans',
                             fontSize: 13,
@@ -368,7 +368,7 @@ class _NotificationDetailSheet extends StatelessWidget {
 
             // Title
             Text(
-              notification.title,
+              notification.localizedTitle,
               style: TextStyle(
                 fontFamily: 'DM Sans',
                 fontSize: 20,
@@ -394,7 +394,7 @@ class _NotificationDetailSheet extends StatelessWidget {
 
             // Body
             Text(
-              notification.body,
+              notification.localizedBody,
               style: TextStyle(
                 fontFamily: 'DM Sans',
                 fontSize: 15,

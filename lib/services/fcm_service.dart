@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -79,11 +80,15 @@ class FcmService {
     if (userId == null) return;
 
     try {
+      // Get current app locale
+      final locale = WidgetsBinding.instance.platformDispatcher.locale.languageCode;
+
       await _supabase.from('fcm_tokens').upsert({
         'user_id': userId,
         'token': token,
         'platform': Platform.isIOS ? 'ios' : 'android',
         'device_info': '${Platform.operatingSystem} ${Platform.operatingSystemVersion}',
+        'locale': locale,
         'updated_at': DateTime.now().toUtc().toIso8601String(),
       }, onConflict: 'user_id,token');
 
