@@ -982,7 +982,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      _selectedHome?.name ?? 'My Home',
+                      _selectedHome?.name ?? AppStrings.get('my_home_default'),
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         fontSize: 24,

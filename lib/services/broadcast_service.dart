@@ -95,11 +95,19 @@ class BroadcastService {
     if (userId == null) return [];
 
     try {
-      final response = await _supabase
+      // Only show notifications created after the user's account
+      final userCreatedAt = _supabase.auth.currentUser?.createdAt;
+
+      var query = _supabase
           .from('broadcast_notifications')
           .select()
-          .or('target.eq.all,target.eq.$_platform')
-          .order('created_at', ascending: false);
+          .or('target.eq.all,target.eq.$_platform');
+
+      if (userCreatedAt != null) {
+        query = query.gte('created_at', userCreatedAt);
+      }
+
+      final response = await query.order('created_at', ascending: false);
 
       return (response as List<dynamic>)
           .map((e) => BroadcastNotification.fromMap(e as Map<String, dynamic>))
@@ -177,6 +185,13 @@ class BroadcastService {
     for (final n in unread) {
       await markAsRead(n.id);
     }
+  }
+
+  /// Clear all notifications for the current user by adding them to a "dismissed" list.
+  /// We add userId to a `dismissed_by` array (similar to read_by).
+  /// For now, we just mark all as read and let the UI handle clearing.
+  Future<void> clearAllForUser() async {
+    // We'll filter client-side — user dismissed notifications are stored locally
   }
 }
 

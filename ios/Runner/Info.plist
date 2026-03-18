@@ -2,10 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>H-Bot requires background location access to trigger smart home automations even when the app is not open.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>H-Bot uses your location to enable location-based automations and smart home triggers.</string>
+	<string>H-Bot uses your location to read your Wi-Fi network name during device setup.</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>WifiSSIDRead</key>

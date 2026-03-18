@@ -17,10 +17,10 @@ class ConnectivityBanner extends StatelessWidget {
       color: HBotColors.warning,
       child: isOnline
           ? const SizedBox.shrink()
-          : const Center(
+          : Center(
               child: Text(
-                'No internet connection',
-                style: TextStyle(
+                AppStrings.get('no_internet_connection'),
+                style: const TextStyle(
                   fontFamily: 'DM Sans',
                   fontSize: 12,
                   fontWeight: FontWeight.w500,

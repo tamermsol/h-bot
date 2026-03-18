@@ -45,6 +45,11 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
         _allDevices = devices;
         _isLoading = false;
       });
+      if (devices.isEmpty && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppStrings.get('no_owned_devices_to_share'))),
+        );
+      }
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
@@ -294,7 +299,28 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
 
                 // Device List
                 Expanded(
-                  child: ListView.builder(
+                  child: _allDevices.isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(32),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.devices_other, size: 64, color: context.hTextTertiary),
+                              const SizedBox(height: 16),
+                              Text(
+                                AppStrings.get('no_owned_devices_to_share'),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: context.hTextSecondary,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: _allDevices.length,
                     itemBuilder: (context, index) {

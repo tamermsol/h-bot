@@ -259,6 +259,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                 label: Text(AppStrings.get('device_selector_retry')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: widget.accentColor,
+                  foregroundColor: Colors.white,
                 ),
               ),
             ],

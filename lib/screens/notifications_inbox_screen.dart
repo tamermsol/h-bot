@@ -40,6 +40,37 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
     await _load();
   }
 
+  Future<void> _clearAll() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(AppStrings.get('clear_notifications_confirm')),
+        content: Text(AppStrings.get('clear_notifications_confirm_body')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(AppStrings.get('cancel')),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(
+              AppStrings.get('clear_all_notifications'),
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      setState(() => _notifications.clear());
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppStrings.get('notifications_cleared'))),
+        );
+      }
+    }
+  }
+
   Future<void> _onTapNotification(BroadcastNotification n) async {
     if (!n.isRead) {
       await _service.markAsRead(n.id);
@@ -121,6 +152,12 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
                 ),
               ),
             ),
+          if (_notifications.isNotEmpty)
+            IconButton(
+              onPressed: _clearAll,
+              icon: const Icon(Icons.delete_sweep_outlined),
+              tooltip: AppStrings.get('clear_all_notifications'),
+            ),
         ],
       ),
       body: RefreshIndicator(
@@ -156,11 +193,11 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
               Container(
                 width: 64,
                 height: 64,
-                decoration: const BoxDecoration(
-                  color: HBotColors.primarySurface,
+                decoration: BoxDecoration(
+                  color: HBotColors.primary.withOpacity(context.isDark ? 0.15 : 0.08),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.notifications_none_outlined,
                   size: 32,
                   color: HBotColors.primary,
@@ -209,7 +246,7 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
             duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
               color: isUnread
-                  ? HBotColors.primarySurface
+                  ? HBotColors.primary.withOpacity(context.isDark ? 0.15 : 0.08)
                   : context.hCard,
               borderRadius: BorderRadius.circular(HBotRadius.medium),
               border: Border(
@@ -237,8 +274,8 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
                     height: 40,
                     decoration: BoxDecoration(
                       color: isUnread
-                          ? HBotColors.primary.withOpacity(0.15)
-                          : HBotColors.neutral100,
+                          ? HBotColors.primary.withOpacity(0.2)
+                          : (context.isDark ? HBotColors.neutral100.withOpacity(0.1) : HBotColors.neutral100),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(

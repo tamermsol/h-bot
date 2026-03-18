@@ -51,7 +51,13 @@ class _NotificationsSettingsScreenState
 
       if (mounted) {
         setState(() {
-          _notificationsEnabled = enabled;
+          // Sync toggle with actual permission status (not just saved pref)
+          _notificationsEnabled = enabled && status.isGranted;
+          // If permission is granted but pref is off, update pref
+          if (status.isGranted && !enabled) {
+            prefs.setBool(_notificationsEnabledKey, true);
+            _notificationsEnabled = true;
+          }
           _permissionStatus = status;
           _deviceOffline = deviceOffline;
           _deviceOnline = deviceOnline;

@@ -213,10 +213,13 @@ class HelpCenterScreen extends StatelessWidget {
           color: context.hTextPrimary,
         ),
       ),
-      subtitle: Text(
-        subtitle,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: context.hTextSecondary,
+      subtitle: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Text(
+          subtitle,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: context.hTextSecondary,
+          ),
         ),
       ),
       trailing: Icon(

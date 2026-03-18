@@ -60,9 +60,9 @@ class _SignInScreenState extends State<SignInScreen> {
       if (mounted) {
         String msg = 'Sign-in failed. Please check your credentials.';
         if (e.toString().contains('timeout')) {
-          msg = 'Connection timeout. Check your internet connection.';
+          msg = AppStrings.get('connection_timeout');
         } else if (e.toString().contains('network')) {
-          msg = 'Network error. Check your internet connection.';
+          msg = AppStrings.get('network_error');
         }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(msg)),

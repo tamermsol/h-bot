@@ -71,7 +71,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   final List<String> _triggerTypes = [
     'Manual',
     'Time Based',
-    'Location Based',
+    // 'Location Based', // Hidden for initial release
     'Sensor Triggered',
   ];
 

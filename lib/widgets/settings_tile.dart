@@ -108,7 +108,7 @@ class SettingsTile extends StatelessWidget {
         ),
         if (showDivider)
           Padding(
-            padding: const EdgeInsets.only(left: 56),
+            padding: const EdgeInsetsDirectional.only(start: 56),
             child: Container(height: 1, color: HBotColors.borderSubtle),
           ),
       ],
@@ -138,8 +138,8 @@ class SettingsGroup extends StatelessWidget {
       children: [
         if (label != null) ...[
           Padding(
-            padding: const EdgeInsets.only(
-              left: HBotSpacing.space5,
+            padding: const EdgeInsetsDirectional.only(
+              start: HBotSpacing.space5,
               bottom: HBotSpacing.space2,
               top: HBotSpacing.space6,
             ),

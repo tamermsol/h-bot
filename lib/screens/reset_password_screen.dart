@@ -213,7 +213,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 const SizedBox(height: HBotSpacing.space5),
 
                 Text(
-                  'Reset Password',
+                  AppStrings.get('reset_password_title'),
                   style: TextStyle(
                     fontFamily: 'DM Sans',
                     fontSize: 24,
@@ -226,7 +226,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 const SizedBox(height: HBotSpacing.space2),
 
                 Text(
-                  'Enter the 6-digit code sent to:',
+                  AppStrings.get('reset_enter_code'),
                   style: TextStyle(
                     fontFamily: 'DM Sans',
                     fontSize: 14,
@@ -306,12 +306,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 SmartInputField(
                   controller: _newPasswordController,
                   label: AppStrings.get('reset_password_new_password'),
-                  hint: 'At least 6 characters',
+                  hint: AppStrings.get('reset_at_least_6'),
                   obscureText: true,
                   enabled: !_isResetting,
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please enter a new password';
-                    if (value.length < 6) return 'Password must be at least 6 characters';
+                    if (value == null || value.isEmpty) return AppStrings.get('reset_enter_new_password');
+                    if (value.length < 6) return AppStrings.get('reset_password_min_error');
                     return null;
                   },
                 ),
@@ -322,11 +322,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 SmartInputField(
                   controller: _confirmPasswordController,
                   label: AppStrings.get('reset_password_confirm_password'),
-                  hint: 'Re-enter your password',
+                  hint: AppStrings.get('reset_reenter_password'),
                   obscureText: true,
                   enabled: !_isResetting,
                   validator: (value) {
-                    if (value != _newPasswordController.text) return 'Passwords do not match';
+                    if (value != _newPasswordController.text) return AppStrings.get('reset_passwords_no_match');
                     return null;
                   },
                 ),
@@ -334,7 +334,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 const SizedBox(height: HBotSpacing.space2),
 
                 Text(
-                  'Password must be at least 6 characters',
+                  AppStrings.get('reset_password_min_error'),
                   style: TextStyle(
                     fontFamily: 'DM Sans',
                     fontSize: 12,
@@ -375,7 +375,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Didn't receive the code? ",
+                      "${AppStrings.get('reset_didnt_receive')} ",
                       style: TextStyle(
                         fontFamily: 'DM Sans',
                         color: context.hTextSecondary,
@@ -384,7 +384,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                     if (_resendCountdown > 0)
                       Text(
-                        'Resend in ${_resendCountdown}s',
+                        '${AppStrings.get('reset_resend_in')} ${_resendCountdown}s',
                         style: TextStyle(
                           fontFamily: 'DM Sans',
                           color: context.hTextTertiary,
@@ -400,8 +400,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 height: 16,
                                 child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary)),
                               )
-                            : const Text(
-                                'Resend',
+                            : Text(
+                                AppStrings.get('reset_resend'),
                                 style: TextStyle(
                                   fontFamily: 'DM Sans',
                                   color: HBotColors.primary,
