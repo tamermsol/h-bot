@@ -494,7 +494,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
             Icon(Icons.room_outlined, size: 80, color: context.hTextTertiary),
             const SizedBox(height: HBotSpacing.space6),
             Text(
-              'No Rooms Yet',
+              AppStrings.get('rooms_no_rooms_yet'),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: context.hTextPrimary,
                 fontWeight: FontWeight.w600,
@@ -502,7 +502,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
             ),
             const SizedBox(height: HBotSpacing.space4),
             Text(
-              'Add rooms to organize your smart devices by location',
+              AppStrings.get('rooms_add_rooms_desc'),
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: context.hTextSecondary,
               ),
@@ -619,7 +619,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Tap to manage devices',
+                              AppStrings.get('rooms_tap_manage'),
                               style: TextStyle(
                                 fontSize: 13,
                                 color:

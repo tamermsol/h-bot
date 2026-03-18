@@ -299,8 +299,8 @@ class _HomesScreenState extends State<HomesScreen> {
     return Scaffold(
       backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text(
-          'My Homes',
+        title: Text(
+          AppStrings.get('homes_my_homes'),
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
         backgroundColor: context.hBackground,
@@ -333,7 +333,7 @@ class _HomesScreenState extends State<HomesScreen> {
             Icon(Icons.home_outlined, size: 80, color: context.hTextTertiary),
             const SizedBox(height: HBotSpacing.space6),
             Text(
-              'No Homes Yet',
+              AppStrings.get('homes_no_homes'),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 color: context.hTextPrimary,
                 fontWeight: FontWeight.w600,
@@ -403,7 +403,7 @@ class _HomesScreenState extends State<HomesScreen> {
               ),
             ),
             subtitle: Text(
-              'Created ${_formatDate(home.createdAt)}',
+              '${AppStrings.get('homes_created')} ${_formatDate(home.createdAt)}',
               style: TextStyle(color: context.hTextSecondary),
             ),
             trailing: PopupMenuButton<String>(
@@ -453,12 +453,12 @@ class _HomesScreenState extends State<HomesScreen> {
                     contentPadding: EdgeInsets.zero,
                   ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'delete',
                   child: ListTile(
                     leading: Icon(Icons.delete_outline, color: Colors.red),
                     title: Text(
-                      'Delete Home',
+                      AppStrings.get('homes_delete_home'),
                       style: TextStyle(color: Colors.red),
                     ),
                     contentPadding: EdgeInsets.zero,
@@ -495,11 +495,11 @@ class _HomesScreenState extends State<HomesScreen> {
     final difference = now.difference(date);
 
     if (difference.inDays == 0) {
-      return 'Today';
+      return AppStrings.get('homes_today');
     } else if (difference.inDays == 1) {
-      return 'Yesterday';
+      return AppStrings.get('homes_yesterday');
     } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
+      return '${difference.inDays} ${AppStrings.get('homes_days_ago')}';
     } else {
       return '${date.day}/${date.month}/${date.year}';
     }

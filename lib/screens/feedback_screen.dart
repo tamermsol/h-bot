@@ -163,7 +163,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           children: [
             // Header
             Text(
-              'We value your feedback',
+              AppStrings.get('feedback_we_value_your_feedback'),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: context.hTextPrimary,
@@ -180,7 +180,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
             // Feedback Input
             Text(
-              'Your Feedback',
+              AppStrings.get('feedback_your_feedback'),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: context.hTextPrimary,
@@ -204,7 +204,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 ),
                 decoration: InputDecoration(
                   hintText:
-                      'Tell us what you think...\n\nYou can share:\n• Feature suggestions\n• Bug reports\n• General feedback\n• Questions or concerns',
+                      AppStrings.get('feedback_tell_us'),
                   hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: context.hTextSecondary,
                   ),
@@ -217,7 +217,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
             // Send Options
             Text(
-              'Send via',
+              AppStrings.get('feedback_send_via'),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: context.hTextPrimary,
@@ -292,7 +292,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Your feedback matters',
+                          AppStrings.get('feedback_matters'),
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(
                                 fontWeight: FontWeight.w600,
@@ -301,7 +301,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'We read every message and use your feedback to improve HBOT. We typically respond within 24 hours during business days.',
+                          AppStrings.get('feedback_response_time'),
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(
                                 color: context.hTextPrimary,

@@ -84,7 +84,7 @@ class _NotificationsSettingsScreenState
             _permissionStatus = status;
           });
         }
-        _showSuccessMessage('Notifications enabled successfully');
+        _showSuccessMessage(AppStrings.get('notif_enabled_success'));
       } else if (status.isDenied) {
         // Permission denied
         _showPermissionDeniedDialog();
@@ -100,7 +100,7 @@ class _NotificationsSettingsScreenState
           _notificationsEnabled = false;
         });
       }
-      _showSuccessMessage('Notifications disabled');
+      _showSuccessMessage(AppStrings.get('notif_disabled'));
     }
   }
 
@@ -141,8 +141,8 @@ class _NotificationsSettingsScreenState
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
         title: Text(AppStrings.get('notifications_settings_permission_denied')),
-        content: const Text(
-          'Notification permission was denied. You can enable it later from your device settings or try again.',
+        content: Text(
+          AppStrings.get('notif_permission_denied'),
         ),
         actions: [
           TextButton(
@@ -167,8 +167,8 @@ class _NotificationsSettingsScreenState
       builder: (context) => AlertDialog(
         backgroundColor: context.hCard,
         title: Text(AppStrings.get('notifications_settings_permission_required')),
-        content: const Text(
-          'Notification permission is permanently denied. Please enable it from your device settings to receive notifications.',
+        content: Text(
+          AppStrings.get('notif_permission_permanent'),
         ),
         actions: [
           TextButton(
@@ -206,7 +206,7 @@ class _NotificationsSettingsScreenState
                 children: [
                   // Header
                   Text(
-                    'Notification Preferences',
+                    AppStrings.get('notifications_settings_notification_preferences'),
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: context.hTextPrimary,
@@ -214,7 +214,7 @@ class _NotificationsSettingsScreenState
                   ),
                   const SizedBox(height: HBotSpacing.space2),
                   Text(
-                    'Manage how you receive notifications from HBOT',
+                    AppStrings.get('notifications_settings_manage_desc'),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: context.hTextSecondary,
                     ),
@@ -233,7 +233,7 @@ class _NotificationsSettingsScreenState
                       value: _notificationsEnabled,
                       onChanged: _toggleNotifications,
                       title: Text(
-                        'Enable Notifications',
+                        AppStrings.get('notifications_settings_enable_notifications'),
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w500,
                           color: context.hTextPrimary,
@@ -241,8 +241,8 @@ class _NotificationsSettingsScreenState
                       ),
                       subtitle: Text(
                         _notificationsEnabled
-                            ? 'You will receive notifications about device status, automations, and updates'
-                            : 'Turn on to receive notifications',
+                            ? AppStrings.get('notifications_settings_enable_desc')
+                            : AppStrings.get('notif_turn_on'),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: context.hTextSecondary,
                         ),
@@ -297,7 +297,7 @@ class _NotificationsSettingsScreenState
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Permission Required',
+                                  AppStrings.get('notif_permission_required'),
                                   style: Theme.of(context).textTheme.bodyMedium
                                       ?.copyWith(
                                         fontWeight: FontWeight.w600,
@@ -306,7 +306,7 @@ class _NotificationsSettingsScreenState
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Notification permission is required to receive alerts. Enable notifications above to grant permission.',
+                                  AppStrings.get('notif_permission_required_desc'),
                                   style: Theme.of(context).textTheme.bodySmall
                                       ?.copyWith(
                                         color: context.hTextSecondary,
@@ -323,7 +323,7 @@ class _NotificationsSettingsScreenState
 
                   // Notification types section
                   Text(
-                    'Notification Types',
+                    AppStrings.get('notifications_settings_notification_types'),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: context.hTextPrimary,
@@ -339,8 +339,8 @@ class _NotificationsSettingsScreenState
                       children: [
                         _buildNotificationToggle(
                           icon: Icons.cloud_off,
-                          title: 'Device Offline',
-                          description: 'When a device goes offline',
+                          title: AppStrings.get('notifications_settings_device_offline'),
+                          description: AppStrings.get('notifications_settings_device_offline_desc'),
                           value: _deviceOffline,
                           onChanged: _notificationsEnabled ? (v) {
                             setState(() => _deviceOffline = v);
@@ -350,8 +350,8 @@ class _NotificationsSettingsScreenState
                         const Divider(height: 1, indent: 72),
                         _buildNotificationToggle(
                           icon: Icons.cloud_done,
-                          title: 'Device Online',
-                          description: 'When a device comes back online',
+                          title: AppStrings.get('notifications_settings_device_online'),
+                          description: AppStrings.get('notifications_settings_device_online_desc'),
                           value: _deviceOnline,
                           onChanged: _notificationsEnabled ? (v) {
                             setState(() => _deviceOnline = v);
@@ -361,8 +361,8 @@ class _NotificationsSettingsScreenState
                         const Divider(height: 1, indent: 72),
                         _buildNotificationToggle(
                           icon: Icons.auto_awesome,
-                          title: 'Scene Executed',
-                          description: 'When a scene or automation runs',
+                          title: AppStrings.get('notifications_settings_scene_executed'),
+                          description: AppStrings.get('notifications_settings_scene_executed_desc'),
                           value: _sceneRun,
                           onChanged: _notificationsEnabled ? (v) {
                             setState(() => _sceneRun = v);
@@ -372,8 +372,8 @@ class _NotificationsSettingsScreenState
                         const Divider(height: 1, indent: 72),
                         _buildNotificationToggle(
                           icon: Icons.lightbulb_outline,
-                          title: 'State Changes',
-                          description: 'When a device is turned on/off',
+                          title: AppStrings.get('notifications_settings_state_changes'),
+                          description: AppStrings.get('notifications_settings_state_changes_desc'),
                           value: _stateChange,
                           onChanged: _notificationsEnabled ? (v) {
                             setState(() => _stateChange = v);

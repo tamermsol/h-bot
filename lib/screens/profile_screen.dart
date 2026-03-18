@@ -638,7 +638,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: HBotSpacing.space3),
             Text(
-              _userName ?? 'Loading...',
+              _userName ?? AppStrings.get('profile_loading'),
               style: TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: context.hTextPrimary),
             ),
             const SizedBox(height: HBotSpacing.space1),
@@ -704,7 +704,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const Icon(Icons.email_outlined, size: 48, color: HBotColors.primary),
                   const SizedBox(height: HBotSpacing.space4),
                   Text(
-                    'We\'ll send a verification code to your email to confirm your identity.',
+                    AppStrings.get('profile_change_password_desc'),
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 14, color: context.hTextSecondary),
                   ),
@@ -863,7 +863,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                   const SizedBox(height: HBotSpacing.space2),
                   Text(
-                    'Password must be at least 6 characters',
+                    AppStrings.get('profile_password_min'),
                     style: TextStyle(fontSize: 12, color: context.hTextSecondary),
                   ),
                 ],
@@ -879,7 +879,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       return;
                     }
                     if (newPw.length < 6) {
-                      setState(() => errorMessage = 'Password must be at least 6 characters');
+                      setState(() => errorMessage = AppStrings.get('profile_password_min'));
                       return;
                     }
                     if (newPw != confirmPw) {
@@ -910,7 +910,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return AlertDialog(
               backgroundColor: context.hCard,
               title: Text(
-                step == 0 ? 'Change Password' : step == 1 ? 'Verify Email' : 'New Password',
+                step == 0 ? AppStrings.get('change_password') : step == 1 ? AppStrings.get('profile_verify_email') : AppStrings.get('profile_new_password'),
                 style: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w600),
               ),
               content: SingleChildScrollView(child: content),

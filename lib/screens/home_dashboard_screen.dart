@@ -2304,7 +2304,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                 ),
                 const SizedBox(height: HBotSpacing.space4),
                 Text(
-                  'View & Filter Options',
+                  AppStrings.get('home_dashboard_view_filter_options'),
                   style: Theme.of(
                     context,
                   ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),

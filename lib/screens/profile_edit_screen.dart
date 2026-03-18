@@ -106,8 +106,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       ),
                     ),
                   )
-                : const Text(
-                    'Save',
+                : Text(
+                    AppStrings.get('common_save'),
                     style: TextStyle(
                       color: HBotColors.primary,
                       fontWeight: FontWeight.w600,
@@ -143,7 +143,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Update your profile information. Phone numbers must be in E.164 format (e.g., +1234567890).',
+                        AppStrings.get('profile_edit_info_desc'),
                         style: TextStyle(
                           color: context.hTextSecondary,
                           fontSize: 14,
@@ -214,8 +214,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                             ),
                           ),
                         )
-                      : const Text(
-                          'Update Profile',
+                      : Text(
+                          AppStrings.get('profile_edit_update_profile'),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
