@@ -419,7 +419,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SettingsTile(
                 icon: Icons.meeting_room_outlined,
-                title: 'Rooms',
+                title: AppStrings.get('profile_rooms'),
                 onTap: () async {
                   final homeId = await CurrentHomeService().getCurrentHomeId();
                   if (homeId == null) {
@@ -448,7 +448,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SettingsTile(
                 icon: Icons.wifi_outlined,
-                title: 'WiFi Profiles',
+                title: AppStrings.get('profile_wifi_profiles'),
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const WiFiProfileScreen())),
                 showDivider: false,
@@ -516,7 +516,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               SettingsTile(
                 icon: Icons.person_outline,
-                title: 'Personal Information',
+                title: AppStrings.get('profile_personal_information'),
                 onTap: _openEditProfile,
               ),
               if (_authService.canChangePassword())
@@ -527,7 +527,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               SettingsTile(
                 icon: Icons.share_outlined,
-                title: 'Share Devices',
+                title: AppStrings.get('profile_share_devices'),
                 onTap: () async {
                   final homes = await supabase.from('homes').select('id').limit(1);
                   if (homes.isEmpty) {
@@ -546,13 +546,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SettingsTile(
                 icon: Icons.people_outline,
-                title: 'Shared with Me',
+                title: AppStrings.get('profile_shared_with_me'),
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const SharedDevicesScreen())),
               ),
               SettingsTile(
                 icon: Icons.feedback_outlined,
-                title: 'Send Feedback',
+                title: AppStrings.get('profile_send_feedback'),
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const FeedbackScreen())),
               ),

@@ -82,10 +82,10 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
   String _relativeTime(DateTime dt) {
     final diff = DateTime.now().difference(dt);
     if (diff.inSeconds < 60) return 'Just now';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-    if (diff.inHours < 24) return '${diff.inHours}h ago';
-    if (diff.inDays == 1) return 'Yesterday';
-    if (diff.inDays < 7) return '${diff.inDays}d ago';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}${AppStrings.get("notifications_minutes_ago")}';
+    if (diff.inHours < 24) return '${diff.inHours}${AppStrings.get("notifications_hours_ago")}';
+    if (diff.inDays == 1) return AppStrings.get('notifications_yesterday');
+    if (diff.inDays < 7) return '${diff.inDays}${AppStrings.get("notifications_days_ago")}';
     // Format as date
     return '${dt.day}/${dt.month}/${dt.year}';
   }
@@ -99,8 +99,8 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
       appBar: AppBar(
         backgroundColor: context.hCard,
         elevation: 0,
-        title: const Text(
-          'Notifications',
+        title: Text(
+          AppStrings.get('notifications_title'),
           style: TextStyle(
             fontFamily: 'DM Sans',
             fontWeight: FontWeight.w700,
@@ -112,7 +112,7 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
             TextButton(
               onPressed: _markAllRead,
               child: Text(
-                'Mark all read',
+                AppStrings.get('notifications_mark_all_read'),
                 style: TextStyle(
                   fontFamily: 'DM Sans',
                   color: HBotColors.primary,

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "36282208705",
+    "project_id": "hbot-app-6c521",
+    "storage_bucket": "hbot-app-6c521.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36282208705:android:6cd3a220ec5f2342759f40",
+        "android_client_info": {
+          "package_name": "tech.hbot.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTMpuvvZdky43upaIOa8wj2deO1n5iDrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -905,11 +905,11 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
     String get _greeting {
     final hour = DateTime.now().hour;
-    if (hour < 5) return 'Good night 🌙';
-    if (hour < 12) return 'Good morning ☀️';
-    if (hour < 18) return 'Good afternoon';
-    if (hour < 22) return 'Good evening';
-    return 'Good night 🌙';
+    if (hour < 5) return '${AppStrings.get("greeting_good_night")} 🌙';
+    if (hour < 12) return '${AppStrings.get("greeting_good_morning")} ☀️';
+    if (hour < 18) return AppStrings.get("greeting_good_afternoon");
+    if (hour < 22) return AppStrings.get("greeting_good_evening");
+    return '${AppStrings.get("greeting_good_night")} 🌙';
   }
 
   Widget build(BuildContext context) {
@@ -1124,7 +1124,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     ),
                   ),
                   TextSpan(
-                    text: ' device${_devices.length == 1 ? '' : 's'}',
+                    text: ' ${_devices.length == 1 ? AppStrings.get("dashboard_device_count_singular") : AppStrings.get("dashboard_device_count_plural")}',
                   ),
                 ],
               ),
