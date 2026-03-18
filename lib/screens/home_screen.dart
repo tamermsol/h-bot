@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../theme/app_theme.dart';
+import '../services/fcm_service.dart';
 import '../services/network_connectivity_service.dart';
 import '../widgets/connectivity_banner.dart';
 import '../widgets/responsive_shell.dart';
@@ -32,6 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _currentHomeName = widget.homeName;
     _currentIndex = widget.initialIndex;
     _startConnectivityMonitoring();
+    // Initialize FCM push notifications after auth
+    FcmService().initialize();
   }
 
   @override
