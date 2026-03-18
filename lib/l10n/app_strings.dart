@@ -922,6 +922,22 @@ class AppStrings {
       'help_response_time': 'We typically respond within 24 hours during business days.',
     
       'notifications_just_now': 'Just now',
+    
+      'trigger_manual': 'Manual',
+      'trigger_time_based': 'Time Based',
+      'trigger_location_based': 'Location Based',
+      'trigger_sensor_triggered': 'Sensor Triggered',
+      'trigger_desc_manual': 'Activate manually when needed',
+      'trigger_desc_time': 'Activate at a specific time',
+      'trigger_desc_location': 'Activate based on your location',
+      'trigger_desc_sensor': 'Activate when sensors detect changes',
+      'common_next': 'Next',
+      'common_previous': 'Previous',
+      'scene_create': 'Create Scene',
+      'scene_update': 'Update Scene',
+    
+      'common_shared': 'Shared',
+      'common_unknown': 'Unknown',
     },
 
     // ── Arabic ────────────────────────────────────────────────────────────────
@@ -1829,6 +1845,22 @@ class AppStrings {
       'help_response_time': 'نستجيب عادةً خلال 24 ساعة في أيام العمل.',
     
       'notifications_just_now': 'الآن',
+    
+      'trigger_manual': 'يدوي',
+      'trigger_time_based': 'مؤقت',
+      'trigger_location_based': 'حسب الموقع',
+      'trigger_sensor_triggered': 'بالمستشعر',
+      'trigger_desc_manual': 'تفعيل يدوي عند الحاجة',
+      'trigger_desc_time': 'تفعيل في وقت محدد',
+      'trigger_desc_location': 'تفعيل بناءً على موقعك',
+      'trigger_desc_sensor': 'تفعيل عند اكتشاف المستشعر للتغييرات',
+      'common_next': 'التالي',
+      'common_previous': 'السابق',
+      'scene_create': 'إنشاء سيناريو',
+      'scene_update': 'تحديث السيناريو',
+    
+      'common_shared': 'مشارك',
+      'common_unknown': 'غير معروف',
     },
   };
 }

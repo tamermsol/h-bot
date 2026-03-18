@@ -128,7 +128,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
             'deviceName': device.deviceName,
             'type': _mapDeviceTypeToCategory(device.deviceType),
             'icon': _getIconForDeviceType(device.deviceType),
-            'room': 'Shared',
+            'room': AppStrings.get('common_shared'),
             'isOnline': device.online ?? false,
             'device': device,
             'isShared': true,
@@ -392,8 +392,8 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(color: Colors.orange.withOpacity(0.4)),
                         ),
-                        child: const Text(
-                          'Shared',
+                        child: Text(
+                          AppStrings.get('common_shared'),
                           style: TextStyle(fontSize: 10, color: Colors.orange, fontWeight: FontWeight.w600),
                         ),
                       ),

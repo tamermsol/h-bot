@@ -221,7 +221,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
               'name': device.deviceName,
               'deviceName': device.deviceName,
               'type': device.deviceType.name,
-              'room': isShared ? 'Shared' : 'Unknown',
+              'room': isShared ? AppStrings.get('common_shared') : AppStrings.get('common_unknown'),
               'icon': _getDeviceIcon(device.deviceType.name),
               'isOnline': device.online ?? false,
               'device': device, // ✅ Include full device object
@@ -650,7 +650,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   ),
                 ),
                 title: Text(
-                  trigger,
+                  _getTriggerDisplayName(trigger),
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: isSelected
                         ? context.hTextPrimary
@@ -1711,8 +1711,8 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       borderRadius: HBotRadius.smallRadius,
                     ),
                   ),
-                  child: const Text(
-                    'Previous',
+                  child: Text(
+                    AppStrings.get('common_previous'),
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -1744,8 +1744,8 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       )
                     : Text(
                         _currentStep == 5
-                            ? (_isEditMode ? 'Update Scene' : 'Create Scene')
-                            : 'Next',
+                            ? (_isEditMode ? AppStrings.get('scene_update') : AppStrings.get('scene_create'))
+                            : AppStrings.get('common_next'),
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -2150,16 +2150,31 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     }
   }
 
+  String _getTriggerDisplayName(String trigger) {
+    switch (trigger) {
+      case 'Manual':
+        return AppStrings.get('trigger_manual');
+      case 'Time Based':
+        return AppStrings.get('trigger_time_based');
+      case 'Location Based':
+        return AppStrings.get('trigger_location_based');
+      case 'Sensor Triggered':
+        return AppStrings.get('trigger_sensor_triggered');
+      default:
+        return trigger;
+    }
+  }
+
   String _getTriggerDescription(String trigger) {
     switch (trigger) {
       case 'Manual':
-        return 'Activate manually when needed';
+        return AppStrings.get('trigger_desc_manual');
       case 'Time Based':
-        return 'Activate at a specific time';
+        return AppStrings.get('trigger_desc_time');
       case 'Location Based':
-        return 'Activate based on your location';
+        return AppStrings.get('trigger_desc_location');
       case 'Sensor Triggered':
-        return 'Activate when sensors detect changes';
+        return AppStrings.get('trigger_desc_sensor');
       default:
         return '';
     }
