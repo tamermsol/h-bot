@@ -81,7 +81,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   final List<String> _repeatOptions = [
     'Once only',
     'Every day',
-    'Monday to Friday',
+    'Weekdays',
     'Weekend',
     'Custom',
   ];
@@ -421,7 +421,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
 
             SmartInputField(
               controller: _nameController,
-              hint: 'Scene name (e.g., Movie Night)',
+              hint: AppStrings.get('scene_name_hint'),
               onChanged: (value) => setState(() {}),
             ),
 
@@ -591,7 +591,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       Text(
                         _nameController.text.isNotEmpty
                             ? _nameController.text
-                            : 'Scene Preview',
+                            : AppStrings.get('scene_preview'),
                         style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(fontWeight: FontWeight.w600),
                       ),
@@ -726,7 +726,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Activation Time',
+                    AppStrings.get('scene_activation_time'),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   TextButton(
@@ -795,7 +795,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Select Days',
+                      AppStrings.get('scene_select_days'),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: HBotSpacing.space2),
@@ -836,7 +836,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Trigger Type',
+                    AppStrings.get('scene_trigger_type'),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: HBotSpacing.space2),
@@ -943,10 +943,10 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                         : const Icon(Icons.my_location),
                     label: Text(
                       _isDetectingLocation
-                          ? 'Detecting Location...'
+                          ? AppStrings.get('scene_detecting_location')
                           : _selectedLatitude != null
-                          ? 'Update Location'
-                          : 'Use Current Location',
+                          ? AppStrings.get('scene_update_location')
+                          : AppStrings.get('scene_use_current_location'),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _selectedColor,
@@ -1027,7 +1027,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Select Devices',
+            AppStrings.get('scene_select_devices'),
             style: Theme.of(
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -1065,7 +1065,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Configure Device Actions',
+            AppStrings.get('scene_configure_actions'),
             style: Theme.of(
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -1502,7 +1502,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Review Scene',
+            AppStrings.get('scene_review'),
             style: Theme.of(
               context,
             ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -1609,7 +1609,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           const SizedBox(height: HBotSpacing.space4),
 
           // Configuration summary
-          _buildSummarySection('Basic Info', ['Name: ${_nameController.text}']),
+          _buildSummarySection(AppStrings.get('scene_basic_info'), ['Name: ${_nameController.text}']),
 
           const SizedBox(height: HBotSpacing.space2),
 
@@ -1827,9 +1827,9 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     // Validate time-based trigger has a time selected
     if (_selectedTrigger == 'Time Based' && _selectedTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Please select an activation time for time-based trigger',
+            AppStrings.get('scene_select_time_error'),
           ),
           backgroundColor: Colors.red,
         ),
@@ -1962,8 +1962,8 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           SnackBar(
             content: Text(
               _isEditMode
-                  ? 'Failed to update scene: $e'
-                  : 'Failed to create scene: $e',
+                  ? '${AppStrings.get('scene_update_failed')}: $e'
+                  : '${AppStrings.get('scene_create_failed')}: $e',
             ),
             backgroundColor: Colors.red,
           ),
@@ -2267,9 +2267,9 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       if (!serviceEnabled) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text(
-                'Location services are disabled. Please enable them.',
+                AppStrings.get('scene_location_disabled'),
               ),
               backgroundColor: Colors.red,
             ),
@@ -2298,9 +2298,9 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
       if (permission == LocationPermission.deniedForever) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
+            SnackBar(
               content: Text(
-                'Location permissions are permanently denied. Please enable them in settings.',
+                AppStrings.get('scene_location_denied'),
               ),
               backgroundColor: Colors.red,
             ),
