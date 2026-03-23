@@ -1,11 +1,38 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/auth_service.dart';
 import 'sign_in_screen.dart';
 import 'home_screen.dart';
 
-class AuthWrapper extends StatelessWidget {
+class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool _timedOut = false;
+  Timer? _timeoutTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Safety timeout: if auth stream doesn't emit within 5 seconds,
+    // fall through to sign-in screen (prevents blank page on iPad/device)
+    _timeoutTimer = Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        setState(() => _timedOut = true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timeoutTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +41,14 @@ class AuthWrapper extends StatelessWidget {
     return StreamBuilder<AuthState>(
       stream: authService.authStateChanges,
       builder: (context, snapshot) {
-        // Show loading indicator while checking auth state
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        // If stream has error, go to sign-in
+        if (snapshot.hasError) {
+          return const SignInScreen();
+        }
+
+        // Show loading indicator while checking auth state,
+        // but only until timeout to prevent permanent blank screen
+        if (snapshot.connectionState == ConnectionState.waiting && !_timedOut) {
           return const Scaffold(
             backgroundColor: Color(0xFFF8F9FB),
             body: Center(
@@ -25,6 +58,9 @@ class AuthWrapper extends StatelessWidget {
             ),
           );
         }
+
+        // Cancel timeout timer once we have data
+        _timeoutTimer?.cancel();
 
         // Check if we have valid auth data and session
         final hasSession = snapshot.hasData && snapshot.data!.session != null;

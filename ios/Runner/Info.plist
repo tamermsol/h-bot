@@ -87,12 +87,6 @@
 	<string>H-Bot needs photo library access to set custom background images.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>H-Bot needs microphone access for device communication.</string>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>H-Bot needs local network access to discover and communicate with smart home devices.</string>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_http._tcp</string>
-	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>

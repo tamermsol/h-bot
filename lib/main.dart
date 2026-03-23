@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'env.dart';
-import 'screens/auth_wrapper.dart';
 import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
 import 'services/app_lifecycle_manager.dart';
@@ -21,11 +21,26 @@ import '../utils/phosphor_icons.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Supabase
-  await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnon);
+  // Set up global error handling to prevent blank screens
+  FlutterError.onError = (FlutterErrorDetails details) {
+    debugPrint('Flutter error: ${details.exceptionAsString()}');
+    FlutterError.presentError(details);
+  };
 
-  // Initialize device state cache for instant UI feedback
-  await DeviceStateCache().initialize();
+  try {
+    // Initialize Supabase
+    await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnon);
+  } catch (e) {
+    debugPrint('Supabase initialization error: $e');
+    // App will still launch — auth wrapper will show sign-in screen
+  }
+
+  try {
+    // Initialize device state cache for instant UI feedback
+    await DeviceStateCache().initialize();
+  } catch (e) {
+    debugPrint('DeviceStateCache initialization error: $e');
+  }
 
   runApp(
     ChangeNotifierProvider(
@@ -82,10 +97,24 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
     final isAuthenticated = session != null;
 
     if (isAuthenticated && !_servicesStarted) {
-      _sceneTriggerScheduler.start();
-      _locationTriggerMonitor.start();
-      _sceneCommandExecutor.start();
       _servicesStarted = true;
+      // Start services with error handling — a service failure
+      // should never crash the app or cause a blank screen
+      try {
+        _sceneTriggerScheduler.start();
+      } catch (e) {
+        debugPrint('SceneTriggerScheduler start error: $e');
+      }
+      try {
+        _locationTriggerMonitor.start();
+      } catch (e) {
+        debugPrint('LocationTriggerMonitor start error: $e');
+      }
+      try {
+        _sceneCommandExecutor.start();
+      } catch (e) {
+        debugPrint('SceneCommandExecutor start error: $e');
+      }
     } else if (!isAuthenticated && _servicesStarted) {
       _sceneTriggerScheduler.stop();
       _locationTriggerMonitor.stop();
