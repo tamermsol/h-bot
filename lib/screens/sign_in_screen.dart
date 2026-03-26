@@ -1,13 +1,10 @@
-// TODO: Re-enable dart:io import when Apple Sign-in is configured
-// import 'dart:io';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/auth_service.dart';
 import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import '../l10n/app_strings.dart';
 import 'sign_up_screen.dart';
-import 'home_screen.dart';
 import 'forgot_password_screen.dart';
 import '../widgets/responsive_shell.dart';
 
@@ -53,11 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
             },
           );
 
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-      }
+      // Auth state change in AuthWrapper handles navigation automatically
     } catch (e) {
       if (mounted) {
         String msg = 'Sign-in failed. Please check your credentials.';
@@ -110,22 +103,12 @@ class _SignInScreenState extends State<SignInScreen> {
         },
       );
 
-      if (result && mounted) {
-        final session = Supabase.instance.client.auth.currentSession;
-        if (session != null) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        } else if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppStrings.get('sign_in_google_signin_was_cancelled'))),
-          );
-        }
-      } else if (mounted) {
+      if (!result && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(AppStrings.get('sign_in_google_sign_in_was_cancelled'))),
         );
       }
+      // Auth state change in AuthWrapper handles navigation automatically
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -296,11 +279,29 @@ class _SignInScreenState extends State<SignInScreen> {
 
                 
 
-                // TODO: Re-enable Apple Sign-in once Supabase Apple provider is configured
-                // Apple Sign-in is hidden until the Apple OAuth secret is added to Supabase dashboard
-                // if (Platform.isIOS) ...[
-                //   ... Apple Sign-in button ...
-                // ],
+                if (Platform.isIOS) ...[
+                  const SizedBox(height: HBotSpacing.space4),
+                  SizedBox(
+                    height: 52,
+                    child: OutlinedButton.icon(
+                      onPressed: _isLoading ? null : _signInWithApple,
+                      icon: const Icon(Icons.apple, size: 24),
+                      label: Text(
+                        AppStrings.get('sign_in_with_apple'),
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: HBotRadius.mediumRadius,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
 
                 const SizedBox(height: HBotSpacing.space6),
 

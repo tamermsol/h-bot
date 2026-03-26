@@ -150,7 +150,7 @@ class AuthRepo {
       final response = await supabase.auth
           .signInWithOAuth(
             OAuthProvider.google,
-            redirectTo: 'com.example.hbot://login-callback/',
+            redirectTo: 'com.mb.hbot://login-callback/',
             authScreenLaunchMode: LaunchMode.externalApplication,
           )
           .timeout(

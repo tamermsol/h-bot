@@ -63,6 +63,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   TabController? _tabController;
   Timer? _stateRefreshTimer;
   StreamSubscription<void>? _roomChangeSubscription;
+  StreamSubscription<AuthState>? _authStateSubscription;
 
   // Queue for errors that occur during initialization
   final List<String> _errorQueue = [];
@@ -171,7 +172,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   void _setupAuthListener() {
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+    _authStateSubscription = Supabase.instance.client.auth.onAuthStateChange.listen((data) {
       final event = data.event;
       final user = data.session?.user;
 
@@ -351,6 +352,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this); // Remove lifecycle observer
+    _authStateSubscription?.cancel(); // Cancel auth state subscription
     _roomChangeSubscription?.cancel(); // Cancel room change subscription
     // Clean up resources
     _tabController?.dispose();
