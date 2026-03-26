@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/profile.dart';
 
@@ -114,6 +119,65 @@ class AuthRepo {
     }
   }
 
+  /// Generate a random nonce string for Apple Sign In
+  String _generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// SHA256 hash of a string
+  String _sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  /// Sign in with Apple using native iOS flow + Supabase signInWithIdToken
+  Future<bool> signInWithApple() async {
+    try {
+      debugPrint('🍎 Starting native Apple Sign In...');
+
+      // Generate a nonce for security
+      final rawNonce = _generateNonce();
+      final hashedNonce = _sha256ofString(rawNonce);
+
+      // Request Apple credential natively
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: hashedNonce,
+      );
+
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        throw Exception('Apple Sign In failed — no identity token received.');
+      }
+
+      debugPrint('🍎 Got Apple credential, signing in with Supabase...');
+
+      // Sign in to Supabase with the Apple ID token
+      final response = await supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: idToken,
+        nonce: rawNonce,
+      );
+
+      debugPrint('🍎 Apple Sign In complete: ${response.user?.id}');
+      return response.user != null;
+    } catch (e) {
+      debugPrint('❌ Apple sign-in error: $e');
+      if (e.toString().contains('AuthorizationErrorCode.canceled')) {
+        throw Exception('Apple Sign In was cancelled.');
+      }
+      throw _handleAuthException(e);
+    }
+  }
+
   /// Sign in with Google OAuth using Supabase
   Future<bool> signInWithGoogle() async {
     try {
@@ -123,7 +187,7 @@ class AuthRepo {
       final response = await supabase.auth
           .signInWithOAuth(
             OAuthProvider.google,
-            redirectTo: 'com.example.hbot://login-callback/',
+            redirectTo: 'com.mb.hbot://login-callback/',
             authScreenLaunchMode: LaunchMode.externalApplication,
           )
           .timeout(
@@ -215,7 +279,7 @@ class AuthRepo {
     return provider == 'email';
   }
 
-  /// Verify OTP code sent to email
+  /// Verify OTP code sent to email (uses Supabase Auth built-in OTP)
   Future<void> verifyOtp(String email, String token) async {
     try {
       debugPrint('🔐 Verifying OTP for email: $email');
@@ -227,7 +291,7 @@ class AuthRepo {
       );
 
       if (response.user == null) {
-        throw Exception('OTP verification failed');
+        throw Exception('Invalid or expired verification code. Please try again.');
       }
 
       debugPrint('✅ OTP verified successfully');
@@ -241,13 +305,44 @@ class AuthRepo {
   Future<void> resendOtp(String email) async {
     try {
       debugPrint('📧 Resending OTP to: $email');
-
-      // Resend the signup confirmation email with OTP
       await supabase.auth.resend(type: OtpType.signup, email: email);
-
       debugPrint('✅ OTP resent successfully');
     } catch (e) {
       debugPrint('❌ Failed to resend OTP: $e');
+      throw _handleAuthException(e);
+    }
+  }
+
+  /// Send password reset OTP
+  /// Check if an email address is registered in the system.
+  /// Uses Supabase's signInWithPassword with a dummy password to check if the email exists.
+  /// If user doesn't exist, Supabase returns "Invalid login credentials".
+  /// If user exists but wrong password, same error — but we use a more reliable approach:
+  /// we call resetPasswordForEmail which silently succeeds for non-existent emails,
+  /// so instead we create an RPC function or query auth metadata.
+  /// Simplest approach: try to sign in and check the error type.
+  Future<bool> checkEmailExists(String email) async {
+    try {
+      // Use Supabase admin endpoint via RPC to check email existence
+      final response = await supabase.rpc('check_email_exists', params: {
+        'email_input': email.toLowerCase().trim(),
+      });
+      return response == true;
+    } catch (e) {
+      debugPrint('❌ Error checking email: $e, falling back to allow');
+      // If RPC doesn't exist, fall back to allowing (don't block user)
+      return true;
+    }
+  }
+
+  Future<void> sendPasswordResetOtp(String email) async {
+    try {
+      debugPrint('📧 Sending password reset OTP to: $email');
+      // This uses Supabase's built-in recovery flow which sends an OTP via custom SMTP
+      await supabase.auth.resetPasswordForEmail(email);
+      debugPrint('✅ Password reset OTP sent');
+    } catch (e) {
+      debugPrint('❌ Failed to send reset OTP: $e');
       throw _handleAuthException(e);
     }
   }
@@ -269,7 +364,7 @@ class AuthRepo {
       );
 
       if (response.user == null) {
-        throw Exception('OTP verification failed');
+        throw Exception('Invalid or expired reset code. Please try again.');
       }
 
       debugPrint('✅ OTP verified, updating password');

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../utils/phosphor_icons.dart';
+import '../theme/app_theme.dart';
+import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class HelpCenterScreen extends StatelessWidget {
   const HelpCenterScreen({super.key});
@@ -44,11 +46,8 @@ class HelpCenterScreen extends StatelessWidget {
   void _showErrorSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          message,
-          style: const TextStyle(fontFamily: 'Inter'),
-        ),
-        backgroundColor: const Color(0xFFEF4444),
+        content: Text(message),
+        backgroundColor: HBotColors.error,
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -56,80 +55,50 @@ class HelpCenterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text(AppStrings.get('help_center_help_center')),
+        backgroundColor: context.hBackground,
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Center(
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F7FA),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                HBotIcons.back,
-                size: 16,
-                color: Color(0xFF1F2937),
-              ),
-            ),
-          ),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'Help Center',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Inter',
-            color: Color(0xFF1F2937),
-          ),
-        ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+      body: ResponsiveShell(child: SingleChildScrollView(
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            const Text(
-              'We\'re here to help',
-              style: TextStyle(
-                fontSize: 20,
+            Text(
+              AppStrings.get('help_were_here_to_help'),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1F2937),
-                fontFamily: 'Inter',
+                color: context.hTextPrimary,
               ),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Get in touch with us through any of the following channels',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF6B7280),
-                fontFamily: 'Inter',
+            const SizedBox(height: HBotSpacing.space2),
+            Text(
+              AppStrings.get('help_get_in_touch'),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: context.hTextSecondary,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Contact Information Section
-            _buildSectionHeader(context, 'Contact Information'),
-            const SizedBox(height: 16),
+            _buildSectionHeader(context, AppStrings.get('help_contact_information')),
+            const SizedBox(height: HBotSpacing.space4),
             Container(
               decoration: BoxDecoration(
-                color: const Color(0xFFF5F7FA),
-                borderRadius: BorderRadius.circular(16),
+                color: context.hCard,
+                borderRadius: HBotRadius.mediumRadius,
               ),
               child: Column(
                 children: [
                   _buildContactTile(
                     context,
-                    icon: HBotIcons.network,
-                    title: 'Website',
+                    icon: Icons.language,
+                    title: AppStrings.get('help_website'),
                     subtitle: 'https://h-bot.tech/',
                     onTap: () =>
                         _launchUrl(context, 'https://h-bot.tech/', 'website'),
@@ -137,8 +106,8 @@ class HelpCenterScreen extends StatelessWidget {
                   const Divider(height: 1, indent: 72),
                   _buildContactTile(
                     context,
-                    icon: HBotIcons.email,
-                    title: 'Email',
+                    icon: Icons.email_outlined,
+                    title: AppStrings.get('help_email'),
                     subtitle: 'support@h-bot.tech',
                     onTap: () => _launchUrl(
                       context,
@@ -149,8 +118,8 @@ class HelpCenterScreen extends StatelessWidget {
                   const Divider(height: 1, indent: 72),
                   _buildContactTile(
                     context,
-                    icon: HBotIcons.phone,
-                    title: 'Phone',
+                    icon: Icons.phone_outlined,
+                    title: AppStrings.get('help_phone'),
                     subtitle: '+20 12 81167100',
                     onTap: () =>
                         _launchUrl(context, 'tel:+201281167100', 'phone'),
@@ -158,8 +127,8 @@ class HelpCenterScreen extends StatelessWidget {
                   const Divider(height: 1, indent: 72),
                   _buildContactTile(
                     context,
-                    icon: HBotIcons.feedback,
-                    title: 'WhatsApp',
+                    icon: Icons.chat_outlined,
+                    title: AppStrings.get('help_whatsapp'),
                     subtitle: '+20 12 81167100',
                     onTap: () => _launchUrl(
                       context,
@@ -171,34 +140,32 @@ class HelpCenterScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: HBotSpacing.space6),
 
             // Additional Info
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(HBotSpacing.space4),
               decoration: BoxDecoration(
-                color: const Color(0xFF0883FD).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(16),
+                color: HBotColors.primary.withOpacity(0.1),
+                borderRadius: HBotRadius.mediumRadius,
                 border: Border.all(
-                  color: const Color(0xFF0883FD).withOpacity(0.3),
+                  color: HBotColors.primary.withOpacity(0.3),
                   width: 1,
                 ),
               ),
               child: Row(
                 children: [
                   Icon(
-                    HBotIcons.info,
-                    color: const Color(0xFF0883FD),
+                    Icons.info_outline,
+                    color: HBotColors.primary,
                     size: 24,
                   ),
-                  const SizedBox(width: 16),
-                  const Expanded(
+                  const SizedBox(width: HBotSpacing.space4),
+                  Expanded(
                     child: Text(
-                      'We typically respond within 24 hours during business days.',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF1F2937),
-                        fontFamily: 'Inter',
+                      AppStrings.get('help_response_time'),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: context.hTextPrimary,
                       ),
                     ),
                   ),
@@ -208,17 +175,16 @@ class HelpCenterScreen extends StatelessWidget {
           ],
         ),
       ),
+      ),
     );
   }
 
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Text(
       title,
-      style: const TextStyle(
-        fontSize: 16,
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1F2937),
-        fontFamily: 'Inter',
+        color: context.hTextPrimary,
       ),
     );
   }
@@ -233,34 +199,33 @@ class HelpCenterScreen extends StatelessWidget {
   }) {
     return ListTile(
       leading: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(HBotSpacing.space2),
         decoration: BoxDecoration(
-          color: const Color(0xFF0883FD).withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
+          color: HBotColors.primary.withOpacity(0.1),
+          borderRadius: HBotRadius.smallRadius,
         ),
-        child: Icon(icon, color: const Color(0xFF0883FD), size: 24),
+        child: Icon(icon, color: HBotColors.primary, size: 24),
       ),
       title: Text(
         title,
-        style: const TextStyle(
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontWeight: FontWeight.w500,
-          fontSize: 16,
-          color: Color(0xFF1F2937),
-          fontFamily: 'Inter',
+          color: context.hTextPrimary,
         ),
       ),
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(
-          fontSize: 12,
-          color: Color(0xFF6B7280),
-          fontFamily: 'Inter',
+      subtitle: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Text(
+          subtitle,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: context.hTextSecondary,
+          ),
         ),
       ),
       trailing: Icon(
-        HBotIcons.chevronRight,
+        Icons.arrow_forward_ios,
         size: 16,
-        color: Color(0xFF6B7280),
+        color: context.hTextSecondary,
       ),
       onTap: onTap,
     );

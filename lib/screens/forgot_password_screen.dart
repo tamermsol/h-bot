@@ -3,7 +3,8 @@ import '../services/auth_service.dart';
 import '../widgets/smart_input_field.dart';
 import '../theme/app_theme.dart';
 import 'reset_password_screen.dart';
-import '../utils/phosphor_icons.dart';
+import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -16,7 +17,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _authService = AuthService();
-
   bool _isLoading = false;
 
   @override
@@ -25,19 +25,32 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  Future<void> _sendResetEmail() async {
+  Future<void> _sendResetCode() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => _isLoading = true);
 
-    try {
-      await _authService.resetPassword(_emailController.text.trim());
+    final email = _emailController.text.trim();
 
+    try {
+      // Validate email exists before sending OTP
+      final exists = await _authService.checkEmailExists(email);
+      if (!exists) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(AppStrings.get('reset_email_not_found')),
+              backgroundColor: HBotColors.error,
+            ),
+          );
+        }
+        return;
+      }
+
+      await _authService.resetPassword(email);
       if (mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) =>
-                ResetPasswordScreen(email: _emailController.text.trim()),
+            builder: (_) => ResetPasswordScreen(email: email),
           ),
         );
       }
@@ -45,7 +58,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to send reset email: ${e.toString()}'),
+            content: Text('${AppStrings.get('reset_code_failed')}${e.toString()}'),
             backgroundColor: HBotColors.error,
           ),
         );
@@ -58,152 +71,110 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HBotTheme.background(context),
+      backgroundColor: context.hBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(HBotIcons.back, color: HBotTheme.textPrimary(context)),
+          icon: Icon(Icons.arrow_back_ios, color: context.hTextPrimary, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: HBotSpacing.tabletMaxWidth),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: HBotSpacing.screenPadding,
-              ),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: HBotSpacing.space7),
+      body: ResponsiveShell(
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: HBotSpacing.space7),
 
-                    // Icon in circle
-                    Center(
-                      child: Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: HBotTheme.surfacePrimarySubtle(context),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          HBotIcons.lock,
-                          size: 40,
-                          color: HBotColors.primary,
-                        ),
+                  // Icon
+                  Center(
+                    child: Container(
+                      width: 64,
+                      height: 64,
+                      decoration: const BoxDecoration(
+                        color: HBotColors.primarySurface,
+                        shape: BoxShape.circle,
                       ),
+                      child: const Icon(Icons.lock_reset_rounded, size: 32, color: HBotColors.primary),
                     ),
+                  ),
 
-                    const SizedBox(height: HBotSpacing.space6),
+                  const SizedBox(height: HBotSpacing.space5),
 
-                    // "Reset Password" (28px/700, textPrimary)
-                    Text(
-                      'Reset Password',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: HBotTheme.textPrimary(context),
-                        letterSpacing: -0.5,
-                      ),
-                      textAlign: TextAlign.center,
+                  Text(
+                    AppStrings.get('reset_password'),
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: context.hTextPrimary,
                     ),
+                    textAlign: TextAlign.center,
+                  ),
 
-                    // "Enter your email to reset" (14px/400, textSecondary)
-                    Text(
-                      'Enter your email to reset',
+                  const SizedBox(height: HBotSpacing.space2),
+
+                  SizedBox(
+                    width: 280,
+                    child: Text(
+                      AppStrings.get('reset_password_body'),
                       style: TextStyle(
-                        fontFamily: 'Inter',
+                        fontFamily: 'DM Sans',
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: HBotTheme.textSecondary(context),
+                        color: context.hTextSecondary,
                       ),
                       textAlign: TextAlign.center,
                     ),
+                  ),
 
-                    SizedBox(height: HBotSpacing.space7),
+                  const SizedBox(height: HBotSpacing.space7),
 
-                    // Email Field
-                    SmartInputField(
-                      controller: _emailController,
-                      label: 'Email',
-                      keyboardType: TextInputType.emailAddress,
-                      prefixIcon: Icon(HBotIcons.email, size: 20),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        if (!RegExp(
-                          r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                        ).hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
+                  SmartInputField(
+                    controller: _emailController,
+                    label: AppStrings.get('email'),
+                    hint: AppStrings.get('email_hint'),
+                    keyboardType: TextInputType.emailAddress,
+                    enabled: !_isLoading,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return AppStrings.get('email_required');
+                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                        return AppStrings.get('email_invalid');
+                      }
+                      return null;
+                    },
+                  ),
 
-                    const SizedBox(height: HBotSpacing.space6),
+                  const SizedBox(height: HBotSpacing.space6),
 
-                    // Gradient "Send Reset Link" button (52px)
-                    Container(
-                      height: 52,
-                      decoration: hbotPrimaryButtonDecoration(enabled: !_isLoading),
+                  SizedBox(
+                    height: 52,
+                    child: Container(
+                      decoration: hbotPrimaryButtonDecoration(disabled: _isLoading),
                       child: ElevatedButton(
-                        onPressed: _isLoading ? null : _sendResetEmail,
+                        onPressed: _isLoading ? null : _sendResetCode,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           shadowColor: Colors.transparent,
                           foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: HBotRadius.mediumRadius,
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
                         ),
                         child: _isLoading
                             ? const SizedBox(
                                 height: 20,
                                 width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white,
-                                  ),
-                                ),
+                                child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
                               )
-                            : const Text(
-                                'Send Reset Link',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                            : Text(AppStrings.get('send_reset_code'), style: const TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500)),
                       ),
                     ),
-
-                    const SizedBox(height: HBotSpacing.space6),
-
-                    // Back to Sign In
-                    Center(
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text(
-                          'Back to Sign In',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            color: HBotTheme.textSecondary(context),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

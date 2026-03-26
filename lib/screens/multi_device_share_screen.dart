@@ -7,7 +7,8 @@ import '../models/device.dart';
 import '../models/device_share_invitation.dart';
 import '../repos/device_sharing_repo.dart';
 import '../repos/devices_repo.dart';
-import '../utils/phosphor_icons.dart';
+import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class MultiDeviceShareScreen extends StatefulWidget {
   final String homeId;
@@ -44,13 +45,18 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
         _allDevices = devices;
         _isLoading = false;
       });
+      if (devices.isEmpty && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppStrings.get('no_owned_devices_to_share'))),
+        );
+      }
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading devices: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('multi_device_share_error_loading_devices_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -60,9 +66,9 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
   Future<void> _generateMultiDeviceQR() async {
     if (_selectedDeviceIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select at least one device'),
-          backgroundColor: HBotColors.warning,
+        SnackBar(
+          content: Text(AppStrings.get('multi_device_share_please_select_at_least_one_device')),
+          backgroundColor: Colors.orange,
         ),
       );
       return;
@@ -90,8 +96,8 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Authentication failed: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('multi_device_share_authentication_failed_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -101,9 +107,9 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
     if (!authenticated) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Authentication required'),
-            backgroundColor: HBotColors.warning,
+          SnackBar(
+            content: Text(AppStrings.get('multi_device_share_authentication_required')),
+            backgroundColor: Colors.orange,
           ),
         );
       }
@@ -145,8 +151,8 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error generating QR: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('multi_device_share_error_generating_qr_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -167,8 +173,8 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error canceling QR: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('multi_device_share_error_canceling_qr_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -177,17 +183,12 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text('Share Multiple Devices'),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        title: Text(AppStrings.get('multi_device_share_share_multiple_devices')),
+        backgroundColor: context.hBackground,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -205,7 +206,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                           child: Text(
                             '${_selectedDeviceIds.length} device(s) selected',
                             style: TextStyle(
-                              color: HBotColors.textPrimaryLight,
+                              color: context.hTextPrimary,
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                             ),
@@ -242,7 +243,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                                     color: Colors.white,
                                   ),
                                 )
-                              : Icon(HBotIcons.devices, size: 18),
+                              : const Icon(Icons.qr_code, size: 18),
                           label: const Text(
                             'Generate',
                             style: TextStyle(fontSize: 13),
@@ -286,11 +287,11 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                             color: Colors.black87,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         TextButton.icon(
                           onPressed: _cancelQR,
-                          icon: Icon(HBotIcons.close),
-                          label: const Text('Cancel QR Code'),
+                          icon: const Icon(Icons.close),
+                          label: Text(AppStrings.get('multi_device_share_cancel_qr_code')),
                         ),
                       ],
                     ),
@@ -298,7 +299,28 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
 
                 // Device List
                 Expanded(
-                  child: ListView.builder(
+                  child: _allDevices.isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(32),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.devices_other, size: 64, color: context.hTextTertiary),
+                              const SizedBox(height: 16),
+                              Text(
+                                AppStrings.get('no_owned_devices_to_share'),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: context.hTextSecondary,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: _allDevices.length,
                     itemBuilder: (context, index) {
@@ -306,7 +328,7 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                       final isSelected = _selectedDeviceIds.contains(device.id);
 
                       return Card(
-                        color: HBotColors.cardLight,
+                        color: context.hCard,
                         margin: const EdgeInsets.only(bottom: 8),
                         child: CheckboxListTile(
                           value: isSelected,
@@ -322,21 +344,21 @@ class _MultiDeviceShareScreenState extends State<MultiDeviceShareScreen> {
                           title: Text(
                             device.deviceName,
                             style: TextStyle(
-                              color: HBotColors.textPrimaryLight,
+                              color: context.hTextPrimary,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: Text(
                             device.deviceType.toString().split('.').last,
                             style: TextStyle(
-                              color: HBotColors.textSecondaryLight,
+                              color: context.hTextSecondary,
                             ),
                           ),
                           secondary: Icon(
-                            HBotIcons.devices,
+                            Icons.devices,
                             color: isSelected
                                 ? HBotColors.primary
-                                : HBotColors.textSecondaryLight,
+                                : context.hTextSecondary,
                           ),
                           activeColor: HBotColors.primary,
                         ),

@@ -6,7 +6,7 @@ import '../services/tasmota_mqtt_service.dart';
 import '../repos/devices_repo.dart';
 import '../theme/app_theme.dart';
 import '../utils/channel_detection_utils.dart';
-import '../utils/phosphor_icons.dart';
+import '../l10n/app_strings.dart';
 
 /// Widget for controlling multi-channel Tasmota devices with MQTT
 class DeviceControlWidget extends StatefulWidget {
@@ -200,8 +200,8 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to control channel $channel: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text('${AppStrings.get("error_control_channel")}: $e'),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -225,10 +225,10 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
                 Expanded(
                   child: Text(
                     widget.device.deviceName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                     ),
                   ),
                 ),
@@ -256,10 +256,10 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
               Padding(
                 padding: const EdgeInsets.only(top: HBotSpacing.space2),
                 child: Text(
-                  'No realtime data (MQTT not available)',
+                  'No realtime data available',
                   style: Theme.of(
                     context,
-                  ).textTheme.bodySmall?.copyWith(color: HBotColors.warning),
+                  ).textTheme.bodySmall?.copyWith(color: Colors.orange),
                 ),
               ),
 
@@ -267,9 +267,9 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
             const SizedBox(height: HBotSpacing.space2),
             Text(
               '${ChannelDetectionUtils.getChannelCountDisplayName(widget.device.effectiveChannels)} • ${widget.device.deviceType.name}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
             ),
           ],
@@ -282,7 +282,7 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
     final isOn = _channelStates[1] ?? false;
 
     return SwitchListTile(
-      title: const Text('Power'),
+      title: Text(AppStrings.get('device_control_power')),
       value: isOn,
       onChanged: _isConnected ? (value) => _toggleChannel(1) : null,
     );
@@ -299,9 +299,9 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
                 Expanded(
                   child: Text(
                     _getChannelName(i),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                     ),
                   ),
                 ),
@@ -319,15 +319,15 @@ class _DeviceControlWidgetState extends State<DeviceControlWidget> {
   IconData _getDeviceIcon() {
     switch (widget.device.deviceType) {
       case DeviceType.relay:
-        return HBotIcons.power;
+        return Icons.power_settings_new;
       case DeviceType.dimmer:
-        return HBotIcons.lightbulb;
+        return Icons.lightbulb_outline;
       case DeviceType.shutter:
-        return HBotIcons.shutter;
+        return Icons.window;
       case DeviceType.sensor:
-        return HBotIcons.thermometer;
+        return Icons.sensors;
       case DeviceType.other:
-        return HBotIcons.deviceUnknown;
+        return Icons.device_unknown;
     }
   }
 }

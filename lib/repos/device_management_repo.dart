@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/supabase_client.dart';
 import '../models/device_channel.dart';
@@ -146,86 +147,112 @@ class DeviceManagementRepo {
     }
   }
 
-  /// Rename a device channel
+  /// Rename a device channel — stores in meta_json.channel_labels on devices table
+  /// AND locally in SharedPreferences as reliable fallback
   Future<void> renameChannel({
     required String deviceId,
     required int channelNo,
     required String newLabel,
   }) async {
+    final label = newLabel.trim();
+    if (label.isEmpty) throw 'Channel label cannot be empty';
+    debugPrint('🔄 Renaming channel: $deviceId/$channelNo to "$label"');
+
+    // Always save locally first (reliable)
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'channel_label_${deviceId}_$channelNo';
+    await prefs.setString(key, label);
+    debugPrint('💾 Saved channel label locally: $key = $label');
+
+    // Then try to save to Supabase (best-effort)
     try {
-      debugPrint('🔄 Renaming channel: $deviceId/$channelNo to "$newLabel"');
+      final device = await supabase
+          .from('devices')
+          .select('meta_json')
+          .eq('id', deviceId)
+          .maybeSingle();
 
-      await supabase.rpc(
-        'rename_channel',
-        params: {
-          'p_device_id': deviceId,
-          'p_channel_no': channelNo,
-          'p_label': newLabel.trim(),
-        },
-      );
+      if (device != null) {
+        final metaJson = Map<String, dynamic>.from(
+          (device['meta_json'] as Map<String, dynamic>?) ?? {},
+        );
+        final channelLabels = Map<String, dynamic>.from(
+          (metaJson['channel_labels'] as Map<String, dynamic>?) ?? {},
+        );
 
-      debugPrint('✅ Channel renamed successfully');
+        final isCustom = label != 'Channel $channelNo';
+        channelLabels[channelNo.toString()] = {
+          'label': label,
+          'is_custom': isCustom,
+        };
+        metaJson['channel_labels'] = channelLabels;
+
+        await supabase
+            .from('devices')
+            .update({'meta_json': metaJson})
+            .eq('id', deviceId);
+        debugPrint('✅ Channel renamed in Supabase meta_json');
+      }
     } catch (e) {
-      debugPrint('❌ Channel rename failed: $e');
-
-      if (e.toString().contains('Device not found') ||
-          e.toString().contains('device not found')) {
-        throw 'Device not found or access denied';
-      }
-      if (e.toString().contains('cannot be empty')) {
-        throw 'Channel label cannot be empty';
-      }
-      if (e.toString().contains('Invalid channel number')) {
-        throw 'Invalid channel number: $channelNo';
-      }
-      if (e.toString().contains('not authenticated')) {
-        throw 'Authentication required. Please log in and try again.';
-      }
-      throw 'Failed to rename channel: $e';
+      debugPrint('⚠️ Supabase channel rename failed (local save OK): $e');
     }
   }
 
-  /// Update channel type (light or switch)
+  /// Get locally saved channel label (SharedPreferences fallback)
+  static Future<String?> getLocalChannelLabel(String deviceId, int channelNo) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('channel_label_${deviceId}_$channelNo');
+  }
+
+  /// Update channel type (light or switch) — stores in meta_json on devices table
   Future<void> updateChannelType({
     required String deviceId,
     required int channelNo,
     required String channelType,
   }) async {
     try {
-      debugPrint(
-        '🔄 Updating channel type: $deviceId/$channelNo to "$channelType"',
-      );
-
       if (channelType != 'light' && channelType != 'switch') {
         throw 'Invalid channel type: must be light or switch';
       }
+      debugPrint('🔄 Updating channel type: $deviceId/$channelNo to "$channelType"');
 
-      await supabase.rpc(
-        'update_channel_type',
-        params: {
-          'p_device_id': deviceId,
-          'p_channel_no': channelNo,
-          'p_channel_type': channelType,
-        },
+      final device = await supabase
+          .from('devices')
+          .select('meta_json')
+          .eq('id', deviceId)
+          .maybeSingle();
+
+      if (device == null) throw 'Device not found';
+
+      final metaJson = Map<String, dynamic>.from(
+        (device['meta_json'] as Map<String, dynamic>?) ?? {},
+      );
+      final channelLabels = Map<String, dynamic>.from(
+        (metaJson['channel_labels'] as Map<String, dynamic>?) ?? {},
       );
 
-      debugPrint('✅ Channel type updated successfully');
+      final existing = channelLabels[channelNo.toString()];
+      if (existing is Map<String, dynamic>) {
+        existing['type'] = channelType;
+        channelLabels[channelNo.toString()] = existing;
+      } else {
+        channelLabels[channelNo.toString()] = {
+          'label': 'Channel $channelNo',
+          'is_custom': false,
+          'type': channelType,
+        };
+      }
+      metaJson['channel_labels'] = channelLabels;
+
+      await supabase
+          .from('devices')
+          .update({'meta_json': metaJson})
+          .eq('id', deviceId);
+
+      debugPrint('✅ Channel type updated successfully (stored in meta_json)');
     } catch (e) {
       debugPrint('❌ Channel type update failed: $e');
-
-      if (e.toString().contains('Device not found') ||
-          e.toString().contains('device not found')) {
-        throw 'Device not found or access denied';
-      }
-      if (e.toString().contains('invalid channel type')) {
-        throw 'Invalid channel type: must be light or switch';
-      }
-      if (e.toString().contains('channel not found')) {
-        throw 'Channel not found';
-      }
-      if (e.toString().contains('not authenticated')) {
-        throw 'Authentication required. Please log in and try again.';
-      }
+      if (e is String) rethrow;
       throw 'Failed to update channel type: $e';
     }
   }

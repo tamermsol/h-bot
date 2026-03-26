@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
-import '../utils/phosphor_icons.dart';
 import 'dart:io';
 import '../theme/app_theme.dart';
+import '../widgets/settings_tile.dart';
+import '../widgets/avatar_picker_dialog.dart';
 import '../services/auth_service.dart';
 import '../services/smart_home_service.dart';
 import '../services/current_home_service.dart';
 import '../services/avatar_service.dart';
 import '../models/profile.dart';
+import '../models/home.dart';
 import '../utils/error_handler.dart';
-import '../widgets/avatar_picker_dialog.dart';
+import '../core/supabase_client.dart';
+import '../services/theme_service.dart';
+import '../services/locale_service.dart';
+import '../l10n/app_strings.dart';
 import 'sign_in_screen.dart';
 import 'profile_edit_screen.dart';
 import 'homes_screen.dart';
@@ -18,7 +24,10 @@ import 'notifications_settings_screen.dart';
 import 'feedback_screen.dart';
 import 'hbot_account_screen.dart';
 import 'shared_devices_screen.dart';
-import 'appearance_settings_screen.dart';
+import 'multi_device_share_screen.dart';
+import 'rooms_screen.dart';
+import 'wifi_profile_screen.dart';
+import '../widgets/responsive_shell.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -72,6 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final user = _authService.currentUser;
       if (user != null) {
+        // Get basic user info from auth
         if (mounted) {
           setState(() {
             _userEmail = user.email;
@@ -79,10 +89,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         }
 
+        // Try to get full profile from database with timeout
         try {
           final profile = await _authService.getCurrentProfile().timeout(
             const Duration(seconds: 10),
             onTimeout: () {
+              // Return null on timeout, use basic auth data
               return null;
             },
           );
@@ -95,12 +107,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             });
           }
         } catch (profileError) {
+          // Profile loading failed, but we still have basic auth info
+          // Silently continue with auth data only
           ErrorHandler.logError(
             profileError,
             context: 'ProfileScreen._loadUserData',
           );
         }
       } else {
+        // No user signed in
         if (mounted) {
           setState(() {
             _userEmail = null;
@@ -110,6 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       }
     } catch (e) {
+      // Handle error - show fallback data
       ErrorHandler.logError(e, context: 'ProfileScreen._loadUserData');
       if (mounted) {
         setState(() {
@@ -152,6 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           });
         }
       } else {
+        // Default avatar selected
         await _avatarService.setDefaultAvatar(result);
         if (mounted) {
           setState(() {
@@ -162,6 +179,146 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  void _openAlexaSkill() {
+    // Show instructions for linking with Alexa
+    _showAlexaInstructions();
+  }
+
+  void _showAlexaInstructions() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: context.hCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40, height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: context.hTextSecondary.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Icon(Icons.mic, color: HBotColors.primary, size: 28),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    AppStrings.get('alexa_link_title'),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: context.hTextPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            _buildStep(context, '1', AppStrings.get('alexa_step_1')),
+            _buildStep(context, '2', AppStrings.get('alexa_step_2')),
+            _buildStep(context, '3', AppStrings.get('alexa_step_3')),
+            _buildStep(context, '4', AppStrings.get('alexa_step_4')),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStep(BuildContext context, String number, String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 28, height: 28,
+            decoration: BoxDecoration(
+              color: HBotColors.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Center(
+              child: Text(
+                number,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: HBotColors.primary,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: context.hTextPrimary,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAppearanceDialog() {
+    final themeService = Provider.of<ThemeService>(context, listen: false);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.getCardColor(context),
+        title: Text(AppStrings.get('profile_appearance')),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<ThemeMode>(
+              title: Text(AppStrings.get('profile_light')),
+              value: ThemeMode.light,
+              groupValue: themeService.themeMode,
+              onChanged: (v) {
+                themeService.setThemeMode(ThemeMode.light);
+                Navigator.pop(ctx);
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: Text(AppStrings.get('profile_dark')),
+              value: ThemeMode.dark,
+              groupValue: themeService.themeMode,
+              onChanged: (v) {
+                themeService.setThemeMode(ThemeMode.dark);
+                Navigator.pop(ctx);
+              },
+            ),
+            RadioListTile<ThemeMode>(
+              title: Text(AppStrings.get('profile_system')),
+              value: ThemeMode.system,
+              groupValue: themeService.themeMode,
+              onChanged: (v) {
+                themeService.setThemeMode(ThemeMode.system);
+                Navigator.pop(ctx);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> _loadStatistics() async {
     try {
       if (mounted) {
@@ -170,6 +327,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         });
       }
 
+      // Get all homes for the current user
       final homes = await _smartHomeService.getMyHomes();
 
       int homeCount = homes.length;
@@ -177,14 +335,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       int roomCount = 0;
       int sceneCount = 0;
 
+      // Aggregate statistics across all homes
       for (final home in homes) {
         try {
+          // Count devices in this home
           final devices = await _smartHomeService.getDevicesByHome(home.id);
           deviceCount += devices.length;
 
+          // Count rooms in this home
           final rooms = await _smartHomeService.getRooms(home.id);
           roomCount += rooms.length;
 
+          // Count scenes in this home
           final scenes = await _smartHomeService.getScenes(home.id);
           sceneCount += scenes.length;
         } catch (e) {
@@ -192,6 +354,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             e,
             context: 'ProfileScreen._loadStatistics.home',
           );
+          // Continue with other homes even if one fails
         }
       }
 
@@ -209,6 +372,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       if (mounted) {
         setState(() {
           _isLoadingStats = false;
+          // Keep default values (0) on error
         });
       }
     }
@@ -222,9 +386,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
 
+    // Refresh profile data if updated
     if (result != null) {
       _loadUserData();
-      _loadStatistics();
+      _loadStatistics(); // Also refresh statistics
     }
   }
 
@@ -232,594 +397,262 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // --- v0: Gradient header: linear-gradient(180deg, #E0F2FE 0%, #FFFFFF 100%) ---
-          _buildHeader(),
+          const SizedBox(height: HBotSpacing.space4),
 
-          // --- v0: Scrollable body px-4 pb-28 ---
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // v0: Stats grid 4 columns, gap-2, mb-5, mt-1
-                const SizedBox(height: 4),
-                _buildStatsGrid(),
-                const SizedBox(height: 20),
+          // Profile Header — centered avatar + name + email
+          _buildProfileHeader(),
 
-                // v0: Settings section
-                _buildSectionTitle('Settings'),
-                const SizedBox(height: 8),
-                _buildSectionCard([
-                  _buildSettingsRow(
-                    icon: HBotIcons.palette,
-                    iconBg: const Color(0xFFFFF7ED),
-                    iconColor: const Color(0xFFF97316),
-                    label: 'Appearance',
-                    subtitle: 'Choose light or dark theme',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AppearanceSettingsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildSettingsRow(
-                    icon: HBotIcons.building,
-                    iconBg: const Color(0xFFF5F3FF),
-                    iconColor: const Color(0xFF8B5CF6),
-                    label: 'Manage Homes',
-                    showDivider: true,
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomesScreen(
-                            onHomeChanged: () {
-                              _loadStatistics();
-                            },
-                          ),
-                        ),
-                      );
-                      _loadStatistics();
-                    },
-                  ),
-                  _buildSettingsRow(
-                    icon: HBotIcons.notifications,
-                    iconBg: const Color(0xFFEFF6FF),
-                    iconColor: const Color(0xFF3B82F6),
-                    label: 'Notifications',
-                    showDivider: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const NotificationsSettingsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ]),
-
-                const SizedBox(height: 16),
-
-                // v0: Account section
-                _buildSectionTitle('Account'),
-                const SizedBox(height: 8),
-                _buildSectionCard([
-                  _buildSettingsRow(
-                    icon: HBotIcons.person,
-                    iconBg: const Color(0xFFECFDF5),
-                    iconColor: const Color(0xFF10B981),
-                    label: 'Personal Information',
-                    onTap: _openEditProfile,
-                  ),
-                  _buildSettingsRow(
-                    icon: HBotIcons.lock,
-                    iconBg: const Color(0xFFEFF6FF),
-                    iconColor: const Color(0xFF3B82F6),
-                    label: 'Change Password',
-                    showDivider: true,
-                    onTap: () {
+          // Home section
+          SettingsGroup(
+            label: AppStrings.get('profile_smart_home'),
+            children: [
+              SettingsTile(
+                icon: Icons.home_work_outlined,
+                title: AppStrings.get('manage_homes_subtitle'),
+                onTap: () async {
+                  await Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => HomesScreen(onHomeChanged: () => _loadStatistics())));
+                  _loadStatistics();
+                },
+              ),
+              SettingsTile(
+                icon: Icons.meeting_room_outlined,
+                title: AppStrings.get('profile_rooms'),
+                onTap: () async {
+                  final homeId = await CurrentHomeService().getCurrentHomeId();
+                  if (homeId == null) {
+                    if (mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Change password from your email provider')),
+                        SnackBar(content: Text(AppStrings.get('select_home_first')), backgroundColor: HBotColors.warning),
                       );
-                    },
-                  ),
-                  _buildSettingsRow(
-                    icon: HBotIcons.share,
-                    iconBg: const Color(0xFFFFF7ED),
-                    iconColor: const Color(0xFFF59E0B),
-                    label: 'Share My Devices',
-                    showDivider: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SharedDevicesScreen(),
-                        ),
+                    }
+                    return;
+                  }
+                  try {
+                    final homes = await SmartHomeService().getMyHomes();
+                    final home = homes.firstWhere((h) => h.id == homeId);
+                    if (mounted) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => RoomsScreen(home: home)));
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('${AppStrings.get("error_load_home")}: $e'), backgroundColor: HBotColors.error),
                       );
-                    },
-                  ),
-                  _buildSettingsRow(
-                    icon: HBotIcons.profile,
-                    iconBg: const Color(0xFFF5F3FF),
-                    iconColor: const Color(0xFF8B5CF6),
-                    label: 'Shared with Me',
-                    showDivider: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SharedDevicesScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildSettingsRow(
-                    icon: HBotIcons.devices,
-                    iconBg: const Color(0xFFF0FDF4),
-                    iconColor: const Color(0xFF22C55E),
-                    label: 'HBOT Account',
-                    showDivider: true,
-                    onTap: _openHBOTAccountScreen,
-                  ),
-                ]),
+                    }
+                  }
+                },
+              ),
+              SettingsTile(
+                icon: Icons.wifi_outlined,
+                title: AppStrings.get('profile_wifi_profiles'),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const WiFiProfileScreen())),
+                showDivider: false,
+              ),
+            ],
+          ),
 
-                const SizedBox(height: 16),
+          // Integrations section
+          SettingsGroup(
+            label: AppStrings.get('profile_integrations'),
+            children: [
+              SettingsTile(
+                icon: Icons.record_voice_over_outlined,
+                title: AppStrings.get('alexa_integration'),
+                subtitle: AppStrings.get('alexa_subtitle'),
+                onTap: _openAlexaSkill,
+                showDivider: false,
+              ),
+            ],
+          ),
 
-                // v0: Support section
-                _buildSectionTitle('Support'),
-                const SizedBox(height: 8),
-                _buildSectionCard([
-                  _buildSettingsRow(
-                    icon: HBotIcons.help,
-                    iconBg: const Color(0xFFEFF6FF),
-                    iconColor: const Color(0xFF3B82F6),
-                    label: 'Help Center',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HelpCenterScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  _buildSettingsRow(
-                    icon: HBotIcons.feedback,
-                    iconBg: const Color(0xFFF5F3FF),
-                    iconColor: const Color(0xFF8B5CF6),
-                    label: 'Send Feedback',
-                    showDivider: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const FeedbackScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ]),
-
-                const SizedBox(height: 16),
-
-                // v0: Sign Out row — red, LogOut icon in #FFF1F2 bg
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FA),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: _showSignOutDialog,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                        child: Row(
-                          children: [
-                            // v0: 32x32 rounded-xl icon container bg #FFF1F2
-                            Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFF1F2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  HBotIcons.signOut,
-                                  size: 15,
-                                  color: const Color(0xFFEF4444),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            const Expanded(
-                              child: Text(
-                                'Sign Out',
-                                style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFFEF4444),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+          // App section
+          SettingsGroup(
+            label: AppStrings.get('profile_settings'),
+            children: [
+              SettingsTile(
+                icon: Icons.notifications_outlined,
+                title: AppStrings.get('notifications'),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
+              ),
+              Consumer<ThemeService>(
+                builder: (context, themeService, _) => SettingsTile(
+                  icon: Icons.palette_outlined,
+                  title: AppStrings.get('theme'),
+                  value: themeService.isDarkMode
+                      ? AppStrings.get('theme_subtitle_dark')
+                      : AppStrings.get('theme_subtitle_light'),
+                  onTap: _showAppearanceDialog,
                 ),
-
-                const SizedBox(height: 16),
-
-                // Version text
-                const Center(
-                  child: Text(
-                    'H-Bot v1.0.0',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 11,
-                      color: Color(0xFFC7C9CF),
-                    ),
-                  ),
+              ),
+              Consumer<LocaleService>(
+                builder: (context, localeService, _) => SettingsTile(
+                  icon: Icons.language_outlined,
+                  title: AppStrings.get('language'),
+                  value: localeService.isArabic
+                      ? AppStrings.get('language_subtitle_ar')
+                      : AppStrings.get('language_subtitle_en'),
+                  onTap: () => _showLanguagePicker(localeService),
                 ),
+              ),
+              SettingsTile(
+                icon: Icons.info_outline,
+                title: AppStrings.get('profile_about'),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const HelpCenterScreen())),
+                showDivider: false,
+              ),
+            ],
+          ),
 
-                // Bottom padding to account for bottom nav
-                const SizedBox(height: 112),
-              ],
+          // Account section
+          SettingsGroup(
+            label: AppStrings.get('profile_account'),
+            children: [
+              SettingsTile(
+                icon: Icons.person_outline,
+                title: AppStrings.get('profile_personal_information'),
+                onTap: _openEditProfile,
+              ),
+              if (_authService.canChangePassword())
+                SettingsTile(
+                  icon: Icons.lock_outline,
+                  title: AppStrings.get('change_password'),
+                  onTap: _showChangePasswordDialog,
+                ),
+              SettingsTile(
+                icon: Icons.share_outlined,
+                title: AppStrings.get('profile_share_devices'),
+                onTap: () async {
+                  final homes = await supabase.from('homes').select('id').limit(1);
+                  if (homes.isEmpty) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(AppStrings.get('create_home_first')), backgroundColor: HBotColors.warning),
+                      );
+                    }
+                    return;
+                  }
+                  if (mounted) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => MultiDeviceShareScreen(homeId: homes.first['id'])));
+                  }
+                },
+              ),
+              SettingsTile(
+                icon: Icons.people_outline,
+                title: AppStrings.get('profile_shared_with_me'),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const SharedDevicesScreen())),
+              ),
+              SettingsTile(
+                icon: Icons.feedback_outlined,
+                title: AppStrings.get('profile_send_feedback'),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const FeedbackScreen())),
+              ),
+              SettingsTile(
+                icon: Icons.account_circle_outlined,
+                title: AppStrings.get('hbot_account'),
+                onTap: _openHBOTAccountScreen,
+              ),
+              SettingsTile(
+                icon: Icons.logout,
+                title: AppStrings.get('sign_out'),
+                titleColor: HBotColors.error,
+                iconColor: HBotColors.error,
+                showChevron: false,
+                showDivider: false,
+                onTap: _showSignOutDialog,
+              ),
+            ],
+          ),
+
+          const SizedBox(height: HBotSpacing.space7),
+          Center(
+            child: Text(
+              'v1.0.0 (143)',
+              style: TextStyle(
+                fontSize: 11,
+                color: context.hTextTertiary,
+                fontFamily: 'DM Sans',
+              ),
             ),
           ),
+          const SizedBox(height: HBotSpacing.space5),
         ],
       ),
     );
   }
 
-  // --- v0: Gradient header ---
-  Widget _buildHeader() {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFFE0F2FE), Color(0xFFFFFFFF)],
+  Widget _buildProfileHeader() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: HBotSpacing.space6,
+          bottom: HBotSpacing.space2,
         ),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 32, 20, 24),
-          child: Column(
-            children: [
-              // v0: Avatar 80x80 circle with gradient bg, edit button
-              GestureDetector(
-                onTap: _showAvatarPicker,
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: _avatarPath == null
-                          ? const _UserSilhouette()
-                          : ClipOval(
-                              child: _avatarService.isCustomAvatar(_avatarPath)
-                                  ? Image.file(
-                                      File(_avatarPath!),
-                                      fit: BoxFit.cover,
-                                      width: 80,
-                                      height: 80,
-                                    )
-                                  : Image.asset(
-                                      _avatarPath!,
-                                      fit: BoxFit.cover,
-                                      width: 80,
-                                      height: 80,
-                                    ),
-                            ),
-                    ),
-                    // v0: pencil edit button at bottom-right
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFFE5E7EB),
-                            width: 2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Icon(
-                            HBotIcons.edit,
-                            size: 10,
-                            color: const Color(0xFF6B7280),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // v0: Name 18px bold
-              Text(
-                _userName ?? 'Loading...',
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF1F2937),
-                  height: 1.2,
-                ),
-              ),
-
-              const SizedBox(height: 2),
-
-              // v0: Email 13px #6B7280
-              Text(
-                _userEmail ?? 'Loading...',
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 13,
-                  color: Color(0xFF6B7280),
-                ),
-              ),
-
-              // v0: Phone 12px #9CA3AF
-              if (_userPhone != null) ...[
-                const SizedBox(height: 2),
-                Text(
-                  _userPhone!,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 12,
-                    color: Color(0xFF9CA3AF),
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // --- v0: Stats grid: 4 columns ---
-  Widget _buildStatsGrid() {
-    final stats = [
-      _StatData(
-        icon: HBotIcons.memory,
-        iconColor: const Color(0xFF3B82F6),
-        bg: const Color(0xFFEFF6FF),
-        label: 'Devices',
-        value: _isLoadingStats ? '...' : '$_totalDevices',
-      ),
-      _StatData(
-        icon: HBotIcons.home,
-        iconColor: const Color(0xFF0EA5E9),
-        bg: const Color(0xFFF0F9FF),
-        label: 'Rooms',
-        value: _isLoadingStats ? '...' : '$_totalRooms',
-      ),
-      _StatData(
-        icon: HBotIcons.building,
-        iconColor: const Color(0xFF8B5CF6),
-        bg: const Color(0xFFF5F3FF),
-        label: 'Homes',
-        value: _isLoadingStats ? '...' : '$_totalHomes',
-      ),
-      _StatData(
-        icon: HBotIcons.scenes,
-        iconColor: const Color(0xFFF59E0B),
-        bg: const Color(0xFFFFFBEB),
-        label: 'Scenes',
-        value: _isLoadingStats ? '...' : '$_totalScenes',
-      ),
-    ];
-
-    return Row(
-      children: stats.map((stat) {
-        return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F7FA),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
-              ),
-              child: Column(
+        child: Column(
+          children: [
+            // Avatar — 80px circle
+            GestureDetector(
+              onTap: _showAvatarPicker,
+              child: Stack(
                 children: [
-                  // v0: 32x32 circle icon container
                   Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: stat.bg,
+                    width: 80,
+                    height: 80,
+                    decoration: const BoxDecoration(
+                      color: HBotColors.primarySurface,
                       shape: BoxShape.circle,
                     ),
-                    child: Center(
-                      child: Icon(stat.icon, size: 15, color: stat.iconColor),
-                    ),
+                    child: _avatarPath == null
+                        ? const Center(child: Icon(Icons.person, size: 44, color: HBotColors.primary))
+                        : ClipOval(
+                            child: _avatarService.isCustomAvatar(_avatarPath)
+                                ? Image.file(File(_avatarPath!), fit: BoxFit.cover, width: 80, height: 80)
+                                : Image.asset(_avatarPath!, fit: BoxFit.cover, width: 80, height: 80),
+                          ),
                   ),
-                  const SizedBox(height: 4),
-                  // v0: 15px bold value
-                  Text(
-                    stat.value,
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF1F2937),
-                      height: 1.0,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  // v0: 10px label
-                  Text(
-                    stat.label,
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF9CA3AF),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: HBotColors.primary,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      child: const Icon(Icons.edit, size: 14, color: Colors.white),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  // v0: Section title: 11px bold uppercase #9CA3AF tracking-wider px-1 mb-2
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4),
-      child: Text(
-        title.toUpperCase(),
-        style: const TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          color: Color(0xFF9CA3AF),
-          letterSpacing: 1.2,
-        ),
-      ),
-    );
-  }
-
-  // v0: Section card: #F5F7FA bg, rounded-2xl, border #E5E7EB
-  Widget _buildSectionCard(List<Widget> rows) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F7FA),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(children: rows),
-    );
-  }
-
-  // v0: Settings row: 32x32 rounded-xl icon, 14px medium label, optional subtitle, ChevronRight
-  Widget _buildSettingsRow({
-    required IconData icon,
-    required Color iconBg,
-    required Color iconColor,
-    required String label,
-    String? subtitle,
-    bool showDivider = false,
-    VoidCallback? onTap,
-  }) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (showDivider)
-          Container(
-            height: 1,
-            color: const Color(0xFFEBEDF0),
-          ),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                children: [
-                  // v0: 32x32 rounded-xl icon container
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: iconBg,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Icon(icon, size: 15, color: iconColor),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          label,
-                          style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF1F2937),
-                            height: 1.2,
-                          ),
-                        ),
-                        if (subtitle != null) ...[
-                          const SizedBox(height: 2),
-                          Text(
-                            subtitle,
-                            style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 11,
-                              color: Color(0xFF9CA3AF),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    HBotIcons.chevronRight,
-                    size: 16,
-                    color: Color(0xFFC7C9CF),
-                  ),
-                ],
-              ),
+            const SizedBox(height: HBotSpacing.space3),
+            Text(
+              _userName ?? AppStrings.get('profile_loading'),
+              style: TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: context.hTextPrimary),
             ),
-          ),
+            const SizedBox(height: HBotSpacing.space1),
+            Text(
+              _userEmail ?? '',
+              style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w400, color: context.hTextSecondary),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
+
+  // Legacy section builders removed — now using SettingsGroup pattern above
 
   void _openHBOTAccountScreen() {
     Navigator.push(
@@ -830,6 +663,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           userName: _userName,
           userPhone: _userPhone,
           onAccountDeleted: () {
+            // Navigate to sign-in screen after account deletion
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const SignInScreen()),
               (route) => false,
@@ -840,55 +674,358 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  /// Change password flow: Step 1 → Enter email, Step 2 → Enter OTP, Step 3 → New password
+  void _showChangePasswordDialog() {
+    final email = _authService.currentUser?.email ?? '';
+    final emailController = TextEditingController(text: email);
+    final otpController = TextEditingController();
+    final newPasswordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+    int step = 0; // 0=email, 1=OTP, 2=new password
+    bool isLoading = false;
+    bool obscureNew = true;
+    bool obscureConfirm = true;
+    String? errorMessage;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return StatefulBuilder(
+          builder: (ctx, setState) {
+            Widget content;
+            List<Widget> actions;
+
+            if (step == 0) {
+              // Step 1: Email confirmation
+              content = Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.email_outlined, size: 48, color: HBotColors.primary),
+                  const SizedBox(height: HBotSpacing.space4),
+                  Text(
+                    AppStrings.get('profile_change_password_desc'),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: context.hTextSecondary),
+                  ),
+                  const SizedBox(height: HBotSpacing.space4),
+                  TextField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      labelText: AppStrings.get('profile_email_address'),
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
+                    ),
+                  ),
+                  if (errorMessage != null) ...[
+                    const SizedBox(height: HBotSpacing.space2),
+                    Text(errorMessage!, style: const TextStyle(color: HBotColors.error, fontSize: 13)),
+                  ],
+                ],
+              );
+              actions = [
+                TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: Text(AppStrings.get('profile_cancel'))),
+                TextButton(
+                  onPressed: isLoading ? null : () async {
+                    if (emailController.text.isEmpty) {
+                      setState(() => errorMessage = 'Please enter your email');
+                      return;
+                    }
+                    setState(() { isLoading = true; errorMessage = null; });
+                    try {
+                      await _authService.resetPassword(emailController.text.trim());
+                      setState(() { step = 1; isLoading = false; });
+                    } catch (e) {
+                      setState(() { isLoading = false; errorMessage = 'Failed to send code: $e'; });
+                    }
+                  },
+                  style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
+                  child: isLoading
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : Text(AppStrings.get('profile_send_code')),
+                ),
+              ];
+            } else if (step == 1) {
+              // Step 2: OTP verification
+              content = Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.pin_outlined, size: 48, color: HBotColors.primary),
+                  const SizedBox(height: HBotSpacing.space4),
+                  Text(
+                    'Enter the 6-digit code sent to\n${emailController.text.trim()}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: context.hTextSecondary),
+                  ),
+                  const SizedBox(height: HBotSpacing.space4),
+                  TextField(
+                    controller: otpController,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    maxLength: 6,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 8),
+                    decoration: InputDecoration(
+                      labelText: AppStrings.get('profile_verification_code'),
+                      counterText: '',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
+                    ),
+                  ),
+                  if (errorMessage != null) ...[
+                    const SizedBox(height: HBotSpacing.space2),
+                    Text(errorMessage!, style: const TextStyle(color: HBotColors.error, fontSize: 13)),
+                  ],
+                  const SizedBox(height: HBotSpacing.space2),
+                  TextButton(
+                    onPressed: isLoading ? null : () async {
+                      setState(() => isLoading = true);
+                      try {
+                        await _authService.resendOtp(emailController.text.trim());
+                        setState(() => isLoading = false);
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(AppStrings.get('profile_code_resent')), backgroundColor: Colors.green),
+                          );
+                        }
+                      } catch (e) {
+                        setState(() { isLoading = false; errorMessage = 'Failed to resend: $e'; });
+                      }
+                    },
+                    child: Text(AppStrings.get('profile_resend_code')),
+                  ),
+                ],
+              );
+              actions = [
+                TextButton(onPressed: () => setState(() { step = 0; errorMessage = null; }), child: Text(AppStrings.get('profile_back'))),
+                TextButton(
+                  onPressed: isLoading ? null : () async {
+                    if (otpController.text.length != 6) {
+                      setState(() => errorMessage = 'Please enter the 6-digit code');
+                      return;
+                    }
+                    setState(() { isLoading = true; errorMessage = null; });
+                    try {
+                      await _authService.verifyOtp(emailController.text.trim(), otpController.text.trim());
+                      setState(() { step = 2; isLoading = false; });
+                    } catch (e) {
+                      setState(() { isLoading = false; errorMessage = 'Invalid code. Please try again.'; });
+                    }
+                  },
+                  style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
+                  child: isLoading
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : Text(AppStrings.get('profile_verify')),
+                ),
+              ];
+            } else {
+              // Step 3: New password
+              content = Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.lock_reset, size: 48, color: HBotColors.primary),
+                  const SizedBox(height: HBotSpacing.space4),
+                  Text(
+                    'Set your new password',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: context.hTextSecondary),
+                  ),
+                  const SizedBox(height: HBotSpacing.space4),
+                  TextField(
+                    controller: newPasswordController,
+                    obscureText: obscureNew,
+                    decoration: InputDecoration(
+                      labelText: AppStrings.get('profile_new_password'),
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(obscureNew ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () => setState(() => obscureNew = !obscureNew),
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
+                    ),
+                  ),
+                  const SizedBox(height: HBotSpacing.space4),
+                  TextField(
+                    controller: confirmPasswordController,
+                    obscureText: obscureConfirm,
+                    decoration: InputDecoration(
+                      labelText: AppStrings.get('profile_confirm_new_password'),
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(obscureConfirm ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () => setState(() => obscureConfirm = !obscureConfirm),
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(HBotRadius.small)),
+                    ),
+                  ),
+                  if (errorMessage != null) ...[
+                    const SizedBox(height: HBotSpacing.space2),
+                    Text(errorMessage!, style: const TextStyle(color: HBotColors.error, fontSize: 13)),
+                  ],
+                  const SizedBox(height: HBotSpacing.space2),
+                  Text(
+                    AppStrings.get('profile_password_min'),
+                    style: TextStyle(fontSize: 12, color: context.hTextSecondary),
+                  ),
+                ],
+              );
+              actions = [
+                TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: Text(AppStrings.get('common_cancel'))),
+                TextButton(
+                  onPressed: isLoading ? null : () async {
+                    final newPw = newPasswordController.text;
+                    final confirmPw = confirmPasswordController.text;
+                    if (newPw.isEmpty || confirmPw.isEmpty) {
+                      setState(() => errorMessage = 'Please fill in all fields');
+                      return;
+                    }
+                    if (newPw.length < 6) {
+                      setState(() => errorMessage = AppStrings.get('profile_password_min'));
+                      return;
+                    }
+                    if (newPw != confirmPw) {
+                      setState(() => errorMessage = 'Passwords do not match');
+                      return;
+                    }
+                    setState(() { isLoading = true; errorMessage = null; });
+                    try {
+                      await _authService.changePassword(newPw);
+                      Navigator.of(dialogContext).pop();
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(AppStrings.get('profile_password_changed_successfully')), backgroundColor: Colors.green),
+                        );
+                      }
+                    } catch (e) {
+                      setState(() { isLoading = false; errorMessage = 'Failed to change password: $e'; });
+                    }
+                  },
+                  style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
+                  child: isLoading
+                      ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : Text(AppStrings.get('profile_change_password')),
+                ),
+              ];
+            }
+
+            return AlertDialog(
+              backgroundColor: context.hCard,
+              title: Text(
+                step == 0 ? AppStrings.get('change_password') : step == 1 ? AppStrings.get('profile_verify_email') : AppStrings.get('profile_new_password'),
+                style: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w600),
+              ),
+              content: SingleChildScrollView(child: content),
+              actions: actions,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showLanguagePicker(LocaleService localeService) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: context.hCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40, height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: context.hTextSecondary.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Text(
+              AppStrings.get('select_language'),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: context.hTextPrimary,
+                fontFamily: 'DM Sans',
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildLanguageOption(ctx, localeService, 'en', AppStrings.get('lang_english')),
+            const SizedBox(height: 8),
+            _buildLanguageOption(ctx, localeService, 'ar', AppStrings.get('lang_arabic')),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLanguageOption(BuildContext ctx, LocaleService localeService, String code, String label) {
+    final isSelected = localeService.locale == code;
+    return InkWell(
+      onTap: () {
+        localeService.setLocale(code);
+        Navigator.of(ctx).pop();
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: isSelected ? HBotColors.primarySurface : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? HBotColors.primary : context.hBorder,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                  color: isSelected ? HBotColors.primary : context.hTextPrimary,
+                  fontFamily: 'DM Sans',
+                ),
+              ),
+            ),
+            if (isSelected)
+              const Icon(Icons.check_circle, color: HBotColors.primary, size: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _showSignOutDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text(
-            'Sign out?',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF1F2937),
-            ),
-          ),
-          content: const Text(
-            'You\'ll need to sign back in to access your smart home.',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 14,
-              color: Color(0xFF6B7280),
-            ),
-          ),
+          backgroundColor: context.hCard,
+          title: Text(AppStrings.get('sign_out')),
+          content: Text(AppStrings.get('sign_out_confirm')),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  color: Color(0xFF6B7280),
-                ),
-              ),
+              child: Text(AppStrings.get('cancel')),
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Close dialog first
                 await _handleSignOut();
               },
-              style: TextButton.styleFrom(foregroundColor: const Color(0xFFEF4444)),
-              child: const Text(
-                'Sign Out',
-                style: TextStyle(fontFamily: 'Inter'),
-              ),
+              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
+              child: Text(AppStrings.get('sign_out')),
             ),
           ],
         );
@@ -898,10 +1035,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _handleSignOut() async {
     try {
+      // Show loading indicator
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
                 SizedBox(
                   width: 16,
@@ -912,7 +1050,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 SizedBox(width: 12),
-                Text('Signing out...'),
+                Text(AppStrings.get('profile_signing_out')),
               ],
             ),
             backgroundColor: HBotColors.primary,
@@ -921,8 +1059,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       }
 
+      // Perform sign out
       await AuthService().signOut();
 
+      // Navigate to sign-in screen and clear navigation stack
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const SignInScreen()),
@@ -930,10 +1070,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       }
     } catch (e) {
+      // Handle sign out error
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error signing out: $e'),
+            content: Text('${AppStrings.get("error_signing_out")}: $e'),
             backgroundColor: HBotColors.error,
             duration: const Duration(seconds: 4),
           ),
@@ -941,37 +1082,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
   }
-}
-
-/// v0: White user silhouette SVG inside gradient avatar
-/// Since we can't use inline SVG in Flutter, approximate with Icon
-class _UserSilhouette extends StatelessWidget {
-  const _UserSilhouette();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Icon(
-        HBotIcons.person,
-        size: 42,
-        color: Colors.white,
-      ),
-    );
-  }
-}
-
-class _StatData {
-  final IconData icon;
-  final Color iconColor;
-  final Color bg;
-  final String label;
-  final String value;
-
-  const _StatData({
-    required this.icon,
-    required this.iconColor,
-    required this.bg,
-    required this.label,
-    required this.value,
-  });
 }

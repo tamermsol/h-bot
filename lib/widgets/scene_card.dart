@@ -1,103 +1,101 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
 
-/// Scene Card per design spec (03-COMPONENT-LIBRARY.md Section 2.2)
-/// 72px height, 16px padding, white bg, 1px border, 16px radius
-/// Leading: 40x40 circle, #F0F7FF bg, emoji/icon 24px inside
-/// Title: 16px/600, textPrimary
-/// Subtitle: 12px/400, textSecondary (e.g., "5 devices")
-/// Trailing: 40x40 circle, #F0F7FF bg, play icon 24px, #0883FD color
-class SceneCard extends StatelessWidget {
-  final Map<String, dynamic> scene;
-  final Function(bool) onToggle;
+/// Scene Card — horizontal list item (72px height)
+/// Design: 03-COMPONENT-LIBRARY.md §2.2
+class SceneCard extends StatefulWidget {
+  final String name;
+  final String subtitle;
+  final IconData? icon;
+  final String? emoji;
   final VoidCallback? onTap;
   final VoidCallback? onPlay;
+  final VoidCallback? onLongPress;
 
   const SceneCard({
     super.key,
-    required this.scene,
-    required this.onToggle,
+    required this.name,
+    required this.subtitle,
+    this.icon,
+    this.emoji,
     this.onTap,
     this.onPlay,
+    this.onLongPress,
   });
 
   @override
-  Widget build(BuildContext context) {
-    final bool isActive = scene['isActive'] ?? false;
+  State<SceneCard> createState() => _SceneCardState();
+}
 
+class _SceneCardState extends State<SceneCard> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 72),
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapUp: (_) => setState(() => _isPressed = false),
+      onTapCancel: () => setState(() => _isPressed = false),
+      child: AnimatedContainer(
+        duration: HBotDurations.fast,
+        height: 72,
         padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
-          color: HBotColors.cardLight,
+          color: _isPressed ? HBotColors.cardHover : context.hCard,
           borderRadius: HBotRadius.largeRadius,
-          border: Border.all(
-            color: HBotColors.borderLight,
-            width: 1,
-          ),
+          border: Border.all(color: context.hBorder, width: 1),
         ),
         child: Row(
           children: [
-            // Scene icon in 40px circle with $surfacePrimarySubtle bg
+            // Scene icon in tinted circle
             Container(
               width: 40,
               height: 40,
               decoration: const BoxDecoration(
-                color: HBotColors.surfacePrimarySubtle,
+                color: HBotColors.primarySurface,
                 shape: BoxShape.circle,
               ),
-              alignment: Alignment.center,
-              child: scene['emoji'] != null
-                  ? Text(
-                      scene['emoji'],
-                      style: const TextStyle(fontSize: 24),
-                    )
-                  : Icon(
-                      scene['icon'] ?? HBotIcons.scenes,
-                      color: HBotColors.primary,
-                      size: 24,
-                    ),
+              child: Center(
+                child: widget.emoji != null
+                    ? Text(widget.emoji!, style: const TextStyle(fontSize: 20))
+                    : Icon(
+                        widget.icon ?? Icons.play_circle_outline,
+                        color: HBotColors.primary,
+                        size: 24,
+                      ),
+              ),
             ),
 
             const SizedBox(width: HBotSpacing.space3),
 
-            // Scene name + subtitle
+            // Name + subtitle
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title: $titleMedium 16/600, textPrimary
                   Text(
-                    scene['name'] ?? '',
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
+                    widget.name,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  if (scene['description'] != null ||
-                      scene['time'] != null ||
-                      scene['deviceCount'] != null) ...[
+                  if (widget.subtitle.isNotEmpty) ...[
                     const SizedBox(height: 2),
-                    // Subtitle: $bodySmall 12/400, textSecondary
                     Text(
-                      scene['description'] ??
-                          scene['time'] ??
-                          (scene['deviceCount'] != null
-                              ? '${scene['deviceCount']} devices'
-                              : ''),
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
+                      widget.subtitle,
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        color: HBotColors.textSecondaryLight,
+                        color: context.hTextSecondary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -109,38 +107,27 @@ class SceneCard extends StatelessWidget {
 
             const SizedBox(width: HBotSpacing.space3),
 
-            // Play button: 40x40 circle, $surfacePrimarySubtle bg, play icon
-            GestureDetector(
-              onTap: onPlay ?? () => onToggle(!isActive),
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: HBotColors.surfacePrimarySubtle,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: Icon(
-                  isActive ? HBotIcons.pause : HBotIcons.play,
-                  color: HBotColors.primary,
-                  size: 24,
+            // Play button
+            if (widget.onPlay != null)
+              GestureDetector(
+                onTap: widget.onPlay,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: const BoxDecoration(
+                    color: HBotColors.primarySurface,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.play_arrow_rounded,
+                    color: HBotColors.primary,
+                    size: 24,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
     );
-  }
-
-  // Keep legacy helper for backwards compatibility
-  static IconData getTimeIcon(String time) {
-    if (time.toLowerCase().contains('manual')) {
-      return HBotIcons.power;
-    } else if (time.toLowerCase().contains('location')) {
-      return HBotIcons.room;
-    } else {
-      return HBotIcons.accessTime;
-    }
   }
 }

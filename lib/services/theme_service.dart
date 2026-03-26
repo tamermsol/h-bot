@@ -19,7 +19,11 @@ class ThemeService extends ChangeNotifier {
       final savedTheme = prefs.getString(_themeKey);
 
       if (savedTheme != null) {
-        _themeMode = savedTheme == 'dark' ? ThemeMode.dark : ThemeMode.light;
+        switch (savedTheme) {
+          case 'dark': _themeMode = ThemeMode.dark; break;
+          case 'system': _themeMode = ThemeMode.system; break;
+          default: _themeMode = ThemeMode.light;
+        }
       } else {
         // First launch - set light mode as default
         _themeMode = ThemeMode.light;
@@ -35,10 +39,13 @@ class ThemeService extends ChangeNotifier {
   Future<void> _saveTheme() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(
-        _themeKey,
-        _themeMode == ThemeMode.dark ? 'dark' : 'light',
-      );
+      String value;
+      switch (_themeMode) {
+        case ThemeMode.dark: value = 'dark'; break;
+        case ThemeMode.system: value = 'system'; break;
+        default: value = 'light';
+      }
+      await prefs.setString(_themeKey, value);
     } catch (e) {
       debugPrint('Error saving theme: $e');
     }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/phosphor_icons.dart';
+import '../theme/app_theme.dart';
+import '../widgets/responsive_shell.dart';
+import '../services/notification_service.dart';
+import '../l10n/app_strings.dart';
 
 class NotificationsSettingsScreen extends StatefulWidget {
   const NotificationsSettingsScreen({super.key});
@@ -18,6 +21,13 @@ class _NotificationsSettingsScreenState
   bool _isLoading = true;
   PermissionStatus _permissionStatus = PermissionStatus.denied;
 
+  // Granular notification preferences
+  final NotificationService _notifService = NotificationService();
+  bool _deviceOffline = true;
+  bool _deviceOnline = false;
+  bool _sceneRun = true;
+  bool _stateChange = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,10 +43,26 @@ class _NotificationsSettingsScreenState
       // Check current permission status
       final status = await Permission.notification.status;
 
+      // Load granular preferences
+      final deviceOffline = await _notifService.deviceOfflineEnabled;
+      final deviceOnline = await _notifService.deviceOnlineEnabled;
+      final sceneRun = await _notifService.sceneRunEnabled;
+      final stateChange = await _notifService.stateChangeEnabled;
+
       if (mounted) {
         setState(() {
-          _notificationsEnabled = enabled;
+          // Sync toggle with actual permission status (not just saved pref)
+          _notificationsEnabled = enabled && status.isGranted;
+          // If permission is granted but pref is off, update pref
+          if (status.isGranted && !enabled) {
+            prefs.setBool(_notificationsEnabledKey, true);
+            _notificationsEnabled = true;
+          }
           _permissionStatus = status;
+          _deviceOffline = deviceOffline;
+          _deviceOnline = deviceOnline;
+          _sceneRun = sceneRun;
+          _stateChange = stateChange;
           _isLoading = false;
         });
       }
@@ -64,7 +90,7 @@ class _NotificationsSettingsScreenState
             _permissionStatus = status;
           });
         }
-        _showSuccessMessage('Notifications enabled successfully');
+        _showSuccessMessage(AppStrings.get('notif_enabled_success'));
       } else if (status.isDenied) {
         // Permission denied
         _showPermissionDeniedDialog();
@@ -80,7 +106,7 @@ class _NotificationsSettingsScreenState
           _notificationsEnabled = false;
         });
       }
-      _showSuccessMessage('Notifications disabled');
+      _showSuccessMessage(AppStrings.get('notif_disabled'));
     }
   }
 
@@ -107,11 +133,8 @@ class _NotificationsSettingsScreenState
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            message,
-            style: const TextStyle(fontFamily: 'Inter'),
-          ),
-          backgroundColor: const Color(0xFF8CD1FB),
+          content: Text(message),
+          backgroundColor: HBotColors.success,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -122,32 +145,22 @@ class _NotificationsSettingsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFFF5F7FA),
-        title: const Text(
-          'Permission Denied',
-          style: TextStyle(fontFamily: 'Inter'),
-        ),
-        content: const Text(
-          'Notification permission was denied. You can enable it later from your device settings or try again.',
-          style: TextStyle(fontFamily: 'Inter'),
+        backgroundColor: context.hCard,
+        title: Text(AppStrings.get('notifications_settings_permission_denied')),
+        content: Text(
+          AppStrings.get('notif_permission_denied'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(fontFamily: 'Inter'),
-            ),
+            child: Text(AppStrings.get('notifications_settings_cancel')),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               _toggleNotifications(true); // Try again
             },
-            child: const Text(
-              'Try Again',
-              style: TextStyle(fontFamily: 'Inter'),
-            ),
+            child: Text(AppStrings.get('notifications_settings_try_again')),
           ),
         ],
       ),
@@ -158,32 +171,22 @@ class _NotificationsSettingsScreenState
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFFF5F7FA),
-        title: const Text(
-          'Permission Required',
-          style: TextStyle(fontFamily: 'Inter'),
-        ),
-        content: const Text(
-          'Notification permission is permanently denied. Please enable it from your device settings to receive notifications.',
-          style: TextStyle(fontFamily: 'Inter'),
+        backgroundColor: context.hCard,
+        title: Text(AppStrings.get('notifications_settings_permission_required')),
+        content: Text(
+          AppStrings.get('notif_permission_permanent'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'Cancel',
-              style: TextStyle(fontFamily: 'Inter'),
-            ),
+            child: Text(AppStrings.get('notifications_settings_cancel_2')),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               openAppSettings(); // Open device settings
             },
-            child: const Text(
-              'Open Settings',
-              style: TextStyle(fontFamily: 'Inter'),
-            ),
+            child: Text(AppStrings.get('notifications_settings_open_settings')),
           ),
         ],
       ),
@@ -192,158 +195,128 @@ class _NotificationsSettingsScreenState
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text(AppStrings.get('notifications_settings_notifications')),
+        backgroundColor: context.hBackground,
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Center(
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F7FA),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                HBotIcons.back,
-                size: 16,
-                color: Color(0xFF1F2937),
-              ),
-            ),
-          ),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'Notifications',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Inter',
-            color: Color(0xFF1F2937),
-          ),
-        ),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(HBotSpacing.space6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header
-                  const Text(
-                    'Notification Preferences',
-                    style: TextStyle(
-                      fontSize: 20,
+                  Text(
+                    AppStrings.get('notifications_settings_notification_preferences'),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1F2937),
-                      fontFamily: 'Inter',
+                      color: context.hTextPrimary,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Manage how you receive notifications from HBOT',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF6B7280),
-                      fontFamily: 'Inter',
+                  const SizedBox(height: HBotSpacing.space2),
+                  Text(
+                    AppStrings.get('notifications_settings_manage_desc'),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: context.hTextSecondary,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: HBotSpacing.space6),
 
                   // Enable/Disable Notifications
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF5F7FA),
-                      borderRadius: BorderRadius.circular(16),
+                      color: context.hCard,
+                      borderRadius: BorderRadius.circular(
+                        HBotRadius.medium,
+                      ),
                     ),
                     child: SwitchListTile(
                       value: _notificationsEnabled,
                       onChanged: _toggleNotifications,
-                      title: const Text(
-                        'Enable Notifications',
-                        style: TextStyle(
+                      title: Text(
+                        AppStrings.get('notifications_settings_enable_notifications'),
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: Color(0xFF1F2937),
-                          fontFamily: 'Inter',
+                          color: context.hTextPrimary,
                         ),
                       ),
                       subtitle: Text(
                         _notificationsEnabled
-                            ? 'You will receive notifications about device status, automations, and updates'
-                            : 'Turn on to receive notifications',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF6B7280),
-                          fontFamily: 'Inter',
+                            ? AppStrings.get('notifications_settings_enable_desc')
+                            : AppStrings.get('notif_turn_on'),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: context.hTextSecondary,
                         ),
                       ),
                       secondary: Container(
-                        padding: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(HBotSpacing.space2),
                         decoration: BoxDecoration(
                           color: _notificationsEnabled
-                              ? const Color(0xFF0883FD).withOpacity(0.1)
-                              : const Color(0xFF6B7280).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8),
+                              ? HBotColors.primary.withOpacity(0.1)
+                              : context.hTextSecondary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(
+                            HBotRadius.small,
+                          ),
                         ),
                         child: Icon(
                           _notificationsEnabled
-                              ? HBotIcons.notificationsFilled
-                              : HBotIcons.notifications,
+                              ? Icons.notifications_active
+                              : Icons.notifications_off_outlined,
                           color: _notificationsEnabled
-                              ? const Color(0xFF0883FD)
-                              : const Color(0xFF6B7280),
+                              ? HBotColors.primary
+                              : context.hTextSecondary,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: HBotSpacing.space6),
 
                   // Permission Status Info
                   if (_permissionStatus != PermissionStatus.granted)
                     Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(HBotSpacing.space4),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF59E0B).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(16),
+                        color: HBotColors.warning.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(
+                          HBotRadius.medium,
+                        ),
                         border: Border.all(
-                          color: const Color(0xFFF59E0B).withOpacity(0.3),
+                          color: HBotColors.warning.withOpacity(0.3),
                           width: 1,
                         ),
                       ),
                       child: Row(
                         children: [
                           Icon(
-                            HBotIcons.info,
-                            color: Color(0xFFF59E0B),
+                            Icons.info_outline,
+                            color: HBotColors.warning,
                             size: 24,
                           ),
-                          const SizedBox(width: 16),
+                          const SizedBox(width: HBotSpacing.space4),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
-                                  'Permission Required',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    color: Color(0xFF1F2937),
-                                    fontFamily: 'Inter',
-                                  ),
+                                  AppStrings.get('notif_permission_required'),
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: context.hTextPrimary,
+                                      ),
                                 ),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 Text(
-                                  'Notification permission is required to receive alerts. Enable notifications above to grant permission.',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xFF6B7280),
-                                    fontFamily: 'Inter',
-                                  ),
+                                  AppStrings.get('notif_permission_required_desc'),
+                                  style: Theme.of(context).textTheme.bodySmall
+                                      ?.copyWith(
+                                        color: context.hTextSecondary,
+                                      ),
                                 ),
                               ],
                             ),
@@ -352,45 +325,66 @@ class _NotificationsSettingsScreenState
                       ),
                     ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: HBotSpacing.space6),
 
-                  // What you'll receive section
-                  const Text(
-                    'What you\'ll receive',
-                    style: TextStyle(
-                      fontSize: 16,
+                  // Notification types section
+                  Text(
+                    AppStrings.get('notifications_settings_notification_types'),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1F2937),
-                      fontFamily: 'Inter',
+                      color: context.hTextPrimary,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: HBotSpacing.space4),
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF5F7FA),
-                      borderRadius: BorderRadius.circular(16),
+                      color: context.hCard,
+                      borderRadius: BorderRadius.circular(HBotRadius.medium),
                     ),
                     child: Column(
                       children: [
-                        _buildNotificationTypeItem(
-                          icon: HBotIcons.power,
-                          title: 'Device Status',
-                          description:
-                              'Get notified when devices go online or offline',
+                        _buildNotificationToggle(
+                          icon: Icons.cloud_off,
+                          title: AppStrings.get('notifications_settings_device_offline'),
+                          description: AppStrings.get('notifications_settings_device_offline_desc'),
+                          value: _deviceOffline,
+                          onChanged: _notificationsEnabled ? (v) {
+                            setState(() => _deviceOffline = v);
+                            _notifService.setDeviceOfflineEnabled(v);
+                          } : null,
                         ),
                         const Divider(height: 1, indent: 72),
-                        _buildNotificationTypeItem(
-                          icon: HBotIcons.scenes,
-                          title: 'Automation Alerts',
-                          description:
-                              'Notifications when scenes and automations run',
+                        _buildNotificationToggle(
+                          icon: Icons.cloud_done,
+                          title: AppStrings.get('notifications_settings_device_online'),
+                          description: AppStrings.get('notifications_settings_device_online_desc'),
+                          value: _deviceOnline,
+                          onChanged: _notificationsEnabled ? (v) {
+                            setState(() => _deviceOnline = v);
+                            _notifService.setDeviceOnlineEnabled(v);
+                          } : null,
                         ),
                         const Divider(height: 1, indent: 72),
-                        _buildNotificationTypeItem(
-                          icon: HBotIcons.refresh,
-                          title: 'System Updates',
-                          description: 'Important updates and announcements',
-                          showDivider: false,
+                        _buildNotificationToggle(
+                          icon: Icons.auto_awesome,
+                          title: AppStrings.get('notifications_settings_scene_executed'),
+                          description: AppStrings.get('notifications_settings_scene_executed_desc'),
+                          value: _sceneRun,
+                          onChanged: _notificationsEnabled ? (v) {
+                            setState(() => _sceneRun = v);
+                            _notifService.setSceneRunEnabled(v);
+                          } : null,
+                        ),
+                        const Divider(height: 1, indent: 72),
+                        _buildNotificationToggle(
+                          icon: Icons.lightbulb_outline,
+                          title: AppStrings.get('notifications_settings_state_changes'),
+                          description: AppStrings.get('notifications_settings_state_changes_desc'),
+                          value: _stateChange,
+                          onChanged: _notificationsEnabled ? (v) {
+                            setState(() => _stateChange = v);
+                            _notifService.setStateChangeEnabled(v);
+                          } : null,
                         ),
                       ],
                     ),
@@ -401,38 +395,37 @@ class _NotificationsSettingsScreenState
     );
   }
 
-  Widget _buildNotificationTypeItem({
+  Widget _buildNotificationToggle({
     required IconData icon,
     required String title,
     required String description,
-    bool showDivider = true,
+    required bool value,
+    ValueChanged<bool>? onChanged,
   }) {
-    return ListTile(
-      leading: Container(
-        padding: const EdgeInsets.all(8),
+    return SwitchListTile(
+      secondary: Container(
+        padding: const EdgeInsets.all(HBotSpacing.space2),
         decoration: BoxDecoration(
-          color: const Color(0xFF0883FD).withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
+          color: HBotColors.primary.withOpacity(0.1),
+          borderRadius: HBotRadius.smallRadius,
         ),
-        child: Icon(icon, color: const Color(0xFF0883FD), size: 24),
+        child: Icon(icon, color: HBotColors.primary, size: 24),
       ),
       title: Text(
         title,
-        style: const TextStyle(
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
           fontWeight: FontWeight.w500,
-          fontSize: 16,
-          color: Color(0xFF1F2937),
-          fontFamily: 'Inter',
+          color: context.hTextPrimary,
         ),
       ),
       subtitle: Text(
         description,
-        style: const TextStyle(
-          fontSize: 12,
-          color: Color(0xFF6B7280),
-          fontFamily: 'Inter',
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: context.hTextSecondary,
         ),
       ),
+      value: value,
+      onChanged: onChanged,
     );
   }
 }

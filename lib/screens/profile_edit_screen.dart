@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 import '../widgets/smart_input_field.dart';
 import '../services/auth_service.dart';
 import '../models/profile.dart';
-import '../utils/phosphor_icons.dart';
+import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   final Profile? initialProfile;
@@ -58,12 +60,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Profile updated successfully!',
-              style: TextStyle(fontFamily: 'Inter'),
-            ),
-            backgroundColor: Color(0xFF8CD1FB),
+          SnackBar(
+            content: Text(AppStrings.get('profile_edit_profile_updated_successfully')),
+            backgroundColor: HBotColors.success,
           ),
         );
         Navigator.of(context).pop(updatedProfile);
@@ -72,11 +71,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Error updating profile: $e',
-              style: const TextStyle(fontFamily: 'Inter'),
-            ),
-            backgroundColor: const Color(0xFFEF4444),
+            content: Text(AppStrings.get('profile_edit_error_updating_profile_e')),
+            backgroundColor: HBotColors.error,
           ),
         );
       }
@@ -89,39 +85,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text(AppStrings.get('profile_edit_edit_profile')),
+        backgroundColor: context.hBackground,
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: Center(
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F7FA),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                HBotIcons.back,
-                color: Color(0xFF1F2937),
-                size: 18,
-              ),
-            ),
-          ),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'Edit Profile',
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1F2937),
-          ),
-        ),
         actions: [
           TextButton(
             onPressed: _isLoading ? null : _saveProfile,
@@ -132,23 +102,22 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        Color(0xFF0883FD),
+                        HBotColors.primary,
                       ),
                     ),
                   )
-                : const Text(
-                    'Save',
+                : Text(
+                    AppStrings.get('common_save'),
                     style: TextStyle(
-                      fontFamily: 'Inter',
-                      color: Color(0xFF0883FD),
+                      color: HBotColors.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      body: ResponsiveShell(child: SingleChildScrollView(
+        padding: const EdgeInsets.all(HBotSpacing.space4),
         child: Form(
           key: _formKey,
           child: Column(
@@ -156,28 +125,27 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             children: [
               // Info card
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(HBotSpacing.space4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0883FD).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(16),
+                  color: HBotColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(HBotRadius.medium),
                   border: Border.all(
-                    color: const Color(0xFF0883FD).withOpacity(0.2),
+                    color: HBotColors.primary.withOpacity(0.2),
                   ),
                 ),
                 child: Row(
                   children: [
                     Icon(
-                      HBotIcons.info,
-                      color: const Color(0xFF0883FD),
+                      Icons.info_outline,
+                      color: HBotColors.primary,
                       size: 20,
                     ),
                     const SizedBox(width: 12),
-                    const Expanded(
+                    Expanded(
                       child: Text(
-                        'Update your profile information. Phone numbers must be in E.164 format (e.g., +1234567890).',
+                        AppStrings.get('profile_edit_info_desc'),
                         style: TextStyle(
-                          fontFamily: 'Inter',
-                          color: Color(0xFF6B7280),
+                          color: context.hTextSecondary,
                           fontSize: 14,
                         ),
                       ),
@@ -191,7 +159,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               // Full Name Field
               SmartInputField(
                 controller: _fullNameController,
-                label: 'Full Name',
+                label: AppStrings.get('profile_edit_full_name'),
                 keyboardType: TextInputType.name,
                 validator: (value) {
                   if (value != null && value.isNotEmpty) {
@@ -208,7 +176,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               // Phone Number Field
               SmartInputField(
                 controller: _phoneController,
-                label: 'Phone Number (Optional)',
+                label: AppStrings.get('profile_edit_phone_number_optional'),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value != null && value.isNotEmpty) {
@@ -225,56 +193,40 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               // Save Button
               SizedBox(
                 height: 50,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _saveProfile,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: HBotColors.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x590883FD),
-                        blurRadius: 12,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
+                    elevation: 0,
                   ),
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _saveProfile,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.white,
-                              ),
-                            ),
-                          )
-                        : const Text(
-                            'Update Profile',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
                             ),
                           ),
-                  ),
+                        )
+                      : Text(
+                          AppStrings.get('profile_edit_update_profile'),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                 ),
               ),
             ],
           ),
         ),
+      ),
       ),
     );
   }

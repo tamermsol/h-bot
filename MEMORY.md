@@ -91,3 +91,122 @@
 ### Workspace
 - H-Bot source copied to `/root/.openclaw/workspace-hbot/` (lib/, pubspec.yaml, ios/, android/, assets/)
 - Work from hbot workspace, not flutter workspace
+
+## 2026-03-26 — Sign in with Apple + App Store Rejection
+
+### App Store Rejection (v1.0.1 build 144)
+- Guideline 4.8: Need Sign in with Apple
+- Guideline 2.1: Need demo video with physical hardware
+- Tamer handling video
+
+### Sign in with Apple Implementation
+- Commit: `59ea2e7`, version 1.0.2+145
+- Packages: `sign_in_with_apple`, `crypto`
+- Native iOS flow → `signInWithIdToken(provider: apple)` with nonce
+- Supabase Apple auth enabled (client_id: `com.mb.hbot`)
+- Entitlement: `com.apple.developer.applesignin` in Runner.entitlements
+- Buttons on sign_in_screen + sign_up_screen (iOS only)
+- **BLOCKED**: Tamer must enable "Sign In with Apple" capability on App ID `com.mb.hbot` in Apple Developer portal and regenerate provisioning profile
+
+### iOS Build IDs
+- Build 145 FAILED (provisioning): `69c4f83d68d6f85bb2066c66`
+- Build 144 SUCCESS: `69bae849bef2dd317623a49a`
+- ASC build 144 ID: `ba2ed522-baf1-4a08-a1cf-ecc0c25aa5e3`
+
+### ASC Version
+- v1.0.1 version ID: `b094dc6c-22c0-46e9-8df2-30a768cecef6` (reused from v1.0)
+- Review submission cancelled, will resubmit after build 145 succeeds
+
+## GOLDEN RULES
+- **No MQTT/Tasmota anywhere user-facing** — App Store, Play Store, descriptions, keywords, screenshots, marketing. Use generic terms: "smart home devices", "real-time updates", "IoT devices"
+- Don't push to TestFlight unless asked — APK + git only (Tamer rule from 2026-03-17)
+
+## 2026-03-17 — Google Play Store Setup
+- AAB built (42.3MB), waiting for service account JSON key from Tim
+- Developer account ID: `6376157508824598411`
+- App Store version 1.0 (Build 142) WAITING_FOR_REVIEW with real screenshots, clean descriptions
+
+## 2026-03-15 — Design System Migration Complete (Build 101)
+
+### hbot-design branch status
+- All AppTheme references migrated to HBotColors/HBotSpacing/HBotRadius tokens (70+ files)
+- Branding applied: app icons, splash screen, auth screens from h-bot.tech assets
+- Zero compile errors
+- Latest commit: `d369ced` on `hbot-design` branch
+- Build 101 on TestFlight + Android APK sent to Tim
+
+### Correct App Store Connect IDs (verified)
+- App Apple ID: `6760253054`
+- Build 101 ASC ID: `5839a6e7-e207-4789-97ba-fa2404347fdc`
+- Internal Testers Group: `12c1b517-a3ee-4c0d-bcac-d4b16cb59abb`
+
+### Android Build Environment Notes
+- Server `/tmp` is `noexec` — must use `JAVA_OPTS=-Djava.io.tmpdir=/root/gradle-tmp`
+- Groovy init script at `/root/.gradle/init.d/flutter-compat.gradle` creates `flutter` extension for old Groovy plugins (geolocator_android etc.)
+- Don't create for `:app` project — only subprojects
+- Kotlin version warnings (2.1.0 vs 1.8.0) are benign
+
+### Remaining design work
+- Implement remaining screens from `05-REMAINING-SCREENS.md`
+- Audit platform-specific Android code (auto-discovery, NsdManager vs Bonjour)
+- Dark mode tokens defined but not implemented
+- Visual polish pass needed
+
+## 2026-03-18 — FCM Push Notifications Complete
+
+### Architecture
+- Firebase project: `hbot-app-6c521` (HBOT APP)
+- FCM API server: systemd `hbot-fcm` on port 8099, proxied at `/hbot/api/`
+- Endpoints: `/hbot/api/push` (POST), `/hbot/api/token-count` (GET), `/hbot/api/health` (GET)
+- Server script: `/var/www/html/hbot/api/fcm-server.py`
+- Firebase Admin SDK: `/root/.firebase/firebase-admin-sdk.json`
+- APNs key: `/root/.firebase/AuthKey_7KXU88V423.p8` (Key ID: `7KXU88V423`, Team ID: `6U3ELYT3M7`)
+- Supabase table: `fcm_tokens` with RLS
+- Admin panel sends FCM push + saves to `broadcast_notifications`
+- Tim confirmed push working ✅
+
+### Flutter client FCM
+- `firebase_core` + `firebase_messaging` in pubspec
+- `lib/services/fcm_service.dart` — token registration, permissions, background/foreground
+- `Firebase.initializeApp()` in `main.dart`, `FcmService().initialize()` in `HomeScreen.initState()`
+- `google-services.json` (Android) + `GoogleService-Info.plist` (iOS) in place
+- `com.google.gms.google-services` plugin in `android/settings.gradle.kts` + `android/app/build.gradle.kts`
+
+### Shared Devices Bug Fix
+- Root cause: single-query join `shared_devices → devices_with_channels(*)` blocked by RLS for non-owners
+- Fix: two-step query (get IDs from `shared_devices`, then fetch from `devices_with_channels` with `.inFilter`)
+- Commit: `1e5fbf2`
+
+### Scene Localization — Fully Complete
+- ~650 total localization keys (en + ar)
+- All scene screen strings: triggers, repeat, days, location, device selection, actions, review, errors
+- Latest commit: `1e5fbf2` on `hbot-design`
+
+### Current APK
+- Latest: `hbot-latest.apk` at `https://aoperatingsystem.online/hbot/hbot-latest.apk`
+- Includes: FCM, shared devices fix, full scene localization
+
+## 2026-03-16 — Build 137 + App Store Submission WIP
+
+### Build 137
+- Google sign-in removed (email/password only)
+- Commit `b3b7426` on `hbot-design`
+- **Rule from Tamer: Don't push to TestFlight unless asked** — APK + git only
+
+### App Store Listing (version 1.0, build 136)
+- Name: **H-Bot Smart Home**, subtitle: **Smart Home Control**
+- Privacy policy: `https://aoperatingsystem.online/hbot-privacy`
+- Screenshots: iPhone 6.7", 5.5", iPad 12.9" — all uploaded
+- Pricing: FREE, Categories: Lifestyle + Utilities
+- Review detail + demo account configured
+
+### Blocked on submission
+- App Privacy questionnaire (must be done in ASC web UI — no API)
+- Demo account `test@hbot.app` needs manual creation in Supabase (email confirm failed)
+
+### ASC API Key Lessons
+- Use `reviewSubmissions` not deprecated `appStoreVersionSubmissions`
+- No API for app privacy / data usages — web only
+- iPad Pro 12.9" screenshots required
+- PNG alpha channel rejected — always use `PNG24:` format
+- Price schedule needs `included` array with inline appPrices

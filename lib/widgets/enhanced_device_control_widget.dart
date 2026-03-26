@@ -6,9 +6,9 @@ import '../services/mqtt_device_manager.dart';
 import '../repos/devices_repo.dart';
 import '../widgets/mqtt_debug_sheet.dart';
 import '../widgets/shutter_control_widget.dart';
+import '../widgets/channel_grid.dart';
 import '../theme/app_theme.dart';
-import '../utils/channel_detection_utils.dart';
-import '../utils/phosphor_icons.dart';
+import '../l10n/app_strings.dart';
 
 /// Enhanced widget for controlling devices with the new MQTT device manager
 class EnhancedDeviceControlWidget extends StatefulWidget {
@@ -307,8 +307,8 @@ class _EnhancedDeviceControlWidgetState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to control channel $channel: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text('${AppStrings.get("error_control_channel")}: $e'),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -323,9 +323,9 @@ class _EnhancedDeviceControlWidgetState
       debugPrint('❌ Error turning all channels on: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to turn all channels on'),
-            backgroundColor: HBotColors.error,
+          SnackBar(
+            content: Text(AppStrings.get('enhanced_device_control_failed_to_turn_all_channels_on')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -340,9 +340,9 @@ class _EnhancedDeviceControlWidgetState
       debugPrint('❌ Error turning all channels off: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to turn all channels off'),
-            backgroundColor: HBotColors.error,
+          SnackBar(
+            content: Text(AppStrings.get('enhanced_device_control_failed_to_turn_all_channels_off')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -375,10 +375,10 @@ class _EnhancedDeviceControlWidgetState
                 Expanded(
                   child: Text(
                     widget.device.deviceName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: HBotColors.textPrimaryLight,
+                      color: context.hTextPrimary,
                     ),
                   ),
                 ),
@@ -397,15 +397,7 @@ class _EnhancedDeviceControlWidgetState
             else if (widget.device.channels == 1)
               _buildSingleChannelControl()
             else
-              _buildMultiChannelControls(),
-
-            // Bulk controls for multi-channel devices
-            if (widget.showBulkControls &&
-                widget.device.deviceType != DeviceType.shutter &&
-                widget.device.effectiveChannels > 1) ...[
-              const SizedBox(height: HBotSpacing.space4),
-              _buildBulkControls(),
-            ],
+              _buildChannelGrid(),
           ],
         ),
       ),
@@ -417,133 +409,40 @@ class _EnhancedDeviceControlWidgetState
     final isConnected = _connectionState == MqttConnectionState.connected;
 
     return SwitchListTile(
-      title: const Text('Power'),
+      title: Text(AppStrings.get('enhanced_device_control_power')),
       value: isOn,
       onChanged: isConnected ? (value) => _setChannelState(1, value) : null,
     );
   }
 
-  Widget _buildMultiChannelControls() {
+  Widget _buildChannelGrid() {
     final isConnected = _connectionState == MqttConnectionState.connected;
 
-    return Column(
-      children: [
-        for (int i = 1; i <= widget.device.effectiveChannels; i++)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2),
-            child: Row(
-              children: [
-                Icon(
-                  _channelTypes[i] == 'light'
-                      ? HBotIcons.lightbulb
-                      : HBotIcons.power,
-                  size: 20,
-                  color: (_channelStates[i] ?? false)
-                      ? HBotColors.primary
-                      : HBotColors.textSecondaryLight,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    _getChannelName(i),
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: HBotColors.textPrimaryLight,
-                    ),
-                  ),
-                ),
-                Switch(
-                  value: _channelStates[i] ?? false,
-                  onChanged: isConnected
-                      ? (value) => _setChannelState(i, value)
-                      : null,
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildBulkControls() {
-    final isConnected = _connectionState == MqttConnectionState.connected;
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4),
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      decoration: BoxDecoration(
-        color: HBotColors.surfaceLight,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[800]!),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Bulk Controls',
-            style: TextStyle(
-              color: HBotColors.textPrimaryLight,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(height: HBotSpacing.space2),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: isConnected ? _turnAllOn : null,
-                  icon: Icon(HBotIcons.power, size: 18),
-                  label: const Text('All ON'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.successDark,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey[800],
-                    disabledForegroundColor: Colors.grey[600],
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: HBotSpacing.space2),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: isConnected ? _turnAllOff : null,
-                  icon: Icon(HBotIcons.power, size: 18),
-                  label: const Text('All OFF'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: HBotColors.errorDark,
-                    foregroundColor: Colors.white,
-                    disabledBackgroundColor: Colors.grey[800],
-                    disabledForegroundColor: Colors.grey[600],
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return ChannelGrid(
+      channelCount: widget.device.effectiveChannels,
+      channelStates: _channelStates,
+      channelNames: _channelNames,
+      channelTypes: _channelTypes,
+      canControl: isConnected,
+      compact: true,
+      onToggleChannel: (channel, value) => _setChannelState(channel, value),
+      onAllOn: _turnAllOn,
+      onAllOff: _turnAllOff,
     );
   }
 
   IconData _getDeviceIcon() {
     switch (widget.device.deviceType) {
       case DeviceType.relay:
-        return HBotIcons.power;
+        return Icons.power_settings_new;
       case DeviceType.dimmer:
-        return HBotIcons.lightbulb;
+        return Icons.lightbulb_outline;
       case DeviceType.shutter:
-        return HBotIcons.shutter;
+        return Icons.window;
       case DeviceType.sensor:
-        return HBotIcons.thermometer;
+        return Icons.sensors;
       case DeviceType.other:
-        return HBotIcons.deviceUnknown;
+        return Icons.device_unknown;
     }
   }
 }

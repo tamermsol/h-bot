@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import '../utils/phosphor_icons.dart';
 import 'dart:convert';
 import '../theme/app_theme.dart';
 import '../repos/device_sharing_repo.dart';
 import '../models/shared_device.dart';
 import '../core/supabase_client.dart';
+import '../l10n/app_strings.dart';
 
 class ScanDeviceQRScreen extends StatefulWidget {
   const ScanDeviceQRScreen({super.key});
@@ -50,7 +50,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e'), backgroundColor: HBotColors.error),
+        SnackBar(content: Text(AppStrings.get('scan_device_qr_error_e')), backgroundColor: Colors.red),
       );
       setState(() => _isProcessing = false);
     }
@@ -71,13 +71,13 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
-        title: const Text('Add Shared Device?'),
+        backgroundColor: context.hCard,
+        title: Text(AppStrings.get('scan_device_qr_add_shared_device')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Device: $deviceName'),
+            Text('${AppStrings.get("scan_qr_device")}: $deviceName'),
             const SizedBox(height: 8),
             const Text(
               'This device will be added to your dashboard immediately.',
@@ -88,14 +88,14 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('scan_device_qr_cancel')),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: HBotColors.primary,
             ),
-            child: const Text('Add Device'),
+            child: Text(AppStrings.get('scan_device_qr_add_device')),
           ),
         ],
       ),
@@ -119,9 +119,9 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     if (!mounted) return;
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Device added successfully! Check your dashboard.'),
-        backgroundColor: HBotColors.success,
+      SnackBar(
+        content: Text(AppStrings.get('scan_device_qr_device_added_successfully_check_your_das')),
+        backgroundColor: Colors.green,
       ),
     );
   }
@@ -135,8 +135,8 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: HBotColors.cardLight,
-        title: const Text('Add Shared Devices?'),
+        backgroundColor: context.hCard,
+        title: Text(AppStrings.get('scan_device_qr_add_shared_devices')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,14 +164,14 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(AppStrings.get('scan_device_qr_cancel_2')),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: HBotColors.primary,
             ),
-            child: const Text('Add All'),
+            child: Text(AppStrings.get('scan_device_qr_add_all')),
           ),
         ],
       ),
@@ -212,7 +212,7 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
         content: Text(
           '$successCount of $deviceCount device(s) added successfully!',
         ),
-        backgroundColor: HBotColors.success,
+        backgroundColor: Colors.green,
       ),
     );
   }
@@ -223,23 +223,23 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
       final homes = await supabase.from('homes').select('id').limit(1);
 
       if (homes.isEmpty) {
-        // Create "Shared Devices" home
+        // Create default "My Home"
         final homeResponse = await supabase
             .from('homes')
-            .insert({'name': 'Shared Devices'})
+            .insert({'name': 'My Home'})
             .select()
             .single();
 
         final homeId = homeResponse['id'] as String;
 
-        // Create "Shared Devices" room
+        // Create a default room
         await supabase.from('rooms').insert({
           'home_id': homeId,
-          'name': 'Shared Devices',
+          'name': 'My Devices',
           'sort_order': 0,
         });
 
-        debugPrint('Created "Shared Devices" home and room for new user');
+        debugPrint('Created default "My Home" and room for new user');
       }
     } catch (e) {
       debugPrint('Error ensuring home/room: $e');
@@ -252,17 +252,17 @@ class _ScanDeviceQRScreenState extends State<ScanDeviceQRScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Scan Device QR Code'),
+        title: Text(AppStrings.get('scan_device_qr_scan_device_qr_code')),
         backgroundColor: Colors.black,
         actions: [
           IconButton(
             icon: Icon(
-              _controller.torchEnabled ? HBotIcons.bolt : HBotIcons.bolt,
+              _controller.torchEnabled ? Icons.flash_on : Icons.flash_off,
             ),
             onPressed: () => _controller.toggleTorch(),
           ),
           IconButton(
-            icon: Icon(HBotIcons.camera),
+            icon: const Icon(Icons.flip_camera_ios),
             onPressed: () => _controller.switchCamera(),
           ),
         ],

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../services/smart_home_service.dart';
 import '../models/device.dart';
-import '../utils/phosphor_icons.dart';
+import '../repos/devices_repo.dart';
+import '../l10n/app_strings.dart';
 
 class DeviceSelector extends StatefulWidget {
   final List<Map<String, dynamic>> selectedDevices;
@@ -76,16 +77,6 @@ class _DeviceSelectorState extends State<DeviceSelector> {
         );
       }
 
-      if (devices.isEmpty) {
-        debugPrint('DeviceSelector: No devices found');
-        setState(() {
-          _isLoading = false;
-          _errorMessage = 'No devices found in this home. Add devices first.';
-          _availableDevices = [];
-        });
-        return;
-      }
-
       // Get room names for better display
       final Map<String, String> roomNames = {};
       if (widget.homeId != null) {
@@ -101,22 +92,65 @@ class _DeviceSelectorState extends State<DeviceSelector> {
         }
       }
 
-      _availableDevices = devices.map((Device d) {
+      final List<Map<String, dynamic>> allDevices = devices.map((Device d) {
         final roomName = d.roomId != null
             ? roomNames[d.roomId] ?? 'Unknown Room'
             : 'No Room';
         return {
           'id': d.id,
-          'name': d.name,
-          'deviceName': d.name,
+          'name': d.deviceName,
+          'deviceName': d.deviceName,
           'type': _mapDeviceTypeToCategory(d.deviceType),
           'icon': _getIconForDeviceType(d.deviceType),
           'room': roomName,
-          'isOnline':
-              d.online ?? false, // Use device's online status from database
+          'isOnline': d.online ?? false,
           'device': d,
+          'isShared': false,
         };
       }).toList();
+
+      // Load shared devices using the same approach as the dashboard
+      // (queries through shared_devices table join, which respects RLS properly)
+      try {
+        final devicesRepo = DevicesRepo();
+        final sharedDevicesList = await devicesRepo.listSharedDevices();
+        debugPrint('DeviceSelector: Loaded ${sharedDevicesList.length} shared devices');
+
+        // Track existing device IDs to avoid duplicates
+        final existingIds = allDevices.map((d) => d['id'] as String).toSet();
+
+        for (final device in sharedDevicesList) {
+          if (existingIds.contains(device.id)) continue;
+
+          allDevices.add({
+            'id': device.id,
+            'name': device.deviceName,
+            'deviceName': device.deviceName,
+            'type': _mapDeviceTypeToCategory(device.deviceType),
+            'icon': _getIconForDeviceType(device.deviceType),
+            'room': AppStrings.get('common_shared'),
+            'isOnline': device.online ?? false,
+            'device': device,
+            'isShared': true,
+          });
+          existingIds.add(device.id);
+        }
+      } catch (e) {
+        debugPrint('DeviceSelector: Failed to load shared devices: $e');
+        // Non-fatal — continue with home devices only
+      }
+
+      if (allDevices.isEmpty) {
+        debugPrint('DeviceSelector: No devices found (home + shared)');
+        setState(() {
+          _isLoading = false;
+          _errorMessage = AppStrings.get('no_devices_found');
+          _availableDevices = [];
+        });
+        return;
+      }
+
+      _availableDevices = allDevices;
 
       debugPrint(
         'DeviceSelector: Prepared ${_availableDevices.length} devices for display',
@@ -154,20 +188,20 @@ class _DeviceSelectorState extends State<DeviceSelector> {
         return _mapDeviceTypeToIcon(DeviceType.values.byName(deviceType));
       }
     } catch (_) {}
-    return HBotIcons.deviceUnknown;
+    return Icons.device_unknown;
   }
 
   IconData _mapDeviceTypeToIcon(DeviceType deviceType) {
     switch (deviceType) {
       case DeviceType.relay:
       case DeviceType.dimmer:
-        return HBotIcons.lightbulb;
+        return Icons.lightbulb_outline;
       case DeviceType.sensor:
-        return HBotIcons.thermometer;
+        return Icons.thermostat;
       case DeviceType.shutter:
-        return HBotIcons.shutter;
+        return Icons.window;
       case DeviceType.other:
-        return HBotIcons.deviceUnknown;
+        return Icons.device_unknown;
     }
   }
 
@@ -186,7 +220,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
   Widget build(BuildContext context) {
     // Show loading state
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: Padding(
           padding: EdgeInsets.all(HBotSpacing.space6),
           child: Column(
@@ -194,7 +228,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
             children: [
               CircularProgressIndicator(),
               SizedBox(height: HBotSpacing.space4),
-              Text('Loading devices...'),
+              Text(AppStrings.get('device_selector_loading_devices')),
             ],
           ),
         ),
@@ -209,22 +243,23 @@ class _DeviceSelectorState extends State<DeviceSelector> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(HBotIcons.errorOutline, size: 64, color: HBotColors.textTertiaryLight),
+              Icon(Icons.error_outline, size: 64, color: context.hTextTertiary),
               const SizedBox(height: HBotSpacing.space4),
               Text(
                 _errorMessage!,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: HBotColors.textSecondaryLight,
+                  color: context.hTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: HBotSpacing.space4),
+              const SizedBox(height: HBotSpacing.space4),
               ElevatedButton.icon(
                 onPressed: _loadDevices,
-                icon: Icon(HBotIcons.refresh),
-                label: const Text('Retry'),
+                icon: const Icon(Icons.refresh),
+                label: Text(AppStrings.get('device_selector_retry')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: widget.accentColor,
+                  foregroundColor: Colors.white,
                 ),
               ),
             ],
@@ -263,14 +298,14 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                   labelStyle: TextStyle(
                     color: isSelected
                         ? widget.accentColor
-                        : HBotColors.textSecondaryLight,
+                        : context.hTextSecondary,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),
-                  backgroundColor: HBotColors.cardLight,
+                  backgroundColor: context.hCard,
                   side: BorderSide(
                     color: isSelected
                         ? widget.accentColor.withOpacity(0.5)
-                        : HBotColors.textTertiaryLight.withOpacity(0.3),
+                        : context.hTextTertiary.withOpacity(0.3),
                   ),
                 ),
               );
@@ -292,7 +327,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
             ),
             child: Row(
               children: [
-                Icon(HBotIcons.checkCircle, color: widget.accentColor, size: 20),
+                Icon(Icons.check_circle, color: widget.accentColor, size: 20),
                 const SizedBox(width: HBotSpacing.space2),
                 Text(
                   '${widget.selectedDevices.length} devices selected',
@@ -314,8 +349,9 @@ class _DeviceSelectorState extends State<DeviceSelector> {
           itemCount: filteredDevices.length,
           itemBuilder: (context, index) {
             final device = filteredDevices[index];
+            final isShared = device['isShared'] as bool? ?? false;
             final isSelected = widget.selectedDevices.any(
-              (selected) => selected['name'] == device['name'],
+              (selected) => selected['id'] == device['id'],
             );
 
             return Container(
@@ -326,28 +362,48 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                   decoration: BoxDecoration(
                     color: isSelected
                         ? widget.accentColor.withOpacity(0.2)
-                        : HBotColors.cardLight,
+                        : context.hCard,
                     borderRadius: BorderRadius.circular(HBotRadius.small),
                   ),
                   child: Icon(
                     device['icon'],
                     color: isSelected
                         ? widget.accentColor
-                        : HBotColors.textSecondaryLight,
+                        : context.hTextSecondary,
                     size: 20,
                   ),
                 ),
-                title: Text(
-                  device['name'],
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: HBotColors.textPrimaryLight,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  ),
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        device['name'],
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: context.hTextPrimary,
+                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    if (isShared)
+                      Container(
+                        margin: const EdgeInsets.only(left: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: Colors.orange.withOpacity(0.4)),
+                        ),
+                        child: Text(
+                          AppStrings.get('common_shared'),
+                          style: TextStyle(fontSize: 10, color: Colors.orange, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                  ],
                 ),
                 subtitle: Text(
                   device['room'],
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: HBotColors.textTertiaryLight,
+                    color: context.hTextTertiary,
                   ),
                 ),
                 trailing: Checkbox(
@@ -362,7 +418,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
                 },
                 tileColor: isSelected
                     ? widget.accentColor.withOpacity(0.1)
-                    : HBotColors.cardLight,
+                    : context.hCard,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(HBotRadius.medium),
                   side: BorderSide(
@@ -384,7 +440,7 @@ class _DeviceSelectorState extends State<DeviceSelector> {
       widget.selectedDevices,
     );
     final existingIndex = updatedDevices.indexWhere(
-      (selected) => selected['name'] == device['name'],
+      (selected) => selected['id'] == device['id'],
     );
 
     if (existingIndex >= 0) {

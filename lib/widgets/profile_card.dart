@@ -19,28 +19,38 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cardColor = context.hCard;
+    final textPrimary = context.hTextPrimary;
+    final textSecondary = context.hTextSecondary;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(HBotSpacing.space4),
         decoration: BoxDecoration(
-          color: HBotColors.cardLight,
-          borderRadius: HBotRadius.largeRadius,
+          color: cardColor,
+          borderRadius: BorderRadius.circular(HBotRadius.medium),
           border: Border.all(
-            color: HBotColors.borderLight,
+            color: context.hBorder,
             width: 1,
           ),
-          boxShadow: HBotShadows.small,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Icon container
             Container(
-              padding: const EdgeInsets.all(HBotSpacing.space2),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: HBotRadius.smallRadius,
+                color: color.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(HBotRadius.small),
               ),
               child: Icon(icon, color: color, size: 24),
             ),
@@ -50,25 +60,20 @@ class ProfileCard extends StatelessWidget {
             // Value
             Text(
               value,
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: HBotColors.textPrimaryLight,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: textPrimary,
+                fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(height: HBotSpacing.space1),
+            const SizedBox(height: 4),
 
             // Title
             Text(
               title,
-              style: const TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: HBotColors.textSecondaryLight,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: textSecondary),
             ),
           ],
         ),

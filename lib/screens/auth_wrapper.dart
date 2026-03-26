@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/auth_service.dart';
+import '../theme/app_theme.dart';
 import 'sign_in_screen.dart';
 import 'home_screen.dart';
 
@@ -13,17 +15,19 @@ class AuthWrapper extends StatefulWidget {
 }
 
 class _AuthWrapperState extends State<AuthWrapper> {
+  final _authService = AuthService();
   bool _timedOut = false;
   Timer? _timeoutTimer;
 
   @override
   void initState() {
     super.initState();
-    // Safety timeout: if auth stream doesn't emit within 5 seconds,
-    // fall through to sign-in screen (prevents blank page on iPad/device)
+    // If auth stream doesn't emit within 5 seconds, fall through to SignInScreen
     _timeoutTimer = Timer(const Duration(seconds: 5), () {
       if (mounted) {
-        setState(() => _timedOut = true);
+        setState(() {
+          _timedOut = true;
+        });
       }
     });
   }
@@ -36,30 +40,27 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = AuthService();
-
     return StreamBuilder<AuthState>(
-      stream: authService.authStateChanges,
+      stream: _authService.authStateChanges,
       builder: (context, snapshot) {
-        // If stream has error, go to sign-in
-        if (snapshot.hasError) {
+        // If timed out and still waiting, fall through to sign in
+        if (_timedOut && snapshot.connectionState == ConnectionState.waiting) {
           return const SignInScreen();
         }
 
-        // Show loading indicator while checking auth state,
-        // but only until timeout to prevent permanent blank screen
-        if (snapshot.connectionState == ConnectionState.waiting && !_timedOut) {
-          return const Scaffold(
-            backgroundColor: Color(0xFFF8F9FB),
+        // Show loading indicator while checking auth state
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            backgroundColor: context.hBackground,
             body: Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0883FD)),
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF9500)),
               ),
             ),
           );
         }
 
-        // Cancel timeout timer once we have data
+        // Cancel timeout timer once we get data
         _timeoutTimer?.cancel();
 
         // Check if we have valid auth data and session

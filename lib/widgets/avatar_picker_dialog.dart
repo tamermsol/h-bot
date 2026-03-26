@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/avatar_service.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
+import '../l10n/app_strings.dart';
 
 class AvatarPickerDialog extends StatelessWidget {
   final String? currentAvatarPath;
@@ -11,7 +11,7 @@ class AvatarPickerDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: HBotColors.cardLight,
+      backgroundColor: context.hCard,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(HBotRadius.large),
       ),
@@ -21,10 +21,10 @@ class AvatarPickerDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Choose Avatar',
               style: TextStyle(
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
@@ -32,9 +32,9 @@ class AvatarPickerDialog extends StatelessWidget {
             const SizedBox(height: 20),
 
             // Default avatars grid
-            const Text(
+            Text(
               'Default Avatars',
-              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 14),
+              style: TextStyle(color: context.hTextSecondary, fontSize: 14),
             ),
             const SizedBox(height: 12),
             GridView.builder(
@@ -73,8 +73,8 @@ class AvatarPickerDialog extends StatelessWidget {
             ),
 
             const SizedBox(height: 20),
-            Divider(color: HBotColors.textSecondaryLight.withOpacity(0.2)),
-            SizedBox(height: 12),
+            Divider(color: context.hTextSecondary.withOpacity(0.2)),
+            const SizedBox(height: 12),
 
             // Custom options
             Row(
@@ -82,14 +82,14 @@ class AvatarPickerDialog extends StatelessWidget {
               children: [
                 _buildOptionButton(
                   context,
-                  icon: HBotIcons.image,
-                  label: 'Gallery',
+                  icon: Icons.photo_library,
+                  label: AppStrings.get('avatar_picker_dialog_gallery'),
                   onTap: () => Navigator.pop(context, 'gallery'),
                 ),
                 _buildOptionButton(
                   context,
-                  icon: HBotIcons.camera,
-                  label: 'Camera',
+                  icon: Icons.camera_alt,
+                  label: AppStrings.get('avatar_picker_dialog_camera'),
                   onTap: () => Navigator.pop(context, 'camera'),
                 ),
               ],
@@ -102,9 +102,9 @@ class AvatarPickerDialog extends StatelessWidget {
               width: double.infinity,
               child: TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text(
+                child: Text(
                   'Cancel',
-                  style: TextStyle(color: HBotColors.textSecondaryLight),
+                  style: TextStyle(color: context.hTextSecondary),
                 ),
               ),
             ),
@@ -126,7 +126,7 @@ class AvatarPickerDialog extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
-          color: HBotColors.surfaceLight,
+          color: context.hSurface,
           borderRadius: BorderRadius.circular(HBotRadius.medium),
         ),
         child: Column(
@@ -135,7 +135,7 @@ class AvatarPickerDialog extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               label,
-              style: const TextStyle(color: HBotColors.textPrimaryLight, fontSize: 12),
+              style: TextStyle(color: context.hTextPrimary, fontSize: 12),
             ),
           ],
         ),

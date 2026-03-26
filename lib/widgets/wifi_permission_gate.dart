@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/wifi_permission_service.dart';
 import '../services/platform_helper.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
+import '../l10n/app_strings.dart';
 
 /// Widget that gates Wi-Fi functionality behind proper permissions
 class WiFiPermissionGate extends StatefulWidget {
@@ -93,8 +93,8 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to request permissions: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text('${AppStrings.get("error_request_permissions")}: $e'),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -109,7 +109,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
           content: Text(
             'Could not open location settings. Please enable manually.',
           ),
-          backgroundColor: HBotColors.warning,
+          backgroundColor: Colors.orange,
         ),
       );
     }
@@ -127,7 +127,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
           content: Text(
             'Could not open app settings. Please enable permissions manually.',
           ),
-          backgroundColor: HBotColors.warning,
+          backgroundColor: Colors.orange,
         ),
       );
     }
@@ -146,13 +146,13 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
           backgroundColor: HBotColors.primary,
           foregroundColor: Colors.white,
         ),
-        body: const Center(
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircularProgressIndicator(),
               SizedBox(height: HBotSpacing.space4),
-              Text('Checking permissions...'),
+              Text(AppStrings.get('wifi_permission_gate_checking_permissions')),
             ],
           ),
         ),
@@ -177,37 +177,37 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
           children: [
             Icon(
               _permissionStatus == WiFiPermissionStatus.locationServicesDisabled
-                  ? HBotIcons.close
-                  : HBotIcons.wifiOff,
+                  ? Icons.location_off
+                  : Icons.wifi_off,
               size: 80,
-              color: HBotColors.warning,
+              color: Colors.orange,
             ),
             const SizedBox(height: HBotSpacing.space6),
             Text(
               _permissionStatus.message,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: HBotSpacing.space4),
             Text(
               _explanation,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: HBotSpacing.space6),
+            const SizedBox(height: HBotSpacing.space6),
             if (_permissionStatus ==
                 WiFiPermissionStatus.locationServicesDisabled) ...[
               ElevatedButton.icon(
                 onPressed: _openLocationSettings,
-                icon: Icon(HBotIcons.room),
-                label: const Text('Turn On Location Services'),
+                icon: const Icon(Icons.location_on),
+                label: Text(AppStrings.get('wifi_permission_gate_turn_on_location_services')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
                   foregroundColor: Colors.white,
@@ -221,8 +221,8 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
                 WiFiPermissionStatus.permanentlyDenied) ...[
               ElevatedButton.icon(
                 onPressed: _openAppSettings,
-                icon: Icon(HBotIcons.settings),
-                label: const Text('Open App Settings'),
+                icon: const Icon(Icons.settings),
+                label: Text(AppStrings.get('wifi_permission_gate_open_app_settings')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
                   foregroundColor: Colors.white,
@@ -235,8 +235,8 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
             ] else ...[
               ElevatedButton.icon(
                 onPressed: _requestPermissions,
-                icon: Icon(HBotIcons.check),
-                label: const Text('Grant Permissions'),
+                icon: const Icon(Icons.check),
+                label: Text(AppStrings.get('wifi_permission_gate_grant_permissions')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
                   foregroundColor: Colors.white,
@@ -247,11 +247,11 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
                 ),
               ),
             ],
-            SizedBox(height: HBotSpacing.space4),
+            const SizedBox(height: HBotSpacing.space4),
             TextButton.icon(
               onPressed: _checkPermissions,
-              icon: Icon(HBotIcons.refresh),
-              label: const Text('Check Again'),
+              icon: const Icon(Icons.refresh),
+              label: Text(AppStrings.get('wifi_permission_gate_check_again')),
               style: TextButton.styleFrom(
                 foregroundColor: HBotColors.primary,
               ),
@@ -264,9 +264,9 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
               const SizedBox(height: HBotSpacing.space4),
               Text(
                 'On iPhone, you can continue without auto-detecting WiFi. You\'ll enter your WiFi name manually.',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: HBotColors.textSecondaryLight,
+                  color: context.hTextSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -283,7 +283,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
                 style: TextButton.styleFrom(
                   foregroundColor: HBotColors.primary,
                 ),
-                child: const Text('Continue Without Auto-Detect'),
+                child: Text(AppStrings.get('wifi_permission_gate_continue_without_autodetect')),
               ),
             ],
           ],

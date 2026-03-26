@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
 
 class SceneIconSelector extends StatelessWidget {
   final IconData selectedIcon;
@@ -12,43 +11,42 @@ class SceneIconSelector extends StatelessWidget {
     required this.onIconSelected,
   });
 
-  static final List<IconData> _availableIcons = [
-    HBotIcons.scenes,
-    HBotIcons.sun,
-    HBotIcons.moon,
-    HBotIcons.play,
-    HBotIcons.home,
-    HBotIcons.shield,
-    HBotIcons.celebration,
-    HBotIcons.device,
-    HBotIcons.briefcase,
-    HBotIcons.barbell,
-    HBotIcons.coffee,
-    HBotIcons.music,
-    HBotIcons.pawPrint,
-    HBotIcons.flower,
-    HBotIcons.umbrella,
-    HBotIcons.leaf,
-    HBotIcons.fire,
-    HBotIcons.thermometer,
-    HBotIcons.lightbulb,
-    HBotIcons.shield,
-    HBotIcons.broom,
-    HBotIcons.couch,
-    HBotIcons.graduationCap,
-    HBotIcons.shoppingCart,
+  static const List<IconData> _availableIcons = [
+    Icons.auto_awesome,
+    Icons.wb_sunny,
+    Icons.bedtime,
+    Icons.movie,
+    Icons.home,
+    Icons.shield,
+    Icons.celebration,
+    Icons.restaurant,
+    Icons.work,
+    Icons.fitness_center,
+    Icons.local_cafe,
+    Icons.music_note,
+    Icons.pets,
+    Icons.spa,
+    Icons.beach_access,
+    Icons.nature,
+    Icons.local_fire_department,
+    Icons.ac_unit,
+    Icons.lightbulb,
+    Icons.security,
+    Icons.cleaning_services,
+    Icons.weekend,
+    Icons.school,
+    Icons.shopping_cart,
   ];
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: HBotColors.cardLight,
+        color: context.hCard,
         borderRadius: BorderRadius.circular(HBotRadius.medium),
-        border: isDark ? null : Border.all(color: HBotColors.borderLight),
+        border: Border.all(color: context.hBorder),
       ),
       child: GridView.builder(
         shrinkWrap: true,
@@ -70,14 +68,12 @@ class SceneIconSelector extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? HBotColors.primary.withOpacity(0.2)
-                    : (isDark ? HBotColors.surfaceLight : Colors.white),
+                    : (Colors.white),
                 borderRadius: BorderRadius.circular(HBotRadius.small),
                 border: Border.all(
                   color: isSelected
                       ? HBotColors.primary
-                      : (isDark
-                            ? Colors.transparent
-                            : HBotColors.borderLight),
+                      : (context.hBorder),
                   width: isSelected ? 2 : 1,
                 ),
               ),
@@ -85,7 +81,7 @@ class SceneIconSelector extends StatelessWidget {
                 icon,
                 color: isSelected
                     ? HBotColors.primary
-                    : HBotColors.textSecondaryLight,
+                    : context.hTextSecondary,
                 size: 24,
               ),
             ),

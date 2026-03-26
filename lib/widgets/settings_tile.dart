@@ -1,162 +1,176 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
 
-/// Settings Tile per design spec (03-COMPONENT-LIBRARY.md Section 2.3)
-/// 56px height, 16px horizontal padding
-/// Icon: 24px, iconDefault=#5A6577
-/// Label: bodyLarge 16/400, textPrimary=#0A1628
-/// Value: bodyMedium 14/400, textSecondary=#5A6577
-/// Chevron: 16px, neutral400
-/// Pressed bg = neutral100
+/// Settings item — 56px row inside a SettingsGroup
+/// Design: 03-COMPONENT-LIBRARY.md §2.3
 class SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
-  final String subtitle;
+  final String? subtitle;
+  final String? value;
   final VoidCallback? onTap;
   final bool showDivider;
+  final bool showChevron;
   final Color? titleColor;
+  final Color? iconColor;
   final Widget? trailing;
 
   const SettingsTile({
     super.key,
     required this.icon,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
+    this.value,
     this.onTap,
     this.showDivider = true,
+    this.showChevron = true,
     this.titleColor,
+    this.iconColor,
     this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            splashColor: HBotColors.neutral100,
-            highlightColor: HBotColors.neutral100,
-            child: Container(
-              height: 56,
-              padding: const EdgeInsets.symmetric(
-                horizontal: HBotSpacing.space4,
-              ),
-              child: Row(
-                children: [
-                  // Icon (24px, $iconDefault)
-                  Icon(
-                    icon,
-                    color: titleColor ?? HBotColors.iconDefault,
-                    size: 24,
-                  ),
-                  const SizedBox(width: HBotSpacing.space3),
-                  // Label ($bodyLarge 16/400, $textPrimary)
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: titleColor ?? HBotColors.textPrimaryLight,
-                      ),
-                    ),
-                  ),
-                  // Value text ($bodyMedium 14/400, $textSecondary)
-                  if (subtitle.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(right: HBotSpacing.space2),
-                      child: Text(
-                        subtitle,
-                        style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 14,
+        InkWell(
+          onTap: onTap,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 56),
+            padding: const EdgeInsets.symmetric(
+              horizontal: HBotSpacing.space4,
+              vertical: HBotSpacing.space3,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  size: 24,
+                  color: iconColor ?? titleColor ?? HBotColors.iconDefault,
+                ),
+                const SizedBox(width: HBotSpacing.space3),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
-                          color: HBotColors.textSecondaryLight,
+                          color: titleColor ?? context.hTextPrimary,
                         ),
                       ),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          subtitle!,
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: context.hTextTertiary,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                if (value != null) ...[
+                  const SizedBox(width: HBotSpacing.space2),
+                  Text(
+                    value!,
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: context.hTextSecondary,
                     ),
-                  // Trailing widget or chevron (16px, neutral400)
-                  trailing ??
-                      Icon(
-                        HBotIcons.chevronRight,
-                        color: HBotColors.neutral400,
-                        size: 16,
-                      ),
+                  ),
                 ],
-              ),
+                if (trailing != null) ...[
+                  const SizedBox(width: HBotSpacing.space2),
+                  trailing!,
+                ] else if (showChevron) ...[
+                  const SizedBox(width: HBotSpacing.space2),
+                  const Icon(
+                    Icons.chevron_right,
+                    color: HBotColors.neutral400,
+                    size: 16,
+                  ),
+                ],
+              ],
             ),
           ),
         ),
-        // Inner divider: 1px #F0F2F5, inset 56px from leading
         if (showDivider)
           Padding(
-            padding: const EdgeInsets.only(left: 56),
-            child: Container(
-              height: 1,
-              color: HBotColors.neutral100,
-            ),
+            padding: const EdgeInsetsDirectional.only(start: 56),
+            child: Container(height: 1, color: HBotColors.borderSubtle),
           ),
       ],
     );
   }
 }
 
-/// Group wrapper for settings tiles per design spec
-/// White bg, 1px border #E8ECF1, 16px radius
-/// Inner dividers between tiles (1px #F0F2F5, inset from leading)
-/// 24px margin bottom between groups
-class SettingsTileGroup extends StatelessWidget {
+/// Grouped card wrapper for settings items
+/// Design: 03-COMPONENT-LIBRARY.md §2.3 Group wrapper
+class SettingsGroup extends StatelessWidget {
+  final String? label;
   final List<Widget> children;
-  final String? title;
+  final EdgeInsetsGeometry? margin;
 
-  const SettingsTileGroup({
+  const SettingsGroup({
     super.key,
+    this.label,
     required this.children,
-    this.title,
+    this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        if (title != null) ...[
+        if (label != null) ...[
           Padding(
-            padding: const EdgeInsets.only(
-              left: HBotSpacing.space1,
+            padding: const EdgeInsetsDirectional.only(
+              start: HBotSpacing.space5,
               bottom: HBotSpacing.space2,
+              top: HBotSpacing.space6,
             ),
             child: Text(
-              title!.toUpperCase(),
-              style: const TextStyle(
-                fontFamily: 'Inter',
+              label!.toUpperCase(),
+              style: TextStyle(
+                fontFamily: 'DM Sans',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.0,
-                color: HBotColors.textTertiaryLight,
+                color: context.hTextSecondary,
               ),
             ),
           ),
         ],
         Container(
+          margin: margin ??
+              const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
           decoration: BoxDecoration(
-            color: HBotColors.cardLight,
+            color: context.hCard,
             borderRadius: HBotRadius.largeRadius,
-            border: Border.all(
-              color: HBotColors.borderLight,
-              width: 1,
+            border: Border.all(color: context.hBorder, width: 1),
+          ),
+          child: ClipRRect(
+            borderRadius: HBotRadius.largeRadius,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: children,
             ),
           ),
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            children: children,
-          ),
         ),
-        const SizedBox(height: HBotSpacing.space6),
       ],
     );
   }

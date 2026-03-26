@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
 import 'auth_wrapper.dart';
+import '../l10n/app_strings.dart';
 
+/// Splash screen — dark gradient background with animated logo + text
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -13,26 +14,26 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-  late AnimationController _pulseController;
-  late Animation<double> _pulseAnimation;
+  late final AnimationController _mainController;
+  late final Animation<double> _fadeAnimation;
+  late final Animation<double> _scaleAnimation;
+  late final AnimationController _pulseController;
+  late final Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
+    _mainController = AnimationController(
       duration: const Duration(milliseconds: 900),
       vsync: this,
     );
     _fadeAnimation = CurvedAnimation(
-      parent: _controller,
+      parent: _mainController,
       curve: Curves.easeOut,
     );
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+      CurvedAnimation(parent: _mainController, curve: Curves.easeOutBack),
     );
 
     _pulseController = AnimationController(
@@ -44,16 +45,14 @@ class _SplashScreenState extends State<SplashScreen>
     );
     _pulseController.repeat(reverse: true);
 
-    _controller.forward();
+    _mainController.forward();
 
     Future.delayed(const Duration(milliseconds: 2500), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const AuthWrapper(),
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
+            pageBuilder: (_, __, ___) => const AuthWrapper(),
+            transitionsBuilder: (_, animation, __, child) {
               return FadeTransition(opacity: animation, child: child);
             },
             transitionDuration: HBotDurations.slow,
@@ -65,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _mainController.dispose();
     _pulseController.dispose();
     super.dispose();
   }
@@ -97,8 +96,9 @@ class _SplashScreenState extends State<SplashScreen>
             child: ScaleTransition(
               scale: _scaleAnimation,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Spacer(flex: 3),
+                  const Spacer(),
 
                   // Logo with white glow effect
                   Container(
@@ -122,11 +122,11 @@ class _SplashScreenState extends State<SplashScreen>
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(28),
                       child: Image.asset(
-                        'assets/images/branding/hbot_app_icon.png',
+                        'assets/images/hbot_logo.png',
                         width: 120,
                         height: 120,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Container(
+                        errorBuilder: (_, __, ___) => Container(
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
@@ -137,8 +137,11 @@ class _SplashScreenState extends State<SplashScreen>
                               width: 1,
                             ),
                           ),
-                          child: Icon(HBotIcons.smartToy,
-                              color: Colors.white, size: 56),
+                          child: const Icon(
+                            Icons.home_rounded,
+                            color: Colors.white,
+                            size: 56,
+                          ),
                         ),
                       ),
                     ),
@@ -150,7 +153,7 @@ class _SplashScreenState extends State<SplashScreen>
                   const Text(
                     'H-Bot',
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'DM Sans',
                       fontSize: 36,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
@@ -164,7 +167,7 @@ class _SplashScreenState extends State<SplashScreen>
                   Text(
                     'Smart Home, Simplified',
                     style: TextStyle(
-                      fontFamily: 'Inter',
+                      fontFamily: 'DM Sans',
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
                       color: Colors.white.withOpacity(0.7),
@@ -172,26 +175,31 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                   ),
 
-                  const Spacer(flex: 3),
+                  const Spacer(),
 
-                  // Pulsing loading indicator
-                  FadeTransition(
-                    opacity: _pulseAnimation,
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.white.withOpacity(0.4),
-                            blurRadius: 8,
-                            spreadRadius: 2,
+                  // Pulsing dot loader
+                  AnimatedBuilder(
+                    animation: _pulseAnimation,
+                    builder: (context, child) {
+                      return Opacity(
+                        opacity: _pulseAnimation.value,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.8),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.white.withOpacity(0.4),
+                                blurRadius: 8,
+                                spreadRadius: 2,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 48),

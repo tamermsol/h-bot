@@ -632,7 +632,7 @@ class EnhancedWiFiService {
       if (response.statusCode == 200) {
         return WiFiProvisioningResponse(
           success: true,
-          message: 'Wi-Fi credentials sent successfully (Tasmota method)',
+          message: 'Wi-Fi credentials sent successfully',
           deviceIp: '192.168.4.1',
         );
       } else {

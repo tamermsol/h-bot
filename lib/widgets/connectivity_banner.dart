@@ -1,62 +1,33 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
+import '../l10n/app_strings.dart';
 
-/// Connectivity Banner per design spec
-/// Slim banner: 40px height
-/// Online: #22C55E bg, white text "Connected"
-/// Offline: #EF4444 bg, white text "No Connection"
-/// Slide down animation when appearing, slide up when disappearing
-/// 12px/500 text, centered with 16px icon
+/// Persistent offline banner — sits at top of screen when offline
+/// Design: 04-SCREEN-DESIGNS.md §10.2
 class ConnectivityBanner extends StatelessWidget {
   final bool isOnline;
-  final String? message;
 
-  const ConnectivityBanner({
-    required this.isOnline,
-    this.message,
-    super.key,
-  });
+  const ConnectivityBanner({super.key, required this.isOnline});
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSlide(
-      offset: Offset(0, isOnline ? -1 : 0),
+    return AnimatedContainer(
       duration: HBotDurations.medium,
-      curve: HBotCurves.standard,
-      child: AnimatedOpacity(
-        opacity: isOnline ? 0.0 : 1.0,
-        duration: HBotDurations.medium,
-        child: Container(
-          width: double.infinity,
-          height: 40,
-          color: isOnline ? HBotColors.success : HBotColors.error,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                isOnline ? HBotIcons.wifi : HBotIcons.wifiOff,
-                size: 16,
-                color: Colors.white,
-              ),
-              const SizedBox(width: HBotSpacing.space2),
-              Flexible(
-                child: Text(
-                  message ??
-                      (isOnline ? 'Connected' : 'No Connection'),
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
+      height: isOnline ? 0 : 36,
+      color: HBotColors.warning,
+      child: isOnline
+          ? const SizedBox.shrink()
+          : Center(
+              child: Text(
+                AppStrings.get('no_internet_connection'),
+                style: const TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

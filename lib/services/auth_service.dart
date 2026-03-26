@@ -44,9 +44,19 @@ class AuthService {
     await _authRepo.signOut();
   }
 
-  // Reset password
+  // Check if email exists in the system
+  Future<bool> checkEmailExists(String email) async {
+    return await _authRepo.checkEmailExists(email);
+  }
+
+  // Sign in with Apple
+  Future<bool> signInWithApple() async {
+    return await _authRepo.signInWithApple();
+  }
+
+  // Reset password (sends OTP via our custom email system)
   Future<void> resetPassword(String email) async {
-    await _authRepo.resetPassword(email);
+    await _authRepo.sendPasswordResetOtp(email);
   }
 
   // Get current user profile

@@ -169,18 +169,30 @@ class DeviceWithChannels {
   }
 
   /// Get the label for a specific channel
+  /// Checks meta_json.channel_labels first (client-writable), then view's channel_labels
   String getChannelLabel(int channelNo) {
-    if (channelLabels == null) {
-      return 'Channel $channelNo';
+    // Check meta_json.channel_labels first (stored via device update)
+    final metaLabels = metaJson?['channel_labels'] as Map<String, dynamic>?;
+    if (metaLabels != null) {
+      final metaData = metaLabels[channelNo.toString()];
+      if (metaData is Map<String, dynamic>) {
+        final label = metaData['label'] as String?;
+        final isCustom = metaData['is_custom'] as bool? ?? false;
+        if (isCustom && label != null && label.isNotEmpty) {
+          return label;
+        }
+      }
     }
 
-    final channelData = channelLabels![channelNo.toString()];
-    if (channelData is Map<String, dynamic>) {
-      final label = channelData['label'] as String?;
-      final isCustom = channelData['is_custom'] as bool? ?? false;
-
-      if (isCustom && label != null && label.isNotEmpty) {
-        return label;
+    // Fallback to view's channel_labels (from device_channels table)
+    if (channelLabels != null) {
+      final channelData = channelLabels![channelNo.toString()];
+      if (channelData is Map<String, dynamic>) {
+        final label = channelData['label'] as String?;
+        final isCustom = channelData['is_custom'] as bool? ?? false;
+        if (isCustom && label != null && label.isNotEmpty) {
+          return label;
+        }
       }
     }
 

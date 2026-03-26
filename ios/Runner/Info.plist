@@ -2,10 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>H-Bot requires background location access to trigger smart home automations even when the app is not open.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>H-Bot uses your location to enable location-based automations and smart home triggers.</string>
+	<string>H-Bot uses your location to read your Wi-Fi network name during device setup.</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
 	<dict>
 		<key>WifiSSIDRead</key>
@@ -87,7 +85,29 @@
 	<string>H-Bot needs photo library access to set custom background images.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>H-Bot needs microphone access for device communication.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>H-Bot needs local network access to discover and communicate with smart home devices.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_http._tcp</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.mb.hbot</string>
+			</array>
+		</dict>
+	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>alexa</string>
+		<string>amzn</string>
+	</array>
 </dict>
 </plist>

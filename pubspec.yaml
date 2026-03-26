@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.1+51
+version: 1.0.2+151
 
 environment:
   sdk: ">=3.5.0 <4.0.0"
@@ -29,6 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
   share_plus: ^7.2.2
 
@@ -53,10 +55,12 @@ dependencies:
   # Permission handling
   permission_handler: ^11.3.1
   url_launcher: ^6.3.1
+  crypto: ^3.0.7
+  sign_in_with_apple: ^6.1.4
 
   # Device info and location services
   device_info_plus: ^10.1.2
-  geolocator: ^13.0.1
+  geolocator: ^13.0.2
   shared_preferences: ^2.5.3
 
   # Image picker for background images
@@ -65,18 +69,21 @@ dependencies:
   # Path provider for local storage
   path_provider: ^2.1.4
 
-  # Phosphor icons (line-style per design spec)
-  phosphor_flutter: ^2.1.0
-
   # State management
   provider: ^6.1.2
 
   # QR Code generation and scanning for device sharing
   qr_flutter: ^4.1.0
-  mobile_scanner: ^5.2.3
+  mobile_scanner: ^6.0.11
   
   # Biometric authentication for device sharing
   local_auth: ^2.2.0
+  flutter_local_notifications: ^19.5.0
+  sqflite: ^2.4.1
+  home_widget: ^0.9.0
+  path: ^1.9.0
+  firebase_core: ^4.5.0
+  firebase_messaging: ^16.1.2
 
 dev_dependencies:
   flutter_test:
@@ -110,7 +117,7 @@ flutter:
     - assets/images/
     - assets/images/backgrounds/
     - assets/images/avatars/
-    - assets/images/branding/
+    - assets/branding/
     - assets/ca.crt
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -124,17 +131,17 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
+  fonts:
+    - family: DM Sans
+      fonts:
+        - asset: assets/fonts/DMSans-Variable.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700

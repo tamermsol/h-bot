@@ -1,10 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 import 'env.dart';
 import 'screens/splash_screen.dart';
 import 'theme/app_theme.dart';
@@ -16,35 +22,202 @@ import 'services/location_trigger_monitor.dart';
 import 'services/device_state_cache.dart';
 import 'services/scene_command_executor.dart';
 import 'services/theme_service.dart';
-import '../utils/phosphor_icons.dart';
+import 'services/locale_service.dart';
+import 'services/notification_service.dart';
+import 'l10n/app_strings.dart';
+
+/// Background callback for home widget toggle actions.
+/// This runs in a separate isolate when user taps toggle on widget.
+@pragma('vm:entry-point')
+Future<void> homeWidgetBackgroundCallback(Uri? uri) async {
+  if (uri == null) return;
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (uri.host == 'toggle' || uri.host == 'shutter') {
+    final deviceId = uri.queryParameters['deviceId'];
+    final topic = uri.queryParameters['topic'];
+    final action = uri.host; // 'toggle' or 'shutter'
+
+    if (deviceId == null || topic == null) return;
+
+    debugPrint('🏠 Widget action: $action on $deviceId');
+
+    // 1. Update widget visually FIRST (instant feedback)
+    if (action == 'toggle') {
+      final newState = uri.queryParameters['state'] ?? 'OFF';
+      for (int i = 0; i < 4; i++) {
+        final storedId = await HomeWidget.getWidgetData<String>('device_${i}_id');
+        if (storedId == deviceId) {
+          await HomeWidget.saveWidgetData('device_${i}_state', newState);
+          break;
+        }
+      }
+    }
+    await HomeWidget.updateWidget(androidName: 'HBotDeviceWidget');
+
+    // 2. Send MQTT command directly from background
+    try {
+      final client = MqttServerClient(
+        'y3ae1177.ala.eu-central-1.emqxsl.com',
+        'hbot-widget-${DateTime.now().millisecondsSinceEpoch}',
+      );
+      client.port = 8883;
+      client.secure = true;
+      client.keepAlivePeriod = 10;
+      client.connectTimeoutPeriod = 5000;
+      client.securityContext = SecurityContext()
+        ..setTrustedCertificatesBytes(utf8.encode(_emqxCaCert));
+
+      final connMsg = MqttConnectMessage()
+          .withClientIdentifier(client.clientIdentifier)
+          .authenticateAs('admin', 'P@ssword1')
+          .startClean();
+      client.connectionMessage = connMsg;
+
+      await client.connect();
+
+      if (client.connectionStatus?.state == MqttConnectionState.connected) {
+        String cmdTopic;
+        String payload;
+
+        if (action == 'shutter') {
+          final direction = uri.queryParameters['direction'] ?? 'stop';
+          cmdTopic = 'cmnd/$topic/ShutterPosition1';
+          payload = direction == 'up' ? '0' : direction == 'down' ? '100' : 'STOP';
+        } else {
+          final newState = uri.queryParameters['state'] ?? 'OFF';
+          cmdTopic = 'cmnd/$topic/POWER0';
+          payload = newState;
+        }
+
+        final builder = MqttClientPayloadBuilder();
+        builder.addString(payload);
+        client.publishMessage(cmdTopic, MqttQos.atLeastOnce, builder.payload!);
+        debugPrint('🏠 Widget MQTT sent: $cmdTopic = $payload');
+
+        // Brief delay to ensure message is sent
+        await Future.delayed(const Duration(milliseconds: 300));
+        client.disconnect();
+      }
+    } catch (e) {
+      debugPrint('⚠️ Widget MQTT error: $e');
+      // Store as pending for when app opens
+      await HomeWidget.saveWidgetData('pending_toggle_device', deviceId);
+      await HomeWidget.saveWidgetData('pending_toggle_state',
+          uri.queryParameters['state'] ?? uri.queryParameters['direction'] ?? '');
+    }
+  }
+}
+
+// EMQX Cloud CA certificate for TLS connections from widget background
+const String _emqxCaCert = '''
+-----BEGIN CERTIFICATE-----
+MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh
+MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3
+d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD
+QTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVT
+MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j
+b20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG
+9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsB
+CSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97
+nh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt
+43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7P
+T19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4
+gdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAO
+BgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbR
+TLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUw
+DQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/Esr
+hMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg
+06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJF
+PnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0ls
+YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk
+CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
+-----END CERTIFICATE-----''';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Set up global error handling to prevent blank screens
+  // Global error handler to prevent unhandled Flutter errors from crashing the app
   FlutterError.onError = (FlutterErrorDetails details) {
-    debugPrint('Flutter error: ${details.exceptionAsString()}');
-    FlutterError.presentError(details);
+    debugPrint('FlutterError: ${details.exceptionAsString()}');
+    debugPrint('Stack: ${details.stack}');
   };
 
+  // Custom error widget — show a retry screen instead of grey/blank screen
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: const Color(0xFFF8F9FB),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.error_outline, size: 48, color: Color(0xFFFF3B30)),
+                const SizedBox(height: 16),
+                const Text(
+                  'Something went wrong',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  details.exceptionAsString(),
+                  style: const TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  };
+
+  // Initialize Firebase
   try {
-    // Initialize Supabase
-    await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnon);
+    await Firebase.initializeApp();
   } catch (e) {
-    debugPrint('Supabase initialization error: $e');
-    // App will still launch — auth wrapper will show sign-in screen
+    debugPrint('Firebase init failed: $e');
   }
 
+  // Initialize Supabase
   try {
-    // Initialize device state cache for instant UI feedback
+    await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnon);
+  } catch (e) {
+    debugPrint('Supabase init failed: $e');
+  }
+
+  // Initialize device state cache for instant UI feedback
+  try {
     await DeviceStateCache().initialize();
   } catch (e) {
-    debugPrint('DeviceStateCache initialization error: $e');
+    debugPrint('DeviceStateCache init failed: $e');
+  }
+
+  // Initialize local notifications
+  try {
+    await NotificationService().initialize();
+  } catch (e) {
+    debugPrint('NotificationService init failed: $e');
+  }
+
+  // Register home widget background callback for toggle actions
+  try {
+    HomeWidget.registerInteractivityCallback(homeWidgetBackgroundCallback);
+  } catch (e) {
+    debugPrint('HomeWidget callback registration failed: $e');
   }
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeService(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeService()),
+        ChangeNotifierProvider(create: (_) => LocaleService()),
+      ],
       child: const SmartHomeApp(),
     ),
   );
@@ -97,24 +270,10 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
     final isAuthenticated = session != null;
 
     if (isAuthenticated && !_servicesStarted) {
+      _sceneTriggerScheduler.start();
+      _locationTriggerMonitor.start();
+      _sceneCommandExecutor.start();
       _servicesStarted = true;
-      // Start services with error handling — a service failure
-      // should never crash the app or cause a blank screen
-      try {
-        _sceneTriggerScheduler.start();
-      } catch (e) {
-        debugPrint('SceneTriggerScheduler start error: $e');
-      }
-      try {
-        _locationTriggerMonitor.start();
-      } catch (e) {
-        debugPrint('LocationTriggerMonitor start error: $e');
-      }
-      try {
-        _sceneCommandExecutor.start();
-      } catch (e) {
-        debugPrint('SceneCommandExecutor start error: $e');
-      }
     } else if (!isAuthenticated && _servicesStarted) {
       _sceneTriggerScheduler.stop();
       _locationTriggerMonitor.stop();
@@ -135,117 +294,42 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
 
   @override
   Widget build(BuildContext context) {
-    final themeService = Provider.of<ThemeService>(context);
+    return Consumer2<ThemeService, LocaleService>(
+      builder: (context, themeService, localeService, _) {
+        final isDark = themeService.isDarkMode;
 
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: themeService.isDarkMode
-            ? Brightness.light
-            : Brightness.dark,
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: themeService.isDarkMode
-            ? Brightness.light
-            : Brightness.dark,
-      ),
-    );
+        // Keep AppStrings in sync with locale service
+        AppStrings.setLocale(localeService.locale);
 
-    // Enable edge-to-edge mode
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+            systemNavigationBarColor: Colors.transparent,
+            systemNavigationBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+          ),
+        );
 
-    return MaterialApp(
-      title: 'HBOT',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: themeService.themeMode,
-      home: const SplashScreen(),
-    );
-  }
-}
+        // Enable edge-to-edge mode
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+        return MaterialApp(
+          title: 'HBOT',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme(),
+          darkTheme: AppTheme.darkTheme(),
+          themeMode: themeService.themeMode,
+          locale: localeService.isArabic ? const Locale('ar') : const Locale('en'),
+          supportedLocales: const [Locale('en'), Locale('ar')],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(HBotIcons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }
+

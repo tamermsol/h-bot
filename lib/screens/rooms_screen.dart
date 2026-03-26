@@ -10,7 +10,8 @@ import '../widgets/background_image_picker.dart';
 import '../widgets/background_container.dart';
 import '../widgets/room_icon_picker.dart';
 import 'devices_screen.dart';
-import '../utils/phosphor_icons.dart';
+import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class RoomsScreen extends StatefulWidget {
   final Home home;
@@ -28,8 +29,6 @@ class _RoomsScreenState extends State<RoomsScreen> {
   final TextEditingController _nameController = TextEditingController();
   List<Room> _rooms = [];
   bool _isLoading = true;
-  // Device counts per room
-  final Map<String, int> _deviceCounts = {};
 
   @override
   void initState() {
@@ -51,32 +50,15 @@ class _RoomsScreenState extends State<RoomsScreen> {
         _rooms = rooms;
         _isLoading = false;
       });
-      // Load device counts in background
-      _loadDeviceCounts();
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load rooms: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('rooms_failed_to_load_rooms_e')),
+            backgroundColor: Colors.red,
           ),
         );
-      }
-    }
-  }
-
-  Future<void> _loadDeviceCounts() async {
-    for (final room in _rooms) {
-      try {
-        final devices = await _service.getDevicesByRoom(room.id);
-        if (mounted) {
-          setState(() {
-            _deviceCounts[room.id] = devices.length;
-          });
-        }
-      } catch (_) {
-        // Silently ignore count errors
       }
     }
   }
@@ -84,9 +66,9 @@ class _RoomsScreenState extends State<RoomsScreen> {
   Future<void> _createRoom() async {
     if (_nameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a room name'),
-          backgroundColor: HBotColors.error,
+        SnackBar(
+          content: Text(AppStrings.get('rooms_please_enter_a_room_name')),
+          backgroundColor: Colors.red,
         ),
       );
       return;
@@ -106,7 +88,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Room "${room.name}" created successfully!'),
+            content: Text('${AppStrings.get("success_room_created")}: ${room.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );
@@ -121,138 +103,51 @@ class _RoomsScreenState extends State<RoomsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to create room: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('rooms_failed_to_create_room_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
     }
   }
 
-  void _showCreateRoomBottomSheet() {
-    _nameController.clear();
-    String? selectedIconName;
-
-    showModalBottomSheet(
+  void _showCreateRoomDialog() {
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-              ),
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 12,
-                bottom: 20 + MediaQuery.of(context).viewInsets.bottom,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Drag handle
-                  Center(
-                    child: Container(
-                      width: 36,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFD1D7E0),
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'New Room',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF0A1628),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Room name input
-                  TextField(
-                    controller: _nameController,
-                    autofocus: true,
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 16,
-                      color: Color(0xFF0A1628),
-                    ),
-                    decoration: InputDecoration(
-                      hintText: 'Room name',
-                      hintStyle: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 14,
-                        color: Color(0xFF7A8494),
-                      ),
-                      filled: true,
-                      fillColor: const Color(0xFFF8F9FB),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF0883FD), width: 1.5),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  // Save button
-                  InkWell(
-                    onTap: _createRoom,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Ink(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        height: 52,
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'Save',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
+      builder: (context) => AlertDialog(
+        backgroundColor: context.hCard,
+        title: Text(AppStrings.get('rooms_create_new_room')),
+        content: TextField(
+          controller: _nameController,
+          decoration: InputDecoration(
+            labelText: AppStrings.get('rooms_room_name'),
+            hintText: AppStrings.get('rooms_eg_living_room_kitchen_etc'),
+          ),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(AppStrings.get('rooms_cancel')),
+          ),
+          ElevatedButton(
+            onPressed: _createRoom,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: HBotColors.primary,
+            ),
+            child: Text(AppStrings.get('rooms_create')),
+          ),
+        ],
+      ),
     );
   }
 
   Future<void> _editRoom(Room room) async {
     if (_nameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a room name'),
-          backgroundColor: HBotColors.error,
+        SnackBar(
+          content: Text(AppStrings.get('rooms_please_enter_a_room_name_2')),
+          backgroundColor: Colors.red,
         ),
       );
       return;
@@ -276,7 +171,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Room "${updatedRoom.name}" updated successfully!'),
+            content: Text('${AppStrings.get("success_room_updated")}: ${updatedRoom.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );
@@ -291,8 +186,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to update room: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('rooms_failed_to_update_room_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -312,7 +207,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Room "${room.name}" deleted successfully!'),
+            content: Text('${AppStrings.get("success_room_deleted")}: ${room.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );
@@ -328,120 +223,43 @@ class _RoomsScreenState extends State<RoomsScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to delete room: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('rooms_failed_to_delete_room_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
     }
   }
 
-  void _showEditRoomBottomSheet(Room room) {
+  void _showEditRoomDialog(Room room) {
     _nameController.text = room.name;
-
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (context) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        return AlertDialog(
+          backgroundColor: context.hCard,
+          title: Text(AppStrings.get('rooms_edit_room')),
+          content: TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: AppStrings.get('rooms_room_name_2'),
+              hintText: AppStrings.get('rooms_eg_living_room_kitchen_etc_2'),
+            ),
+            autofocus: true,
           ),
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 12,
-            bottom: 20 + MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Drag handle
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD1D7E0),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppStrings.get('rooms_cancel_2')),
+            ),
+            ElevatedButton(
+              onPressed: () => _editRoom(room),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HBotColors.primary,
               ),
-              const SizedBox(height: 16),
-              const Text(
-                'Edit Room',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF0A1628),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _nameController,
-                autofocus: true,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  color: Color(0xFF0A1628),
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Room name',
-                  hintStyle: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 14,
-                    color: Color(0xFF7A8494),
-                  ),
-                  filled: true,
-                  fillColor: const Color(0xFFF8F9FB),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF0883FD), width: 1.5),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              InkWell(
-                onTap: () => _editRoom(room),
-                borderRadius: BorderRadius.circular(12),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    height: 52,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+              child: Text(AppStrings.get('rooms_save')),
+            ),
+          ],
         );
       },
     );
@@ -452,124 +270,22 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text(
-            'Delete Room?',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF0A1628),
-            ),
-          ),
+          backgroundColor: context.hCard,
+          title: Text(AppStrings.get('rooms_delete_room')),
           content: Text(
             'Are you sure you want to delete "${room.name}"? This action cannot be undone and will remove all devices in this room.',
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 14,
-              color: Color(0xFF5A6577),
-            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(fontFamily: 'Inter', color: Color(0xFF5A6577)),
-              ),
+              child: Text(AppStrings.get('rooms_cancel_3')),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                _deleteRoom(room);
-              },
-              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
-              child: const Text(
-                'Delete',
-                style: TextStyle(fontFamily: 'Inter'),
-              ),
+            ElevatedButton(
+              onPressed: () => _deleteRoom(room),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: Text(AppStrings.get('rooms_delete')),
             ),
           ],
-        );
-      },
-    );
-  }
-
-  void _showRoomOptionsSheet(Room room) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Drag handle
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD1D7E0),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              SizedBox(height: 16),
-              ListTile(
-                leading: Icon(HBotIcons.edit, color: Color(0xFF5A6577)),
-                title: const Text(
-                  'Rename',
-                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showEditRoomBottomSheet(room);
-                },
-              ),
-              ListTile(
-                leading: Icon(HBotIcons.category, color: Color(0xFF5A6577)),
-                title: const Text(
-                  'Change Icon',
-                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showIconPickerDialog(room);
-                },
-              ),
-              ListTile(
-                leading: Icon(HBotIcons.image, color: Color(0xFF5A6577)),
-                title: const Text(
-                  'Background Image',
-                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showBackgroundImageDialog(room);
-                },
-              ),
-              ListTile(
-                leading: Icon(HBotIcons.delete, color: Color(0xFFEF4444)),
-                title: const Text(
-                  'Delete',
-                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFFEF4444)),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showDeleteRoomDialog(room);
-                },
-              ),
-            ],
-          ),
         );
       },
     );
@@ -583,8 +299,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: HBotTheme.card(context),
-          title: const Text('Room Background Image'),
+          backgroundColor: context.hCard,
+          title: Text(AppStrings.get('rooms_room_background_image')),
           content: SingleChildScrollView(
             child: BackgroundImagePicker(
               currentImageUrl: room.backgroundImageUrl,
@@ -593,6 +309,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
               entityId: room.id,
               onImageSelected: (imageUrl) async {
                 try {
+                  // If imageUrl is null, we're removing the background
                   if (imageUrl == null) {
                     await _roomsRepo.updateRoom(room.id, clearBackground: true);
                   } else {
@@ -602,6 +319,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
                     );
                   }
 
+                  // Reload rooms to get updated data
                   await _loadRooms();
 
                   if (mounted) {
@@ -611,8 +329,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Failed to update background: $e'),
-                        backgroundColor: HBotColors.error,
+                        content: Text(AppStrings.get('rooms_failed_to_update_background_e')),
+                        backgroundColor: Colors.red,
                       ),
                     );
                   }
@@ -623,7 +341,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(AppStrings.get('rooms_close')),
             ),
           ],
         );
@@ -640,19 +358,8 @@ class _RoomsScreenState extends State<RoomsScreen> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: HBotTheme.card(context),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              title: const Text(
-                'Change Room Icon',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF0A1628),
-                ),
-              ),
+              backgroundColor: context.hCard,
+              title: Text(AppStrings.get('rooms_change_room_icon')),
               content: SizedBox(
                 width: double.maxFinite,
                 child: SingleChildScrollView(
@@ -669,12 +376,9 @@ class _RoomsScreenState extends State<RoomsScreen> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(fontFamily: 'Inter', color: Color(0xFF5A6577)),
-                  ),
+                  child: Text(AppStrings.get('rooms_cancel_4')),
                 ),
-                TextButton(
+                ElevatedButton(
                   onPressed: () async {
                     if (selectedIconName == null) {
                       Navigator.pop(context);
@@ -687,13 +391,14 @@ class _RoomsScreenState extends State<RoomsScreen> {
                         iconName: selectedIconName,
                       );
 
+                      // Reload rooms to get updated data
                       await _loadRooms();
 
                       if (mounted) {
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Room icon updated successfully!'),
+                          SnackBar(
+                            content: Text(AppStrings.get('rooms_room_icon_updated_successfully')),
                             backgroundColor: HBotColors.primary,
                           ),
                         );
@@ -702,18 +407,17 @@ class _RoomsScreenState extends State<RoomsScreen> {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Failed to update icon: $e'),
-                            backgroundColor: HBotColors.error,
+                            content: Text(AppStrings.get('rooms_failed_to_update_icon_e')),
+                            backgroundColor: Colors.red,
                           ),
                         );
                       }
                     }
                   },
-                  style: TextButton.styleFrom(foregroundColor: HBotColors.primary),
-                  child: const Text(
-                    'Save',
-                    style: TextStyle(fontFamily: 'Inter'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: HBotColors.primary,
                   ),
+                  child: Text(AppStrings.get('rooms_save_2')),
                 ),
               ],
             );
@@ -732,128 +436,89 @@ class _RoomsScreenState extends State<RoomsScreen> {
     // Otherwise, auto-detect from name
     final name = room.name.toLowerCase();
     if (name.contains('living') || name.contains('lounge')) {
-      return HBotIcons.armchair;
+      return Icons.weekend;
     } else if (name.contains('kitchen')) {
-      return HBotIcons.cookingPot;
+      return Icons.kitchen;
     } else if (name.contains('bedroom') || name.contains('bed')) {
-      return HBotIcons.bed;
+      return Icons.bed;
     } else if (name.contains('bathroom') || name.contains('bath')) {
-      return HBotIcons.bathtub;
+      return Icons.bathtub;
     } else if (name.contains('office') || name.contains('study')) {
-      return HBotIcons.desk;
+      return Icons.desk;
     } else if (name.contains('garage')) {
-      return HBotIcons.garage;
+      return Icons.garage;
     } else if (name.contains('garden') || name.contains('outdoor')) {
-      return HBotIcons.plant;
+      return Icons.grass;
     } else {
-      return HBotIcons.room;
+      return Icons.room;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? context.hBackground
+          : context.hBackground,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF8F9FB),
-        elevation: 0,
-        scrolledUnderElevation: 0,
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? context.hBackground
+            : context.hBackground,
         title: Text(
-          'Rooms',
-          style: const TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF0A1628),
-          ),
+          widget.home.name,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
+        elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(HBotIcons.add, color: Color(0xFF0883FD)),
-            onPressed: _showCreateRoomBottomSheet,
+            icon: const Icon(Icons.add),
+            onPressed: _showCreateRoomDialog,
           ),
         ],
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0883FD)),
-              ),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : _rooms.isEmpty
-              ? _buildEmptyState()
-              : _buildRoomsList(),
+          ? _buildEmptyState()
+          : _buildRoomsList(),
     );
   }
 
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: const BoxDecoration(
-                color: Color(0xFFF0F2F5),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                HBotIcons.home,
-                size: 48,
-                color: Color(0xFFD1D7E0),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'No rooms yet',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 18,
+            Icon(Icons.room_outlined, size: 80, color: context.hTextTertiary),
+            const SizedBox(height: HBotSpacing.space6),
+            Text(
+              AppStrings.get('rooms_no_rooms_yet'),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: context.hTextPrimary,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF0A1628),
               ),
             ),
-            const SizedBox(height: 8),
-            const SizedBox(
-              width: 260,
-              child: Text(
-                'Organize your devices by adding rooms.',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF5A6577),
-                ),
-                textAlign: TextAlign.center,
+            const SizedBox(height: HBotSpacing.space4),
+            Text(
+              AppStrings.get('rooms_add_rooms_desc'),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: context.hTextSecondary,
               ),
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
-            InkWell(
-              onTap: _showCreateRoomBottomSheet,
-              borderRadius: BorderRadius.circular(12),
-              child: Ink(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Container(
-                  height: 52,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    '+ Add Room',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+            const SizedBox(height: HBotSpacing.space6),
+            ElevatedButton.icon(
+              onPressed: _showCreateRoomDialog,
+              icon: const Icon(Icons.add),
+              label: Text(AppStrings.get('rooms_add_your_first_room')),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HBotColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: HBotSpacing.space6,
+                  vertical: HBotSpacing.space4,
                 ),
               ),
             ),
@@ -864,108 +529,185 @@ class _RoomsScreenState extends State<RoomsScreen> {
   }
 
   Widget _buildRoomsList() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color(0xFFE8ECF1)),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: List.generate(_rooms.length, (index) {
-            final room = _rooms[index];
-            final deviceCount = _deviceCounts[room.id] ?? 0;
-            final isLast = index == _rooms.length - 1;
-
-            return Column(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DevicesScreen(
-                          home: widget.home,
-                          room: room,
-                          onDeviceChanged: () {},
-                        ),
-                      ),
-                    );
-                  },
-                  onLongPress: () => _showRoomOptionsSheet(room),
-                  child: Container(
-                    height: 72,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: [
-                        // Leading icon
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            color: Color(0xFFF0F7FF),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            _getRoomIcon(room),
-                            color: const Color(0xFF0883FD),
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        // Room info
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                room.name,
-                                style: const TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF0A1628),
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                '$deviceCount device${deviceCount == 1 ? '' : 's'}',
-                                style: const TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xFF5A6577),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Chevron
-                        Icon(
-                          HBotIcons.chevronRight,
-                          size: 20,
-                          color: Color(0xFFA0AAB8),
-                        ),
-                      ],
+    return ListView.builder(
+      padding: const EdgeInsets.all(HBotSpacing.space4),
+      itemCount: _rooms.length,
+      itemBuilder: (context, index) {
+        final room = _rooms[index];
+        // Use EXACT same Card structure as Dashboard
+        return Card(
+          color: context.hCard,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 0,
+            vertical: HBotSpacing.space2,
+          ),
+          child: Stack(
+            children: [
+              // Background image if available
+              if (room.backgroundImageUrl != null &&
+                  room.backgroundImageUrl!.isNotEmpty)
+                Positioned.fill(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(HBotRadius.medium),
+                    child: BackgroundContainer(
+                      backgroundImageUrl: room.backgroundImageUrl,
+                      overlayColor:
+                          Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black
+                          : Colors
+                                .black, // Changed to black for better contrast in Light Mode
+                      overlayOpacity:
+                          Theme.of(context).brightness == Brightness.dark
+                          ? 0.5
+                          : 0.6, // Increased to 0.6 for better text visibility in Light Mode
+                      child: const SizedBox.expand(),
                     ),
                   ),
                 ),
-                if (!isLast)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 68),
-                    child: Container(
-                      height: 1,
-                      color: const Color(0xFFF0F2F5),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DevicesScreen(
+                        home: widget.home,
+                        room: room,
+                        onDeviceChanged: () {
+                          // Could refresh room data here if needed
+                        },
+                      ),
                     ),
+                  );
+                },
+                borderRadius: BorderRadius.circular(HBotRadius.medium),
+                child: Padding(
+                  padding: const EdgeInsets.all(HBotSpacing.space4),
+                  child: Row(
+                    children: [
+                      // Icon container
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: HBotColors.primary.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(
+                            HBotRadius.medium,
+                          ),
+                        ),
+                        child: Icon(
+                          _getRoomIcon(room),
+                          color: HBotColors.primary,
+                          size: 28,
+                        ),
+                      ),
+                      const SizedBox(width: HBotSpacing.space4),
+                      // Room info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              room.name,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                color:
+                                    room.backgroundImageUrl != null &&
+                                        room.backgroundImageUrl!.isNotEmpty
+                                    ? Colors.white
+                                    : context.hTextPrimary,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              AppStrings.get('rooms_tap_manage'),
+                              style: TextStyle(
+                                fontSize: 13,
+                                color:
+                                    room.backgroundImageUrl != null &&
+                                        room.backgroundImageUrl!.isNotEmpty
+                                    ? Colors.white70
+                                    : context.hTextSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-              ],
-            );
-          }),
-        ),
-      ),
+                ),
+              ),
+              Positioned(
+                top: 4,
+                right: 4,
+                child: PopupMenuButton<String>(
+                  icon: Icon(
+                    Icons.more_vert,
+                    color:
+                        room.backgroundImageUrl != null &&
+                            room.backgroundImageUrl!.isNotEmpty
+                        ? Colors.white
+                        : context.hTextTertiary,
+                    size: 20,
+                  ),
+                  onSelected: (value) {
+                    switch (value) {
+                      case 'edit':
+                        _showEditRoomDialog(room);
+                        break;
+                      case 'icon':
+                        _showIconPickerDialog(room);
+                        break;
+                      case 'background':
+                        _showBackgroundImageDialog(room);
+                        break;
+                      case 'delete':
+                        _showDeleteRoomDialog(room);
+                        break;
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: ListTile(
+                        leading: Icon(Icons.edit_outlined),
+                        title: Text(AppStrings.get('rooms_edit_room_2')),
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'icon',
+                      child: ListTile(
+                        leading: Icon(Icons.category_outlined),
+                        title: Text(AppStrings.get('rooms_change_icon')),
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'background',
+                      child: ListTile(
+                        leading: Icon(Icons.image_outlined),
+                        title: Text(AppStrings.get('rooms_background_image')),
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
+                    const PopupMenuItem(
+                      value: 'delete',
+                      child: ListTile(
+                        leading: Icon(Icons.delete_outline, color: Colors.red),
+                        title: Text(
+                          'Delete Room',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -3,7 +3,8 @@ import '../theme/app_theme.dart';
 import '../models/shared_device.dart';
 import '../repos/device_sharing_repo.dart';
 import 'scan_device_qr_screen.dart';
-import '../utils/phosphor_icons.dart';
+import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class SharedDevicesScreen extends StatefulWidget {
   const SharedDevicesScreen({super.key});
@@ -36,8 +37,8 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error loading shared devices: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('shared_devices_error_loading_shared_devices_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -46,20 +47,15 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        title: const Text('Shared with Me'),
-        backgroundColor: isDark
-            ? HBotColors.backgroundLight
-            : HBotColors.backgroundLight,
+        title: Text(AppStrings.get('shared_devices_shared_with_me')),
+        backgroundColor: context.hBackground,
         actions: [
           IconButton(
-            icon: Icon(HBotIcons.devices),
+            icon: const Icon(Icons.qr_code_scanner),
             onPressed: () {
               Navigator.push(
                 context,
@@ -68,7 +64,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                 ),
               ).then((_) => _loadSharedDevices());
             },
-            tooltip: 'Scan QR Code',
+            tooltip: AppStrings.get('shared_devices_scan_qr_code_2'),
           ),
         ],
       ),
@@ -84,7 +80,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                 itemBuilder: (context, index) {
                   final shared = _sharedDevices[index];
                   return Card(
-                    color: HBotColors.cardLight,
+                    color: context.hCard,
                     margin: const EdgeInsets.only(bottom: 12),
                     child: ListTile(
                       leading: Container(
@@ -102,7 +98,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                         shared.deviceName ?? 'Unknown Device',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: HBotColors.textPrimaryLight,
+                          color: context.hTextPrimary,
                         ),
                       ),
                       subtitle: Column(
@@ -113,7 +109,7 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                             'Type: ${_getDeviceTypeName(shared.deviceType ?? '')}',
                             style: TextStyle(
                               fontSize: 13,
-                              color: HBotColors.textSecondaryLight,
+                              color: context.hTextSecondary,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -121,16 +117,16 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                             'Owner: ${shared.ownerEmail ?? 'Unknown'}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: HBotColors.textSecondaryLight,
+                              color: context.hTextSecondary,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Row(
                             children: [
                               Icon(
                                 shared.canControl
-                                    ? HBotIcons.power
-                                    : HBotIcons.visibility,
+                                    ? Icons.touch_app
+                                    : Icons.visibility,
                                 size: 14,
                                 color: shared.canControl
                                     ? Colors.green
@@ -167,9 +163,9 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              HBotIcons.share,
+              Icons.share_outlined,
               size: 80,
-              color: HBotColors.textTertiaryLight,
+              color: context.hTextTertiary,
             ),
             const SizedBox(height: 16),
             Text(
@@ -177,14 +173,14 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               'Devices shared with you will appear here.\nControl them from your dashboard.',
               textAlign: TextAlign.center,
-              style: TextStyle(color: HBotColors.textSecondaryLight),
+              style: TextStyle(color: context.hTextSecondary),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -196,8 +192,8 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
                   ),
                 ).then((_) => _loadSharedDevices());
               },
-              icon: Icon(HBotIcons.devices),
-              label: const Text('Scan QR Code'),
+              icon: const Icon(Icons.qr_code_scanner),
+              label: Text(AppStrings.get('shared_devices_scan_qr_code')),
               style: ElevatedButton.styleFrom(
                 backgroundColor: HBotColors.primary,
                 padding: const EdgeInsets.symmetric(
@@ -232,13 +228,13 @@ class _SharedDevicesScreenState extends State<SharedDevicesScreen> {
   IconData _getDeviceIcon(String type) {
     switch (type.toLowerCase()) {
       case 'light':
-        return HBotIcons.lightbulb;
+        return Icons.lightbulb_outline;
       case 'shutter':
-        return HBotIcons.shutter;
+        return Icons.blinds;
       case 'switch':
-        return HBotIcons.power;
+        return Icons.power_settings_new;
       default:
-        return HBotIcons.devices;
+        return Icons.devices;
     }
   }
 }

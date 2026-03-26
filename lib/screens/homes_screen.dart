@@ -3,7 +3,8 @@ import '../theme/app_theme.dart';
 import '../services/smart_home_service.dart';
 import '../models/home.dart';
 import 'rooms_screen.dart';
-import '../utils/phosphor_icons.dart';
+import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 class HomesScreen extends StatefulWidget {
   final VoidCallback? onHomeChanged;
@@ -45,8 +46,8 @@ class _HomesScreenState extends State<HomesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to load homes: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('homes_failed_to_load_homes_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -54,23 +55,23 @@ class _HomesScreenState extends State<HomesScreen> {
   }
 
   Future<void> _createHome() async {
-    debugPrint('Create home button pressed');
+    debugPrint('🏠 Create home button pressed');
 
     if (_nameController.text.trim().isEmpty) {
-      debugPrint('Home name is empty');
+      debugPrint('❌ Home name is empty');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a home name'),
-          backgroundColor: HBotColors.error,
+        SnackBar(
+          content: Text(AppStrings.get('homes_please_enter_a_home_name')),
+          backgroundColor: Colors.red,
         ),
       );
       return;
     }
 
     try {
-      debugPrint('Creating home: ${_nameController.text.trim()}');
+      debugPrint('🔄 Creating home: ${_nameController.text.trim()}');
       final home = await _service.createHome(_nameController.text.trim());
-      debugPrint('Home created successfully: ${home.name}');
+      debugPrint('✅ Home created successfully: ${home.name}');
 
       setState(() {
         _homes.add(home);
@@ -81,7 +82,7 @@ class _HomesScreenState extends State<HomesScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Home "${home.name}" created successfully!'),
+            content: Text('${AppStrings.get("success_home_created")}: ${home.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );
@@ -90,12 +91,12 @@ class _HomesScreenState extends State<HomesScreen> {
       // Notify parent that homes have changed
       widget.onHomeChanged?.call();
     } catch (e) {
-      debugPrint('Failed to create home: $e');
+      debugPrint('❌ Failed to create home: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to create home: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('homes_failed_to_create_home_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -105,9 +106,9 @@ class _HomesScreenState extends State<HomesScreen> {
   Future<void> _editHome(Home home) async {
     if (_nameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a home name'),
-          backgroundColor: HBotColors.error,
+        SnackBar(
+          content: Text(AppStrings.get('homes_please_enter_a_home_name_2')),
+          backgroundColor: Colors.red,
         ),
       );
       return;
@@ -148,8 +149,8 @@ class _HomesScreenState extends State<HomesScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to update home: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('homes_failed_to_update_home_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -169,7 +170,7 @@ class _HomesScreenState extends State<HomesScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Home "${home.name}" deleted successfully!'),
+            content: Text('${AppStrings.get("success_home_deleted")}: ${home.name}'),
             backgroundColor: HBotColors.primary,
           ),
         );
@@ -182,228 +183,85 @@ class _HomesScreenState extends State<HomesScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to delete home: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('homes_failed_to_delete_home_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
     }
   }
 
-  void _showCreateHomeBottomSheet() {
+  void _showCreateHomeDialog() {
+    debugPrint('🔘 Show create home dialog called');
     _nameController.clear();
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (context) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        debugPrint('🔘 Dialog builder called');
+        return AlertDialog(
+          backgroundColor: context.hCard,
+          title: Text(AppStrings.get('homes_create_new_home')),
+          content: TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: AppStrings.get('homes_home_name'),
+              hintText: AppStrings.get('homes_eg_my_house_office_etc'),
+            ),
+            autofocus: true,
           ),
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 12,
-            bottom: 20 + MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Drag handle
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD1D7E0),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                debugPrint('🔘 Cancel button pressed');
+                Navigator.pop(context);
+              },
+              child: Text(AppStrings.get('homes_cancel')),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                debugPrint('🔘 Create button pressed');
+                _createHome();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HBotColors.primary,
               ),
-              const SizedBox(height: 16),
-              const Text(
-                'New Home',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF0A1628),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _nameController,
-                autofocus: true,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  color: Color(0xFF0A1628),
-                ),
-                decoration: InputDecoration(
-                  hintText: 'e.g., My House, Office, etc.',
-                  hintStyle: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 14,
-                    color: Color(0xFF7A8494),
-                  ),
-                  filled: true,
-                  fillColor: const Color(0xFFF8F9FB),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF0883FD), width: 1.5),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              InkWell(
-                onTap: _createHome,
-                borderRadius: BorderRadius.circular(12),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    height: 52,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'Create',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+              child: Text(AppStrings.get('homes_create')),
+            ),
+          ],
         );
       },
     );
   }
 
-  void _showEditHomeBottomSheet(Home home) {
+  void _showEditHomeDialog(Home home) {
     _nameController.text = home.name;
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (context) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        return AlertDialog(
+          backgroundColor: context.hCard,
+          title: Text(AppStrings.get('homes_edit_home')),
+          content: TextField(
+            controller: _nameController,
+            decoration: InputDecoration(
+              labelText: AppStrings.get('homes_home_name_2'),
+              hintText: AppStrings.get('homes_eg_my_house_office_etc_2'),
+            ),
+            autofocus: true,
           ),
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 12,
-            bottom: 20 + MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD1D7E0),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(AppStrings.get('homes_cancel_2')),
+            ),
+            ElevatedButton(
+              onPressed: () => _editHome(home),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HBotColors.primary,
               ),
-              const SizedBox(height: 16),
-              const Text(
-                'Edit Home',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF0A1628),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _nameController,
-                autofocus: true,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  color: Color(0xFF0A1628),
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Home name',
-                  hintStyle: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 14,
-                    color: Color(0xFF7A8494),
-                  ),
-                  filled: true,
-                  fillColor: const Color(0xFFF8F9FB),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFFE8ECF1), width: 1.5),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF0883FD), width: 1.5),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              InkWell(
-                onTap: () => _editHome(home),
-                borderRadius: BorderRadius.circular(12),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    height: 52,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+              child: Text(AppStrings.get('homes_save')),
+            ),
+          ],
         );
       },
     );
@@ -414,45 +272,20 @@ class _HomesScreenState extends State<HomesScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: const Text(
-            'Delete Home?',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF0A1628),
-            ),
-          ),
+          backgroundColor: context.hCard,
+          title: Text(AppStrings.get('homes_delete_home')),
           content: Text(
             'Are you sure you want to delete "${home.name}"? This action cannot be undone and will delete all rooms and devices in this home.',
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 14,
-              color: Color(0xFF5A6577),
-            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(fontFamily: 'Inter', color: Color(0xFF5A6577)),
-              ),
+              child: Text(AppStrings.get('homes_cancel_3')),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                _deleteHome(home);
-              },
-              style: TextButton.styleFrom(foregroundColor: HBotColors.error),
-              child: const Text(
-                'Delete',
-                style: TextStyle(fontFamily: 'Inter'),
-              ),
+            ElevatedButton(
+              onPressed: () => _deleteHome(home),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: Text(AppStrings.get('homes_delete')),
             ),
           ],
         );
@@ -460,185 +293,74 @@ class _HomesScreenState extends State<HomesScreen> {
     );
   }
 
-  void _showHomeOptionsSheet(Home home) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD1D7E0),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              SizedBox(height: 16),
-              ListTile(
-                leading: Icon(HBotIcons.room, color: Color(0xFF5A6577)),
-                title: const Text(
-                  'Manage Rooms',
-                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
-                ),
-                onTap: () async {
-                  Navigator.pop(context);
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RoomsScreen(
-                        home: home,
-                        onRoomChanged: () {},
-                      ),
-                    ),
-                  );
-                  await _loadHomes();
-                  widget.onHomeChanged?.call();
-                },
-              ),
-              ListTile(
-                leading: Icon(HBotIcons.edit, color: Color(0xFF5A6577)),
-                title: const Text(
-                  'Edit Home',
-                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFF0A1628)),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showEditHomeBottomSheet(home);
-                },
-              ),
-              ListTile(
-                leading: Icon(HBotIcons.delete, color: Color(0xFFEF4444)),
-                title: const Text(
-                  'Delete Home',
-                  style: TextStyle(fontFamily: 'Inter', fontSize: 16, color: Color(0xFFEF4444)),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  _showDeleteHomeDialog(home);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FB),
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF8F9FB),
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        title: const Text(
-          'My Homes',
-          style: TextStyle(
-            fontFamily: 'Inter',
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF0A1628),
-          ),
+        title: Text(
+          AppStrings.get('homes_my_homes'),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
         ),
+        backgroundColor: context.hBackground,
+        elevation: 0,
         actions: [
           IconButton(
-            icon: Icon(HBotIcons.add, color: Color(0xFF0883FD)),
-            onPressed: _showCreateHomeBottomSheet,
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              debugPrint('➕ Add button in app bar pressed');
+              _showCreateHomeDialog();
+            },
           ),
         ],
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF0883FD)),
-              ),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : _homes.isEmpty
-              ? _buildEmptyState()
-              : _buildHomesList(),
+          ? _buildEmptyState()
+          : _buildHomesList(),
     );
   }
 
   Widget _buildEmptyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: const BoxDecoration(
-                color: Color(0xFFF0F2F5),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                HBotIcons.home,
-                size: 48,
-                color: Color(0xFFD1D7E0),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'No homes yet',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 18,
+            Icon(Icons.home_outlined, size: 80, color: context.hTextTertiary),
+            const SizedBox(height: HBotSpacing.space6),
+            Text(
+              AppStrings.get('homes_no_homes'),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: context.hTextPrimary,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF0A1628),
               ),
             ),
-            const SizedBox(height: 8),
-            const SizedBox(
-              width: 260,
-              child: Text(
-                'Create your first home to start managing your smart devices.',
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF5A6577),
-                ),
-                textAlign: TextAlign.center,
+            const SizedBox(height: HBotSpacing.space4),
+            Text(
+              'Create your first home to start managing your smart devices',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: context.hTextSecondary,
               ),
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 24),
-            InkWell(
-              onTap: _showCreateHomeBottomSheet,
-              borderRadius: BorderRadius.circular(12),
-              child: Ink(
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Container(
-                  height: 52,
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    '+ Create Your First Home',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+            const SizedBox(height: HBotSpacing.space6),
+            ElevatedButton.icon(
+              onPressed: () {
+                debugPrint('🏠 Create Your First Home button pressed');
+                _showCreateHomeDialog();
+              },
+              icon: const Icon(Icons.add),
+              label: Text(AppStrings.get('homes_create_your_first_home')),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: HBotColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: HBotSpacing.space6,
+                  vertical: HBotSpacing.space4,
                 ),
               ),
             ),
@@ -649,150 +371,122 @@ class _HomesScreenState extends State<HomesScreen> {
   }
 
   Widget _buildHomesList() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      child: Column(
-        children: [
-          // Homes list card
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFFE8ECF1)),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                ...List.generate(_homes.length, (index) {
-                  final home = _homes[index];
-                  final isLast = index == _homes.length - 1;
 
-                  return Column(
-                    children: [
-                      InkWell(
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RoomsScreen(
-                                home: home,
-                                onRoomChanged: () {},
-                              ),
-                            ),
-                          );
-                          await _loadHomes();
-                          widget.onHomeChanged?.call();
-                        },
-                        onLongPress: () => _showHomeOptionsSheet(home),
-                        child: Container(
-                          height: 72,
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Row(
-                            children: [
-                              // Leading gradient icon circle
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  HBotIcons.homeFilled,
-                                  color: Colors.white,
-                                  size: 22,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              // Home name
-                              Expanded(
-                                child: Text(
-                                  home.name,
-                                  style: const TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFF0A1628),
-                                  ),
-                                ),
-                              ),
-                              // More options
-                              IconButton(
-                                icon: Icon(
-                                  HBotIcons.more,
-                                  color: Color(0xFFA0AAB8),
-                                  size: 20,
-                                ),
-                                onPressed: () => _showHomeOptionsSheet(home),
-                              ),
-                            ],
-                          ),
+    return ListView.builder(
+      padding: const EdgeInsets.all(HBotSpacing.space4),
+      itemCount: _homes.length,
+      itemBuilder: (context, index) {
+        final home = _homes[index];
+        return Card(
+          color: context.hCard,
+          margin: const EdgeInsets.only(bottom: HBotSpacing.space4),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: HBotRadius.mediumRadius,
+            side: BorderSide(color: context.hBorder),
+          ),
+          child: ListTile(
+            leading: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: HBotColors.primary.withOpacity(0.1),
+                borderRadius: HBotRadius.mediumRadius,
+              ),
+              child: Icon(Icons.home, color: HBotColors.primary),
+            ),
+            title: Text(
+              home.name,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: context.hTextPrimary,
+              ),
+            ),
+            subtitle: Text(
+              '${AppStrings.get('homes_created')} ${_formatDate(home.createdAt)}',
+              style: TextStyle(color: context.hTextSecondary),
+            ),
+            trailing: PopupMenuButton<String>(
+              icon: Icon(Icons.more_vert, color: context.hTextTertiary),
+              onSelected: (value) async {
+                switch (value) {
+                  case 'edit':
+                    _showEditHomeDialog(home);
+                    break;
+                  case 'delete':
+                    _showDeleteHomeDialog(home);
+                    break;
+                  case 'rooms':
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RoomsScreen(
+                          home: home,
+                          onRoomChanged: () {
+                            // Callback is called while still on RoomsScreen
+                            // We'll reload data after returning instead
+                          },
                         ),
                       ),
-                      if (!isLast)
-                        Padding(
-                          padding: const EdgeInsets.only(left: 68),
-                          child: Container(
-                            height: 1,
-                            color: const Color(0xFFF0F2F5),
-                          ),
-                        ),
-                    ],
-                  );
-                }),
-                // Add Home row
-                const Padding(
-                  padding: EdgeInsets.only(left: 68),
-                  child: Divider(height: 1, color: Color(0xFFF0F2F5)),
+                    );
+                    // Reload homes data to get updated room names
+                    await _loadHomes();
+                    // Notify parent dashboard to refresh
+                    widget.onHomeChanged?.call();
+                    break;
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'rooms',
+                  child: ListTile(
+                    leading: Icon(Icons.room_outlined),
+                    title: Text(AppStrings.get('homes_manage_rooms')),
+                    contentPadding: EdgeInsets.zero,
+                  ),
                 ),
-                InkWell(
-                  onTap: _showCreateHomeBottomSheet,
-                  child: Container(
-                    height: 56,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF0F7FF),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: const Color(0xFF0883FD).withOpacity(0.3),
-                              width: 1.5,
-                              strokeAlign: BorderSide.strokeAlignInside,
-                            ),
-                          ),
-                          child: Icon(
-                            HBotIcons.add,
-                            color: Color(0xFF0883FD),
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        const Text(
-                          'Add Home',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: Color(0xFF0883FD),
-                          ),
-                        ),
-                      ],
+                PopupMenuItem(
+                  value: 'edit',
+                  child: ListTile(
+                    leading: Icon(Icons.edit_outlined),
+                    title: Text(AppStrings.get('homes_edit_home_2')),
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: ListTile(
+                    leading: Icon(Icons.delete_outline, color: Colors.red),
+                    title: Text(
+                      AppStrings.get('homes_delete_home'),
+                      style: TextStyle(color: Colors.red),
                     ),
+                    contentPadding: EdgeInsets.zero,
                   ),
                 ),
               ],
             ),
+            onTap: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RoomsScreen(
+                    home: home,
+                    onRoomChanged: () {
+                      // Callback is called while still on RoomsScreen
+                      // We'll reload data after returning instead
+                    },
+                  ),
+                ),
+              );
+              // Reload homes data to get updated room names
+              await _loadHomes();
+              // Notify parent dashboard to refresh
+              widget.onHomeChanged?.call();
+            },
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -801,11 +495,11 @@ class _HomesScreenState extends State<HomesScreen> {
     final difference = now.difference(date);
 
     if (difference.inDays == 0) {
-      return 'Today';
+      return AppStrings.get('homes_today');
     } else if (difference.inDays == 1) {
-      return 'Yesterday';
+      return AppStrings.get('homes_yesterday');
     } else if (difference.inDays < 7) {
-      return '${difference.inDays} days ago';
+      return '${difference.inDays} ${AppStrings.get('homes_days_ago')}';
     } else {
       return '${date.day}/${date.month}/${date.year}';
     }

@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../theme/app_theme.dart';
-import '../utils/phosphor_icons.dart';
+import '../widgets/responsive_shell.dart';
+import '../l10n/app_strings.dart';
 
 /// Screen for manual shutter calibration by entering times directly
 class ShutterManualCalibrationScreen extends StatefulWidget {
@@ -42,9 +43,9 @@ class _ShutterManualCalibrationScreenState
 
     if (_currentPosition == ShutterPosition.unknown) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please select current shutter position'),
-          backgroundColor: HBotColors.warning,
+        SnackBar(
+          content: Text(AppStrings.get('shutter_manual_calibration_please_select_current_shutter_position')),
+          backgroundColor: Colors.orange,
         ),
       );
       return;
@@ -53,7 +54,7 @@ class _ShutterManualCalibrationScreenState
     try {
       final topicBase = widget.device.tasmotaTopicBase;
       if (topicBase == null || topicBase.isEmpty) {
-        throw Exception('Device has no MQTT topic configured');
+        throw Exception('Device is not configured for remote control');
       }
 
       final openTime = int.parse(_openTimeController.text);
@@ -104,7 +105,7 @@ class _ShutterManualCalibrationScreenState
             content: Text(
               'Calibration applied successfully!\nOpen: ${openTime}s, Close: ${closeTime}s\nDevice is restarting...',
             ),
-            backgroundColor: HBotColors.success,
+            backgroundColor: Colors.green,
             duration: const Duration(seconds: 4),
           ),
         );
@@ -121,8 +122,8 @@ class _ShutterManualCalibrationScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to apply calibration: $e'),
-            backgroundColor: HBotColors.error,
+            content: Text(AppStrings.get('shutter_manual_calibration_failed_to_apply_calibration_e')),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -144,25 +145,20 @@ class _ShutterManualCalibrationScreenState
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? HBotColors.backgroundLight
-          : HBotColors.backgroundLight,
+      backgroundColor: context.hBackground,
       appBar: AppBar(
-        backgroundColor: isDark
-            ? HBotColors.surfaceLight
-            : HBotColors.cardLight,
+        backgroundColor: context.hCard,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(HBotIcons.back, color: HBotColors.textPrimaryLight),
+          icon: Icon(Icons.arrow_back, color: context.hTextPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Manual Calibration',
           style: TextStyle(
-            color: HBotColors.textPrimaryLight,
+            color: context.hTextPrimary,
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -178,8 +174,8 @@ class _ShutterManualCalibrationScreenState
               // Device name
               Text(
                 widget.device.deviceName,
-                style: const TextStyle(
-                  color: HBotColors.textPrimaryLight,
+                style: TextStyle(
+                  color: context.hTextPrimary,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -193,32 +189,32 @@ class _ShutterManualCalibrationScreenState
 
               // Current position selection
               _buildPositionSelector(),
-              SizedBox(height: HBotSpacing.space6),
+              const SizedBox(height: HBotSpacing.space6),
 
               // Open time input
               _buildTimeInput(
                 controller: _openTimeController,
-                label: 'Open Duration (seconds)',
+                label: AppStrings.get('shutter_manual_calibration_open_duration_seconds'),
                 hint: 'Enter time to fully open',
-                icon: HBotIcons.arrowUp,
-                color: HBotColors.success,
+                icon: Icons.arrow_upward,
+                color: Colors.green,
               ),
-              SizedBox(height: HBotSpacing.space4),
+              const SizedBox(height: HBotSpacing.space4),
 
               // Close time input
               _buildTimeInput(
                 controller: _closeTimeController,
-                label: 'Close Duration (seconds)',
+                label: AppStrings.get('shutter_manual_calibration_close_duration_seconds'),
                 hint: 'Enter time to fully close',
-                icon: HBotIcons.arrowDown,
-                color: HBotColors.error,
+                icon: Icons.arrow_downward,
+                color: Colors.red,
               ),
-              SizedBox(height: HBotSpacing.space6),
+              const SizedBox(height: HBotSpacing.space6),
 
               // Apply button
               ElevatedButton.icon(
                 onPressed: _applyManualCalibration,
-                icon: Icon(HBotIcons.check),
+                icon: const Icon(Icons.check),
                 label: const Text(
                   'Apply Calibration',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -241,7 +237,7 @@ class _ShutterManualCalibrationScreenState
 
   Widget _buildInstructionsCard() {
     return Card(
-      color: HBotColors.cardLight,
+      color: context.hCard,
       child: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
@@ -250,15 +246,15 @@ class _ShutterManualCalibrationScreenState
             Row(
               children: [
                 Icon(
-                  HBotIcons.info,
+                  Icons.info_outline,
                   color: HBotColors.primary,
                   size: 24,
                 ),
                 const SizedBox(width: 8),
-                const Text(
+                Text(
                   'Manual Calibration',
                   style: TextStyle(
-                    color: HBotColors.textPrimaryLight,
+                    color: context.hTextPrimary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -266,7 +262,7 @@ class _ShutterManualCalibrationScreenState
               ],
             ),
             const SizedBox(height: HBotSpacing.space4),
-            const Text(
+            Text(
               '1. Move your shutter to either fully open (100%) or fully closed (0%)\n'
               '2. Select the current position below\n'
               '3. Enter the time (in seconds) it takes to:\n'
@@ -274,7 +270,7 @@ class _ShutterManualCalibrationScreenState
               '   • Fully close from open position\n'
               '4. Click "Apply Calibration" to save',
               style: TextStyle(
-                color: HBotColors.textSecondaryLight,
+                color: context.hTextSecondary,
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -287,45 +283,45 @@ class _ShutterManualCalibrationScreenState
 
   Widget _buildPositionSelector() {
     return Card(
-      color: HBotColors.cardLight,
+      color: context.hCard,
       child: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Current Shutter Position',
               style: TextStyle(
-                color: HBotColors.textPrimaryLight,
+                color: context.hTextPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: HBotSpacing.space4),
-            const Text(
+            Text(
               'Select where your shutter is right now:',
-              style: TextStyle(color: HBotColors.textSecondaryLight, fontSize: 14),
+              style: TextStyle(color: context.hTextSecondary, fontSize: 14),
             ),
-            SizedBox(height: HBotSpacing.space4),
+            const SizedBox(height: HBotSpacing.space4),
             Row(
               children: [
                 Expanded(
                   child: _buildPositionButton(
                     position: ShutterPosition.fullyClosed,
-                    label: 'Fully Closed',
+                    label: AppStrings.get('shutter_manual_calibration_fully_closed'),
                     subtitle: '0%',
-                    icon: HBotIcons.arrowDown,
-                    color: HBotColors.error,
+                    icon: Icons.arrow_downward,
+                    color: Colors.red,
                   ),
                 ),
-                SizedBox(width: HBotSpacing.space4),
+                const SizedBox(width: HBotSpacing.space4),
                 Expanded(
                   child: _buildPositionButton(
                     position: ShutterPosition.fullyOpen,
-                    label: 'Fully Open',
+                    label: AppStrings.get('shutter_manual_calibration_fully_open'),
                     subtitle: '100%',
-                    icon: HBotIcons.arrowUp,
-                    color: HBotColors.success,
+                    icon: Icons.arrow_upward,
+                    color: Colors.green,
                   ),
                 ),
               ],
@@ -356,21 +352,21 @@ class _ShutterManualCalibrationScreenState
         decoration: BoxDecoration(
           color: isSelected
               ? color.withOpacity(0.2)
-              : HBotColors.backgroundLight,
+              : context.hBackground,
           border: Border.all(
-            color: isSelected ? color : HBotColors.textTertiaryLight,
+            color: isSelected ? color : context.hTextTertiary,
             width: 2,
           ),
           borderRadius: BorderRadius.circular(HBotRadius.medium),
         ),
         child: Column(
           children: [
-            Icon(icon, color: isSelected ? color : HBotColors.textTertiaryLight, size: 32),
+            Icon(icon, color: isSelected ? color : context.hTextTertiary, size: 32),
             const SizedBox(height: 8),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? color : HBotColors.textSecondaryLight,
+                color: isSelected ? color : context.hTextSecondary,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
@@ -379,7 +375,7 @@ class _ShutterManualCalibrationScreenState
             Text(
               subtitle,
               style: TextStyle(
-                color: isSelected ? color : HBotColors.textTertiaryLight,
+                color: isSelected ? color : context.hTextTertiary,
                 fontSize: 12,
               ),
             ),
@@ -397,7 +393,7 @@ class _ShutterManualCalibrationScreenState
     required Color color,
   }) {
     return Card(
-      color: HBotColors.cardLight,
+      color: context.hCard,
       child: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
         child: Column(
@@ -409,8 +405,8 @@ class _ShutterManualCalibrationScreenState
                 const SizedBox(width: 8),
                 Text(
                   label,
-                  style: const TextStyle(
-                    color: HBotColors.textPrimaryLight,
+                  style: TextStyle(
+                    color: context.hTextPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
@@ -422,14 +418,14 @@ class _ShutterManualCalibrationScreenState
               controller: controller,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              style: const TextStyle(color: HBotColors.textPrimaryLight, fontSize: 18),
+              style: TextStyle(color: context.hTextPrimary, fontSize: 18),
               decoration: InputDecoration(
                 hintText: hint,
-                hintStyle: const TextStyle(color: HBotColors.textTertiaryLight),
+                hintStyle: TextStyle(color: context.hTextTertiary),
                 suffixText: 'seconds',
-                suffixStyle: const TextStyle(color: HBotColors.textSecondaryLight),
+                suffixStyle: TextStyle(color: context.hTextSecondary),
                 filled: true,
-                fillColor: HBotColors.backgroundLight,
+                fillColor: context.hBackground,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(HBotRadius.small),
                   borderSide: BorderSide.none,

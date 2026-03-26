@@ -29,17 +29,80 @@ class DevicesRepo {
       final userId = supabase.auth.currentUser?.id;
       if (userId == null) return [];
 
-      final response = await supabase
+      // Step 1: Get shared device IDs from shared_devices table
+      final sharedRows = await supabase
           .from('shared_devices')
-          .select('device_id, devices_with_channels(*)')
+          .select('device_id')
           .eq('shared_with_id', userId);
 
-      return (response as List)
-          .where((item) => item['devices_with_channels'] != null)
-          .map((item) => Device.fromJson(item['devices_with_channels']))
+      final deviceIds = (sharedRows as List)
+          .map((row) => row['device_id'] as String)
           .toList();
+
+      debugPrint('listSharedDevices: Found ${deviceIds.length} shared device IDs for user $userId');
+      if (deviceIds.isEmpty) return [];
+
+      // Step 2: Try RPC first (bypasses all RLS)
+      try {
+        final rpcResponse = await supabase.rpc('get_shared_devices');
+        if (rpcResponse != null && rpcResponse is List && rpcResponse.isNotEmpty) {
+          final devices = rpcResponse
+              .map((json) => Device.fromJson(json as Map<String, dynamic>))
+              .toList();
+          debugPrint('listSharedDevices: Got ${devices.length} via RPC');
+          return devices;
+        }
+      } catch (rpcErr) {
+        debugPrint('listSharedDevices: RPC failed: $rpcErr');
+      }
+
+      // Step 3: Fallback — query devices table directly with inFilter
+      try {
+        final devicesResponse = await supabase
+            .from('devices')
+            .select('*')
+            .inFilter('id', deviceIds)
+            .eq('is_deleted', false);
+
+        final devices = (devicesResponse as List).map((json) {
+          // devices table uses 'inserted_at' not 'created_at', map it
+          final map = Map<String, dynamic>.from(json);
+          if (!map.containsKey('created_at') && map.containsKey('inserted_at')) {
+            map['created_at'] = map['inserted_at'];
+          }
+          return Device.fromJson(map);
+        }).toList();
+        debugPrint('listSharedDevices: Got ${devices.length} via direct query');
+        return devices;
+      } catch (directErr) {
+        debugPrint('listSharedDevices: Direct query failed: $directErr');
+      }
+
+      // Step 4: Last resort — build minimal Device objects from shared_devices join
+      try {
+        final joinResponse = await supabase
+            .from('shared_devices')
+            .select('device_id, devices!inner(id, display_name, device_type, home_id, room_id, topic_base, mac_address, owner_user_id, online, channels, channel_count, inserted_at, updated_at, is_deleted)')
+            .eq('shared_with_id', userId);
+
+        final devices = (joinResponse as List).where((item) {
+          return item['devices'] != null;
+        }).map((item) {
+          final d = Map<String, dynamic>.from(item['devices']);
+          d['name'] = d['display_name'] ?? 'Shared Device';
+          d['created_at'] = d['inserted_at'] ?? DateTime.now().toIso8601String();
+          d['tasmota_topic_base'] = d['topic_base'];
+          return Device.fromJson(d);
+        }).toList();
+        debugPrint('listSharedDevices: Got ${devices.length} via join fallback');
+        return devices;
+      } catch (joinErr) {
+        debugPrint('listSharedDevices: Join fallback failed: $joinErr');
+      }
+
+      return [];
     } catch (e) {
-      debugPrint('Failed to load shared devices: $e');
+      debugPrint('listSharedDevices: FAILED: $e');
       return [];
     }
   }
