@@ -138,20 +138,46 @@ CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Global error handler to prevent unhandled Flutter errors from crashing the app
+  FlutterError.onError = (FlutterErrorDetails details) {
+    debugPrint('FlutterError: ${details.exceptionAsString()}');
+    debugPrint('Stack: ${details.stack}');
+  };
+
   // Initialize Firebase
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    debugPrint('Firebase init failed: $e');
+  }
 
   // Initialize Supabase
-  await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnon);
+  try {
+    await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnon);
+  } catch (e) {
+    debugPrint('Supabase init failed: $e');
+  }
 
   // Initialize device state cache for instant UI feedback
-  await DeviceStateCache().initialize();
+  try {
+    await DeviceStateCache().initialize();
+  } catch (e) {
+    debugPrint('DeviceStateCache init failed: $e');
+  }
 
   // Initialize local notifications
-  await NotificationService().initialize();
+  try {
+    await NotificationService().initialize();
+  } catch (e) {
+    debugPrint('NotificationService init failed: $e');
+  }
 
   // Register home widget background callback for toggle actions
-  HomeWidget.registerInteractivityCallback(homeWidgetBackgroundCallback);
+  try {
+    HomeWidget.registerInteractivityCallback(homeWidgetBackgroundCallback);
+  } catch (e) {
+    debugPrint('HomeWidget callback registration failed: $e');
+  }
 
   runApp(
     MultiProvider(
