@@ -1,4 +1,5 @@
-import 'dart:io';
+// TODO: Re-enable dart:io import when Apple Sign-in is configured
+// import 'dart:io';
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../widgets/smart_input_field.dart';
@@ -367,53 +368,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
 
-                // Sign in with Apple (iOS only)
-                if (Platform.isIOS) ...[
-                  const SizedBox(height: HBotSpacing.space4),
-
-                  Row(
-                    children: [
-                      Expanded(child: Divider(color: context.hBorder)),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          AppStrings.get('or'),
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            fontSize: 14,
-                            color: context.hTextSecondary,
-                          ),
-                        ),
-                      ),
-                      Expanded(child: Divider(color: context.hBorder)),
-                    ],
-                  ),
-
-                  const SizedBox(height: HBotSpacing.space4),
-
-                  SizedBox(
-                    height: 52,
-                    child: OutlinedButton.icon(
-                      onPressed: _isLoading ? null : _signInWithApple,
-                      icon: const Icon(Icons.apple, size: 24),
-                      label: Text(
-                        AppStrings.get('sign_in_with_apple'),
-                        style: const TextStyle(
-                          fontFamily: 'DM Sans',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: context.hTextPrimary,
-                        side: BorderSide(color: context.hBorder),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: HBotRadius.mediumRadius,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                // TODO: Re-enable Apple Sign-in once Supabase Apple provider is configured
+                // Apple Sign-in is hidden until the Apple OAuth secret is added to Supabase dashboard
+                // if (Platform.isIOS) ...[
+                //   ... Apple Sign-in button ...
+                // ],
 
                 const SizedBox(height: HBotSpacing.space6),
 

@@ -48,20 +48,11 @@ class LocationTriggerMonitor {
         return;
       }
 
-      // Check location permissions
+      // Check location permissions (don't request — permissions should only be
+      // requested from a UI context, not from a background service)
       LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          debugPrint('LocationTriggerMonitor: Location permissions denied');
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        debugPrint(
-          'LocationTriggerMonitor: Location permissions permanently denied',
-        );
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        debugPrint('LocationTriggerMonitor: Location permissions not granted, skipping');
         return;
       }
 
