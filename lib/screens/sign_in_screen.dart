@@ -77,19 +77,14 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<void> _signInWithApple() async {
     setState(() => _isLoading = true);
     try {
-      final response = await _authService.signInWithApple();
-      if (response.user != null && mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-          (route) => false,
-        );
+      final result = await _authService.signInWithApple();
+      if (result && mounted) {
+        // OAuth flow opens browser, auth state change handles navigation
       }
     } catch (e) {
       if (mounted) {
         final msg = e.toString();
-        if (msg.contains('AuthorizationErrorCode.canceled') || msg.contains('canceled')) {
-          // User cancelled — do nothing
-        } else {
+        if (!msg.contains('canceled') && !msg.contains('cancelled')) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('${AppStrings.get("error_apple_sign_in")}: ${e.toString()}'),

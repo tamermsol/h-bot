@@ -50,7 +50,7 @@ class AuthService {
   }
 
   // Sign in with Apple
-  Future<AuthResponse> signInWithApple() async {
+  Future<bool> signInWithApple() async {
     return await _authRepo.signInWithApple();
   }
 
