@@ -67,9 +67,9 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
       maxChildSize: 0.95,
       builder: (context, scrollController) {
         return Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          decoration: BoxDecoration(
+            color: context.hElevated,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           ),
           child: Column(
             children: [
@@ -79,7 +79,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                 height: 4,
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: context.hBorder,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -207,7 +207,7 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
                     label: const Text('Reconnect'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: HBotColors.primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: HBotColors.textOnPrimary,
                     ),
                   ),
                 ),
@@ -316,9 +316,9 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
               height: 200,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: context.hInputBg,
                 borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: Colors.grey[300]!),
+                border: Border.all(color: context.hBorder),
               ),
               child: _debugMessages.isEmpty
                   ? Center(

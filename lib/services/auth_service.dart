@@ -49,6 +49,11 @@ class AuthService {
     return await _authRepo.checkEmailExists(email);
   }
 
+  // Sign in with Apple
+  Future<AuthResponse> signInWithApple() async {
+    return await _authRepo.signInWithApple();
+  }
+
   // Reset password (sends OTP via our custom email system)
   Future<void> resetPassword(String email) async {
     await _authRepo.sendPasswordResetOtp(email);

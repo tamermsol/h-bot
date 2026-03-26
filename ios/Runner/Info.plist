@@ -63,13 +63,11 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	
-	<!-- ========== LOCAL NETWORK PERMISSIONS ========== -->
-	<!-- Required for device discovery and provisioning on local network -->
+	<!-- Local network permissions for device discovery and provisioning -->
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>HBot needs access to your local network to discover, configure, and control your smart home devices.</string>
-	
-	<!-- ========== BONJOUR SERVICES ========== -->
-	<!-- Required for mDNS device discovery and to trigger local network permission -->
+	<string>H-Bot needs local network access to discover, configure, and control your smart home devices.</string>
+
+	<!-- Bonjour services for mDNS device discovery -->
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_http._tcp</string>
@@ -85,12 +83,6 @@
 	<string>H-Bot needs photo library access to set custom background images.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>H-Bot needs microphone access for device communication.</string>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>H-Bot needs local network access to discover and communicate with smart home devices.</string>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_http._tcp</string>
-	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>

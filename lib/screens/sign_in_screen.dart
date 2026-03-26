@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../services/auth_service.dart';
@@ -67,6 +68,35 @@ class _SignInScreenState extends State<SignInScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(msg)),
         );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _signInWithApple() async {
+    setState(() => _isLoading = true);
+    try {
+      final response = await _authService.signInWithApple();
+      if (response.user != null && mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        final msg = e.toString();
+        if (msg.contains('AuthorizationErrorCode.canceled') || msg.contains('canceled')) {
+          // User cancelled — do nothing
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${AppStrings.get("error_apple_sign_in")}: ${e.toString()}'),
+              backgroundColor: HBotColors.error,
+            ),
+          );
+        }
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -269,6 +299,54 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
 
                 
+
+                // Sign in with Apple (iOS only)
+                if (Platform.isIOS) ...[
+                  const SizedBox(height: HBotSpacing.space4),
+
+                  Row(
+                    children: [
+                      Expanded(child: Divider(color: context.hBorder)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          AppStrings.get('or'),
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontSize: 14,
+                            color: context.hTextSecondary,
+                          ),
+                        ),
+                      ),
+                      Expanded(child: Divider(color: context.hBorder)),
+                    ],
+                  ),
+
+                  const SizedBox(height: HBotSpacing.space4),
+
+                  SizedBox(
+                    height: 52,
+                    child: OutlinedButton.icon(
+                      onPressed: _isLoading ? null : _signInWithApple,
+                      icon: const Icon(Icons.apple, size: 24),
+                      label: Text(
+                        AppStrings.get('sign_in_with_apple'),
+                        style: const TextStyle(
+                          fontFamily: 'DM Sans',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: context.hTextPrimary,
+                        side: BorderSide(color: context.hBorder),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: HBotRadius.mediumRadius,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
 
                 const SizedBox(height: HBotSpacing.space6),
 

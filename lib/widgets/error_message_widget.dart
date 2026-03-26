@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/error_handler.dart';
+import '../theme/app_theme.dart';
 import '../l10n/app_strings.dart';
 
 /// Widget to display user-friendly error messages
@@ -21,10 +22,11 @@ class ErrorMessageWidget extends StatelessWidget {
     final message = customMessage ?? ErrorHandler.getUserFriendlyMessage(error);
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: const Color(0xFF2C2C2E),
-        borderRadius: BorderRadius.circular(12),
+        color: context.hCard,
+        borderRadius: HBotRadius.mediumRadius,
+        border: Border.all(color: context.hBorder),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -32,33 +34,33 @@ class ErrorMessageWidget extends StatelessWidget {
           Icon(
             isConnectivityIssue ? Icons.wifi_off : Icons.error_outline,
             size: 48,
-            color: const Color(0xFFFF9500),
+            color: HBotColors.warning,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: HBotSpacing.space4),
           Text(
             message,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: context.hTextPrimary,
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
           if (onRetry != null) ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: HBotSpacing.space4),
             ElevatedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
               label: Text(AppStrings.get('error_message_try_again')),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF9500),
-                foregroundColor: Colors.white,
+                backgroundColor: HBotColors.warning,
+                foregroundColor: HBotColors.textOnPrimary,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
+                  horizontal: HBotSpacing.space6,
+                  vertical: HBotSpacing.space3,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: HBotRadius.smallRadius,
                 ),
               ),
             ),
@@ -81,19 +83,19 @@ class ErrorSnackBar {
           children: [
             Icon(
               isConnectivityIssue ? Icons.wifi_off : Icons.error_outline,
-              color: Colors.white,
+              color: HBotColors.textOnPrimary,
               size: 20,
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: HBotSpacing.space3),
             Expanded(
-              child: Text(message, style: const TextStyle(color: Colors.white)),
+              child: Text(message, style: const TextStyle(color: HBotColors.textOnPrimary)),
             ),
           ],
         ),
-        backgroundColor: const Color(0xFFFF3B30),
+        backgroundColor: HBotColors.error,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 4),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: HBotRadius.smallRadius),
       ),
     );
   }

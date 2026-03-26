@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/profile.dart';
 
@@ -110,6 +113,76 @@ class AuthRepo {
 
       return response;
     } catch (e) {
+      throw _handleAuthException(e);
+    }
+  }
+
+  /// Sign in with Apple using native iOS flow + Supabase
+  Future<AuthResponse> signInWithApple() async {
+    try {
+      debugPrint('🍎 Starting Apple sign-in...');
+
+      // Generate a raw nonce for security
+      final rawNonce = supabase.auth.generateRawNonce();
+      final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+
+      // Request Apple credentials using native iOS dialog
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: hashedNonce,
+      );
+
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        throw Exception('Apple sign-in failed: no identity token received');
+      }
+
+      debugPrint('🍎 Got Apple identity token, signing in with Supabase...');
+
+      // Sign in to Supabase with the Apple ID token
+      final response = await supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: idToken,
+        nonce: rawNonce,
+      );
+
+      debugPrint('✅ Apple sign-in successful: ${response.user?.id}');
+
+      // Create profile if new user
+      if (response.user != null) {
+        final existingProfile = await supabase
+            .from('profiles')
+            .select()
+            .eq('id', response.user!.id)
+            .maybeSingle();
+
+        if (existingProfile == null) {
+          String? fullName;
+          if (credential.givenName != null || credential.familyName != null) {
+            fullName = [credential.givenName, credential.familyName]
+                .where((s) => s != null && s.isNotEmpty)
+                .join(' ');
+          }
+
+          final profileData = <String, dynamic>{
+            'id': response.user!.id,
+            'created_at': DateTime.now().toIso8601String(),
+            'updated_at': DateTime.now().toIso8601String(),
+          };
+          if (fullName != null && fullName.trim().isNotEmpty) {
+            profileData['full_name'] = fullName.trim();
+          }
+          await supabase.from('profiles').upsert(profileData);
+          debugPrint('✅ Profile created for Apple user');
+        }
+      }
+
+      return response;
+    } catch (e) {
+      debugPrint('❌ Apple sign-in error: $e');
       throw _handleAuthException(e);
     }
   }

@@ -1057,6 +1057,10 @@ class AppStrings {
       'reset_email_not_found': 'No account found with this email',
       'connection_timeout': 'Connection timeout. Check your internet connection.',
       'network_error': 'Network error. Check your internet connection.',
+    
+      'sign_in_with_apple': 'Sign in with Apple',
+      'or': 'OR',
+      'error_apple_sign_in': 'Apple sign-in failed',
     },
 
     // ── Arabic ────────────────────────────────────────────────────────────────
@@ -2099,6 +2103,10 @@ class AppStrings {
       'reset_email_not_found': 'لا يوجد حساب بهذا البريد الإلكتروني',
       'connection_timeout': 'انتهت مهلة الاتصال. تحقق من اتصالك بالإنترنت.',
       'network_error': 'خطأ في الشبكة. تحقق من اتصالك بالإنترنت.',
+    
+      'sign_in_with_apple': 'تسجيل الدخول بحساب Apple',
+      'or': 'أو',
+      'error_apple_sign_in': 'فشل تسجيل الدخول بحساب Apple',
     },
   };
 }
