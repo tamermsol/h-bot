@@ -24,7 +24,7 @@ class ConnectivityBanner extends StatelessWidget {
                   fontFamily: 'DM Sans',
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: HBotColors.textOnPrimary,
+                  color: Colors.white,
                 ),
               ),
             ),

@@ -94,16 +94,10 @@ class HBotColors {
 
   // Dark mode
   static const backgroundDark = _Neutral.n950;
-  static const surfaceDark = _Neutral.n900;
   static const cardDark = _Neutral.n800;
-  static const elevatedDark = _Neutral.n800;
-  static const inputBgDark = _Neutral.n900;
   static const borderDark = Color(0xFF181B1F);
-  static const borderSubtleDark = _Neutral.n800;
   static const textPrimaryDark = _Neutral.n0;
   static const textSecondaryDark = Color(0xFFC7C9CC);
-  static const textTertiaryDark = _Neutral.n500;
-  static const iconDefaultDark = _Neutral.n400;
 
   // Gradients
   static const primaryGradient = LinearGradient(
@@ -246,10 +240,7 @@ Widget hbotStatusDot({
 }
 
 /// Section header — overline style
-Widget hbotSectionHeader(String title, {BuildContext? context}) {
-  final color = context != null
-      ? context.hTextSecondary
-      : HBotColors.textSecondaryLight;
+Widget hbotSectionHeader(String title) {
   return Padding(
     padding: const EdgeInsets.only(
       left: HBotSpacing.space5,
@@ -259,12 +250,12 @@ Widget hbotSectionHeader(String title, {BuildContext? context}) {
     ),
     child: Text(
       title.toUpperCase(),
-      style: TextStyle(
+      style: const TextStyle(
         fontFamily: 'DM Sans',
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.0,
-        color: color,
+        color: HBotColors.textSecondaryLight,
       ),
     ),
   );
@@ -702,235 +693,71 @@ class AppTheme {
         error: HBotColors.error,
         onPrimary: HBotColors.textOnPrimary,
         onSurface: HBotColors.textPrimaryDark,
-        onError: HBotColors.textOnPrimary,
-      ),
-      textTheme: const TextTheme(
-        displayLarge: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 32, fontWeight: FontWeight.w700,
-          height: 1.25, letterSpacing: -0.5, color: HBotColors.textPrimaryDark,
-        ),
-        displayMedium: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 28, fontWeight: FontWeight.w700,
-          height: 1.29, letterSpacing: -0.5, color: HBotColors.textPrimaryDark,
-        ),
-        headlineLarge: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 24, fontWeight: FontWeight.w700,
-          height: 1.33, letterSpacing: -0.3, color: HBotColors.textPrimaryDark,
-        ),
-        headlineMedium: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 22, fontWeight: FontWeight.w600,
-          height: 1.27, letterSpacing: -0.3, color: HBotColors.textPrimaryDark,
-        ),
-        headlineSmall: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600,
-          height: 1.30, letterSpacing: -0.2, color: HBotColors.textPrimaryDark,
-        ),
-        titleLarge: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600,
-          height: 1.33, letterSpacing: -0.1, color: HBotColors.textPrimaryDark,
-        ),
-        titleMedium: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w600,
-          height: 1.38, color: HBotColors.textPrimaryDark,
-        ),
-        titleSmall: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600,
-          height: 1.43, color: HBotColors.textPrimaryDark,
-        ),
-        bodyLarge: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w400,
-          height: 1.50, color: HBotColors.textPrimaryDark,
-        ),
-        bodyMedium: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w400,
-          height: 1.43, color: HBotColors.textSecondaryDark,
-        ),
-        bodySmall: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 12, fontWeight: FontWeight.w400,
-          height: 1.33, letterSpacing: 0.1, color: HBotColors.textSecondaryDark,
-        ),
-        labelLarge: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500,
-          height: 1.38, color: HBotColors.textPrimaryDark,
-        ),
-        labelMedium: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w500,
-          height: 1.43, letterSpacing: 0.1, color: HBotColors.textPrimaryDark,
-        ),
-        labelSmall: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 12, fontWeight: FontWeight.w500,
-          height: 1.33, letterSpacing: 0.2, color: HBotColors.textPrimaryDark,
-        ),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: HBotColors.backgroundDark,
         foregroundColor: HBotColors.textPrimaryDark,
         elevation: 0,
-        scrolledUnderElevation: 0,
-        titleTextStyle: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 22, fontWeight: FontWeight.w600,
-          height: 1.27, letterSpacing: -0.3, color: HBotColors.textPrimaryDark,
-        ),
-        iconTheme: IconThemeData(color: HBotColors.iconDefaultDark, size: 24),
       ),
       cardTheme: CardTheme(
         color: HBotColors.cardDark,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: HBotRadius.largeRadius,
+          borderRadius: HBotRadius.mediumRadius,
           side: const BorderSide(color: HBotColors.borderDark, width: 0.5),
         ),
-        margin: EdgeInsets.zero,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: HBotColors.inputBgDark,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: HBotSpacing.space4, vertical: 14,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: HBotRadius.mediumRadius,
-          borderSide: const BorderSide(color: HBotColors.borderDark, width: 1.5),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.mediumRadius,
-          borderSide: const BorderSide(color: HBotColors.borderDark, width: 1.5),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.mediumRadius,
-          borderSide: const BorderSide(color: HBotColors.primary, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.mediumRadius,
-          borderSide: const BorderSide(color: HBotColors.error, width: 1.5),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.mediumRadius,
-          borderSide: const BorderSide(color: HBotColors.error, width: 2),
-        ),
-        hintStyle: const TextStyle(
-          fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w400,
-          color: HBotColors.textTertiaryDark,
-        ),
-        labelStyle: const TextStyle(
-          fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w500,
-          color: HBotColors.textSecondaryDark,
-        ),
-        errorStyle: const TextStyle(
-          fontFamily: 'DM Sans', fontSize: 12, fontWeight: FontWeight.w400,
-          color: HBotColors.error,
-        ),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          minimumSize: const Size(120, 52),
-          backgroundColor: HBotColors.primary,
-          foregroundColor: HBotColors.textOnPrimary,
-          textStyle: const TextStyle(
-            fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500,
-          ),
-          shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
-          elevation: 0,
-          padding: const EdgeInsets.symmetric(
-            horizontal: HBotSpacing.space4, vertical: 14,
-          ),
-        ),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          minimumSize: const Size(120, 52),
-          foregroundColor: HBotColors.primary,
-          textStyle: const TextStyle(
-            fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500,
-          ),
-          shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
-          side: const BorderSide(color: HBotColors.primary, width: 1.5),
-          padding: const EdgeInsets.symmetric(
-            horizontal: HBotSpacing.space4, vertical: 14,
-          ),
-        ),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          minimumSize: const Size(0, 44),
-          foregroundColor: HBotColors.primary,
-          textStyle: const TextStyle(
-            fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w500,
-          ),
-          shape: RoundedRectangleBorder(borderRadius: HBotRadius.smallRadius),
-          padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space3),
-        ),
-      ),
-      switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.all(HBotColors.toggleThumb),
-        trackColor: WidgetStateProperty.resolveWith((states) {
-          return states.contains(WidgetState.selected)
-              ? HBotColors.primary
-              : HBotColors.borderDark;
-        }),
-        trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: HBotColors.backgroundDark,
         selectedItemColor: HBotColors.primary,
-        unselectedItemColor: HBotColors.textTertiaryDark,
-        selectedLabelStyle: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 12, fontWeight: FontWeight.w500,
-        ),
-        unselectedLabelStyle: TextStyle(
-          fontFamily: 'DM Sans', fontSize: 12, fontWeight: FontWeight.w400,
-        ),
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
+        unselectedItemColor: HBotColors.textSecondaryDark,
       ),
       dialogTheme: DialogTheme(
-        backgroundColor: HBotColors.elevatedDark,
-        shape: RoundedRectangleBorder(borderRadius: HBotRadius.xlRadius),
+        backgroundColor: HBotColors.cardDark,
         titleTextStyle: const TextStyle(
-          fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600,
+          fontFamily: 'DM Sans',
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
           color: HBotColors.textPrimaryDark,
-        ),
-        contentTextStyle: const TextStyle(
-          fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w400,
-          color: HBotColors.textSecondaryDark,
         ),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: HBotColors.elevatedDark,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(HBotRadius.xl),
-            topRight: Radius.circular(HBotRadius.xl),
-          ),
-        ),
-        dragHandleColor: HBotColors.textTertiaryDark,
-        dragHandleSize: Size(36, 4),
-        showDragHandle: true,
-      ),
-      snackBarTheme: SnackBarThemeData(
         backgroundColor: HBotColors.cardDark,
-        contentTextStyle: const TextStyle(
-          fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w400,
-          color: HBotColors.textPrimaryDark,
-        ),
-        shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
-        behavior: SnackBarBehavior.floating,
-      ),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: HBotColors.primary,
-        foregroundColor: HBotColors.textOnPrimary,
-        elevation: 4,
-        shape: const CircleBorder(),
       ),
       dividerTheme: const DividerThemeData(
         color: HBotColors.borderDark,
-        thickness: 1,
-        space: 0,
       ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: HBotColors.primary,
-        linearTrackColor: HBotColors.borderDark,
-        circularTrackColor: HBotColors.borderDark,
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return HBotColors.primary;
+          return HBotColors.textSecondaryDark;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) return HBotColors.primary.withOpacity(0.3);
+          return HBotColors.borderDark;
+        }),
+      ),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: HBotColors.cardDark,
+        contentTextStyle: TextStyle(color: HBotColors.textPrimaryDark),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        fillColor: HBotColors.backgroundDark,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.borderDark),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.borderDark),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: HBotRadius.mediumRadius,
+          borderSide: const BorderSide(color: HBotColors.primary),
+        ),
+        labelStyle: const TextStyle(color: HBotColors.textSecondaryDark),
+        hintStyle: const TextStyle(color: HBotColors.textSecondaryDark),
       ),
     );
   }
@@ -940,16 +767,12 @@ class AppTheme {
 /// Use these instead of HBotColors.xxxLight directly.
 extension HBotThemeContext on BuildContext {
   bool get isDark => Theme.of(this).brightness == Brightness.dark;
-
+  
   Color get hBackground => isDark ? HBotColors.backgroundDark : HBotColors.backgroundLight;
-  Color get hSurface => isDark ? HBotColors.surfaceDark : HBotColors.surfaceLight;
   Color get hCard => isDark ? HBotColors.cardDark : HBotColors.cardLight;
-  Color get hElevated => isDark ? HBotColors.elevatedDark : HBotColors.elevatedLight;
-  Color get hInputBg => isDark ? HBotColors.inputBgDark : HBotColors.inputBg;
+  Color get hSurface => isDark ? HBotColors.backgroundDark : HBotColors.surfaceLight;
   Color get hBorder => isDark ? HBotColors.borderDark : HBotColors.borderLight;
-  Color get hBorderSubtle => isDark ? HBotColors.borderSubtleDark : HBotColors.borderSubtle;
   Color get hTextPrimary => isDark ? HBotColors.textPrimaryDark : HBotColors.textPrimaryLight;
   Color get hTextSecondary => isDark ? HBotColors.textSecondaryDark : HBotColors.textSecondaryLight;
-  Color get hTextTertiary => isDark ? HBotColors.textTertiaryDark : HBotColors.textTertiaryLight;
-  Color get hIconDefault => isDark ? HBotColors.iconDefaultDark : HBotColors.iconDefault;
+  Color get hTextTertiary => isDark ? HBotColors.textSecondaryDark : HBotColors.textTertiaryLight;
 }

@@ -135,50 +135,23 @@ CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
 -----END CERTIFICATE-----''';
 
 
-/// Whether Supabase initialized successfully. Checked by widgets before
-/// accessing [Supabase.instance] so we never crash on a failed init.
-bool supabaseReady = false;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Catch all Flutter framework errors
-  FlutterError.onError = (details) {
-    FlutterError.presentError(details);
-    debugPrint('Flutter error: ${details.exception}');
-  };
+  // Initialize Firebase
+  await Firebase.initializeApp();
 
-  try {
-    // Initialize Firebase — timeout prevents blank screen if it hangs
-    await Firebase.initializeApp()
-        .timeout(const Duration(seconds: 5));
+  // Initialize Supabase
+  await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnon);
 
-    // Initialize Supabase — timeout prevents blank screen if it hangs
-    await Supabase.initialize(url: Env.supabaseUrl, anonKey: Env.supabaseAnon)
-        .timeout(const Duration(seconds: 5));
-    supabaseReady = true;
+  // Initialize device state cache for instant UI feedback
+  await DeviceStateCache().initialize();
 
-    // Initialize device state cache for instant UI feedback
-    await DeviceStateCache().initialize()
-        .timeout(const Duration(seconds: 3));
+  // Initialize local notifications
+  await NotificationService().initialize();
 
-    // Non-critical initializations — don't block app launch
-    try {
-      await NotificationService().initialize();
-    } catch (e) {
-      debugPrint('Notification init failed (non-critical): $e');
-    }
-
-    try {
-      HomeWidget.registerInteractivityCallback(homeWidgetBackgroundCallback);
-    } catch (e) {
-      debugPrint('HomeWidget init failed (non-critical): $e');
-    }
-  } catch (e) {
-    debugPrint('Critical init error: $e');
-    // Even if critical services fail, still launch the app
-    // so the user sees something instead of a blank screen
-  }
+  // Register home widget background callback for toggle actions
+  HomeWidget.registerInteractivityCallback(homeWidgetBackgroundCallback);
 
   runApp(
     MultiProvider(
@@ -225,16 +198,13 @@ class _SmartHomeAppState extends State<SmartHomeApp> {
       smartHomeService: _smartHomeService,
     );
 
-    // Only listen for auth changes if Supabase initialized successfully
-    if (supabaseReady) {
-      _authSubscription =
-          Supabase.instance.client.auth.onAuthStateChange.listen((authState) {
-            _handleAuthStateChanged(authState.session);
-          });
+    _authSubscription =
+        Supabase.instance.client.auth.onAuthStateChange.listen((authState) {
+          _handleAuthStateChanged(authState.session);
+        });
 
-      // Handle already-authenticated users on app startup
-      _handleAuthStateChanged(Supabase.instance.client.auth.currentSession);
-    }
+    // Handle already-authenticated users on app startup
+    _handleAuthStateChanged(Supabase.instance.client.auth.currentSession);
   }
 
   void _handleAuthStateChanged(Session? session) {

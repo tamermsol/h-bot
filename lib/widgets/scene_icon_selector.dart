@@ -68,7 +68,7 @@ class SceneIconSelector extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isSelected
                     ? HBotColors.primary.withOpacity(0.2)
-                    : context.hCard,
+                    : (Colors.white),
                 borderRadius: BorderRadius.circular(HBotRadius.small),
                 border: Border.all(
                   color: isSelected

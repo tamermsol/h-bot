@@ -92,6 +92,31 @@
 - H-Bot source copied to `/root/.openclaw/workspace-hbot/` (lib/, pubspec.yaml, ios/, android/, assets/)
 - Work from hbot workspace, not flutter workspace
 
+## 2026-03-26 — Sign in with Apple + App Store Rejection
+
+### App Store Rejection (v1.0.1 build 144)
+- Guideline 4.8: Need Sign in with Apple
+- Guideline 2.1: Need demo video with physical hardware
+- Tamer handling video
+
+### Sign in with Apple Implementation
+- Commit: `59ea2e7`, version 1.0.2+145
+- Packages: `sign_in_with_apple`, `crypto`
+- Native iOS flow → `signInWithIdToken(provider: apple)` with nonce
+- Supabase Apple auth enabled (client_id: `com.mb.hbot`)
+- Entitlement: `com.apple.developer.applesignin` in Runner.entitlements
+- Buttons on sign_in_screen + sign_up_screen (iOS only)
+- **BLOCKED**: Tamer must enable "Sign In with Apple" capability on App ID `com.mb.hbot` in Apple Developer portal and regenerate provisioning profile
+
+### iOS Build IDs
+- Build 145 FAILED (provisioning): `69c4f83d68d6f85bb2066c66`
+- Build 144 SUCCESS: `69bae849bef2dd317623a49a`
+- ASC build 144 ID: `ba2ed522-baf1-4a08-a1cf-ecc0c25aa5e3`
+
+### ASC Version
+- v1.0.1 version ID: `b094dc6c-22c0-46e9-8df2-30a768cecef6` (reused from v1.0)
+- Review submission cancelled, will resubmit after build 145 succeeds
+
 ## GOLDEN RULES
 - **No MQTT/Tasmota anywhere user-facing** — App Store, Play Store, descriptions, keywords, screenshots, marketing. Use generic terms: "smart home devices", "real-time updates", "IoT devices"
 - Don't push to TestFlight unless asked — APK + git only (Tamer rule from 2026-03-17)

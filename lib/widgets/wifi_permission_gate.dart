@@ -144,7 +144,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
         appBar: AppBar(
           title: Text(widget.title),
           backgroundColor: HBotColors.primary,
-          foregroundColor: HBotColors.textOnPrimary,
+          foregroundColor: Colors.white,
         ),
         body: Center(
           child: Column(
@@ -168,7 +168,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
       appBar: AppBar(
         title: Text(widget.title),
         backgroundColor: HBotColors.primary,
-        foregroundColor: HBotColors.textOnPrimary,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(HBotSpacing.space6),
@@ -210,7 +210,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
                 label: Text(AppStrings.get('wifi_permission_gate_turn_on_location_services')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
-                  foregroundColor: HBotColors.textOnPrimary,
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: HBotSpacing.space6,
                     vertical: HBotSpacing.space4,
@@ -225,7 +225,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
                 label: Text(AppStrings.get('wifi_permission_gate_open_app_settings')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
-                  foregroundColor: HBotColors.textOnPrimary,
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: HBotSpacing.space6,
                     vertical: HBotSpacing.space4,
@@ -239,7 +239,7 @@ class _WiFiPermissionGateState extends State<WiFiPermissionGate> {
                 label: Text(AppStrings.get('wifi_permission_gate_grant_permissions')),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: HBotColors.primary,
-                  foregroundColor: HBotColors.textOnPrimary,
+                  foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: HBotSpacing.space6,
                     vertical: HBotSpacing.space4,
