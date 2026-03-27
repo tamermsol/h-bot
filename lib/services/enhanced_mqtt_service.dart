@@ -540,6 +540,14 @@ class EnhancedMqttService {
         _client?.connectionStatus?.state == MqttConnectionState.connected;
   }
 
+  /// Whether the MQTT client is currently connected
+  bool get isConnected => _connectionState == MqttConnectionState.connected;
+
+  /// Publish a retained message to a topic (for panel config, status, etc.)
+  Future<void> publishRetained(String topic, String payload) async {
+    await _publishMessage(topic, payload, retain: true);
+  }
+
   /// Force reconnection with full device re-registration (for app lifecycle)
   Future<bool> forceReconnectWithDevices() async {
     _addDebugMessage(

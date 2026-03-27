@@ -27,6 +27,7 @@ import 'shared_devices_screen.dart';
 import 'multi_device_share_screen.dart';
 import 'rooms_screen.dart';
 import 'wifi_profile_screen.dart';
+import 'panels_screen.dart';
 import '../widgets/responsive_shell.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -451,6 +452,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: AppStrings.get('profile_wifi_profiles'),
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const WiFiProfileScreen())),
+              ),
+              SettingsTile(
+                icon: Icons.tv,
+                title: 'Wall Panels',
+                subtitle: 'Manage paired H-Bot panels',
+                onTap: () async {
+                  final homeId = await CurrentHomeService().getCurrentHomeId();
+                  if (mounted) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => PanelsScreen(homeId: homeId)));
+                  }
+                },
                 showDivider: false,
               ),
             ],
