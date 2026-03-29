@@ -174,6 +174,53 @@ class HaRepo {
     }).eq('id', id);
   }
 
+  /// Auto-map HA areas to H-Bot rooms by matching area names.
+  /// Call after syncEntities to auto-assign home_id/room_id.
+  Future<int> autoMapAreasToRooms(String connectionId, String homeId) async {
+    final userId = _db.auth.currentUser?.id;
+    if (userId == null) return 0;
+
+    // Get all rooms for this home
+    final rooms = await _db
+        .from('rooms')
+        .select('id, name')
+        .eq('home_id', homeId);
+
+    if (rooms.isEmpty) return 0;
+
+    // Build a case-insensitive name->id map
+    final roomMap = <String, String>{};
+    for (final r in rooms) {
+      roomMap[(r['name'] as String).toLowerCase()] = r['id'] as String;
+    }
+
+    // Get entities with HA area names that haven't been mapped yet
+    final entities = await _db
+        .from('ha_entities')
+        .select('id, ha_area_name')
+        .eq('connection_id', connectionId)
+        .eq('user_id', userId)
+        .isFilter('room_id', null);
+
+    int mapped = 0;
+    for (final e in entities) {
+      final areaName = (e['ha_area_name'] as String?)?.toLowerCase();
+      if (areaName == null) continue;
+
+      final roomId = roomMap[areaName];
+      if (roomId != null) {
+        await _db.from('ha_entities').update({
+          'home_id': homeId,
+          'room_id': roomId,
+          'updated_at': DateTime.now().toIso8601String(),
+        }).eq('id', e['id']);
+        mapped++;
+      }
+    }
+
+    return mapped;
+  }
+
   /// Delete all entities for a connection
   Future<void> deleteEntitiesForConnection(String connectionId) async {
     await _db

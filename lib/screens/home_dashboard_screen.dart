@@ -22,10 +22,9 @@ import '../services/room_change_notifier.dart';
 import '../widgets/background_image_picker.dart';
 import 'homes_screen.dart';
 import 'add_device_flow_screen.dart';
-import 'notifications_settings_screen.dart';
 import 'notifications_inbox_screen.dart';
 import '../services/broadcast_service.dart';
-import '../widgets/responsive_shell.dart';
+import '../widgets/ha_dashboard_section.dart';
 import 'device_control_screen.dart';
 import '../l10n/app_strings.dart';
 
@@ -936,6 +935,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     return '${AppStrings.get("greeting_good_night")} 🌙';
   }
 
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Stack(
@@ -1398,45 +1398,56 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       );
     }
 
-    // Return grid or list view based on user preference
-    if (_isGridView) {
-      return _buildDeviceGrid();
-    } else {
-      return _buildDeviceList();
-    }
-  }
+    // Return grid or list view based on user preference, with HA section
+    final selectedRoom = (_selectedRoomFilter != 'All' && _rooms.isNotEmpty)
+        ? _rooms.firstWhere(
+            (r) => r.name == _selectedRoomFilter,
+            orElse: () => _rooms.first,
+          )
+        : null;
 
-  Widget _buildDeviceList() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
-      itemCount: _filteredDevices.length,
-      itemBuilder: (context, index) {
-        final device = _filteredDevices[index];
-        return _buildDeviceCardWrapper(device);
-      },
+    return CustomScrollView(
+      slivers: [
+        // HA entities section (horizontal cards)
+        SliverToBoxAdapter(
+          child: HaDashboardSection(roomId: selectedRoom?.id),
+        ),
+        // Native device grid or list
+        if (_isGridView)
+          _buildDeviceGridSliver()
+        else
+          _buildDeviceListSliver(),
+      ],
     );
   }
 
-  Widget _buildDeviceGrid() {
-    final width = MediaQuery.of(context).size.width;
-    final isTablet = width >= 600;
-    final columns = width >= 900 ? 4 : (isTablet ? 3 : 2);
-    final spacing = isTablet ? HBotSpacing.space4 : HBotSpacing.space3;
-    final hPadding = isTablet ? HBotSpacing.space6 : HBotSpacing.space4;
-
-    return GridView.builder(
-      padding: EdgeInsets.fromLTRB(hPadding, HBotSpacing.space4, hPadding, 80),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columns,
-        crossAxisSpacing: spacing,
-        mainAxisSpacing: spacing,
-        childAspectRatio: isTablet ? 1.1 : 1.0,
+  Widget _buildDeviceGridSliver() {
+    return SliverPadding(
+      padding: const EdgeInsets.all(HBotSpacing.space4),
+      sliver: SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: HBotSpacing.space3,
+          crossAxisSpacing: HBotSpacing.space3,
+          childAspectRatio: 1.1,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => _buildDeviceCardWrapper(_filteredDevices[index], isGridView: true),
+          childCount: _filteredDevices.length,
+        ),
       ),
-      itemCount: _filteredDevices.length,
-      itemBuilder: (context, index) {
-        final device = _filteredDevices[index];
-        return _buildDeviceCardWrapper(device, isGridView: true);
-      },
+    );
+  }
+
+  Widget _buildDeviceListSliver() {
+    return SliverPadding(
+      padding: const EdgeInsets.all(HBotSpacing.space4),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => _buildDeviceCardWrapper(_filteredDevices[index]),
+          childCount: _filteredDevices.length,
+        ),
+      ),
     );
   }
 

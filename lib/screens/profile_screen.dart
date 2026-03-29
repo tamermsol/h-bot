@@ -28,9 +28,7 @@ import 'multi_device_share_screen.dart';
 import 'rooms_screen.dart';
 import 'wifi_profile_screen.dart';
 import 'panels_screen.dart';
-import 'ha_setup_screen.dart';
 import 'ha_entities_screen.dart';
-import '../widgets/responsive_shell.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

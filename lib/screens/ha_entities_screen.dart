@@ -185,6 +185,29 @@ class _HaEntitiesScreenState extends State<HaEntitiesScreen> {
       await _repo.syncEntities(_connection!.id, entityRecords);
       await _repo.updateLastSync(_connection!.id);
 
+      // Auto-map HA areas to H-Bot rooms
+      // Uses the user's current home for matching
+      try {
+        final currentHomeId = await Supabase.instance.client
+            .from('homes')
+            .select('id')
+            .eq('owner_user_id', Supabase.instance.client.auth.currentUser!.id)
+            .limit(1)
+            .maybeSingle();
+
+        if (currentHomeId != null) {
+          final mapped = await _repo.autoMapAreasToRooms(
+            _connection!.id,
+            currentHomeId['id'] as String,
+          );
+          if (mapped > 0) {
+            debugPrint('[HA Sync] Auto-mapped $mapped entities to rooms');
+          }
+        }
+      } catch (e) {
+        debugPrint('[HA Sync] Area-to-room mapping failed (non-fatal): $e');
+      }
+
       // Reload
       _entities = await _repo.getEntities();
 
