@@ -28,6 +28,8 @@ import 'multi_device_share_screen.dart';
 import 'rooms_screen.dart';
 import 'wifi_profile_screen.dart';
 import 'panels_screen.dart';
+import 'ha_setup_screen.dart';
+import 'ha_entities_screen.dart';
 import '../widgets/responsive_shell.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -473,6 +475,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SettingsGroup(
             label: AppStrings.get('profile_integrations'),
             children: [
+              SettingsTile(
+                icon: Icons.home_outlined,
+                title: 'Home Assistant',
+                subtitle: 'Control devices from any vendor',
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const HaEntitiesScreen())),
+              ),
               SettingsTile(
                 icon: Icons.record_voice_over_outlined,
                 title: AppStrings.get('alexa_integration'),
