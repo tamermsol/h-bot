@@ -72,10 +72,16 @@ class HaMqttBridgeService {
 
     _bridgedPanels.add(panelDeviceId);
 
-    // Subscribe to panel commands
+    // Subscribe to panel commands (entity control)
     final cmdTopic = 'hbot/panels/$panelDeviceId/ha/command';
     _mqtt.subscribeToCustomTopic(cmdTopic, (topic, payload) {
       _handlePanelCommand(payload);
+    });
+
+    // Subscribe to scene activation commands from panel
+    final sceneTopic = 'hbot/panels/$panelDeviceId/ha/activate_scene';
+    _mqtt.subscribeToCustomTopic(sceneTopic, (topic, payload) {
+      _handlePanelSceneActivation(payload);
     });
 
     // Push full entity list to panel
@@ -93,6 +99,8 @@ class HaMqttBridgeService {
     _bridgedPanels.remove(panelDeviceId);
     _mqtt.unsubscribeFromCustomTopic(
         'hbot/panels/$panelDeviceId/ha/command');
+    _mqtt.unsubscribeFromCustomTopic(
+        'hbot/panels/$panelDeviceId/ha/activate_scene');
 
     if (_bridgedPanels.isEmpty) {
       _stateSub?.cancel();
@@ -107,8 +115,11 @@ class HaMqttBridgeService {
 
   /// Publish the entity list to the panel
   Future<void> _publishEntityList(String panelDeviceId) async {
-    final entityList = _entities
-        .where((e) => e.isVisible)
+    final visibleEntities = _entities.where((e) => e.isVisible).toList();
+
+    // Publish non-scene entities
+    final entityList = visibleEntities
+        .where((e) => e.domain != 'scene')
         .map((e) => {
               'entity_id': e.entityId,
               'domain': e.domain,
@@ -117,8 +128,22 @@ class HaMqttBridgeService {
             })
         .toList();
 
-    final topic = 'hbot/panels/$panelDeviceId/ha/entities';
-    _mqtt.publishMessage(topic, jsonEncode(entityList));
+    final entityTopic = 'hbot/panels/$panelDeviceId/ha/entities';
+    _mqtt.publishMessage(entityTopic, jsonEncode(entityList));
+
+    // Publish scenes as a separate list so the panel can show scene buttons
+    final sceneList = visibleEntities
+        .where((e) => e.domain == 'scene')
+        .map((e) => {
+              'entity_id': e.entityId,
+              'name': e.displayName,
+            })
+        .toList();
+
+    if (sceneList.isNotEmpty) {
+      final sceneTopic = 'hbot/panels/$panelDeviceId/ha/scenes';
+      _mqtt.publishMessage(sceneTopic, jsonEncode(sceneList));
+    }
   }
 
   /// Publish all current states to the panel
@@ -171,6 +196,23 @@ class HaMqttBridgeService {
     _mqtt.publishMessage(topic, jsonEncode(payload));
   }
 
+  /// Publish a scene activation event to all bridged panels.
+  /// Called by the app UI when a user activates an HA scene, so the
+  /// panel can react immediately (e.g., show a toast or update its view).
+  void publishSceneActivation(String sceneEntityId) {
+    final payload = jsonEncode({
+      'entity_id': sceneEntityId,
+      'activated_at': DateTime.now().toIso8601String(),
+    });
+
+    for (final panelId in _bridgedPanels) {
+      final topic = 'hbot/panels/$panelId/ha/scene_activated';
+      _mqtt.publishMessage(topic, payload);
+    }
+
+    debugPrint('[HA Bridge] Published scene activation: $sceneEntityId');
+  }
+
   /// Handle a command from the panel (turn on, set temp, etc.)
   void _handlePanelCommand(String payload) {
     try {
@@ -192,6 +234,26 @@ class HaMqttBridgeService {
       debugPrint('[HA Bridge] Forwarded command: $domain.$service -> $entityId');
     } catch (e) {
       debugPrint('[HA Bridge] Invalid command: $e');
+    }
+  }
+
+  /// Handle a scene activation request from the panel.
+  /// Expects JSON: {"entity_id": "scene.movie_night"}
+  void _handlePanelSceneActivation(String payload) {
+    try {
+      final data = jsonDecode(payload) as Map<String, dynamic>;
+      final entityId = data['entity_id'] as String?;
+      if (entityId == null || _ws == null) return;
+
+      _ws!.callService(
+        domain: 'scene',
+        service: 'turn_on',
+        entityId: entityId,
+      );
+
+      debugPrint('[HA Bridge] Panel activated scene: $entityId');
+    } catch (e) {
+      debugPrint('[HA Bridge] Invalid scene activation: $e');
     }
   }
 

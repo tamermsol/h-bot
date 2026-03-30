@@ -26,24 +26,44 @@ class HaEntityControlScreen extends StatefulWidget {
   State<HaEntityControlScreen> createState() => _HaEntityControlScreenState();
 }
 
-class _HaEntityControlScreenState extends State<HaEntityControlScreen> {
+class _HaEntityControlScreenState extends State<HaEntityControlScreen>
+    with SingleTickerProviderStateMixin {
   late StreamSubscription<HaEntityState> _stateSub;
   HaEntityState? _currentState;
+  late final AnimationController _toggleAnim;
+  bool? _prevIsOn;
 
   @override
   void initState() {
     super.initState();
+    _toggleAnim = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
     _currentState = widget.stateService.getState(widget.entity.entityId);
+    _prevIsOn = _isOn;
+    if (_isOn) _toggleAnim.value = 1.0;
     _stateSub = widget.stateService
         .watchEntity(widget.entity.entityId)
         .listen((state) {
-      if (mounted) setState(() => _currentState = state);
+      if (mounted) {
+        setState(() => _currentState = state);
+        if (_prevIsOn != _isOn) {
+          _prevIsOn = _isOn;
+          if (_isOn) {
+            _toggleAnim.forward();
+          } else {
+            _toggleAnim.reverse();
+          }
+        }
+      }
     });
   }
 
   @override
   void dispose() {
     _stateSub.cancel();
+    _toggleAnim.dispose();
     super.dispose();
   }
 
@@ -95,43 +115,61 @@ class _HaEntityControlScreenState extends State<HaEntityControlScreen> {
 
   Widget _buildStateHeader() {
     final domain = widget.entity.domainEnum;
-    final color = _isOn ? AppTheme.primaryColor : Colors.grey;
 
-    return Column(
-      children: [
-        // Big icon with state
-        GestureDetector(
-          onTap: domain.isControllable ? _toggle : null,
-          child: Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: color.withOpacity(0.15),
-              border: Border.all(color: color, width: 3),
+    return AnimatedBuilder(
+      animation: _toggleAnim,
+      builder: (context, child) {
+        final color = ColorTween(
+          begin: Colors.grey,
+          end: AppTheme.primaryColor,
+        ).evaluate(_toggleAnim)!;
+
+        return Column(
+          children: [
+            // Animated icon circle
+            GestureDetector(
+              onTap: domain.isControllable ? _toggle : null,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: color.withOpacity(0.15),
+                  border: Border.all(color: color, width: 3),
+                ),
+                child: Icon(
+                  _getDomainIcon(domain, widget.entity.deviceClass),
+                  size: 48,
+                  color: color,
+                ),
+              ),
             ),
-            child: Icon(
-              _getIcon(),
-              size: 48,
-              color: color,
+            const SizedBox(height: 16),
+            Text(
+              _state.toUpperCase(),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
             ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          _state.toUpperCase(),
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          widget.entity.entityId,
-          style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
-        ),
-      ],
+            const SizedBox(height: 4),
+            Text(
+              widget.entity.entityId,
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+            ),
+            // Last changed timestamp
+            if (_currentState != null) ...[
+              const SizedBox(height: 6),
+              Text(
+                'Changed ${_formatTimeAgo(_currentState!.lastChanged)}',
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 11),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 
@@ -467,31 +505,93 @@ class _HaEntityControlScreenState extends State<HaEntityControlScreen> {
     );
   }
 
-  IconData _getIcon() {
-    switch (widget.entity.domainEnum) {
+  /// Domain-aware icon with device_class specializations
+  IconData _getDomainIcon(HaDomain domain, String? deviceClass) {
+    switch (domain) {
       case HaDomain.light:
         return Icons.lightbulb;
       case HaDomain.switchDomain:
+        if (deviceClass == 'outlet') return Icons.power;
         return Icons.toggle_on;
       case HaDomain.climate:
         return Icons.thermostat;
       case HaDomain.cover:
+        if (deviceClass == 'garage') return Icons.garage;
+        if (deviceClass == 'door') return Icons.door_front_door;
+        if (deviceClass == 'window') return Icons.window;
+        if (deviceClass == 'shutter') return Icons.roller_shades;
         return Icons.blinds;
       case HaDomain.fan:
         return Icons.air;
       case HaDomain.lock:
         return _isOn ? Icons.lock_open : Icons.lock;
       case HaDomain.sensor:
-        return Icons.sensors;
+        return _sensorIcon(deviceClass);
       case HaDomain.binarySensor:
+        if (deviceClass == 'motion') return Icons.directions_walk;
+        if (deviceClass == 'door') return Icons.door_front_door;
+        if (deviceClass == 'window') return Icons.window;
+        if (deviceClass == 'smoke') return Icons.local_fire_department;
+        if (deviceClass == 'moisture') return Icons.water_damage;
+        if (deviceClass == 'occupancy') return Icons.person;
         return Icons.sensors;
       case HaDomain.mediaPlayer:
         return Icons.speaker;
       case HaDomain.camera:
         return Icons.videocam;
-      default:
+      case HaDomain.scene:
+        return Icons.palette;
+      case HaDomain.button:
+        return Icons.radio_button_checked;
+      case HaDomain.number:
+        return Icons.tune;
+      case HaDomain.inputBoolean:
+        return Icons.toggle_on_outlined;
+      case HaDomain.inputNumber:
+        return Icons.dialpad;
+      case HaDomain.other:
         return Icons.device_hub;
     }
+  }
+
+  IconData _sensorIcon(String? deviceClass) {
+    switch (deviceClass) {
+      case 'temperature':
+        return Icons.thermostat;
+      case 'humidity':
+        return Icons.water_drop;
+      case 'power':
+      case 'energy':
+        return Icons.bolt;
+      case 'battery':
+        return Icons.battery_std;
+      case 'illuminance':
+        return Icons.light_mode;
+      case 'pressure':
+        return Icons.compress;
+      case 'carbon_dioxide':
+      case 'carbon_monoxide':
+        return Icons.cloud;
+      case 'gas':
+        return Icons.propane_tank;
+      default:
+        return Icons.sensors;
+    }
+  }
+
+  String _formatTimeAgo(DateTime dateTime) {
+    final diff = DateTime.now().difference(dateTime);
+    if (diff.inSeconds < 60) return 'just now';
+    if (diff.inMinutes < 60) {
+      final m = diff.inMinutes;
+      return '$m min${m > 1 ? 's' : ''} ago';
+    }
+    if (diff.inHours < 24) {
+      final h = diff.inHours;
+      return '$h hour${h > 1 ? 's' : ''} ago';
+    }
+    final d = diff.inDays;
+    return '$d day${d > 1 ? 's' : ''} ago';
   }
 
   Future<void> _toggle() async {

@@ -10,6 +10,8 @@ import '../services/ha_entity_state_service.dart';
 import '../screens/ha_entities_screen.dart';
 import '../screens/ha_entity_control_screen.dart';
 import '../screens/ha_setup_screen.dart';
+import '../services/ha_mqtt_bridge_service.dart';
+import 'ha_scene_card.dart';
 
 /// Dashboard section showing HA entities as compact cards.
 /// Designed to sit below the native device grid on the main dashboard.
@@ -28,6 +30,7 @@ class _HaDashboardSectionState extends State<HaDashboardSection> {
   HaEntityStateService? _stateService;
 
   List<HaEntity> _entities = [];
+  List<HaEntity> _scenes = [];
   bool _isLoading = true;
   bool _hasConnection = false;
 
@@ -47,8 +50,9 @@ class _HaDashboardSectionState extends State<HaDashboardSection> {
 
       _hasConnection = true;
 
-      // Load entities (optionally filtered by room)
+      // Load entities (optionally filtered by room) and scenes
       final entities = await _repo.getEntities(roomId: widget.roomId);
+      final scenes = await _repo.getEntities(domain: 'scene');
 
       // Connect WebSocket for real-time
       _ws = HaWebSocketService();
@@ -58,7 +62,8 @@ class _HaDashboardSectionState extends State<HaDashboardSection> {
 
       if (mounted) {
         setState(() {
-          _entities = entities;
+          _entities = entities.where((e) => e.domain != 'scene').toList();
+          _scenes = scenes;
           _isLoading = false;
         });
       }
@@ -92,7 +97,7 @@ class _HaDashboardSectionState extends State<HaDashboardSection> {
   Widget build(BuildContext context) {
     if (_isLoading) return const SizedBox.shrink();
     if (!_hasConnection) return _buildSetupPrompt(context);
-    if (_entities.isEmpty) return const SizedBox.shrink();
+    if (_entities.isEmpty && _scenes.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,16 +135,45 @@ class _HaDashboardSectionState extends State<HaDashboardSection> {
           ),
         ),
 
-        // Horizontal scroll of entity cards
-        SizedBox(
-          height: 100,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: _entities.length,
-            itemBuilder: (ctx, i) => _buildEntityCard(_entities[i]),
+        // Scenes row
+        if (_scenes.isNotEmpty) ...[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 4),
+            child: Text(
+              'Scenes',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: context.hTextSecondary,
+              ),
+            ),
           ),
-        ),
+          SizedBox(
+            height: 80,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _scenes.length,
+              itemBuilder: (ctx, i) => HaSceneCard(
+                scene: _scenes[i],
+                onActivate: () => _activateScene(_scenes[i]),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+
+        // Horizontal scroll of entity cards
+        if (_entities.isNotEmpty)
+          SizedBox(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _entities.length,
+              itemBuilder: (ctx, i) => _buildEntityCard(_entities[i]),
+            ),
+          ),
       ],
     );
   }
@@ -277,7 +311,27 @@ class _HaDashboardSectionState extends State<HaDashboardSection> {
       case HaDomain.fan: return Icons.air;
       case HaDomain.lock: return Icons.lock;
       case HaDomain.mediaPlayer: return Icons.speaker;
+      case HaDomain.camera: return Icons.videocam;
+      case HaDomain.scene: return Icons.palette;
+      case HaDomain.button: return Icons.radio_button_checked;
+      case HaDomain.number: return Icons.tune;
+      case HaDomain.inputBoolean: return Icons.toggle_on_outlined;
+      case HaDomain.inputNumber: return Icons.dialpad;
       default: return Icons.device_hub;
+    }
+  }
+
+  Future<void> _activateScene(HaEntity scene) async {
+    try {
+      await _ws?.callService(
+        domain: 'scene',
+        service: 'turn_on',
+        entityId: scene.entityId,
+      );
+      // Notify the MQTT bridge so the panel can react immediately
+      HaMqttBridgeService().publishSceneActivation(scene.entityId);
+    } catch (e) {
+      debugPrint('[HA Dashboard] Scene activation failed: $e');
     }
   }
 
