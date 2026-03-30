@@ -70,6 +70,14 @@ class _HaEntitiesScreenState extends State<HaEntitiesScreen> {
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
+
+    // Auto-sync if no entities yet (first-time setup)
+    // Run after the frame renders so user sees the UI first
+    if (_entities.isEmpty && _connection != null && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _syncEntities();
+      });
+    }
   }
 
   /// Sync entities from Home Assistant (discovery)
