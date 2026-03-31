@@ -154,9 +154,28 @@ class PanelsRepo {
     }
   }
 
-  /// Delete a panel (unpair)
+  /// Delete a panel (unpair) and cascade-delete its associated relay devices.
+  /// Relay devices are identified by meta_json->>'panel_device_id' matching
+  /// the panel's device_id.
   Future<void> deletePanel(String panelId) async {
     try {
+      // First, get the panel to know its device_id
+      final panel = await getPanel(panelId);
+
+      // Delete associated relay devices if we have the panel's device_id
+      if (panel != null) {
+        try {
+          await supabase
+              .from('devices')
+              .delete()
+              .eq('meta_json->>panel_device_id', panel.deviceId);
+          debugPrint('Deleted relay devices for panel ${panel.deviceId}');
+        } catch (e) {
+          debugPrint('Failed to delete orphaned relay devices (non-fatal): $e');
+        }
+      }
+
+      // Then delete the panel record
       await supabase
           .from('panels')
           .delete()

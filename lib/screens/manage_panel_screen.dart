@@ -12,6 +12,7 @@ import '../repos/devices_repo.dart';
 import '../repos/rooms_repo.dart';
 import '../repos/scenes_repo.dart';
 import '../services/enhanced_mqtt_service.dart';
+import '../services/panel_mqtt_service.dart';
 
 /// Screen to manage what devices and scenes are shown on a paired panel
 class ManagePanelScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
   final DevicesRepo _devicesRepo = DevicesRepo();
   final RoomsRepo _roomsRepo = RoomsRepo();
   final ScenesRepo _scenesRepo = ScenesRepo();
+  final PanelMqttService _panelMqtt = PanelMqttService();
 
   late TabController _tabController;
   late Panel _panel;
@@ -43,18 +45,38 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
   final Set<String> _selectedDeviceIds = {};
   final Set<String> _selectedSceneIds = {};
 
+  // Panel relay devices (filtered from all devices by meta_json)
+  List<Device> get _panelRelays => _allDevices.where((d) {
+    final meta = d.metaJson;
+    return meta != null && meta['panel_device_id'] == _panel.deviceId;
+  }).toList()
+    ..sort((a, b) {
+      final ai = a.metaJson?['panel_relay_index'] as int? ?? 0;
+      final bi = b.metaJson?['panel_relay_index'] as int? ?? 0;
+      return ai.compareTo(bi);
+    });
+
   @override
   void initState() {
     super.initState();
     _panel = widget.panel;
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
+    _panelMqtt.subscribeToPanel(_panel.deviceId);
+    _panelMqtt.addRelayStateListener(_onRelayStateChanged);
     _loadData();
   }
 
   @override
   void dispose() {
+    _panelMqtt.removeRelayStateListener(_onRelayStateChanged);
     _tabController.dispose();
     super.dispose();
+  }
+
+  void _onRelayStateChanged(String panelDeviceId, int relayIndex, bool isOn) {
+    if (panelDeviceId == _panel.deviceId && mounted) {
+      setState(() {}); // Refresh UI with new relay state
+    }
   }
 
   Future<void> _loadData() async {
@@ -87,13 +109,18 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
       _selectedSceneIds.clear();
       final config = _panel.displayConfig;
       if (config != null) {
-        final configDevices = config['devices'] as List? ?? [];
+        // Support both new format (display.devices) and old format (devices)
+        final display = config['display'] as Map<String, dynamic>?;
+        final configDevices = (display?['devices'] ?? config['devices']) as List? ?? [];
         for (final d in configDevices) {
           if (d is Map<String, dynamic> && d['id'] is String) {
-            _selectedDeviceIds.add(d['id'] as String);
+            // Only add if visible (default true for backward compat)
+            if (d['visible'] as bool? ?? true) {
+              _selectedDeviceIds.add(d['id'] as String);
+            }
           }
         }
-        final configScenes = config['scenes'] as List? ?? [];
+        final configScenes = (display?['scenes'] ?? config['scenes']) as List? ?? [];
         for (final s in configScenes) {
           if (s is Map<String, dynamic> && s['id'] is String) {
             _selectedSceneIds.add(s['id'] as String);
@@ -115,22 +142,31 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
     }
   }
 
-  /// Build the display_config JSON from selections
+  /// Build the display_config JSON from selections.
+  /// Uses agreed format: {version, display: {devices: [{id,label,icon,visible,...}], scenes: [...]}}
   Map<String, dynamic> _buildDisplayConfig() {
     final devices = <Map<String, dynamic>>[];
     for (final device in _allDevices) {
-      if (_selectedDeviceIds.contains(device.id)) {
-        final room = _allRooms
-            .where((r) => r.id == device.roomId)
-            .firstOrNull;
-        devices.add(PanelDeviceConfig(
-          id: device.id,
-          name: device.deviceName,
-          type: device.deviceType.name,
-          topic: device.deviceTopicBase ?? '',
-          room: room?.name,
-        ).toJson());
-      }
+      final isSelected = _selectedDeviceIds.contains(device.id);
+      // Include ALL devices but mark visibility
+      final room = _allRooms
+          .where((r) => r.id == device.roomId)
+          .firstOrNull;
+
+      // Check if this is a panel relay (has meta_json with panel info)
+      final meta = device.metaJson;
+      final relayIndex = meta?['panel_relay_index'] as int?;
+
+      devices.add(PanelDeviceConfig(
+        id: device.id,
+        label: device.deviceName,
+        icon: deviceTypeToIcon(device.deviceType.name),
+        type: device.deviceType.name,
+        topic: device.deviceTopicBase ?? '',
+        visible: isSelected,
+        room: room?.name,
+        relayIndex: relayIndex,
+      ).toJson());
     }
 
     final scenes = <Map<String, dynamic>>[];
@@ -138,7 +174,7 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
       if (_selectedSceneIds.contains(scene.id)) {
         scenes.add(PanelSceneConfig(
           id: scene.id,
-          name: scene.name,
+          label: scene.name,
           icon: scene.iconCode?.toString(),
         ).toJson());
       }
@@ -146,9 +182,10 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
 
     return {
       'version': 1,
-      'layout': 'grid',
-      'devices': devices,
-      'scenes': scenes,
+      'display': {
+        'devices': devices,
+        'scenes': scenes,
+      },
     };
   }
 
@@ -252,6 +289,10 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
                     controller: _tabController,
                     tabs: [
                       Tab(
+                        text: 'Relays (${_panelRelays.length})',
+                        icon: const Icon(Icons.power),
+                      ),
+                      Tab(
                         text: 'Devices (${_selectedDeviceIds.length})',
                         icon: const Icon(Icons.devices),
                       ),
@@ -267,6 +308,7 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
                   child: TabBarView(
                     controller: _tabController,
                     children: [
+                      _buildRelaysTab(),
                       _buildDevicesTab(),
                       _buildScenesTab(),
                     ],
@@ -312,6 +354,107 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
             ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRelaysTab() {
+    final relays = _panelRelays;
+    if (relays.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.power_off, size: 48, color: context.hTextSecondary),
+              const SizedBox(height: 12),
+              Text(
+                'No panel relays found',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: context.hTextPrimary),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Re-pair the panel to auto-discover its relay channels.',
+                style: TextStyle(fontSize: 14, color: context.hTextSecondary),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.all(HBotSpacing.space4),
+      itemCount: relays.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final relay = relays[index];
+        final relayIndex = relay.metaJson?['panel_relay_index'] as int? ?? (index + 1);
+        final isOn = _panelMqtt.getRelayState(_panel.deviceId, relayIndex) ?? false;
+
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: context.hCard,
+            borderRadius: HBotRadius.mediumRadius,
+            border: Border.all(
+              color: isOn ? HBotColors.primary.withOpacity(0.4) : context.hBorder,
+              width: isOn ? 1.5 : 0.5,
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: isOn ? HBotColors.primary.withOpacity(0.15) : context.hBorder.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.power,
+                  color: isOn ? HBotColors.primary : context.hTextSecondary,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      relay.deviceName,
+                      style: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: context.hTextPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Relay $relayIndex • ${isOn ? "ON" : "OFF"}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: isOn ? HBotColors.success : context.hTextSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Switch(
+                value: isOn,
+                activeColor: HBotColors.primary,
+                onChanged: (val) {
+                  _panelMqtt.setRelay(_panel.deviceId, relayIndex, val);
+                  // Optimistic update
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

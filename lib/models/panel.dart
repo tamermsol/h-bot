@@ -100,60 +100,95 @@ class Panel {
   }
 }
 
-/// Represents a device entry in the panel display config
+/// Represents a device entry in the panel display config.
+/// Uses 'label' for display name (agreed with smarty), 'visible' for show/hide.
 class PanelDeviceConfig {
   final String id;
-  final String name;
+  final String label;
+  final String icon; // light, fan, switch, outlet, ac, curtain
   final String type;
   final String topic;
+  final bool visible;
   final String? room;
+  final int? relayIndex; // for panel built-in relays
 
   const PanelDeviceConfig({
     required this.id,
-    required this.name,
+    required this.label,
+    this.icon = 'switch',
     required this.type,
     required this.topic,
+    this.visible = true,
     this.room,
+    this.relayIndex,
   });
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'name': name,
+    'label': label,
+    'icon': icon,
     'type': type,
     'topic': topic,
+    'visible': visible,
     if (room != null) 'room': room,
+    if (relayIndex != null) 'relay_index': relayIndex,
   };
 
   factory PanelDeviceConfig.fromJson(Map<String, dynamic> json) => PanelDeviceConfig(
     id: json['id'] as String,
-    name: json['name'] as String,
-    type: json['type'] as String,
-    topic: json['topic'] as String,
+    label: (json['label'] ?? json['name'] ?? '') as String,
+    icon: (json['icon'] ?? 'switch') as String,
+    type: (json['type'] ?? 'relay') as String,
+    topic: (json['topic'] ?? '') as String,
+    visible: json['visible'] as bool? ?? true,
     room: json['room'] as String?,
+    relayIndex: json['relay_index'] as int?,
+  );
+
+  PanelDeviceConfig copyWith({bool? visible, String? label}) => PanelDeviceConfig(
+    id: id,
+    label: label ?? this.label,
+    icon: icon,
+    type: type,
+    topic: topic,
+    visible: visible ?? this.visible,
+    room: room,
+    relayIndex: relayIndex,
   );
 }
 
 /// Represents a scene entry in the panel display config
 class PanelSceneConfig {
   final String id;
-  final String name;
+  final String label;
   final String? icon;
 
   const PanelSceneConfig({
     required this.id,
-    required this.name,
+    required this.label,
     this.icon,
   });
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'name': name,
+    'label': label,
     if (icon != null) 'icon': icon,
   };
 
   factory PanelSceneConfig.fromJson(Map<String, dynamic> json) => PanelSceneConfig(
     id: json['id'] as String,
-    name: json['name'] as String,
+    label: (json['label'] ?? json['name'] ?? '') as String,
     icon: json['icon'] as String?,
   );
+}
+
+/// Maps device type to panel icon name (agreed icon set with smarty)
+String deviceTypeToIcon(String type) {
+  switch (type) {
+    case 'relay': return 'light';
+    case 'dimmer': return 'light';
+    case 'shutter': return 'curtain';
+    case 'sensor': return 'switch';
+    default: return 'switch';
+  }
 }

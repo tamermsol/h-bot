@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../theme/app_theme.dart';
-import '../widgets/responsive_shell.dart';
 import '../services/notification_service.dart';
 import '../l10n/app_strings.dart';
 
@@ -15,7 +14,7 @@ class NotificationsSettingsScreen extends StatefulWidget {
 }
 
 class _NotificationsSettingsScreenState
-    extends State<NotificationsSettingsScreen> {
+    extends State<NotificationsSettingsScreen> with WidgetsBindingObserver {
   static const String _notificationsEnabledKey = 'notifications_enabled';
   bool _notificationsEnabled = false;
   bool _isLoading = true;
@@ -31,7 +30,23 @@ class _NotificationsSettingsScreenState
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadSettings();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // Re-check permission when user returns from iOS Settings
+    if (state == AppLifecycleState.resumed) {
+      _loadSettings();
+    }
   }
 
   Future<void> _loadSettings() async {

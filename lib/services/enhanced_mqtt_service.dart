@@ -548,6 +548,69 @@ class EnhancedMqttService {
     await _publishMessage(topic, payload, retain: true);
   }
 
+  /// Publish a non-retained message to any topic
+  Future<void> publishMessage(String topic, String payload) async {
+    await _publishMessage(topic, payload);
+  }
+
+  // --- Custom topic subscriptions (for panel MQTT topics) ---
+  final Map<String, void Function(String, String)> _customTopicHandlers = {};
+
+  /// Subscribe to a custom topic with a handler callback.
+  /// Supports MQTT wildcards (+, #).
+  void subscribeToCustomTopic(String topic, void Function(String, String) handler) {
+    if (_client == null || !isConnected) {
+      _addDebugMessage('Cannot subscribe to custom topic (not connected): $topic');
+      return;
+    }
+    _customTopicHandlers[topic] = handler;
+    if (!_activeSubscriptions.contains(topic)) {
+      _client!.subscribe(topic, MqttQos.atLeastOnce);
+      _activeSubscriptions.add(topic);
+      _addDebugMessage('📡 Custom subscription: $topic');
+    }
+  }
+
+  /// Unsubscribe from a custom topic.
+  void unsubscribeFromCustomTopic(String topic) {
+    _customTopicHandlers.remove(topic);
+    if (_activeSubscriptions.contains(topic) && _client != null) {
+      try {
+        _client!.unsubscribe(topic);
+        _activeSubscriptions.remove(topic);
+        _addDebugMessage('📡 Custom unsubscription: $topic');
+      } catch (e) {
+        _addDebugMessage('Failed to unsubscribe custom topic: $e');
+      }
+    }
+  }
+
+  /// Check if an incoming topic matches any custom subscription pattern
+  void _dispatchToCustomHandlers(String topic, String payload) {
+    for (final entry in _customTopicHandlers.entries) {
+      if (_topicMatchesPattern(topic, entry.key)) {
+        try {
+          entry.value(topic, payload);
+        } catch (e) {
+          _addDebugMessage('Custom handler error for $topic: $e');
+        }
+      }
+    }
+  }
+
+  /// Match a topic against an MQTT pattern with + and # wildcards
+  bool _topicMatchesPattern(String topic, String pattern) {
+    final topicParts = topic.split('/');
+    final patternParts = pattern.split('/');
+
+    for (int i = 0; i < patternParts.length; i++) {
+      if (patternParts[i] == '#') return true; // # matches remainder
+      if (i >= topicParts.length) return false;
+      if (patternParts[i] != '+' && patternParts[i] != topicParts[i]) return false;
+    }
+    return topicParts.length == patternParts.length;
+  }
+
   /// Force reconnection with full device re-registration (for app lifecycle)
   Future<bool> forceReconnectWithDevices() async {
     _addDebugMessage(
@@ -2533,6 +2596,10 @@ class EnhancedMqttService {
         continue;
       }
 
+      // Dispatch to custom handlers (panel topics, etc.)
+      _dispatchToCustomHandlers(topic, payload);
+
+      // Process Tasmota device messages (stat/tele topics)
       _processDeviceMessage(topic, payload);
     }
   }
