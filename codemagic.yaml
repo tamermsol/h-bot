@@ -42,6 +42,7 @@ workflows:
       - name: Upload to TestFlight
         script: |
           app-store-connect publish \
-            --path build/ios/ipa/*.ipa
+            --path build/ios/ipa/*.ipa \
+            --usesNonExemptEncryption false
     artifacts:
       - build/ios/ipa/*.ipa
