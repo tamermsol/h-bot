@@ -24,7 +24,7 @@ import 'homes_screen.dart';
 import 'add_device_flow_screen.dart';
 import 'notifications_inbox_screen.dart';
 import '../services/broadcast_service.dart';
-import '../widgets/ha_dashboard_section.dart';
+// import '../widgets/ha_dashboard_section.dart';  // Hidden until production-ready
 import 'device_control_screen.dart';
 import '../l10n/app_strings.dart';
 
@@ -82,6 +82,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   // SharedPreferences key for view preference
   static const String _viewPreferenceKey = 'dashboard_view_preference';
 
+  // Safety timeout to prevent _isLoading from being stuck forever (grey screen)
+  Timer? _loadingSafetyTimer;
+
   @override
   void initState() {
     super.initState();
@@ -89,6 +92,17 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     _loadViewPreference(); // Load saved view preference
     _loadData(); // Let _loadData handle MQTT initialization
     _loadUnreadNotificationCount(); // Load notification badge
+
+    // Safety net: if loading hasn't completed in 20 seconds, force it off
+    _loadingSafetyTimer = Timer(const Duration(seconds: 20), () {
+      if (mounted && _isLoading) {
+        debugPrint('⚠️ Loading safety timeout hit — forcing _isLoading=false');
+        setState(() {
+          _isLoading = false;
+          _hasLoadError = true;
+        });
+      }
+    });
 
     // Listen to auth state changes to reload data when user becomes available
     _setupAuthListener();
@@ -351,6 +365,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this); // Remove lifecycle observer
+    _loadingSafetyTimer?.cancel();
     _roomChangeSubscription?.cancel(); // Cancel room change subscription
     // Clean up resources
     _tabController?.dispose();
@@ -557,6 +572,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         });
       }
     } finally {
+      _loadingSafetyTimer?.cancel();
       if (mounted) {
         setState(() => _isLoading = false);
       }
@@ -1378,40 +1394,26 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     }
 
     if (_filteredDevices.isEmpty) {
-      String emptyTitle = AppStrings.get('no_devices_title');
-      String emptySubtitle = AppStrings.get('no_devices_subtitle');
-
-      if (_searchQuery.isNotEmpty) {
-        emptyTitle = AppStrings.get('search');
-        emptySubtitle = AppStrings.get('no_devices_subtitle');
-      } else if (_hideOfflineDevices && _devices.isNotEmpty) {
-        emptyTitle = AppStrings.get('no_devices_title');
-        emptySubtitle = AppStrings.get('no_devices_subtitle');
-      }
-
-      return _buildEmptyState(
-        icon: Icons.devices_outlined,
-        title: emptyTitle,
-        subtitle: emptySubtitle,
-        actionText: AppStrings.get('add_device'),
-        onAction: _showAddMenu,
+      return CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: _buildEmptyState(
+              icon: Icons.devices_outlined,
+              title: _searchQuery.isNotEmpty
+                  ? AppStrings.get('search')
+                  : AppStrings.get('no_devices_title'),
+              subtitle: AppStrings.get('no_devices_subtitle'),
+              actionText: AppStrings.get('add_device'),
+              onAction: _showAddMenu,
+            ),
+          ),
+        ],
       );
     }
 
-    // Return grid or list view based on user preference, with HA section
-    final selectedRoom = (_selectedRoomFilter != 'All' && _rooms.isNotEmpty)
-        ? _rooms.firstWhere(
-            (r) => r.name == _selectedRoomFilter,
-            orElse: () => _rooms.first,
-          )
-        : null;
-
     return CustomScrollView(
       slivers: [
-        // HA entities section (horizontal cards)
-        SliverToBoxAdapter(
-          child: HaDashboardSection(roomId: selectedRoom?.id),
-        ),
         // Native device grid or list
         if (_isGridView)
           _buildDeviceGridSliver()

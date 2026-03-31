@@ -27,8 +27,8 @@ import 'shared_devices_screen.dart';
 import 'multi_device_share_screen.dart';
 import 'rooms_screen.dart';
 import 'wifi_profile_screen.dart';
-import 'panels_screen.dart';
-import 'ha_entities_screen.dart';
+// import 'panels_screen.dart';  // Hidden until production-ready
+// import 'ha_entities_screen.dart';  // Hidden until production-ready
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -453,19 +453,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const WiFiProfileScreen())),
               ),
-              SettingsTile(
-                icon: Icons.tv,
-                title: 'Wall Panels',
-                subtitle: 'Manage paired H-Bot panels',
-                onTap: () async {
-                  final homeId = await CurrentHomeService().getCurrentHomeId();
-                  if (mounted) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => PanelsScreen(homeId: homeId)));
-                  }
-                },
-                showDivider: false,
-              ),
+              // Wall Panels — hidden until production-ready
+              // SettingsTile(
+              //   icon: Icons.tv,
+              //   title: 'Wall Panels',
+              //   subtitle: 'Manage paired H-Bot panels',
+              //   onTap: () async {
+              //     final homeId = await CurrentHomeService().getCurrentHomeId();
+              //     if (mounted) {
+              //       Navigator.push(context,
+              //           MaterialPageRoute(builder: (_) => PanelsScreen(homeId: homeId)));
+              //     }
+              //   },
+              //   showDivider: false,
+              // ),
             ],
           ),
 
@@ -473,13 +474,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SettingsGroup(
             label: AppStrings.get('profile_integrations'),
             children: [
-              SettingsTile(
-                icon: Icons.home_outlined,
-                title: 'Home Assistant',
-                subtitle: 'Control devices from any vendor',
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const HaEntitiesScreen())),
-              ),
+              // Home Assistant — hidden until production-ready
+              // SettingsTile(
+              //   icon: Icons.home_outlined,
+              //   title: 'Home Assistant',
+              //   subtitle: 'Control devices from any vendor',
+              //   onTap: () => Navigator.push(context,
+              //       MaterialPageRoute(builder: (_) => const HaEntitiesScreen())),
+              // ),
               SettingsTile(
                 icon: Icons.record_voice_over_outlined,
                 title: AppStrings.get('alexa_integration'),
@@ -501,14 +503,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
               ),
               Consumer<ThemeService>(
-                builder: (context, themeService, _) => SettingsTile(
-                  icon: Icons.palette_outlined,
-                  title: AppStrings.get('theme'),
-                  value: themeService.isDarkMode
-                      ? AppStrings.get('theme_subtitle_dark')
-                      : AppStrings.get('theme_subtitle_light'),
-                  onTap: _showAppearanceDialog,
-                ),
+                builder: (context, themeService, _) {
+                  String themeLabel;
+                  if (themeService.themeMode == ThemeMode.system) {
+                    themeLabel = AppStrings.get('profile_system');
+                  } else if (themeService.isDarkMode) {
+                    themeLabel = AppStrings.get('theme_subtitle_dark');
+                  } else {
+                    themeLabel = AppStrings.get('theme_subtitle_light');
+                  }
+                  return SettingsTile(
+                    icon: Icons.palette_outlined,
+                    title: AppStrings.get('theme'),
+                    value: themeLabel,
+                    onTap: _showAppearanceDialog,
+                  );
+                },
               ),
               Consumer<LocaleService>(
                 builder: (context, localeService, _) => SettingsTile(
