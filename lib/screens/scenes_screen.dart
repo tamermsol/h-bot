@@ -175,7 +175,9 @@ class _ScenesScreenState extends State<ScenesScreen>
         ? Color(scene.colorValue!)
         : HBotColors.primary;
 
-    return Container(
+    return Opacity(
+      opacity: scene.isEnabled ? 1.0 : 0.6,
+      child: Container(
       margin: const EdgeInsets.only(bottom: HBotSpacing.space3),
       decoration: BoxDecoration(
         color: context.hCard,
@@ -210,6 +212,8 @@ class _ScenesScreenState extends State<ScenesScreen>
                       Text(
                         scene.name,
                         style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w600, color: context.hTextPrimary),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -220,18 +224,21 @@ class _ScenesScreenState extends State<ScenesScreen>
                   ),
                 ),
                 // Play button
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    gradient: scene.isEnabled ? HBotColors.primaryGradient : null,
-                    color: scene.isEnabled ? null : context.hCard,
-                    borderRadius: HBotRadius.fullRadius,
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.play_arrow, color: scene.isEnabled ? Colors.white : context.hTextTertiary, size: 20),
-                    padding: EdgeInsets.zero,
-                    onPressed: scene.isEnabled ? () => _executeScene(scene) : null,
+                Opacity(
+                  opacity: scene.isEnabled ? 1.0 : 0.4,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      gradient: scene.isEnabled ? HBotColors.primaryGradient : null,
+                      color: scene.isEnabled ? null : context.hBorder,
+                      borderRadius: HBotRadius.fullRadius,
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.play_arrow, color: scene.isEnabled ? Colors.white : context.hTextTertiary, size: 20),
+                      padding: EdgeInsets.zero,
+                      onPressed: scene.isEnabled ? () => _executeScene(scene) : null,
+                    ),
                   ),
                 ),
                 const SizedBox(width: HBotSpacing.space2),
@@ -268,6 +275,7 @@ class _ScenesScreenState extends State<ScenesScreen>
           ),
         ),
       ),
+    ),
     );
   }
 

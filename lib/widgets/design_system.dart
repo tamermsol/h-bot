@@ -21,7 +21,7 @@ class HBotCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = HBotTheme.isDark(context);
+    final isDark = context.isDark;
 
     return Container(
       padding: padding,
@@ -71,7 +71,7 @@ class HBotGradientButton extends StatelessWidget {
           gradient: enabled ? HBotColors.primaryGradient : null,
           color: enabled ? null : HBotColors.primaryDisabled,
           borderRadius: BorderRadius.circular(borderRadius),
-          boxShadow: enabled ? HBotColors.fabShadow : null,
+          boxShadow: enabled ? HBotShadows.medium : null,
         ),
         alignment: Alignment.center,
         child: DefaultTextStyle.merge(

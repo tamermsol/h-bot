@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../demo/demo_data.dart';
 import '../models/device.dart';
 import '../utils/mqtt_debug_helper.dart';
 import 'device_state_cache.dart';
@@ -330,6 +331,13 @@ class EnhancedMqttService {
 
   /// Connect to MQTT broker with TLS
   Future<bool> connect() async {
+    // Demo mode: fake a successful connection and inject demo device states
+    if (isDemoMode) {
+      _addDebugMessage('Demo mode: simulating MQTT connection');
+      _setConnectionState(MqttConnectionState.connected);
+      return true;
+    }
+
     if (kIsWeb) {
       _addDebugMessage('MQTT not supported on web - connect() skipped');
       return false;
@@ -1093,6 +1101,20 @@ class EnhancedMqttService {
 
   /// Register a device for MQTT control
   Future<void> registerDevice(Device device) async {
+    // Demo mode: inject mock state immediately
+    if (isDemoMode) {
+      _registeredDevices[device.id] = device;
+      final demoState = DemoData.getDeviceState(device.id);
+      demoState['online'] = true;
+      _deviceStates[device.id] = demoState;
+      if (!_deviceStateControllers.containsKey(device.id)) {
+        _deviceStateControllers[device.id] =
+            StreamController<Map<String, dynamic>>.broadcast();
+      }
+      _deviceStateControllers[device.id]!.add(demoState);
+      return;
+    }
+
     if (device.tasmotaTopicBase == null) {
       throw Exception('Device ${device.name} has no MQTT topic base');
     }

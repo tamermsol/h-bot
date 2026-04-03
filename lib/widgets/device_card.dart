@@ -35,9 +35,20 @@ class DeviceCard extends StatefulWidget {
 
 class _DeviceCardState extends State<DeviceCard> {
   bool _isPressed = false;
+  bool _isToggling = false;
 
   Color get _activeColor => widget.deviceColor ?? HBotColors.primary;
   bool get _unreachable => widget.isOnline == false;
+
+  void _handleToggle(bool value) {
+    setState(() => _isToggling = true);
+    widget.onToggle(value);
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        setState(() => _isToggling = false);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +132,8 @@ class _DeviceCardState extends State<DeviceCard> {
                           ? _activeColor
                           : context.hTextSecondary,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
 
@@ -145,13 +158,24 @@ class _DeviceCardState extends State<DeviceCard> {
                 SizedBox(
                   height: 32,
                   width: 52,
-                  child: FittedBox(
-                    child: Switch(
-                      value: widget.isOn,
-                      onChanged: _unreachable ? null : widget.onToggle,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                  ),
+                  child: _isToggling
+                      ? const Center(
+                          child: SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary),
+                            ),
+                          ),
+                        )
+                      : FittedBox(
+                          child: Switch(
+                            value: widget.isOn,
+                            onChanged: _unreachable ? null : _handleToggle,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                        ),
                 ),
               ],
             ),

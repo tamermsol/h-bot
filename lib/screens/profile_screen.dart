@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:io';
+import '../demo/demo_data.dart';
 import '../theme/app_theme.dart';
 import '../widgets/settings_tile.dart';
 import '../widgets/avatar_picker_dialog.dart';
@@ -79,6 +80,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadUserData() async {
+    // Demo mode: inject demo profile
+    if (isDemoMode) {
+      if (mounted) {
+        setState(() {
+          _currentProfile = DemoData.profile;
+          _userName = DemoData.profile.fullName ?? 'Alex Johnson';
+          _userEmail = DemoData.userEmail;
+          _userPhone = DemoData.profile.phoneNumber;
+        });
+      }
+      return;
+    }
+
     try {
       final user = _authService.currentUser;
       if (user != null) {

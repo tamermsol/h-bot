@@ -310,12 +310,12 @@ class _FigmaDevScreenState extends State<FigmaDevScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(HBotIcons.error, color: HBotColors.errorDark),
+                  Icon(HBotIcons.error, color: HBotColors.error),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _errorMessage!,
-                      style: TextStyle(color: HBotColors.errorDark),
+                      style: TextStyle(color: HBotColors.error),
                     ),
                   ),
                 ],

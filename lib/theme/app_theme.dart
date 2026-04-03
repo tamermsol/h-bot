@@ -464,7 +464,7 @@ class AppTheme {
           size: 24,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: HBotColors.cardLight,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -599,7 +599,7 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
         elevation: 0,
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: HBotColors.elevatedLight,
         shape: RoundedRectangleBorder(
           borderRadius: HBotRadius.xlRadius,
@@ -699,7 +699,7 @@ class AppTheme {
         foregroundColor: HBotColors.textPrimaryDark,
         elevation: 0,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: HBotColors.cardDark,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -712,7 +712,7 @@ class AppTheme {
         selectedItemColor: HBotColors.primary,
         unselectedItemColor: HBotColors.textSecondaryDark,
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: HBotColors.cardDark,
         titleTextStyle: const TextStyle(
           fontFamily: 'DM Sans',

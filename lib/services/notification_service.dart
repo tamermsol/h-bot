@@ -27,13 +27,16 @@ class NotificationService {
     if (_initialized) return;
 
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
+    // In debug mode on iOS (simulator), skip auto-requesting permissions
+    // to avoid the notification dialog blocking screenshots
+    final bool skipIosPermission = !kIsWeb && Platform.isIOS && kDebugMode;
+    final iosSettings = DarwinInitializationSettings(
+      requestAlertPermission: !skipIosPermission,
+      requestBadgePermission: !skipIosPermission,
+      requestSoundPermission: !skipIosPermission,
     );
 
-    const settings = InitializationSettings(
+    final settings = InitializationSettings(
       android: androidSettings,
       iOS: iosSettings,
     );
@@ -75,8 +78,8 @@ class NotificationService {
       }
     }
 
-    // Request iOS permissions
-    if (!kIsWeb && Platform.isIOS) {
+    // Request iOS permissions (skip in debug to avoid simulator dialog)
+    if (!kIsWeb && Platform.isIOS && !kDebugMode) {
       await _plugin
           .resolvePlatformSpecificImplementation<
               IOSFlutterLocalNotificationsPlugin>()

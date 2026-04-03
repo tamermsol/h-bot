@@ -75,6 +75,9 @@ dependencies:
   # QR Code generation and scanning for device sharing
   qr_flutter: ^4.1.0
   mobile_scanner: ^6.0.11
+
+  # Phosphor icon library for design system
+  phosphor_flutter: ^2.1.0
   
   # Biometric authentication for device sharing
   local_auth: ^2.2.0

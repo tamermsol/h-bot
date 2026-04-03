@@ -2605,6 +2605,11 @@ Troubleshooting:
       final newName = _deviceNameController.text.trim();
       if (newName.isEmpty) {
         _addDebugLog('Device name cannot be empty');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Device name cannot be empty'), backgroundColor: Colors.red),
+          );
+        }
         return;
       }
 

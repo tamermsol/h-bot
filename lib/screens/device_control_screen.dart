@@ -45,6 +45,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   bool _isBottomSheetOpen = false;
   // firmware fields removed
   StreamSubscription? _stateSubscription;
+  StreamSubscription? _connectionStateSubscription;
 
   // Local device instance that can be updated
   late Device _currentDevice;
@@ -56,6 +57,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
   @override
   void dispose() {
     _stateSubscription?.cancel();
+    _connectionStateSubscription?.cancel();
     super.dispose();
   }
 
@@ -175,7 +177,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       } else {
         // MQTT not connected, listen for connection state changes
         debugPrint('⏳ MQTT not connected, waiting for connection...');
-        _mqttManager.connectionStateStream.listen((state) {
+        _connectionStateSubscription = _mqttManager.connectionStateStream.listen((state) {
           if (state.toString().contains('connected') && mounted) {
             debugPrint('🔌 MQTT connected, registering device...');
 

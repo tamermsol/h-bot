@@ -1,9 +1,11 @@
 import '../core/supabase_client.dart';
+import '../demo/demo_data.dart';
 import '../models/home.dart';
 
 class HomesRepo {
   /// List all homes the current user has access to
   Future<List<Home>> listMyHomes() async {
+    if (isDemoMode) return DemoData.homes;
     try {
       final user = supabase.auth.currentUser;
       if (user == null) throw 'User not authenticated';

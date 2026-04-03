@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../demo/demo_data.dart';
 import '../theme/app_theme.dart';
 import '../models/home.dart';
 import '../models/room.dart';
@@ -62,7 +63,12 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   bool _mqttConnected = false;
   TabController? _tabController;
   Timer? _stateRefreshTimer;
+  Timer? _roomChangeDebounceTimer;
   StreamSubscription<void>? _roomChangeSubscription;
+  StreamSubscription? _connectionStateSubscription;
+  StreamSubscription? _authStateSubscription;
+  StreamSubscription? _widgetClickedSubscription;
+  final List<StreamSubscription> _deviceStateSubscriptions = [];
 
   // Queue for errors that occur during initialization
   final List<String> _errorQueue = [];
@@ -112,12 +118,16 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
 
     // Listen for room changes from anywhere in the app
     _roomChangeSubscription = RoomChangeNotifier().roomChanges.listen((_) {
-      debugPrint('🔔 Room change notification received, reloading rooms...');
-      _reloadRoomsOnly();
+      debugPrint('🔔 Room change notification received, debouncing reload...');
+      _roomChangeDebounceTimer?.cancel();
+      _roomChangeDebounceTimer = Timer(const Duration(milliseconds: 500), () {
+        debugPrint('🔔 Debounce elapsed, reloading rooms...');
+        _reloadRoomsOnly();
+      });
     });
 
     // Handle home widget launch URIs
-    HomeWidget.widgetClicked.listen(_handleWidgetUri);
+    _widgetClickedSubscription = HomeWidget.widgetClicked.listen(_handleWidgetUri);
     HomeWidget.initiallyLaunchedFromHomeWidget().then(_handleWidgetUri);
   }
 
@@ -185,7 +195,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   }
 
   void _setupAuthListener() {
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
+    _authStateSubscription = Supabase.instance.client.auth.onAuthStateChange.listen((data) {
       final event = data.event;
       final user = data.session?.user;
 
@@ -366,7 +376,16 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this); // Remove lifecycle observer
     _loadingSafetyTimer?.cancel();
+    _roomChangeDebounceTimer?.cancel();
     _roomChangeSubscription?.cancel(); // Cancel room change subscription
+    _connectionStateSubscription?.cancel();
+    _authStateSubscription?.cancel();
+    _widgetClickedSubscription?.cancel();
+    // Cancel device state subscriptions to prevent memory leaks
+    for (final sub in _deviceStateSubscriptions) {
+      sub.cancel();
+    }
+    _deviceStateSubscriptions.clear();
     // Clean up resources
     _tabController?.dispose();
     _stateRefreshTimer?.cancel();
@@ -413,27 +432,33 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
       });
 
       // Check for authenticated user first with retry mechanism
-      User? user = Supabase.instance.client.auth.currentUser;
+      String userId;
+      if (isDemoMode) {
+        userId = 'demo-user-001';
+        debugPrint('Demo mode: using demo user');
+      } else {
+        User? user = Supabase.instance.client.auth.currentUser;
 
-      // If no user, wait a bit for auth state to propagate and retry
-      if (user == null) {
-        debugPrint('No authenticated user found, waiting for auth state...');
-        await Future.delayed(const Duration(milliseconds: 500));
-        user = Supabase.instance.client.auth.currentUser;
-
-        // If still no user after waiting, try one more time
+        // If no user, wait a bit for auth state to propagate and retry
         if (user == null) {
-          debugPrint('Still no authenticated user, waiting longer...');
-          await Future.delayed(const Duration(seconds: 1));
+          debugPrint('No authenticated user found, waiting for auth state...');
+          await Future.delayed(const Duration(milliseconds: 500));
           user = Supabase.instance.client.auth.currentUser;
+
+          // If still no user after waiting, try one more time
+          if (user == null) {
+            debugPrint('Still no authenticated user, waiting longer...');
+            await Future.delayed(const Duration(seconds: 1));
+            user = Supabase.instance.client.auth.currentUser;
+          }
         }
-      }
 
-      if (user == null) {
-        throw Exception('No authenticated user after retries');
+        if (user == null) {
+          throw Exception('No authenticated user after retries');
+        }
+        userId = user.id;
+        debugPrint('Authenticated user found: $userId');
       }
-
-      debugPrint('Authenticated user found: ${user.id}');
 
       // Load homes (with timeout to prevent grey screen hang)
       _homes = await _homesRepo.listMyHomes().timeout(
@@ -521,9 +546,9 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         // Initialize MQTT with user and home ID and start connection in
         // background. We must not block the UI first paint on MQTT.
         debugPrint(
-          'Initializing MQTT (background) for user: ${user.id} and home: ${_selectedHome!.id}',
+          'Initializing MQTT (background) for user: $userId and home: ${_selectedHome!.id}',
         );
-        await _mqttManager.initialize(user.id, homeId: _selectedHome!.id);
+        await _mqttManager.initialize(userId, homeId: _selectedHome!.id);
 
         // Start connection in background using ensureConnected (non-blocking)
         Future.microtask(() async {
@@ -552,7 +577,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         });
 
         // Listen to connection state changes
-        _mqttManager.connectionStateStream.listen((state) {
+        _connectionStateSubscription = _mqttManager.connectionStateStream.listen((state) {
           if (mounted) {
             setState(() {
               _mqttConnected = state.toString().contains('connected');
@@ -639,8 +664,14 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
         // ✅ CRITICAL FIX: Set up combined state change listeners AFTER registration
         // This ensures cached states are loaded and available when watchCombinedDeviceState
         // is called, preventing the OFF flash/flicker on app startup
+        // Cancel any existing device state subscriptions before creating new ones
+        for (final sub in _deviceStateSubscriptions) {
+          sub.cancel();
+        }
+        _deviceStateSubscriptions.clear();
+
         for (final device in devicesList) {
-          _smartHomeService.watchCombinedDeviceState(device.id).listen((state) {
+          final sub = _smartHomeService.watchCombinedDeviceState(device.id).listen((state) {
             if (mounted) {
               debugPrint(
                 '\ud83d\udcf1 Combined state update for ${device.name}: ${state['source']} - ${state['POWER1'] ?? 'N/A'}',
@@ -652,6 +683,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
               _updateHomeWidget();
             }
           });
+          _deviceStateSubscriptions.add(sub);
         }
 
         // Request initial state for all devices after registration and listener setup

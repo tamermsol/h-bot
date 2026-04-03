@@ -1,4 +1,5 @@
 import '../core/supabase_client.dart';
+import '../demo/demo_data.dart';
 import '../models/scene.dart';
 import '../models/scene_step.dart';
 import '../models/scene_trigger.dart';
@@ -9,6 +10,7 @@ import '../services/enhanced_mqtt_service.dart';
 class ScenesRepo {
   /// List all scenes in a home
   Future<List<Scene>> listScenes(String homeId) async {
+    if (isDemoMode) return DemoData.getScenes(homeId);
     try {
       final response = await supabase
           .from('scenes')
@@ -120,6 +122,7 @@ class ScenesRepo {
 
   /// List scene steps
   Future<List<SceneStep>> listSceneSteps(String sceneId) async {
+    if (isDemoMode) return DemoData.getSceneSteps(sceneId);
     try {
       final response = await supabase
           .from('scene_steps')
@@ -204,6 +207,7 @@ class ScenesRepo {
 
   /// List scene triggers
   Future<List<SceneTrigger>> listSceneTriggers(String sceneId) async {
+    if (isDemoMode) return DemoData.getSceneTriggers(sceneId);
     try {
       final response = await supabase
           .from('scene_triggers')

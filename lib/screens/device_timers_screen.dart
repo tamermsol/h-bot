@@ -57,6 +57,11 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
       _calculateOccupiedIndices();
     } catch (e) {
       debugPrint('Error loading timers: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load timers: $e'), backgroundColor: Colors.red),
+        );
+      }
     }
 
     setState(() {
@@ -122,6 +127,11 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
       );
     } catch (e) {
       debugPrint('Error saving timers: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to save timers: $e'), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../core/supabase_client.dart';
+import '../demo/demo_data.dart';
 import '../models/device.dart';
 import '../models/device_state.dart';
 import '../models/device_channel.dart';
@@ -10,6 +11,7 @@ class DevicesRepo {
 
   /// List all devices in a home
   Future<List<Device>> listDevicesByHome(String homeId) async {
+    if (isDemoMode) return DemoData.getDevices(homeId);
     try {
       final response = await supabase
           .from('devices_with_channels')
@@ -25,6 +27,7 @@ class DevicesRepo {
 
   /// List devices shared with current user
   Future<List<Device>> listSharedDevices() async {
+    if (isDemoMode) return DemoData.sharedDevices;
     try {
       final userId = supabase.auth.currentUser?.id;
       if (userId == null) return [];
@@ -109,6 +112,11 @@ class DevicesRepo {
 
   /// List all devices in a room
   Future<List<Device>> listDevicesByRoom(String roomId) async {
+    if (isDemoMode) {
+      return DemoData.getDevices('demo-home-001')
+          .where((d) => d.roomId == roomId)
+          .toList();
+    }
     try {
       final response = await supabase
           .from('devices_with_channels')

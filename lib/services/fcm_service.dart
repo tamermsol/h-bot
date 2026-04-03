@@ -32,20 +32,25 @@ class FcmService {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     // Request permission (iOS will show prompt, Android auto-grants)
-    final settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      provisional: false,
-    );
+    // Skip permission request on simulator to avoid blocking dialog
+    if (!(Platform.isIOS && kDebugMode)) {
+      final settings = await _messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+        provisional: false,
+      );
 
-    debugPrint('FCM Permission: ${settings.authorizationStatus}');
+      debugPrint('FCM Permission: ${settings.authorizationStatus}');
 
-    if (settings.authorizationStatus == AuthorizationStatus.authorized ||
-        settings.authorizationStatus == AuthorizationStatus.provisional) {
-      await _setupToken();
-      _setupForegroundHandler();
-      _setupTokenRefresh();
+      if (settings.authorizationStatus == AuthorizationStatus.authorized ||
+          settings.authorizationStatus == AuthorizationStatus.provisional) {
+        await _setupToken();
+        _setupForegroundHandler();
+        _setupTokenRefresh();
+      }
+    } else {
+      debugPrint('FCM: Skipping permission request in iOS debug mode');
     }
   }
 
