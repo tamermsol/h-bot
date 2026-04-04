@@ -1,163 +1,150 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../services/theme_service.dart';
-import '../utils/phosphor_icons.dart';
+import '../theme/app_theme.dart';
+import '../widgets/design_system.dart';
 
-class AppearanceSettingsScreen extends StatefulWidget {
+class AppearanceSettingsScreen extends StatelessWidget {
   const AppearanceSettingsScreen({super.key});
 
   @override
-  State<AppearanceSettingsScreen> createState() =>
-      _AppearanceSettingsScreenState();
-}
-
-class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
-  final _themeService = ThemeService();
-
-  @override
-  void initState() {
-    super.initState();
-    _themeService.addListener(_onThemeChanged);
-  }
-
-  @override
-  void dispose() {
-    _themeService.removeListener(_onThemeChanged);
-    super.dispose();
-  }
-
-  void _onThemeChanged() {
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Consumer<ThemeService>(
+      builder: (context, themeService, _) {
+        final isDark = themeService.isDarkMode;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Center(
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F7FA),
-                borderRadius: BorderRadius.circular(12),
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: Padding(
+              padding: const EdgeInsets.all(8),
+              child: HBotIconButton(
+                icon: Icons.arrow_back,
+                onTap: () => Navigator.pop(context),
               ),
-              child: Icon(
-                HBotIcons.back,
-                size: 16,
-                color: Color(0xFF1F2937),
+            ),
+            centerTitle: true,
+            title: const Text(
+              'Appearance',
+              style: TextStyle(
+                fontFamily: 'Readex Pro',
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
             ),
           ),
-        ),
-        centerTitle: true,
-        title: const Text(
-          'Appearance',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Inter',
-            color: Color(0xFF1F2937),
-          ),
-        ),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Theme Mode Section
-          Container(
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5F7FA),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: ListTile(
-              contentPadding: const EdgeInsets.all(16),
-              leading: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? const Color(0xFF0883FD).withOpacity(0.2)
-                      : const Color(0xFF0883FD).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(
-                  isDark ? HBotIcons.scenes : HBotIcons.lightbulb,
-                  color: const Color(0xFF0883FD),
-                  size: 24,
-                ),
-              ),
-              title: const Text(
-                'Dark Mode',
-                style: TextStyle(
-                  color: Color(0xFF1F2937),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
-                  fontFamily: 'Inter',
-                ),
-              ),
-              subtitle: Text(
-                isDark
-                    ? 'Dark colors for comfortable viewing'
-                    : 'Switch to dark theme for nighttime use',
-                style: const TextStyle(
-                  color: Color(0xFF6B7280),
-                  fontSize: 13,
-                  fontFamily: 'Inter',
-                ),
-              ),
-              trailing: Switch(
-                value: isDark,
-                onChanged: (value) {
-                  _themeService.setThemeMode(
-                    value ? ThemeMode.dark : ThemeMode.light,
-                  );
-                },
-                activeColor: const Color(0xFF0883FD),
+          body: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [HBotColors.darkBgTop, HBotColors.darkBgBottom],
               ),
             ),
-          ),
-          const SizedBox(height: 24),
-          // Info Card
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: const Color(0xFF0883FD).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: const Color(0xFF0883FD).withOpacity(0.3),
+            child: ListView(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top + kToolbarHeight + HBotSpacing.space4,
+                left: HBotSpacing.space5,
+                right: HBotSpacing.space5,
+                bottom: HBotSpacing.space6,
               ),
-            ),
-            child: Row(
               children: [
-                Icon(
-                  HBotIcons.info,
-                  color: Color(0xFF0883FD),
-                  size: 20,
+                // Dark Mode toggle card
+                HBotCard(
+                  padding: const EdgeInsets.all(HBotSpacing.space4),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: HBotColors.primary.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: HBotColors.glassBorder, width: 0.5),
+                        ),
+                        child: Icon(
+                          isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
+                          color: HBotColors.primary,
+                          size: 18,
+                        ),
+                      ),
+                      const SizedBox(width: HBotSpacing.space3),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Dark Mode',
+                              style: TextStyle(
+                                fontFamily: 'Readex Pro',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              isDark
+                                  ? 'Dark colors for comfortable viewing'
+                                  : 'Switch to dark theme for nighttime use',
+                              style: const TextStyle(
+                                fontFamily: 'Readex Pro',
+                                color: HBotColors.textMuted,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Switch(
+                        value: isDark,
+                        onChanged: (value) {
+                          themeService.setThemeMode(
+                            value ? ThemeMode.dark : ThemeMode.light,
+                          );
+                        },
+                        activeColor: HBotColors.primary,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: Text(
-                    'Theme changes apply immediately across the entire app',
-                    style: TextStyle(
-                      color: Color(0xFF1F2937),
-                      fontSize: 13,
-                      fontFamily: 'Inter',
-                    ),
+                const SizedBox(height: HBotSpacing.space6),
+
+                // Info card
+                HBotCard(
+                  padding: const EdgeInsets.all(HBotSpacing.space4),
+                  backgroundColor: HBotColors.primary.withOpacity(0.08),
+                  borderColor: HBotColors.primary.withOpacity(0.2),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.info_outline,
+                        color: HBotColors.primary,
+                        size: 20,
+                      ),
+                      const SizedBox(width: HBotSpacing.space3),
+                      const Expanded(
+                        child: Text(
+                          'Theme changes apply immediately across the entire app',
+                          style: TextStyle(
+                            fontFamily: 'Readex Pro',
+                            color: Colors.white,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

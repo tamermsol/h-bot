@@ -6,7 +6,6 @@ import '../models/device_timer.dart';
 import '../theme/app_theme.dart';
 import '../services/mqtt_device_manager.dart';
 import 'add_timer_screen.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 class DeviceTimersScreen extends StatefulWidget {

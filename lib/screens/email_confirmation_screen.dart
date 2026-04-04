@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 class EmailConfirmationScreen extends StatefulWidget {

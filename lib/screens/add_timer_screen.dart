@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/device.dart';
 import '../models/device_timer.dart';
 import '../theme/app_theme.dart';
-import '../widgets/responsive_shell.dart';
-import '../l10n/app_strings.dart';
 
 class AddTimerScreen extends StatefulWidget {
   final Device device;

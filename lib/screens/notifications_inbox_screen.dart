@@ -17,6 +17,7 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
   final _service = BroadcastService();
   List<BroadcastNotification> _notifications = [];
   bool _isLoading = true;
+  int _filterIndex = 0; // 0=All, 1=Alerts, 2=Devices
 
   @override
   void initState() {
@@ -44,8 +45,15 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(AppStrings.get('clear_notifications_confirm')),
-        content: Text(AppStrings.get('clear_notifications_confirm_body')),
+        backgroundColor: HBotColors.sheetBackground,
+        title: Text(
+          AppStrings.get('clear_notifications_confirm'),
+          style: const TextStyle(color: Colors.white, fontFamily: 'Readex Pro', fontWeight: FontWeight.w600),
+        ),
+        content: Text(
+          AppStrings.get('clear_notifications_confirm_body'),
+          style: const TextStyle(color: HBotColors.textMuted),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -55,7 +63,7 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
               AppStrings.get('clear_all_notifications'),
-              style: const TextStyle(color: Colors.red),
+              style: const TextStyle(color: HBotColors.error),
             ),
           ),
         ],
@@ -74,7 +82,6 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
   Future<void> _onTapNotification(BroadcastNotification n) async {
     if (!n.isRead) {
       await _service.markAsRead(n.id);
-      // Update local state optimistically
       setState(() {
         final idx = _notifications.indexWhere((x) => x.id == n.id);
         if (idx != -1) {
@@ -98,10 +105,9 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
 
     if (!mounted) return;
 
-    // Show full notification in a bottom sheet
     showModalBottomSheet(
       context: context,
-      backgroundColor: context.hCard,
+      backgroundColor: HBotColors.sheetBackground,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -117,7 +123,6 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
     if (diff.inHours < 24) return '${diff.inHours}${AppStrings.get("notifications_hours_ago")}';
     if (diff.inDays == 1) return AppStrings.get('notifications_yesterday');
     if (diff.inDays < 7) return '${diff.inDays}${AppStrings.get("notifications_days_ago")}';
-    // Format as date
     return '${dt.day}/${dt.month}/${dt.year}';
   }
 
@@ -126,16 +131,36 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
     final hasUnread = _notifications.any((n) => !n.isRead);
 
     return Scaffold(
-      backgroundColor: context.hBackground,
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: context.hCard,
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+        leading: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: HBotColors.glassBackground,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: HBotColors.glassBorder),
+            ),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, size: 20, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
+              padding: EdgeInsets.zero,
+            ),
+          ),
+        ),
         title: Text(
           AppStrings.get('notifications_title'),
-          style: TextStyle(
-            fontFamily: 'DM Sans',
+          style: const TextStyle(
+            fontFamily: 'Readex Pro',
             fontWeight: FontWeight.w700,
-            fontSize: 20,
+            fontSize: 18,
+            color: Colors.white,
           ),
         ),
         actions: [
@@ -144,45 +169,154 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
               onPressed: _markAllRead,
               child: Text(
                 AppStrings.get('notifications_mark_all_read'),
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
+                style: const TextStyle(
+                  fontFamily: 'Readex Pro',
                   color: HBotColors.primary,
                   fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontSize: 12,
                 ),
               ),
             ),
           if (_notifications.isNotEmpty)
             IconButton(
               onPressed: _clearAll,
-              icon: const Icon(Icons.delete_sweep_outlined),
+              icon: const Icon(Icons.delete_sweep_outlined, color: Colors.white),
               tooltip: AppStrings.get('clear_all_notifications'),
             ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _load,
-        color: HBotColors.primary,
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _notifications.isEmpty
-                ? _buildEmptyState()
-                : ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: HBotSpacing.space3,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [HBotColors.darkBgTop, HBotColors.darkBgBottom],
+          ),
+        ),
+        child: RefreshIndicator(
+          onRefresh: _load,
+          color: HBotColors.primary,
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator(color: HBotColors.primary))
+              : _notifications.isEmpty
+                  ? _buildEmptyState()
+                  : ListView(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).padding.top + kToolbarHeight + HBotSpacing.space3,
+                        bottom: HBotSpacing.space6,
+                      ),
+                      children: _buildSectionedList(),
                     ),
-                    itemCount: _notifications.length,
-                    itemBuilder: (context, index) {
-                      return _buildNotificationCard(_notifications[index]);
-                    },
+        ),
+      ),
+    );
+  }
+
+  List<BroadcastNotification> get _filteredNotifications {
+    if (_filterIndex == 0) return _notifications;
+    if (_filterIndex == 1) {
+      // Alerts: target 'alert' or no target
+      return _notifications.where((n) =>
+          n.target == 'alert' || n.target.isEmpty).toList();
+    }
+    // Devices
+    return _notifications.where((n) => n.target == 'device').toList();
+  }
+
+  Widget _buildFilterTabs() {
+    final labels = ['All', 'Alerts', 'Devices'];
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: HBotSpacing.space4,
+        vertical: HBotSpacing.space2,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: HBotColors.glassBackground,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: HBotColors.glassBorder, width: 1),
+        ),
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          children: List.generate(labels.length, (i) {
+            final isActive = _filterIndex == i;
+            return Expanded(
+              child: GestureDetector(
+                onTap: () => setState(() => _filterIndex = i),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? const Color(0x1F0883FD) // rgba(8,131,253,0.12)
+                        : null,
+                    borderRadius: BorderRadius.circular(10),
                   ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    labels[i],
+                    style: TextStyle(
+                      fontFamily: 'Readex Pro',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: isActive ? HBotColors.primary : HBotColors.textMuted,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildSectionedList() {
+    final filtered = _filteredNotifications;
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+
+    final todayItems = filtered.where((n) => n.createdAt.isAfter(todayStart)).toList();
+    final earlierItems = filtered.where((n) => !n.createdAt.isAfter(todayStart)).toList();
+
+    final widgets = <Widget>[
+      _buildFilterTabs(),
+    ];
+
+    if (todayItems.isNotEmpty) {
+      widgets.add(_buildSectionHeader('Today'));
+      for (final n in todayItems) {
+        widgets.add(_buildNotificationCard(n));
+      }
+    }
+
+    if (earlierItems.isNotEmpty) {
+      widgets.add(_buildSectionHeader('Earlier'));
+      for (final n in earlierItems) {
+        widgets.add(_buildNotificationCard(n));
+      }
+    }
+
+    return widgets;
+  }
+
+  Widget _buildSectionHeader(String label) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(HBotSpacing.space5, HBotSpacing.space5, HBotSpacing.space4, HBotSpacing.space2),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontFamily: 'Readex Pro',
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: HBotColors.textMuted,
+        ),
       ),
     );
   }
 
   Widget _buildEmptyState() {
     return ListView(
-      // Wrap in ListView so pull-to-refresh works on empty state
       physics: const AlwaysScrollableScrollPhysics(),
       children: [
         SizedBox(height: MediaQuery.of(context).size.height * 0.3),
@@ -190,36 +324,35 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: HBotColors.primary.withOpacity(context.isDark ? 0.15 : 0.08),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.notifications_none_outlined,
-                  size: 32,
-                  color: HBotColors.primary,
-                ),
-              ),
-              const SizedBox(height: HBotSpacing.space5),
-              Text(
-                AppStrings.get('notifications_inbox_no_notifications_yet'),
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: context.hTextPrimary,
-                ),
-              ),
-              const SizedBox(height: HBotSpacing.space2),
-              Text(
-                AppStrings.get('notifications_inbox_all_caught_up'),
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 14,
-                  color: context.hTextSecondary,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    const Icon(
+                      Icons.notifications_none_outlined,
+                      size: 48,
+                      color: HBotColors.textMuted,
+                    ),
+                    const SizedBox(height: HBotSpacing.space5),
+                    Text(
+                      AppStrings.get('notifications_inbox_no_notifications_yet'),
+                      style: const TextStyle(
+                        fontFamily: 'Readex Pro',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: HBotSpacing.space2),
+                    Text(
+                      AppStrings.get('notifications_inbox_all_caught_up'),
+                      style: const TextStyle(
+                        fontFamily: 'Readex Pro',
+                        fontSize: 13,
+                        color: HBotColors.textMuted,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -229,8 +362,22 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
     );
   }
 
+  /// Determine icon + color for a notification based on target/type.
+  _NotifStyle _notifStyle(BroadcastNotification n) {
+    final target = n.target.toLowerCase();
+    if (target == 'alert') {
+      return const _NotifStyle(Icons.warning_amber_outlined, Color(0xFFF59E0B));
+    }
+    if (target == 'device') {
+      return const _NotifStyle(Icons.devices_outlined, Color(0xFF34D399));
+    }
+    // default
+    return const _NotifStyle(Icons.notifications_outlined, Color(0xFF0883FD));
+  }
+
   Widget _buildNotificationCard(BroadcastNotification n) {
     final isUnread = !n.isRead;
+    final style = _notifStyle(n);
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -241,118 +388,106 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => _onTapNotification(n),
-          borderRadius: BorderRadius.circular(HBotRadius.medium),
+          borderRadius: BorderRadius.circular(16),
+          splashColor: HBotColors.primary.withOpacity(0.06),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
-              color: isUnread
-                  ? HBotColors.primary.withOpacity(context.isDark ? 0.15 : 0.08)
-                  : context.hCard,
-              borderRadius: BorderRadius.circular(HBotRadius.medium),
-              border: Border(
-                left: BorderSide(
-                  color: isUnread ? HBotColors.primary : Colors.transparent,
-                  width: 3,
-                ),
+              color: HBotColors.glassBackground,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isUnread ? HBotColors.glassBorderActive : HBotColors.glassBorder,
+                width: 1,
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
-                  blurRadius: 6,
-                  offset: const Offset(0, 2),
-                ),
-              ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(HBotSpacing.space4),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Bell icon
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: isUnread
-                          ? HBotColors.primary.withOpacity(0.2)
-                          : (context.isDark ? HBotColors.neutral100.withOpacity(0.1) : HBotColors.neutral100),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      isUnread
-                          ? Icons.notifications_active_outlined
-                          : Icons.notifications_outlined,
-                      color: isUnread
-                          ? HBotColors.primary
-                          : HBotColors.iconDefault,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: HBotSpacing.space3),
-
-                  // Content
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                n.localizedTitle,
-                                style: TextStyle(
-                                  fontFamily: 'DM Sans',
-                                  fontSize: 15,
-                                  fontWeight: isUnread
-                                      ? FontWeight.w700
-                                      : FontWeight.w500,
-                                  color: context.hTextPrimary,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const SizedBox(width: HBotSpacing.space2),
-                            Text(
-                              _relativeTime(n.createdAt),
-                              style: TextStyle(
-                                fontFamily: 'DM Sans',
-                                fontSize: 12,
-                                color: context.hTextTertiary,
-                              ),
-                            ),
-                          ],
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                decoration: isUnread
+                    ? const BoxDecoration(
+                        border: Border(
+                          left: BorderSide(color: Color(0xFF0883FD), width: 3),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          n.localizedBody,
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            fontSize: 13,
-                            color: context.hTextSecondary,
-                            height: 1.4,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Unread dot
-                  if (isUnread) ...[
-                    const SizedBox(width: HBotSpacing.space2),
+                      )
+                    : null,
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Colored icon — 40x40, 12px radius
                     Container(
-                      width: 8,
-                      height: 8,
-                      margin: const EdgeInsets.only(top: 6),
-                      decoration: const BoxDecoration(
-                        color: HBotColors.primary,
-                        shape: BoxShape.circle,
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: style.color.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        style.icon,
+                        color: style.color,
+                        size: 20,
                       ),
                     ),
+                    const SizedBox(width: 12),
+
+                    // Content
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            n.localizedTitle,
+                            style: TextStyle(
+                              fontFamily: 'Readex Pro',
+                              fontSize: 13,
+                              fontWeight: isUnread
+                                  ? FontWeight.w600
+                                  : FontWeight.w500,
+                              color: Colors.white,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            n.localizedBody,
+                            style: const TextStyle(
+                              fontFamily: 'Readex Pro',
+                              fontSize: 12,
+                              color: HBotColors.textMuted,
+                              height: 1.5,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            _relativeTime(n.createdAt),
+                            style: const TextStyle(
+                              fontFamily: 'Readex Pro',
+                              fontSize: 10,
+                              color: HBotColors.textMuted,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Unread dot
+                    if (isUnread) ...[
+                      const SizedBox(width: HBotSpacing.space2),
+                      Container(
+                        width: 8,
+                        height: 8,
+                        margin: const EdgeInsets.only(top: 6),
+                        decoration: const BoxDecoration(
+                          color: HBotColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),
@@ -360,6 +495,13 @@ class _NotificationsInboxScreenState extends State<NotificationsInboxScreen> {
       ),
     );
   }
+}
+
+/// Style for a notification icon.
+class _NotifStyle {
+  final IconData icon;
+  final Color color;
+  const _NotifStyle(this.icon, this.color);
 }
 
 /// Bottom sheet showing the full notification detail.
@@ -396,7 +538,7 @@ class _NotificationDetailSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: context.hTextTertiary.withOpacity(0.4),
+                  color: HBotColors.textMuted.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -406,11 +548,11 @@ class _NotificationDetailSheet extends StatelessWidget {
             // Title
             Text(
               notification.localizedTitle,
-              style: TextStyle(
-                fontFamily: 'DM Sans',
+              style: const TextStyle(
+                fontFamily: 'Readex Pro',
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
-                color: context.hTextPrimary,
+                color: Colors.white,
               ),
             ),
             const SizedBox(height: HBotSpacing.space2),
@@ -418,24 +560,24 @@ class _NotificationDetailSheet extends StatelessWidget {
             // Timestamp
             Text(
               _formatDate(notification.createdAt),
-              style: TextStyle(
-                fontFamily: 'DM Sans',
+              style: const TextStyle(
+                fontFamily: 'Readex Pro',
                 fontSize: 12,
-                color: context.hTextTertiary,
+                color: HBotColors.textMuted,
               ),
             ),
             const SizedBox(height: HBotSpacing.space4),
 
-            const Divider(),
+            Container(height: 0.5, color: HBotColors.glassBorder),
             const SizedBox(height: HBotSpacing.space4),
 
             // Body
             Text(
               notification.localizedBody,
-              style: TextStyle(
-                fontFamily: 'DM Sans',
+              style: const TextStyle(
+                fontFamily: 'Readex Pro',
                 fontSize: 15,
-                color: context.hTextSecondary,
+                color: HBotColors.textMuted,
                 height: 1.6,
               ),
             ),
@@ -457,7 +599,7 @@ class _NotificationDetailSheet extends StatelessWidget {
                 child: const Text(
                   'Close',
                   style: TextStyle(
-                    fontFamily: 'DM Sans',
+                    fontFamily: 'Readex Pro',
                     fontWeight: FontWeight.w600,
                   ),
                 ),

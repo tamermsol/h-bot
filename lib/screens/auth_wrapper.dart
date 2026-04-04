@@ -50,7 +50,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
           const HomeScreen(),
           if (!_demoBannerDismissed)
             Positioned(
-              top: MediaQuery.of(context).padding.top + 4,
+              top: MediaQuery.of(context).padding.top + kToolbarHeight + 8,
               left: 16,
               right: 16,
               child: Material(

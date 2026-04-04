@@ -42,6 +42,9 @@ post_install do |installer|
 
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+      config.build_settings['SWIFT_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
+      # Allow arm64 simulator on Apple Silicon (M1/M2)
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386'
     end
   end
 end

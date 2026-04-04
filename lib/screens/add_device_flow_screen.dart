@@ -28,7 +28,7 @@ import '../utils/channel_detection_utils.dart';
 import '../widgets/wifi_permission_gate.dart';
 import '../widgets/enhanced_device_control_widget.dart';
 import '../theme/app_theme.dart';
-import '../widgets/responsive_shell.dart';
+import '../widgets/design_system.dart';
 import '../l10n/app_strings.dart';
 
 /// Complete device pairing flow: Wi-Fi Setup → Device Discovery → Provisioning → Success
@@ -292,7 +292,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: HBotColors.sheetBackground,
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               ),
               child: Row(
@@ -357,28 +357,49 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
     }
   }
 
-  /// Step indicator widget - v0 progress dots
+  /// Step indicator — 4 bars: done=primary, active=gradient, pending=grey
   Widget _buildStepIndicator() {
+    final currentIndex = _currentStep.index;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(4, (i) {
-          final stepIndex = i;
-          final currentIndex = _currentStep.index;
-          final isActive = stepIndex == currentIndex;
-          return Container(
-            margin: EdgeInsets.only(right: i < 3 ? 8 : 0),
-            width: isActive ? 20 : 8,
-            height: 8,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(999),
-              color: stepIndex <= currentIndex
-                  ? const Color(0xFF0883FD)
-                  : const Color(0xFFE5E7EB),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Column(
+        children: [
+          Row(
+            children: List.generate(4, (i) {
+              final isDone = i < currentIndex;
+              final isActive = i == currentIndex;
+              return Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(right: i < 3 ? 6 : 0),
+                  height: 4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    gradient: isActive
+                        ? const LinearGradient(
+                            colors: [Color(0xFF0883FD), Color(0xFF3BC4FF)],
+                          )
+                        : null,
+                    color: isDone
+                        ? HBotColors.primary
+                        : isActive
+                            ? null
+                            : const Color(0x0FFFFFFF), // rgba(255,255,255,0.06)
+                  ),
+                ),
+              );
+            }),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Step ${currentIndex + 1} of 4',
+            style: const TextStyle(
+              fontFamily: 'Readex Pro',
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              color: HBotColors.textMuted,
             ),
-          );
-        }),
+          ),
+        ],
       ),
     );
   }
@@ -392,50 +413,53 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
       ],
     );
 
-    // v0 style AppBar
+    // Dark glass AppBar
     final appBarWidget = Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFF3F4F6), width: 1)),
+        border: Border(bottom: BorderSide(color: HBotColors.glassBorder, width: 0.5)),
       ),
       child: Row(
         children: [
-          GestureDetector(
+          HBotIconButton(
+            icon: Icons.arrow_back,
             onTap: () => Navigator.pop(context),
-            child: Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
-              alignment: Alignment.center,
-              child: Icon(Icons.arrow_back, size: 20, color: const Color(0xFF1F2937)),
-            ),
           ),
           const Expanded(
             child: Text(
               'Add Device',
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: 'DM Sans',
+                fontFamily: 'Readex Pro',
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Color(0xFF1F2937),
+                color: Colors.white,
               ),
             ),
           ),
           // Debug log hidden — triple-tap title to access
-          const SizedBox(width: 36),
+          const SizedBox(width: 40),
         ],
       ),
     );
 
     final scaffold = Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            appBarWidget,
-            Expanded(child: body),
-          ],
+      backgroundColor: HBotColors.darkBgTop,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [HBotColors.darkBgTop, HBotColors.darkBgBottom],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              appBarWidget,
+              Expanded(child: body),
+            ],
+          ),
         ),
       ),
     );
@@ -489,22 +513,31 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               Container(
                 width: 64,
                 height: 64,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFFEFF6FF),
+                  color: HBotColors.primary.withOpacity(0.12),
                 ),
                 alignment: Alignment.center,
-                child: Icon(Icons.wifi, size: 30, color: const Color(0xFF0883FD)),
+                child: Icon(Icons.wifi, size: 30, color: HBotColors.primary),
               ),
               const SizedBox(height: 20),
+              // Step label
+              Text(
+                'STEP 1 OF 4',
+                style: TextStyle(
+                  fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+                  color: HBotColors.textMuted, letterSpacing: 1.0,
+                ),
+              ),
+              const SizedBox(height: 8),
               const Text(
                 'Set Up WiFi',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
               ),
               const SizedBox(height: 4),
               const Text(
                 'Choose a saved profile or enter credentials manually',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: Color(0xFF6B7280)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 28),
@@ -519,16 +552,16 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       height: 50,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F7FA),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFF0883FD)),
+                        color: HBotColors.glassBackground,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: HBotColors.primary),
                       ),
                       child: Row(
                         children: [
                           Expanded(
                             child: Text(
                               _currentSSID!,
-                              style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
+                              style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: Colors.white),
                             ),
                           ),
                           GestureDetector(
@@ -540,7 +573,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                             },
                             child: const Text(
                               'Enter manually instead',
-                              style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
+                              style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
                             ),
                           ),
                         ],
@@ -556,16 +589,16 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F7FA),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                        color: HBotColors.glassBackground,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: HBotColors.glassBorder),
                       ),
                       child: TextField(
                         controller: _ssidController,
-                        style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
+                        style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: Colors.white),
                         decoration: InputDecoration(
                           hintText: AppStrings.get('add_device_flow_wifi_network_name_ssid'),
-                          hintStyle: TextStyle(fontFamily: 'DM Sans', color: Color(0xFF9CA3AF)),
+                          hintStyle: TextStyle(fontFamily: 'Readex Pro', color: HBotColors.textMuted),
                           border: InputBorder.none,
                           filled: false,
                           contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -576,24 +609,24 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F7FA),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFE5E7EB)),
+                        color: HBotColors.glassBackground,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: HBotColors.glassBorder),
                       ),
                       child: TextField(
                         controller: _wifiPasswordController,
                         obscureText: !_passwordVisible,
-                        style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
+                        style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: Colors.white),
                         decoration: InputDecoration(
                           hintText: AppStrings.get('add_device_flow_password'),
-                          hintStyle: const TextStyle(fontFamily: 'DM Sans', color: Color(0xFF9CA3AF)),
+                          hintStyle: const TextStyle(fontFamily: 'Readex Pro', color: HBotColors.textMuted),
                           border: InputBorder.none,
                           filled: false,
                           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                           suffixIcon: IconButton(
                             icon: Icon(
                               _passwordVisible ? Icons.device_hub : Icons.device_hub,
-                              color: const Color(0xFF9CA3AF), size: 20,
+                              color: HBotColors.textMuted, size: 20,
                             ),
                             onPressed: () => _safeSetState(() => _passwordVisible = !_passwordVisible),
                           ),
@@ -607,9 +640,17 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                       children: [
                         GestureDetector(
                           onTap: _isDetectingSSID ? null : _refreshCurrentSSID,
-                          child: Text(
-                            _isDetectingSSID ? 'Detecting...' : 'Auto-detect WiFi',
-                            style: const TextStyle(fontFamily: 'DM Sans', fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: const Color(0x140883FD), // rgba(8,131,253,0.08)
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0x330883FD)), // rgba(8,131,253,0.2)
+                            ),
+                            child: Text(
+                              _isDetectingSSID ? 'Detecting...' : 'Auto-detect WiFi',
+                              style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
+                            ),
                           ),
                         ),
                       ],
@@ -620,7 +661,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                         child: Text(
                           _detectMessage!,
                           style: TextStyle(
-                            fontFamily: 'DM Sans', fontSize: 13,
+                            fontFamily: 'Readex Pro', fontSize: 13,
                             color: _detectMessage!.startsWith('✅') ? Colors.green.shade700 :
                                    _detectMessage!.startsWith('⚠️') ? Colors.orange.shade700 :
                                    _detectMessage!.startsWith('❌') ? Colors.red.shade700 : context.hTextSecondary,
@@ -646,30 +687,39 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 Container(
                   height: 50,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FA),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                    color: HBotColors.glassBackground,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: HBotColors.glassBorder),
                   ),
                   child: TextField(
                     controller: _wifiPasswordController,
                     obscureText: !_passwordVisible,
-                    style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
+                    onChanged: (_) => _safeSetState(() {}),
+                    style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: Colors.white),
                     decoration: InputDecoration(
                       hintText: AppStrings.get('add_device_flow_password_2'),
-                      hintStyle: const TextStyle(fontFamily: 'DM Sans', color: Color(0xFF9CA3AF)),
+                      hintStyle: const TextStyle(fontFamily: 'Readex Pro', color: HBotColors.textMuted),
                       border: InputBorder.none,
                       filled: false,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _passwordVisible ? Icons.device_hub : Icons.device_hub,
-                          color: const Color(0xFF9CA3AF), size: 20,
+                          _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                          color: HBotColors.textMuted, size: 20,
                         ),
                         onPressed: () => _safeSetState(() => _passwordVisible = !_passwordVisible),
                       ),
                     ),
                   ),
                 ),
+                if (_wifiPasswordError != null)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4, top: 4),
+                    child: Text(
+                      _wifiPasswordError!,
+                      style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 12, color: Color(0xFFEF4444)),
+                    ),
+                  ),
                 const SizedBox(height: 12),
               ],
 
@@ -686,7 +736,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text(AppStrings.get('add_device_flow_save_wifi_for_future_devices'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF6B7280))),
+                  Text(AppStrings.get('add_device_flow_save_wifi_for_future_devices'), style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: HBotColors.textMuted)),
                 ],
               ),
 
@@ -699,15 +749,15 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   opacity: _canProceedFromWiFiSetup() ? 1.0 : 0.4,
                   child: Container(
                     width: double.infinity,
-                    height: 48,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
                     ),
                     alignment: Alignment.center,
                     child: const Text(
                       'Continue',
-                      style: TextStyle(fontFamily: 'DM Sans', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                      style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
                     ),
                   ),
                 ),
@@ -720,10 +770,19 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
   }
 
   bool _canProceedFromWiFiSetup() {
-    // Can proceed if we have SSID (auto or manual) and password
+    // Can proceed if we have SSID (auto or manual) and a valid password (min 8 chars for WPA2)
     final hasSSID = _currentSSID != null || _ssidController.text.isNotEmpty;
-    final hasPassword = _wifiPasswordController.text.isNotEmpty;
-    return hasSSID && hasPassword;
+    final password = _wifiPasswordController.text;
+    final hasValidPassword = password.isNotEmpty && password.length >= 8;
+    return hasSSID && hasValidPassword;
+  }
+
+  String? get _wifiPasswordError {
+    final password = _wifiPasswordController.text;
+    if (password.isNotEmpty && password.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+    return null;
   }
 
   String _getEffectiveSSID() {
@@ -811,22 +870,30 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               Container(
                 width: 64,
                 height: 64,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFFEFF6FF),
+                  color: HBotColors.primary.withOpacity(0.12),
                 ),
                 alignment: Alignment.center,
-                child: Icon(Icons.wifi, size: 30, color: const Color(0xFF0883FD)),
+                child: Icon(Icons.wifi, size: 30, color: HBotColors.primary),
               ),
               const SizedBox(height: 20),
+              Text(
+                'STEP 2 OF 4',
+                style: TextStyle(
+                  fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+                  color: HBotColors.textMuted, letterSpacing: 1.0,
+                ),
+              ),
+              const SizedBox(height: 8),
               const Text(
                 'Connect to Your Device',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
               ),
               const SizedBox(height: 4),
               const Text(
                 'Follow these steps on your phone',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: Color(0xFF6B7280)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -834,11 +901,11 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               // 3-step instruction card
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F7FA),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                  color: HBotColors.glassBackground,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: HBotColors.glassBorder),
                 ),
                 child: Column(
                   children: [
@@ -878,18 +945,18 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   width: double.infinity,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FA),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                    color: HBotColors.glassBackground,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: HBotColors.glassBorder),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.open_in_new, size: 16, color: Color(0xFF4B5563)),
+                      Icon(Icons.open_in_new, size: 16, color: HBotColors.textMuted),
                       SizedBox(width: 8),
                       Text(
                         'Open WiFi Settings',
-                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF1F2937)),
+                        style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
                       ),
                     ],
                   ),
@@ -908,7 +975,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   SizedBox(width: 10),
                   Text(
                     'Waiting for connection...',
-                    style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: Color(0xFF6B7280)),
+                    style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
                   ),
                 ],
               ),
@@ -926,18 +993,18 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   width: double.infinity,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FA),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                    color: HBotColors.glassBackground,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: HBotColors.glassBorder),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.device_hub, size: 16, color: Color(0xFF4B5563)),
+                      Icon(Icons.device_hub, size: 16, color: HBotColors.textMuted),
                       SizedBox(width: 8),
                       Text(
                         'Scan QR Code Instead',
-                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF4B5563)),
+                        style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w500, color: HBotColors.textMuted),
                       ),
                     ],
                   ),
@@ -963,13 +1030,13 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   width: double.infinity,
                   height: 48,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                     gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
                   ),
                   alignment: Alignment.center,
                   child: const Text(
                     'I\'m Connected',
-                    style: TextStyle(fontFamily: 'DM Sans', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                    style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                 ),
               ),
@@ -979,7 +1046,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 const SizedBox(height: 24),
                 Text(
                   'Found ${_availableDeviceAPs.length} device${_availableDeviceAPs.length == 1 ? '' : 's'}',
-                  style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+                  style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
                 ),
                 const SizedBox(height: 8),
                 ...(_availableDeviceAPs.map(
@@ -988,26 +1055,26 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     child: Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: _selectedDeviceAP == ap ? const Color(0xFFEFF6FF) : const Color(0xFFF5F7FA),
-                        borderRadius: BorderRadius.circular(12),
+                        color: _selectedDeviceAP == ap ? HBotColors.primary.withOpacity(0.12) : HBotColors.glassBackground,
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: _selectedDeviceAP == ap ? const Color(0xFF0883FD) : const Color(0xFFE5E7EB),
                         ),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.wifi, size: 20, color: const Color(0xFF0883FD)),
+                          Icon(Icons.wifi, size: 20, color: HBotColors.primary),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               ap,
-                              style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
+                              style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: Colors.white),
                             ),
                           ),
                           if (_selectedDeviceAP == ap)
-                            Icon(Icons.check_circle, size: 20, color: const Color(0xFF10B981)),
+                            Icon(Icons.check_circle, size: 22, color: const Color(0xFF34D399)),
                         ],
                       ),
                     ),
@@ -1023,7 +1090,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                     onTap: _startDeviceDiscovery,
                     child: const Text(
                       'Refresh',
-                      style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
+                      style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF0883FD)),
                     ),
                   ),
                 ),
@@ -1047,22 +1114,30 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               Container(
                 width: 64,
                 height: 64,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFFEFF6FF),
+                  color: HBotColors.primary.withOpacity(0.12),
                 ),
                 alignment: Alignment.center,
-                child: Icon(Icons.wifi, size: 30, color: const Color(0xFF0883FD)),
+                child: Icon(Icons.wifi, size: 30, color: HBotColors.primary),
               ),
               const SizedBox(height: 20),
+              Text(
+                'STEP 2 OF 4',
+                style: TextStyle(
+                  fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+                  color: HBotColors.textMuted, letterSpacing: 1.0,
+                ),
+              ),
+              const SizedBox(height: 8),
               const Text(
                 'Connect to Your Device',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
               ),
               const SizedBox(height: 4),
               const Text(
                 'Follow these steps on your phone',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: Color(0xFF6B7280)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -1070,11 +1145,11 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               // 3-step instruction card
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F7FA),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                  color: HBotColors.glassBackground,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: HBotColors.glassBorder),
                 ),
                 child: Column(
                   children: [
@@ -1110,18 +1185,18 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   width: double.infinity,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FA),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                    color: HBotColors.glassBackground,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: HBotColors.glassBorder),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.open_in_new, size: 16, color: Color(0xFF4B5563)),
+                      Icon(Icons.open_in_new, size: 16, color: HBotColors.textMuted),
                       SizedBox(width: 8),
                       Text(
                         'Open WiFi Settings',
-                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF1F2937)),
+                        style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
                       ),
                     ],
                   ),
@@ -1140,7 +1215,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   SizedBox(width: 10),
                   Text(
                     'Waiting for connection...',
-                    style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: Color(0xFF6B7280)),
+                    style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
                   ),
                 ],
               ),
@@ -1157,18 +1232,18 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   width: double.infinity,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FA),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                    color: HBotColors.glassBackground,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: HBotColors.glassBorder),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.device_hub, size: 16, color: Color(0xFF4B5563)),
+                      Icon(Icons.device_hub, size: 16, color: HBotColors.textMuted),
                       SizedBox(width: 8),
                       Text(
                         'Scan QR Code Instead',
-                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF4B5563)),
+                        style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w500, color: HBotColors.textMuted),
                       ),
                     ],
                   ),
@@ -1189,13 +1264,13 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   width: double.infinity,
                   height: 48,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                     gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
                   ),
                   alignment: Alignment.center,
                   child: const Text(
                     'I\'m Connected',
-                    style: TextStyle(fontFamily: 'DM Sans', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                    style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                 ),
               ),
@@ -1214,14 +1289,14 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
         Container(
           width: 24,
           height: 24,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Color(0xFFEFF6FF),
+            color: HBotColors.primary.withOpacity(0.12),
           ),
           alignment: Alignment.center,
           child: Text(
             '$number',
-            style: const TextStyle(fontFamily: 'DM Sans', fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF0883FD)),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF0883FD)),
           ),
         ),
         const SizedBox(width: 12),
@@ -1229,7 +1304,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
           child: highlight != null
               ? Text.rich(
                   TextSpan(
-                    style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937), height: 1.4),
+                    style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: Colors.white, height: 1.4),
                     children: [
                       TextSpan(text: text),
                       TextSpan(
@@ -1241,7 +1316,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                 )
               : Text(
                   text,
-                  style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937), height: 1.4),
+                  style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: Colors.white, height: 1.4),
                 ),
         ),
       ],
@@ -1336,22 +1411,30 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               Container(
                 width: 64,
                 height: 64,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFFEFF6FF),
+                  color: HBotColors.primary.withOpacity(0.12),
                 ),
                 alignment: Alignment.center,
-                child: Icon(Icons.wifi, size: 30, color: const Color(0xFF0883FD)),
+                child: Icon(Icons.wifi, size: 30, color: HBotColors.primary),
               ),
               const SizedBox(height: 20),
+              Text(
+                'STEP 2 OF 4',
+                style: TextStyle(
+                  fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+                  color: HBotColors.textMuted, letterSpacing: 1.0,
+                ),
+              ),
+              const SizedBox(height: 8),
               const Text(
                 'Connect to Your Device',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
               ),
               const SizedBox(height: 4),
               const Text(
                 'Follow these steps on your phone',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: Color(0xFF6B7280)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -1359,11 +1442,11 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
               // 3-step instruction card
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F7FA),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                  color: HBotColors.glassBackground,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: HBotColors.glassBorder),
                 ),
                 child: Column(
                   children: [
@@ -1392,18 +1475,18 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   width: double.infinity,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FA),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                    color: HBotColors.glassBackground,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: HBotColors.glassBorder),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.open_in_new, size: 16, color: Color(0xFF4B5563)),
+                      Icon(Icons.open_in_new, size: 16, color: HBotColors.textMuted),
                       SizedBox(width: 8),
                       Text(
                         'Open WiFi Settings',
-                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF1F2937)),
+                        style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
                       ),
                     ],
                   ),
@@ -1422,7 +1505,7 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   SizedBox(width: 10),
                   Text(
                     'Waiting for connection...',
-                    style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: Color(0xFF6B7280)),
+                    style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
                   ),
                 ],
               ),
@@ -1435,13 +1518,13 @@ class _AddDeviceFlowScreenState extends State<AddDeviceFlowScreen> {
                   width: double.infinity,
                   height: 48,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                     gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
                   ),
                   alignment: Alignment.center,
                   child: const Text(
                     'I\'m Connected',
-                    style: TextStyle(fontFamily: 'DM Sans', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                    style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
                   ),
                 ),
               ),
@@ -1622,9 +1705,9 @@ Troubleshooting:
                 Container(
                   width: 64,
                   height: 64,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(0xFFEFF6FF),
+                    color: HBotColors.primary.withOpacity(0.12),
                   ),
                   alignment: Alignment.center,
                   child: const SizedBox(
@@ -1636,26 +1719,35 @@ Troubleshooting:
                 Container(
                   width: 64,
                   height: 64,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Color(0xFFFEF2F2),
+                    color: HBotColors.error.withOpacity(0.12),
                   ),
                   alignment: Alignment.center,
-                  child: Icon(Icons.device_hub, size: 32, color: const Color(0xFFEF4444)),
+                  child: Icon(Icons.device_hub, size: 32, color: HBotColors.error),
                 ),
               const SizedBox(height: 20),
 
+              // Step label
+              Text(
+                'STEP 3 OF 4',
+                style: TextStyle(
+                  fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+                  color: HBotColors.textMuted, letterSpacing: 1.0,
+                ),
+              ),
+              const SizedBox(height: 8),
               // Title
               Text(
                 hasError ? 'Configuration Failed' : 'Setting Up...',
-                style: const TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+                style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
               ),
               const SizedBox(height: 4),
               Text(
                 hasError
                     ? _statusMessage
                     : 'Please keep this screen open',
-                style: const TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: Color(0xFF6B7280)),
+                style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -1666,7 +1758,7 @@ Troubleshooting:
                   width: double.infinity,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE5E7EB),
+                    color: HBotColors.glassBorder,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: FractionallySizedBox(
@@ -1686,33 +1778,37 @@ Troubleshooting:
                 ...List.generate(setupSteps.length, (i) {
                   final isComplete = i < completedSteps;
                   final isActive = i == activeStep;
-                  final isPending = i > activeStep;
 
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: isActive ? const Color(0x0FFFFFFF) : Colors.transparent,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                     child: Row(
                       children: [
                         if (isComplete)
-                          Icon(Icons.check_circle, size: 22, color: const Color(0xFF10B981))
+                          Icon(Icons.check_circle, size: 22, color: const Color(0xFF34D399))
                         else if (isActive)
                           const SizedBox(
                             width: 22, height: 22,
                             child: CircularProgressIndicator(strokeWidth: 2.5, color: Color(0xFF0883FD)),
                           )
                         else
-                          Icon(Icons.check_circle_outline, size: 22, color: const Color(0xFFE5E7EB)),
+                          Icon(Icons.check_circle_outline, size: 22, color: HBotColors.glassBorder),
                         const SizedBox(width: 12),
                         Text(
                           setupSteps[i]['label']!,
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: 'Readex Pro',
                             fontSize: 14,
                             fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
                             color: isComplete
-                                ? const Color(0xFF1F2937)
+                                ? Colors.white
                                 : isActive
                                     ? const Color(0xFF0883FD)
-                                    : const Color(0xFF9CA3AF),
+                                    : HBotColors.textMuted,
                           ),
                         ),
                       ],
@@ -1734,15 +1830,15 @@ Troubleshooting:
                   },
                   child: Container(
                     width: double.infinity,
-                    height: 48,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
                     ),
                     alignment: Alignment.center,
                     child: const Text(
                       'Retry',
-                      style: TextStyle(fontFamily: 'DM Sans', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
+                      style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
                     ),
                   ),
                 ),
@@ -1754,7 +1850,7 @@ Troubleshooting:
     );
   }
 
-  // Step 4: Success — v0 StepDone design
+  // Step 4: Success — green checkmark ring, device summary, action buttons
   Widget _buildSuccessStep() {
     return SingleChildScrollView(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 24, bottom: 32),
@@ -1763,49 +1859,113 @@ Troubleshooting:
           constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
             children: [
-              // Green check icon in #ECFDF5 circle
+              // Green checkmark ring — 80x80 ring with check inside
               Container(
-                width: 64,
-                height: 64,
-                decoration: const BoxDecoration(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFFECFDF5),
+                  color: const Color(0x1434D399), // rgba(52,211,153,0.08)
+                  border: Border.all(color: const Color(0x4034D399), width: 2), // rgba(52,211,153,0.25)
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF34D399).withOpacity(0.2),
+                      blurRadius: 20,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 alignment: Alignment.center,
-                child: Icon(Icons.check_circle, size: 36, color: const Color(0xFF10B981)),
+                child: const Icon(Icons.check, size: 40, color: Color(0xFF34D399)),
               ),
               const SizedBox(height: 20),
 
+              // Step label
+              Text(
+                'STEP 4 OF 4',
+                style: TextStyle(
+                  fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+                  color: HBotColors.textMuted, letterSpacing: 1.0,
+                ),
+              ),
+              const SizedBox(height: 8),
               // Title
               const Text(
                 'Device Connected!',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w700, color: Color(0xFF1F2937)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
               ),
               const SizedBox(height: 4),
               const Text(
                 'Give your device a name and assign it to a room',
-                style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: Color(0xFF6B7280)),
+                style: TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 28),
+
+              // Device summary card (if discovered)
+              if (_discoveredDevice != null)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: HBotColors.glassBackground,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: HBotColors.glassBorder),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF34D399).withOpacity(0.12),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(Icons.devices, size: 18, color: Color(0xFF34D399)),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _discoveredDevice!.hostname.isNotEmpty ? _discoveredDevice!.hostname : _discoveredDevice!.module,
+                                  style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
+                                ),
+                                Text(
+                                  _discoveredDevice!.module,
+                                  style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 11, color: HBotColors.textMuted),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
 
               // Device name input
               Container(
                 height: 50,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F7FA),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                  color: HBotColors.glassBackground,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: HBotColors.glassBorder),
                 ),
                 child: TextField(
                   controller: _deviceNameController,
-                  style: const TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: Color(0xFF1F2937)),
+                  style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: Colors.white),
                   decoration: InputDecoration(
                     hintText: AppStrings.get('add_device_flow_device_name_eg_hallway_light'),
-                    hintStyle: TextStyle(fontFamily: 'DM Sans', color: Color(0xFF9CA3AF)),
+                    hintStyle: const TextStyle(fontFamily: 'Readex Pro', color: HBotColors.textMuted),
                     border: InputBorder.none,
                     filled: false,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   ),
                 ),
               ),
@@ -1819,9 +1979,9 @@ Troubleshooting:
                   height: 50,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FA),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                    color: HBotColors.glassBackground,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: HBotColors.glassBorder),
                   ),
                   child: Row(
                     children: [
@@ -1829,13 +1989,13 @@ Troubleshooting:
                         child: Text(
                           _selectedRoom?.name ?? 'Select Room',
                           style: TextStyle(
-                            fontFamily: 'DM Sans',
+                            fontFamily: 'Readex Pro',
                             fontSize: 14,
-                            color: _selectedRoom != null ? const Color(0xFF1F2937) : const Color(0xFF9CA3AF),
+                            color: _selectedRoom != null ? Colors.white : HBotColors.textMuted,
                           ),
                         ),
                       ),
-                      Icon(Icons.device_hub, size: 17, color: const Color(0xFF9CA3AF)),
+                      const Icon(Icons.expand_more, size: 20, color: HBotColors.textMuted),
                     ],
                   ),
                 ),
@@ -1852,55 +2012,68 @@ Troubleshooting:
                 const SizedBox(height: 24),
               ],
 
-              // "Go to Dashboard" gradient button
-              GestureDetector(
-                onTap: _finishPairing,
-                child: Container(
-                  width: double.infinity,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF8CD1FB)]),
-                  ),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'Go to Dashboard',
-                    style: TextStyle(fontFamily: 'DM Sans', fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // "Add Another Device" outlined button
-              GestureDetector(
-                onTap: () {
-                  // Save device name if changed before leaving
-                  _updateDeviceName();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddDeviceFlowScreen(
-                        home: widget.home,
-                        room: widget.room,
-                        onDeviceAdded: widget.onDeviceAdded,
+              // Button row: "Add Another" ghost + "Done" gradient primary
+              Row(
+                children: [
+                  // Ghost button — Add Another Device
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        // Save device name if changed before leaving
+                        _updateDeviceName();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddDeviceFlowScreen(
+                              home: widget.home,
+                              room: widget.room,
+                              onDeviceAdded: widget.onDeviceAdded,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: HBotColors.glassBackground,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: HBotColors.glassBorder),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Add Another',
+                          style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
+                        ),
                       ),
                     ),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FA),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFE5E7EB)),
                   ),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'Add Another Device',
-                    style: TextStyle(fontFamily: 'DM Sans', fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+                  const SizedBox(width: 12),
+                  // Gradient primary button — Done
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: _finishPairing,
+                      child: Container(
+                        height: 48,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: const LinearGradient(colors: [Color(0xFF0883FD), Color(0xFF3BC4FF)]),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF0883FD).withOpacity(0.3),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Done',
+                          style: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),

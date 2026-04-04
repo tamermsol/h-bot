@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeService extends ChangeNotifier {
   static const String _themeKey = 'app_theme_mode';
-  ThemeMode _themeMode = ThemeMode.light; // Default to light mode
+  ThemeMode _themeMode = ThemeMode.system; // Default to system mode
 
   ThemeService() {
     _loadTheme();
@@ -25,14 +25,14 @@ class ThemeService extends ChangeNotifier {
           default: _themeMode = ThemeMode.light;
         }
       } else {
-        // First launch - set light mode as default
-        _themeMode = ThemeMode.light;
+        // First launch - follow system theme by default
+        _themeMode = ThemeMode.system;
         await _saveTheme();
       }
       notifyListeners();
     } catch (e) {
       debugPrint('Error loading theme: $e');
-      _themeMode = ThemeMode.light; // Fallback to light mode
+      _themeMode = ThemeMode.system; // Fallback to system mode
     }
   }
 

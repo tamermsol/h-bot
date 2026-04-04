@@ -1,8 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Settings item — 56px row inside a SettingsGroup
-/// Design: 03-COMPONENT-LIBRARY.md §2.3
+/// Settings item — row inside a SettingsGroup
+/// Design: Pixel's approved dark glass — 15px padding, 36x36 icon bg, 14px label + 11px desc
 class SettingsTile extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -14,6 +15,8 @@ class SettingsTile extends StatelessWidget {
   final Color? titleColor;
   final Color? iconColor;
   final Widget? trailing;
+  /// Background color for the icon container; defaults to glass with icon color tint.
+  final Color? iconBackgroundColor;
 
   const SettingsTile({
     super.key,
@@ -27,96 +30,119 @@ class SettingsTile extends StatelessWidget {
     this.titleColor,
     this.iconColor,
     this.trailing,
+    this.iconBackgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final effectiveIconColor = iconColor ?? titleColor ?? HBotColors.primary;
+    final effectiveIconBg = iconBackgroundColor ??
+        effectiveIconColor.withOpacity( 0.08);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 56),
-            padding: const EdgeInsets.symmetric(
-              horizontal: HBotSpacing.space4,
-              vertical: HBotSpacing.space3,
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 24,
-                  color: iconColor ?? titleColor ?? HBotColors.iconDefault,
-                ),
-                const SizedBox(width: HBotSpacing.space3),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontFamily: 'DM Sans',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: titleColor ?? context.hTextPrimary,
-                        ),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            splashColor: HBotColors.primary.withOpacity(0.06),
+            highlightColor: HBotColors.primary.withOpacity(0.04),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 15,
+              ),
+              child: Row(
+                children: [
+                  // Icon with glass + colored background — 36x36
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: effectiveIconBg,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        icon,
+                        size: 18,
+                        color: effectiveIconColor,
                       ),
-                      if (subtitle != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          subtitle!,
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: context.hTextTertiary,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                if (value != null) ...[
-                  const SizedBox(width: HBotSpacing.space2),
-                  Text(
-                    value!,
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: context.hTextSecondary,
                     ),
                   ),
-                ],
-                if (trailing != null) ...[
-                  const SizedBox(width: HBotSpacing.space2),
-                  trailing!,
-                ] else if (showChevron) ...[
-                  const SizedBox(width: HBotSpacing.space2),
-                  const Icon(
-                    Icons.chevron_right,
-                    color: HBotColors.neutral400,
-                    size: 16,
+                  const SizedBox(width: HBotSpacing.space3),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            fontFamily: 'Readex Pro',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: titleColor ?? Colors.white,
+                          ),
+                        ),
+                        if (subtitle != null && subtitle!.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          Text(
+                            subtitle!,
+                            style: const TextStyle(
+                              fontFamily: 'Readex Pro',
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              color: HBotColors.textMuted,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
+                  if (value != null) ...[
+                    const SizedBox(width: HBotSpacing.space2),
+                    Text(
+                      value!,
+                      style: const TextStyle(
+                        fontFamily: 'Readex Pro',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: HBotColors.textMuted,
+                      ),
+                    ),
+                  ],
+                  if (trailing != null) ...[
+                    const SizedBox(width: HBotSpacing.space2),
+                    trailing!,
+                  ] else if (showChevron) ...[
+                    const SizedBox(width: HBotSpacing.space2),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: HBotColors.textMuted,
+                      size: 16,
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
         if (showDivider)
           Padding(
-            padding: const EdgeInsetsDirectional.only(start: 56),
-            child: Container(height: 1, color: HBotColors.borderSubtle),
+            padding: const EdgeInsetsDirectional.only(start: 64),
+            child: Container(
+              height: 0.5,
+              color: const Color(0x0AFFFFFF), // rgba(255,255,255,0.04)
+            ),
           ),
       ],
     );
   }
 }
 
-/// Grouped card wrapper for settings items
+/// Grouped card wrapper for settings items — glass style
 /// Design: 03-COMPONENT-LIBRARY.md §2.3 Group wrapper
 class SettingsGroup extends StatelessWidget {
   final String? label;
@@ -145,12 +171,12 @@ class SettingsGroup extends StatelessWidget {
             ),
             child: Text(
               label!.toUpperCase(),
-              style: TextStyle(
-                fontFamily: 'DM Sans',
+              style: const TextStyle(
+                fontFamily: 'Readex Pro',
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                letterSpacing: 1.0,
-                color: context.hTextSecondary,
+                letterSpacing: 1.5,
+                color: HBotColors.textMuted,
               ),
             ),
           ),
@@ -159,15 +185,21 @@ class SettingsGroup extends StatelessWidget {
           margin: margin ??
               const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
           decoration: BoxDecoration(
-            color: context.hCard,
-            borderRadius: HBotRadius.largeRadius,
-            border: Border.all(color: context.hBorder, width: 1),
+            color: HBotColors.glassBackground,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: HBotColors.glassBorder, width: 1),
           ),
           child: ClipRRect(
-            borderRadius: HBotRadius.largeRadius,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: children,
+            borderRadius: BorderRadius.circular(20),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(
+                sigmaX: HBotColors.glassBlur,
+                sigmaY: HBotColors.glassBlur,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: children,
+              ),
             ),
           ),
         ),

@@ -52,9 +52,9 @@ class SceneIconSelector extends StatelessWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 6,
-          crossAxisSpacing: HBotSpacing.space2,
-          mainAxisSpacing: HBotSpacing.space2,
+          crossAxisCount: 5,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
           childAspectRatio: 1.0,
         ),
         itemCount: _availableIcons.length,
@@ -67,13 +67,13 @@ class SceneIconSelector extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: isSelected
-                    ? HBotColors.primary.withOpacity(0.2)
-                    : (Colors.white),
-                borderRadius: BorderRadius.circular(HBotRadius.small),
+                    ? const Color(0x1A0883FD) // rgba(8,131,253,0.1)
+                    : HBotColors.glassBackground,
+                borderRadius: BorderRadius.circular(14),
                 border: Border.all(
                   color: isSelected
                       ? HBotColors.primary
-                      : (context.hBorder),
+                      : HBotColors.glassBorder,
                   width: isSelected ? 2 : 1,
                 ),
               ),
@@ -81,8 +81,8 @@ class SceneIconSelector extends StatelessWidget {
                 icon,
                 color: isSelected
                     ? HBotColors.primary
-                    : context.hTextSecondary,
-                size: 24,
+                    : HBotColors.textMuted,
+                size: 22,
               ),
             ),
           );

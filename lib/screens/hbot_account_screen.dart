@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/design_system.dart';
 import '../widgets/settings_tile.dart';
 import '../services/auth_service.dart';
 import '../widgets/responsive_shell.dart';
@@ -28,68 +29,185 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: context.hBackground,
+      backgroundColor: Colors.transparent,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
           AppStrings.get('hbot_account_title'),
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+            fontFamily: 'Readex Pro',
+          ),
         ),
-        backgroundColor: context.hBackground,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-      ),
-      body: ResponsiveShell(child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Email Address Section
-            Container(
-              color: context.hCard,
-              child: SettingsTile(
-                icon: Icons.email_outlined,
-                title: AppStrings.get('email_address'),
-                subtitle: _maskEmail(widget.userEmail ?? ''),
-                onTap: () {
-                  // Show full email in a dialog
-                  _showEmailDialog();
-                },
-                showDivider: false,
-              ),
-            ),
-            const SizedBox(height: 1),
-
-            // Change Password Section
-            Container(
-              color: context.hCard,
-              child: SettingsTile(
-                icon: Icons.lock_outline,
-                title: AppStrings.get('change_password'),
-                subtitle: '',
-                onTap: () {
-                  _showChangePasswordSheet();
-                },
-                showDivider: false,
-              ),
-            ),
-            const SizedBox(height: 1),
-
-            // Delete Account Section
-            Container(
-              color: context.hCard,
-              child: SettingsTile(
-                icon: Icons.person_remove_outlined,
-                title: AppStrings.get('delete_account'),
-                subtitle: '',
-                titleColor: HBotColors.error,
-                onTap: () {
-                  _showDeleteAccountDialog();
-                },
-                showDivider: false,
-              ),
-            ),
-          ],
+        iconTheme: const IconThemeData(color: Colors.white),
+        leading: Padding(
+          padding: const EdgeInsets.all(8),
+          child: HBotIconButton(
+            icon: Icons.arrow_back,
+            onTap: () => Navigator.of(context).pop(),
+          ),
         ),
       ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [HBotColors.darkBgTop, HBotColors.darkBgBottom],
+          ),
+        ),
+        child: ResponsiveShell(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: MediaQuery.of(context).padding.top + kToolbarHeight + HBotSpacing.space4),
+
+                // Profile card at top — centered avatar, name, email
+                _buildProfileCard(),
+
+                // Account info group
+                SettingsGroup(
+                  label: AppStrings.get('profile_account'),
+                  children: [
+                    SettingsTile(
+                      icon: Icons.email_outlined,
+                      title: AppStrings.get('email_address'),
+                      subtitle: _maskEmail(widget.userEmail ?? ''),
+                      iconColor: HBotColors.primary,
+                      onTap: () {
+                        _showEmailDialog();
+                      },
+                    ),
+                    SettingsTile(
+                      icon: Icons.lock_outline,
+                      title: AppStrings.get('change_password'),
+                      subtitle: 'Update your password',
+                      iconColor: HBotColors.primary,
+                      onTap: () {
+                        _showChangePasswordSheet();
+                      },
+                    ),
+                    SettingsTile(
+                      icon: Icons.download_outlined,
+                      title: 'Data Export',
+                      subtitle: 'Download your data',
+                      iconColor: const Color(0xFFF59E0B),
+                      showDivider: false,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Data export coming soon'), backgroundColor: HBotColors.primary),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: HBotSpacing.space6),
+
+                // Danger zone — red-tinted glass card
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+                  padding: const EdgeInsets.all(HBotSpacing.space5),
+                  decoration: BoxDecoration(
+                    color: const Color(0x0FEF4444), // rgba(239,68,68,0.06)
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: const Color(0x26EF4444), width: 1), // rgba(239,68,68,0.15)
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: OutlinedButton.icon(
+                          onPressed: () => _showDeleteAccountDialog(),
+                          icon: const Icon(Icons.person_remove_outlined, size: 18),
+                          label: Text(
+                            AppStrings.get('delete_account'),
+                            style: const TextStyle(fontFamily: 'Readex Pro', fontWeight: FontWeight.w600),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: HBotColors.error,
+                            side: const BorderSide(color: HBotColors.error, width: 1),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: HBotSpacing.space7),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileCard() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: HBotSpacing.space5,
+        vertical: HBotSpacing.space3,
+      ),
+      child: HBotCard(
+        borderRadius: 24,
+        padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 20),
+        child: Center(
+          child: Column(
+            children: [
+              // Avatar — 72x72 circle with gradient
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFF1070AD), Color(0xFF2FB8EC)],
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF0883FD).withOpacity(0.25),
+                      blurRadius: 32,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: const Center(child: Icon(Icons.person, size: 40, color: Colors.white)),
+              ),
+              const SizedBox(height: HBotSpacing.space3),
+              Text(
+                widget.userName ?? 'User',
+                style: const TextStyle(
+                  fontFamily: 'Readex Pro',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: HBotSpacing.space1),
+              Text(
+                widget.userEmail ?? '',
+                style: const TextStyle(
+                  fontFamily: 'Readex Pro',
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                  color: HBotColors.textMuted,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -135,7 +253,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       builder: (sheetContext) {
         return StatefulBuilder(
           builder: (BuildContext ctx, StateSetter setState) {
-            // ── helpers ──────────────────────────────────────────────
+            // helpers
             String getOtp() => otpControllers.map((c) => c.text).join();
 
             Future<void> sendCode() async {
@@ -167,7 +285,6 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                 isLoading = true;
                 errorMessage = null;
               });
-              // move to password step (OTP verified client-side on submit)
               setState(() {
                 step = 2;
                 isLoading = false;
@@ -199,7 +316,6 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   getOtp(),
                   newPassword,
                 );
-                // Dispose resources
                 for (final c in otpControllers) { c.dispose(); }
                 for (final n in focusNodes) { n.dispose(); }
                 newPasswordController.dispose();
@@ -221,7 +337,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               }
             }
 
-            // ── OTP box builder ──────────────────────────────────────
+            // OTP box builder
             Widget buildOtpBox(int index) {
               return SizedBox(
                 width: 46,
@@ -232,24 +348,24 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.number,
                   maxLength: 6,
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
+                  style: const TextStyle(
+                    fontFamily: 'Readex Pro',
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
-                    color: ctx.hTextPrimary,
+                    color: Colors.white,
                   ),
                   decoration: InputDecoration(
                     counterText: '',
                     filled: true,
-                    fillColor: ctx.hBackground,
+                    fillColor: HBotColors.glassBackground,
                     contentPadding: const EdgeInsets.symmetric(vertical: 12),
                     border: OutlineInputBorder(
                       borderRadius: HBotRadius.smallRadius,
-                      borderSide: BorderSide(color: ctx.hBorder, width: 1),
+                      borderSide: BorderSide(color: HBotColors.glassBorder, width: 1),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: HBotRadius.smallRadius,
-                      borderSide: BorderSide(color: ctx.hBorder, width: 1),
+                      borderSide: BorderSide(color: HBotColors.glassBorder, width: 1),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: HBotRadius.smallRadius,
@@ -258,7 +374,6 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   ),
                   onChanged: (value) {
                     if (value.length > 1) {
-                      // Paste detected — distribute digits
                       final digits = value.replaceAll(RegExp(r'[^0-9]'), '');
                       for (int i = 0; i < 6; i++) {
                         otpControllers[i].text = i < digits.length ? digits[i] : '';
@@ -282,46 +397,27 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               );
             }
 
-            // ── gradient button ──────────────────────────────────────
+            // gradient button
             Widget buildGradientButton({required String label, required VoidCallback? onPressed}) {
-              return SizedBox(
-                height: 52,
-                child: Container(
-                  decoration: hbotPrimaryButtonDecoration(disabled: isLoading || onPressed == null),
-                  child: ElevatedButton(
-                    onPressed: isLoading ? null : onPressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
-                    ),
-                    child: isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          )
-                        : Text(
-                            label,
-                            style: const TextStyle(
-                              fontFamily: 'DM Sans',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                  ),
-                ),
+              return HBotGradientButton(
+                enabled: !isLoading && onPressed != null,
+                onTap: isLoading ? null : onPressed,
+                child: isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : Text(label),
               );
             }
 
-            // ── sheet body per step ───────────────────────────────────
+            // sheet body per step
             Widget buildStepContent() {
               if (step == 0) {
-                // Step 0: Intro — send code
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
@@ -330,8 +426,8 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       child: Container(
                         width: 56,
                         height: 56,
-                        decoration: const BoxDecoration(
-                          color: HBotColors.primarySurface,
+                        decoration: BoxDecoration(
+                          color: HBotColors.primary.withOpacity(0.15),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(Icons.lock_outline, size: 28, color: HBotColors.primary),
@@ -340,21 +436,21 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                     const SizedBox(height: HBotSpacing.space4),
                     Text(
                       AppStrings.get('change_password'),
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
+                      style: const TextStyle(
+                        fontFamily: 'Readex Pro',
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: ctx.hTextPrimary,
+                        color: Colors.white,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: HBotSpacing.space3),
                     Text(
                       AppStrings.get('enter_otp'),
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
+                      style: const TextStyle(
+                        fontFamily: 'Readex Pro',
                         fontSize: 14,
-                        color: ctx.hTextSecondary,
+                        color: HBotColors.textMuted,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -362,7 +458,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                     Text(
                       widget.userEmail ?? '',
                       style: const TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: 'Readex Pro',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: HBotColors.primary,
@@ -374,7 +470,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       Text(
                         errorMessage!,
                         style: const TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: 'Readex Pro',
                           fontSize: 13,
                           color: HBotColors.error,
                         ),
@@ -386,7 +482,6 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   ],
                 );
               } else if (step == 1) {
-                // Step 1: OTP entry
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
@@ -395,31 +490,31 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       child: Container(
                         width: 56,
                         height: 56,
-                        decoration: const BoxDecoration(
-                          color: HBotColors.primarySurface,
+                        decoration: BoxDecoration(
+                          color: HBotColors.primary.withOpacity(0.15),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(Icons.verified_outlined, size: 28, color: HBotColors.primary),
                       ),
                     ),
                     const SizedBox(height: HBotSpacing.space4),
-                    Text(
+                    const Text(
                       'Enter Verification Code',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: 'Readex Pro',
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: ctx.hTextPrimary,
+                        color: Colors.white,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: HBotSpacing.space3),
-                    Text(
+                    const Text(
                       'We sent a 6-digit code to',
                       style: TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: 'Readex Pro',
                         fontSize: 14,
-                        color: ctx.hTextSecondary,
+                        color: HBotColors.textMuted,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -427,7 +522,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                     Text(
                       widget.userEmail ?? '',
                       style: const TextStyle(
-                        fontFamily: 'DM Sans',
+                        fontFamily: 'Readex Pro',
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: HBotColors.primary,
@@ -444,7 +539,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       Text(
                         errorMessage!,
                         style: const TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: 'Readex Pro',
                           fontSize: 13,
                           color: HBotColors.error,
                         ),
@@ -456,7 +551,6 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                   ],
                 );
               } else {
-                // Step 2: New password entry
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
@@ -465,8 +559,8 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       child: Container(
                         width: 56,
                         height: 56,
-                        decoration: const BoxDecoration(
-                          color: HBotColors.primarySurface,
+                        decoration: BoxDecoration(
+                          color: HBotColors.primary.withOpacity(0.15),
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(Icons.lock_reset_outlined, size: 28, color: HBotColors.primary),
@@ -475,39 +569,38 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                     const SizedBox(height: HBotSpacing.space4),
                     Text(
                       AppStrings.get('new_password'),
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
+                      style: const TextStyle(
+                        fontFamily: 'Readex Pro',
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: ctx.hTextPrimary,
+                        color: Colors.white,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: HBotSpacing.space4),
-                    // New password field
                     TextField(
                       controller: newPasswordController,
                       obscureText: obscureNew,
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
+                      style: const TextStyle(
+                        fontFamily: 'Readex Pro',
                         fontSize: 15,
-                        color: ctx.hTextPrimary,
+                        color: Colors.white,
                       ),
                       decoration: InputDecoration(
                         labelText: AppStrings.get('new_password'),
-                        labelStyle: TextStyle(
-                          fontFamily: 'DM Sans',
-                          color: ctx.hTextSecondary,
+                        labelStyle: const TextStyle(
+                          fontFamily: 'Readex Pro',
+                          color: HBotColors.textMuted,
                         ),
                         filled: true,
-                        fillColor: ctx.hBackground,
+                        fillColor: HBotColors.glassBackground,
                         border: OutlineInputBorder(
                           borderRadius: HBotRadius.mediumRadius,
-                          borderSide: BorderSide(color: ctx.hBorder),
+                          borderSide: BorderSide(color: HBotColors.glassBorder),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: HBotRadius.mediumRadius,
-                          borderSide: BorderSide(color: ctx.hBorder),
+                          borderSide: BorderSide(color: HBotColors.glassBorder),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: HBotRadius.mediumRadius,
@@ -516,37 +609,36 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                         suffixIcon: IconButton(
                           icon: Icon(
                             obscureNew ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                            color: ctx.hTextSecondary,
+                            color: HBotColors.textMuted,
                           ),
                           onPressed: () => setState(() => obscureNew = !obscureNew),
                         ),
                       ),
                     ),
                     const SizedBox(height: HBotSpacing.space3),
-                    // Confirm password field
                     TextField(
                       controller: confirmPasswordController,
                       obscureText: obscureConfirm,
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
+                      style: const TextStyle(
+                        fontFamily: 'Readex Pro',
                         fontSize: 15,
-                        color: ctx.hTextPrimary,
+                        color: Colors.white,
                       ),
                       decoration: InputDecoration(
                         labelText: AppStrings.get('confirm_password'),
-                        labelStyle: TextStyle(
-                          fontFamily: 'DM Sans',
-                          color: ctx.hTextSecondary,
+                        labelStyle: const TextStyle(
+                          fontFamily: 'Readex Pro',
+                          color: HBotColors.textMuted,
                         ),
                         filled: true,
-                        fillColor: ctx.hBackground,
+                        fillColor: HBotColors.glassBackground,
                         border: OutlineInputBorder(
                           borderRadius: HBotRadius.mediumRadius,
-                          borderSide: BorderSide(color: ctx.hBorder),
+                          borderSide: BorderSide(color: HBotColors.glassBorder),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: HBotRadius.mediumRadius,
-                          borderSide: BorderSide(color: ctx.hBorder),
+                          borderSide: BorderSide(color: HBotColors.glassBorder),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: HBotRadius.mediumRadius,
@@ -555,7 +647,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                         suffixIcon: IconButton(
                           icon: Icon(
                             obscureConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                            color: ctx.hTextSecondary,
+                            color: HBotColors.textMuted,
                           ),
                           onPressed: () => setState(() => obscureConfirm = !obscureConfirm),
                         ),
@@ -566,7 +658,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       Text(
                         errorMessage!,
                         style: const TextStyle(
-                          fontFamily: 'DM Sans',
+                          fontFamily: 'Readex Pro',
                           fontSize: 13,
                           color: HBotColors.error,
                         ),
@@ -580,11 +672,11 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               }
             }
 
-            // ── sheet container ───────────────────────────────────────
+            // sheet container
             return Container(
-              decoration: BoxDecoration(
-                color: ctx.hCard,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              decoration: const BoxDecoration(
+                color: HBotColors.sheetBackground,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
               padding: EdgeInsets.fromLTRB(
                 HBotSpacing.space5,
@@ -602,7 +694,7 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
                       height: 4,
                       margin: const EdgeInsets.only(bottom: HBotSpacing.space4),
                       decoration: BoxDecoration(
-                        color: ctx.hBorder,
+                        color: HBotColors.textMuted.withOpacity(0.3),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -622,10 +714,10 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: context.hCard,
+          backgroundColor: HBotColors.sheetBackground,
           title: Text(
             AppStrings.get('email_address'),
-            style: TextStyle(color: context.hTextPrimary),
+            style: const TextStyle(color: Colors.white, fontFamily: 'Readex Pro', fontWeight: FontWeight.w600),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -633,9 +725,9 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
             children: [
               Text(
                 widget.userEmail ?? 'No email',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
-                  color: context.hTextPrimary,
+                  color: Colors.white,
                 ),
               ),
             ],
@@ -658,14 +750,14 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: context.hCard,
+          backgroundColor: HBotColors.sheetBackground,
           title: Row(
             children: [
               Icon(Icons.warning, color: HBotColors.error),
               const SizedBox(width: 8),
               Text(
                 AppStrings.get('delete_account'),
-                style: TextStyle(color: context.hTextPrimary),
+                style: const TextStyle(color: Colors.white, fontFamily: 'Readex Pro', fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -674,11 +766,11 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'This action cannot be undone. Deleting your account will:',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: context.hTextPrimary,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -754,9 +846,9 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
-                color: context.hTextPrimary,
+                color: Colors.white70,
               ),
             ),
           ),
@@ -773,29 +865,27 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          backgroundColor: context.hCard,
-          title: Text(
+          backgroundColor: HBotColors.sheetBackground,
+          title: const Text(
             'Final Confirmation',
-            style: TextStyle(color: context.hTextPrimary),
+            style: TextStyle(color: Colors.white, fontFamily: 'Readex Pro', fontWeight: FontWeight.w600),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'To confirm deletion, please type:',
                 style: TextStyle(
                   fontSize: 14,
-                  color: context.hTextPrimary,
+                  color: Colors.white70,
                 ),
               ),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? context.hBackground
-                      : context.hSurface,
+                  color: HBotColors.glassBackground,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -811,11 +901,23 @@ class _HBOTAccountScreenState extends State<HBOTAccountScreen> {
               const SizedBox(height: 12),
               TextField(
                 controller: confirmationController,
-                style: TextStyle(color: context.hTextPrimary),
+                style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: AppStrings.get('hbot_account_type_here'),
+                  hintStyle: const TextStyle(color: HBotColors.textMuted),
+                  filled: true,
+                  fillColor: HBotColors.glassBackground,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: HBotColors.glassBorder),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide(color: HBotColors.glassBorder),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: HBotColors.error),
                   ),
                 ),
               ),

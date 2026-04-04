@@ -6,7 +6,6 @@ import '../services/smart_home_service.dart';
 import '../repos/devices_repo.dart';
 import '../repos/device_management_repo.dart';
 import '../theme/app_theme.dart';
-import '../utils/channel_detection_utils.dart';
 import '../widgets/shutter_control_widget.dart';
 import '../l10n/app_strings.dart';
 import '../widgets/channel_grid.dart';
@@ -15,9 +14,8 @@ import 'shutter_manual_calibration_screen.dart';
 import 'device_timers_screen.dart';
 import 'share_device_screen.dart';
 import '../widgets/responsive_shell.dart';
+import '../widgets/design_system.dart';
 import 'activity_log_screen.dart';
-import '../services/device_event_tracker.dart';
-import '../services/activity_log_service.dart';
 
 /// Dedicated screen for controlling a specific device
 class DeviceControlScreen extends StatefulWidget {
@@ -475,102 +473,234 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: context.hBackground,
+      backgroundColor: HBotColors.darkBgTop,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: context.hBackground,
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: context.hTextPrimary),
-          onPressed: () => Navigator.of(context).pop(),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: HBotIconButton(
+            icon: Icons.arrow_back,
+            onTap: () => Navigator.of(context).pop(),
+          ),
         ),
-        title: Text(
-          _currentDevice.deviceName,
+        title: const Text(
+          'Device Control',
           style: TextStyle(
-            color: context.hTextPrimary,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
+            fontFamily: 'Readex Pro',
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
           ),
         ),
         actions: [
           // Timer button (for relay and dimmer devices - lights)
           if (_currentDevice.deviceType == DeviceType.relay ||
               _currentDevice.deviceType == DeviceType.dimmer)
-            IconButton(
-              icon: const Icon(
-                Icons.timer_outlined,
-                color: HBotColors.primary,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DeviceTimersScreen(
-                      device: _currentDevice,
-                      mqttManager: _mqttManager,
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: HBotIconButton(
+                icon: Icons.timer_outlined,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DeviceTimersScreen(
+                        device: _currentDevice,
+                        mqttManager: _mqttManager,
+                      ),
                     ),
-                  ),
-                );
-              },
-              tooltip: AppStrings.get('device_control_set_timers'),
+                  );
+                },
+              ),
             ),
-          IconButton(
-            icon: Icon(Icons.refresh, color: context.hTextPrimary),
-            onPressed: _refreshDeviceStatus,
-            tooltip: AppStrings.get('device_control_refresh_device_status'),
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: HBotIconButton(
+              icon: Icons.refresh,
+              onTap: _refreshDeviceStatus,
+            ),
           ),
-          IconButton(
-            icon: Icon(
-              Icons.more_vert,
-              color: context.hTextPrimary,
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: HBotIconButton(
+              icon: Icons.more_vert,
+              onTap: _showDeviceOptions,
             ),
-            onPressed: _showDeviceOptions,
           ),
         ],
       ),
-      body: ResponsiveShell(
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: HBotColors.primary),
-              )
-            : SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: HBotLayout.isTablet(context) ? HBotSpacing.space6 : HBotSpacing.space5,
-                  vertical: HBotSpacing.space6,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildDeviceHeader(),
-                    const SizedBox(height: HBotSpacing.space6),
-                    _buildChannelControls(),
-                    const SizedBox(height: HBotSpacing.space6),
-                    if (_showDebugInfo) ...[
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [HBotColors.darkBgTop, HBotColors.darkBgBottom],
+          ),
+        ),
+        child: ResponsiveShell(
+          child: _isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(color: HBotColors.primary),
+                )
+              : SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    left: HBotLayout.isTablet(context) ? HBotSpacing.space6 : HBotSpacing.space5,
+                    right: HBotLayout.isTablet(context) ? HBotSpacing.space6 : HBotSpacing.space5,
+                    top: MediaQuery.of(context).padding.top + kToolbarHeight + HBotSpacing.space4,
+                    bottom: HBotSpacing.space6,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildDeviceHeader(),
                       const SizedBox(height: HBotSpacing.space6),
-                      _buildDebugInfo(),
+                      _buildChannelControls(),
+                      const SizedBox(height: HBotSpacing.space6),
+                      if (_showDebugInfo) ...[
+                        const SizedBox(height: HBotSpacing.space6),
+                        _buildDebugInfo(),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }
 
-  /// Device header - shows only device name (status indicators removed)
+  /// Device header - hero gradient card with device info (Pixel's design)
   Widget _buildDeviceHeader() {
-    return Column(
-      children: [
-        Text(
-          _currentDevice.deviceName,
-          style: TextStyle(
-            color: context.hTextPrimary,
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
+    final isOnline = _isDeviceOnline();
+    final IconData deviceIcon;
+    switch (_currentDevice.deviceType) {
+      case DeviceType.shutter:
+        deviceIcon = Icons.window;
+      case DeviceType.relay:
+        deviceIcon = Icons.power_settings_new;
+      case DeviceType.dimmer:
+        deviceIcon = Icons.lightbulb;
+      case DeviceType.sensor:
+        deviceIcon = Icons.sensors;
+      case DeviceType.other:
+        deviceIcon = Icons.devices;
+    }
+
+    // Location subtitle — device type description
+    final String locationText = _currentDevice.deviceType.name[0].toUpperCase() +
+        _currentDevice.deviceType.name.substring(1);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment(-1, -1),
+          end: Alignment(1, 1),
+          colors: [Color(0xFF1070AD), Color(0xFF0883FD), Color(0xFF2FB8EC)],
         ),
-      ],
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x66010510), // rgba(1,5,16,0.4)
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Radial glow overlay — top-right
+          Positioned(
+            top: -40,
+            right: -40,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    Colors.white.withOpacity(0.08),
+                    Colors.white.withOpacity(0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Content
+          Center(
+            child: Column(
+              children: [
+                // Device icon — 48x48 white stroke
+                Icon(deviceIcon, size: 48, color: Colors.white),
+                const SizedBox(height: HBotSpacing.space3),
+                // Device name — 22px weight 700
+                Text(
+                  _currentDevice.deviceName,
+                  style: const TextStyle(
+                    fontFamily: 'Readex Pro',
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.3,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                // Location — 13px, 0.85 opacity
+                const SizedBox(height: 4),
+                Opacity(
+                  opacity: 0.85,
+                  child: Text(
+                    locationText,
+                    style: const TextStyle(
+                      fontFamily: 'Readex Pro',
+                      color: Colors.white,
+                      fontSize: 13,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: HBotSpacing.space3),
+                // Connected badge — 4px 12px padding, 20px radius, rgba(52,211,153,0.25), 11px w600
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: (isOnline ? const Color(0xFF34D399) : HBotColors.error).withOpacity(0.25),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: isOnline ? const Color(0xFF34D399) : HBotColors.error,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        isOnline ? 'Connected' : 'Offline',
+                        style: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          color: isOnline ? const Color(0xFF34D399) : HBotColors.error,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -579,7 +709,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     _isBottomSheetOpen = true;
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: context.hCard,
+      backgroundColor: HBotColors.sheetBackground,
       isScrollControlled: true,
       builder: (context) => SafeArea(
         child: SingleChildScrollView(
@@ -591,13 +721,13 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.edit,
-                    color: context.hTextPrimary,
+                    color: Colors.white,
                   ),
                   title: Text(
                     AppStrings.get('rename_device'),
-                    style: TextStyle(color: context.hTextPrimary),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -605,13 +735,13 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.room,
-                    color: context.hTextPrimary,
+                    color: Colors.white,
                   ),
                   title: Text(
                     AppStrings.get('move_to_room'),
-                    style: TextStyle(color: context.hTextPrimary),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -621,17 +751,17 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 // Shutter calibration options (only for shutter devices)
                 if (widget.device.deviceType == DeviceType.shutter) ...[
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.tune,
-                      color: context.hTextPrimary,
+                      color: Colors.white,
                     ),
-                    title: Text(
+                    title: const Text(
                       'Auto Calibrate Shutter',
-                      style: TextStyle(color: context.hTextPrimary),
+                      style: TextStyle(color: Colors.white),
                     ),
                     subtitle: Text(
                       'Measure time automatically',
-                      style: TextStyle(color: context.hTextTertiary, fontSize: 12),
+                      style: TextStyle(color: HBotColors.textMuted, fontSize: 12),
                     ),
                     onTap: () {
                       Navigator.pop(context);
@@ -639,17 +769,17 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                     },
                   ),
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.timer,
-                      color: context.hTextPrimary,
+                      color: Colors.white,
                     ),
-                    title: Text(
+                    title: const Text(
                       'Manual Calibrate Shutter',
-                      style: TextStyle(color: context.hTextPrimary),
+                      style: TextStyle(color: Colors.white),
                     ),
                     subtitle: Text(
                       'Enter times directly',
-                      style: TextStyle(color: context.hTextTertiary, fontSize: 12),
+                      style: TextStyle(color: HBotColors.textMuted, fontSize: 12),
                     ),
                     onTap: () {
                       Navigator.pop(context);
@@ -659,17 +789,17 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ],
                 // Share Device option
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.share_outlined,
-                    color: context.hTextPrimary,
+                    color: Colors.white,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Share Device',
-                    style: TextStyle(color: context.hTextPrimary),
+                    style: TextStyle(color: Colors.white),
                   ),
                   subtitle: Text(
                     'Share with other users via QR code',
-                    style: TextStyle(color: context.hTextTertiary, fontSize: 12),
+                    style: TextStyle(color: HBotColors.textMuted, fontSize: 12),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -683,8 +813,8 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.history, color: context.hTextPrimary),
-                  title: Text(AppStrings.get('activity_log'), style: TextStyle(color: context.hTextPrimary)),
+                  leading: const Icon(Icons.history, color: Colors.white),
+                  title: Text(AppStrings.get('activity_log'), style: const TextStyle(color: Colors.white)),
                   onTap: () {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(
@@ -698,11 +828,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 ListTile(
                   leading: Icon(
                     _showDebugInfo ? Icons.visibility_off : Icons.visibility,
-                    color: context.hTextPrimary,
+                    color: Colors.white,
                   ),
                   title: Text(
                     _showDebugInfo ? 'Hide Device Info' : 'Show Device Info',
-                    style: TextStyle(color: context.hTextPrimary),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   onTap: () {
                     Navigator.pop(context);
@@ -711,7 +841,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                     });
                   },
                 ),
-                Divider(color: context.hTextTertiary),
+                Divider(color: HBotColors.glassBorder),
                 ListTile(
                   leading: const Icon(Icons.delete, color: Colors.red),
                   title: Text(
@@ -781,60 +911,57 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     // Determine model name based on device type and channel count
     modelName = _getHbotModelName();
 
-    return Card(
-      color: Colors.white,
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(HBotSpacing.space6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Device Information',
-              style: TextStyle(
-                color: context.hTextPrimary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+    final infoRows = <MapEntry<String, String>>[
+      MapEntry('Manufacturer', manufacturer),
+      MapEntry('Device Model', modelName),
+      MapEntry('Mac address', macAddress ?? 'Unknown'),
+      MapEntry('IP Address', ipAddress ?? 'Unknown'),
+    ];
+
+    return HBotCard(
+      borderRadius: 16,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const HBotSectionLabel('DEVICE INFO'),
+          const SizedBox(height: 12),
+          for (int i = 0; i < infoRows.length; i++) ...[
+            if (i > 0)
+              Divider(color: HBotColors.glassBorder, height: 1),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: _buildInfoRow(infoRows[i].key, infoRows[i].value),
             ),
-            const SizedBox(height: HBotSpacing.space4),
-            _buildInfoRow('Manufacturer', manufacturer),
-            const SizedBox(height: HBotSpacing.space2),
-            _buildInfoRow('Device Model', modelName),
-            const SizedBox(height: HBotSpacing.space2),
-            _buildInfoRow('Mac address', macAddress ?? 'Unknown'),
-            const SizedBox(height: HBotSpacing.space2),
-            _buildInfoRow('IP Address', ipAddress ?? 'Unknown'),
           ],
-        ),
+        ],
       ),
     );
   }
 
-  /// Build a single info row with label and value
+  /// Build a single info row with label and value (flex space-between)
   Widget _buildInfoRow(String label, String value) {
-
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        SizedBox(
-          width: 120,
-          child: Text(
-            label,
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 14,
-            ),
+        Text(
+          label,
+          style: const TextStyle(
+            fontFamily: 'Readex Pro',
+            color: HBotColors.textMuted,
+            fontSize: 12,
           ),
         ),
-        Expanded(
+        Flexible(
           child: Text(
             value,
-            style: TextStyle(
-              color: Colors.grey[900],
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
+            style: const TextStyle(
+              fontFamily: 'Readex Pro',
+              color: Colors.white,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
             ),
+            textAlign: TextAlign.end,
           ),
         ),
       ],
@@ -891,51 +1018,97 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     );
   }
 
-  /// Build single channel control with large circular power button
+  /// Build single channel control — glass card with power row (Pixel's design)
   Widget _buildSingleChannelControl() {
     final isOn = _getChannelState(1);
     final canControl = _canSendCommands();
+    final channelName = _channelNames[1] ?? (_channelTypes[1] == 'switch' ? 'Power' : 'Light');
 
-    return Center(
-      child: GestureDetector(
-        onTap: canControl ? () => _toggleChannel(1) : null,
-        child: AnimatedContainer(
-          duration: HBotDurations.medium,
-          width: 160,
-          height: 160,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isOn
-                ? HBotColors.primary.withOpacity(0.1)
-                : context.hCard,
-            border: Border.all(
-              color: isOn ? HBotColors.primary : context.hBorder,
-              width: 3,
+    return HBotCard(
+      borderRadius: 20,
+      padding: const EdgeInsets.all(24),
+      child: Row(
+        children: [
+          // Icon
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: isOn
+                  ? HBotColors.primary.withOpacity( 0.08)
+                  : HBotColors.glassBackground,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(
+              _channelTypes[1] == 'switch'
+                  ? Icons.power_settings_new
+                  : Icons.lightbulb,
+              size: 22,
+              color: isOn ? HBotColors.primary : HBotColors.textMuted,
             ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                _channelTypes[1] == 'switch'
-                    ? Icons.power_settings_new
-                    : Icons.lightbulb,
-                size: 48,
-                color: isOn ? HBotColors.primary : HBotColors.iconDefault,
+          const SizedBox(width: 14),
+          // Label — 15px weight 600
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  channelName,
+                  style: const TextStyle(
+                    fontFamily: 'Readex Pro',
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  isOn ? 'On' : 'Off',
+                  style: TextStyle(
+                    fontFamily: 'Readex Pro',
+                    fontSize: 12,
+                    color: HBotColors.textMuted,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Power toggle — 56x30px, 15px radius, knob 26x26px
+          GestureDetector(
+            onTap: canControl ? () => _toggleChannel(1) : null,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: 56,
+              height: 30,
+              decoration: BoxDecoration(
+                color: isOn ? const Color(0xFF34D399) : const Color(0x1AFFFFFF),
+                borderRadius: BorderRadius.circular(15),
               ),
-              const SizedBox(height: HBotSpacing.space2),
-              Text(
-                isOn ? 'ON' : 'OFF',
-                style: TextStyle(
-                  fontFamily: 'DM Sans',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: isOn ? HBotColors.primary : context.hTextSecondary,
+              child: AnimatedAlign(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                alignment: isOn ? Alignment.centerRight : Alignment.centerLeft,
+                child: Container(
+                  width: 26,
+                  height: 26,
+                  margin: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -977,14 +1150,14 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: context.hCard,
+        backgroundColor: HBotColors.sheetBackground,
         title: Text('${AppStrings.get('rename_channel')}: ${_getChannelName(channel)}'),
         content: TextField(
           controller: controller,
-          style: TextStyle(color: context.hTextPrimary),
+          style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: AppStrings.get('rename_channel'),
-            hintStyle: TextStyle(color: context.hTextTertiary),
+            hintStyle: TextStyle(color: HBotColors.textMuted),
           ),
           autofocus: true,
         ),
@@ -1012,7 +1185,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: context.hCard,
+        backgroundColor: HBotColors.sheetBackground,
         title: Text('${_getChannelName(channel)} ${AppStrings.get('channel_options')}'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1021,7 +1194,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
               leading: const Icon(Icons.edit, color: HBotColors.primary),
               title: Text(
                 AppStrings.get('rename_channel'),
-                style: TextStyle(color: context.hTextPrimary),
+                style: TextStyle(color: Colors.white),
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -1034,11 +1207,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 Icons.lightbulb,
                 color: channelType == 'light'
                     ? HBotColors.primary
-                    : context.hTextSecondary,
+                    : HBotColors.textMuted,
               ),
               title: Text(
                 'Light',
-                style: TextStyle(color: context.hTextPrimary),
+                style: TextStyle(color: Colors.white),
               ),
               trailing: channelType == 'light'
                   ? const Icon(Icons.check, color: HBotColors.primary)
@@ -1053,11 +1226,11 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 Icons.power_settings_new,
                 color: channelType == 'switch'
                     ? HBotColors.primary
-                    : context.hTextSecondary,
+                    : HBotColors.textMuted,
               ),
               title: Text(
                 'Switch',
-                style: TextStyle(color: context.hTextPrimary),
+                style: TextStyle(color: Colors.white),
               ),
               trailing: channelType == 'switch'
                   ? const Icon(Icons.check, color: HBotColors.primary)
@@ -1152,7 +1325,6 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       );
 
       if (mounted) {
-        final typeName = newType == 'light' ? 'Light' : 'Switch';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${AppStrings.get("success_channel_type_changed")}'),
@@ -1201,7 +1373,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: context.hCard,
+        backgroundColor: HBotColors.sheetBackground,
         title: Text(AppStrings.get('rename_device')),
         content: TextField(
           controller: controller,
@@ -1321,7 +1493,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: context.hCard,
+          backgroundColor: HBotColors.sheetBackground,
           title: Text(AppStrings.get('move_to_room')),
           content: SizedBox(
             width: double.maxFinite,
@@ -1334,7 +1506,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 children: [
                   Text(
                     'Select a room for this device:',
-                    style: TextStyle(color: context.hTextSecondary),
+                    style: TextStyle(color: HBotColors.textMuted),
                   ),
                   const SizedBox(height: 16),
                   // Scrollable list of rooms
@@ -1352,15 +1524,15 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                             title: Text(
                               'No Room',
                               style: TextStyle(
-                                color: context.hTextPrimary,
+                                color: Colors.white,
                               ),
                             ),
                             subtitle: Text(
                               'Place device in the main area',
-                              style: TextStyle(color: context.hTextSecondary),
+                              style: TextStyle(color: HBotColors.textMuted),
                             ),
                             selected: _currentDevice.roomId == null,
-                            selectedTileColor: HBotColors.primary.withOpacity(0.1),
+                            selectedTileColor: HBotColors.primary.withOpacity( 0.1),
                             onTap: () {
                               Navigator.pop(context);
                               _moveDeviceToRoom(null);
@@ -1379,12 +1551,12 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                                 title: Text(
                                   room.name,
                                   style: TextStyle(
-                                    color: context.hTextPrimary,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 selected: _currentDevice.roomId == room.id,
                                 selectedTileColor: HBotColors.primary
-                                    .withOpacity(0.1),
+                                    .withOpacity( 0.1),
                                 onTap: () {
                                   Navigator.pop(context);
                                   _moveDeviceToRoom(room.id);
@@ -1396,7 +1568,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                               padding: EdgeInsets.all(16.0),
                               child: Text(
                                 'No rooms available. Create rooms from the home screen.',
-                                style: TextStyle(color: context.hTextTertiary),
+                                style: TextStyle(color: HBotColors.textMuted),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -1518,7 +1690,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: context.hCard,
+        backgroundColor: HBotColors.sheetBackground,
         title: Row(
           children: [
             Icon(Icons.warning, color: Colors.red),
@@ -1533,14 +1705,14 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
             Text(
               'Are you sure you want to delete "${widget.device.deviceName}"?',
               style: TextStyle(
-                color: context.hTextPrimary,
+                color: Colors.white,
                 fontSize: 16,
               ),
             ),
             const SizedBox(height: 12),
             Text(
               'This action cannot be undone. All device data, settings, and channel configurations will be permanently removed.',
-              style: TextStyle(color: context.hTextSecondary, fontSize: 14),
+              style: TextStyle(color: HBotColors.textMuted, fontSize: 14),
             ),
           ],
         ),
@@ -1549,7 +1721,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel',
-              style: TextStyle(color: context.hTextSecondary),
+              style: TextStyle(color: HBotColors.textMuted),
             ),
           ),
           TextButton(
@@ -1574,7 +1746,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            backgroundColor: context.hCard,
+            backgroundColor: HBotColors.sheetBackground,
             content: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -1582,7 +1754,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                 SizedBox(width: 16),
                 Text(
                   'Deleting device...',
-                  style: TextStyle(color: context.hTextPrimary),
+                  style: TextStyle(color: Colors.white),
                 ),
               ],
             ),
@@ -1650,7 +1822,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            backgroundColor: context.hCard,
+            backgroundColor: HBotColors.sheetBackground,
             title: Row(
               children: [
                 Icon(errorIcon, color: Colors.red),
@@ -1660,7 +1832,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
             ),
             content: Text(
               errorMessage,
-              style: TextStyle(color: context.hTextPrimary),
+              style: TextStyle(color: Colors.white),
             ),
             actions: [
               TextButton(

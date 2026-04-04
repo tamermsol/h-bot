@@ -120,6 +120,7 @@ flutter:
     - assets/images/
     - assets/images/backgrounds/
     - assets/images/avatars/
+    - assets/images/branding/
     - assets/branding/
     - assets/ca.crt
 
@@ -135,6 +136,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: Readex Pro
+      fonts:
+        - asset: assets/fonts/ReadexPro-Variable.ttf
     - family: DM Sans
       fonts:
         - asset: assets/fonts/DMSans-Variable.ttf

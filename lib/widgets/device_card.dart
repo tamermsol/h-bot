@@ -52,6 +52,9 @@ class _DeviceCardState extends State<DeviceCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Success green for active status text
+    const successColor = Color(0xFF34D399);
+
     return GestureDetector(
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
@@ -68,16 +71,15 @@ class _DeviceCardState extends State<DeviceCard> {
           constraints: const BoxConstraints(minHeight: 140),
           padding: const EdgeInsets.all(HBotSpacing.space4),
           decoration: BoxDecoration(
-            color: _isPressed ? HBotColors.cardHover : context.hCard,
-            borderRadius: HBotRadius.largeRadius,
-            border: Border(
-              left: BorderSide(
-                color: widget.isOn ? _activeColor : context.hBorder,
-                width: widget.isOn ? 3 : 1,
-              ),
-              top: BorderSide(color: context.hBorder, width: 1),
-              right: BorderSide(color: context.hBorder, width: 1),
-              bottom: BorderSide(color: context.hBorder, width: 1),
+            color: _isPressed
+                ? HBotColors.glassBackgroundHover
+                : HBotColors.glassBackground,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(
+              color: widget.isOn
+                  ? HBotColors.glassBorderActive
+                  : HBotColors.glassBorder,
+              width: 1,
             ),
           ),
           child: Opacity(
@@ -86,14 +88,24 @@ class _DeviceCardState extends State<DeviceCard> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Device icon with optional unreachable dot
+                // Device icon with background container
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Icon(
-                      widget.icon,
-                      color: widget.isOn ? _activeColor : HBotColors.iconDefault,
-                      size: 32,
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: widget.isOn
+                            ? _activeColor.withOpacity(0.15)
+                            : Colors.white.withOpacity(0.06),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Icon(
+                        widget.icon,
+                        color: widget.isOn ? _activeColor : HBotColors.textMuted,
+                        size: 24,
+                      ),
                     ),
                     if (_unreachable)
                       Positioned(
@@ -109,11 +121,11 @@ class _DeviceCardState extends State<DeviceCard> {
                 // Device name — centered
                 Text(
                   widget.title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'DM Sans',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: context.hTextPrimary,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -126,11 +138,9 @@ class _DeviceCardState extends State<DeviceCard> {
                     widget.value!,
                     style: TextStyle(
                       fontFamily: 'DM Sans',
-                      fontSize: 13,
+                      fontSize: 11,
                       fontWeight: FontWeight.w500,
-                      color: widget.isOn
-                          ? _activeColor
-                          : context.hTextSecondary,
+                      color: widget.isOn ? successColor : HBotColors.textMuted,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -141,11 +151,11 @@ class _DeviceCardState extends State<DeviceCard> {
                   const SizedBox(height: 2),
                   Text(
                     widget.roomName!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'DM Sans',
-                      fontSize: 12,
+                      fontSize: 11,
                       fontWeight: FontWeight.w400,
-                      color: context.hTextSecondary,
+                      color: HBotColors.textMuted,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
