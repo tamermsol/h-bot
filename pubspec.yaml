@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.2+149
+version: 1.0.3+1
 
 environment:
   sdk: ">=3.5.0 <4.0.0"
@@ -56,6 +56,7 @@ dependencies:
   permission_handler: ^11.3.1
   url_launcher: ^6.3.1
   crypto: ^3.0.7
+  sign_in_with_apple: ^6.1.4
 
   # Device info and location services
   device_info_plus: ^10.1.2
@@ -74,6 +75,9 @@ dependencies:
   # QR Code generation and scanning for device sharing
   qr_flutter: ^4.1.0
   mobile_scanner: ^6.0.11
+
+  # Phosphor icon library for design system
+  phosphor_flutter: ^2.1.0
   
   # Biometric authentication for device sharing
   local_auth: ^2.2.0
@@ -116,6 +120,7 @@ flutter:
     - assets/images/
     - assets/images/backgrounds/
     - assets/images/avatars/
+    - assets/images/branding/
     - assets/branding/
     - assets/ca.crt
 
@@ -131,6 +136,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: Readex Pro
+      fonts:
+        - asset: assets/fonts/ReadexPro-Variable.ttf
     - family: DM Sans
       fonts:
         - asset: assets/fonts/DMSans-Variable.ttf

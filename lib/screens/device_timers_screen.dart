@@ -6,7 +6,6 @@ import '../models/device_timer.dart';
 import '../theme/app_theme.dart';
 import '../services/mqtt_device_manager.dart';
 import 'add_timer_screen.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 class DeviceTimersScreen extends StatefulWidget {
@@ -57,6 +56,11 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
       _calculateOccupiedIndices();
     } catch (e) {
       debugPrint('Error loading timers: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load timers: $e'), backgroundColor: Colors.red),
+        );
+      }
     }
 
     setState(() {
@@ -122,6 +126,11 @@ class _DeviceTimersScreenState extends State<DeviceTimersScreen> {
       );
     } catch (e) {
       debugPrint('Error saving timers: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to save timers: $e'), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 

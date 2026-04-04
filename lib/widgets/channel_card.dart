@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import 'design_system.dart';
 
 /// Individual channel control card — used in ChannelGrid
 /// Compact card with icon, name, state label, and toggle
@@ -31,23 +32,10 @@ class ChannelCard extends StatelessWidget {
     return GestureDetector(
       onTap: canControl ? () => onToggle(!isOn) : null,
       onLongPress: onLongPress,
-      child: AnimatedContainer(
-        duration: HBotDurations.medium,
-        curve: HBotCurves.standard,
+      child: HBotCard(
+        borderRadius: 18,
+        borderColor: isOn ? HBotColors.glassBorderActive : null,
         padding: const EdgeInsets.all(HBotSpacing.space3),
-        decoration: BoxDecoration(
-          color: context.hCard,
-          borderRadius: HBotRadius.mediumRadius,
-          border: Border(
-            left: BorderSide(
-              color: isOn ? HBotColors.primary : context.hBorder,
-              width: isOn ? 3 : 1,
-            ),
-            top: BorderSide(color: context.hBorder, width: 1),
-            right: BorderSide(color: context.hBorder, width: 1),
-            bottom: BorderSide(color: context.hBorder, width: 1),
-          ),
-        ),
         child: Opacity(
           opacity: canControl ? 1.0 : 0.5,
           child: Column(
@@ -58,18 +46,29 @@ class ChannelCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    _icon,
-                    size: 24,
-                    color: isOn ? HBotColors.primary : HBotColors.iconDefault,
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: isOn
+                          ? HBotColors.primary.withOpacity(0.08)
+                          : HBotColors.glassBackground,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      _icon,
+                      size: 20,
+                      color: isOn ? HBotColors.primary : HBotColors.textMuted,
+                    ),
                   ),
                   SizedBox(
                     height: 28,
-                    width: 44,
+                    width: 48,
                     child: FittedBox(
                       child: Switch(
                         value: isOn,
                         onChanged: canControl ? onToggle : null,
+                        activeColor: HBotColors.primary,
                         materialTapTargetSize:
                             MaterialTapTargetSize.shrinkWrap,
                       ),
@@ -86,11 +85,11 @@ class ChannelCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       channelName,
-                      style: TextStyle(
-                        fontFamily: 'DM Sans',
+                      style: const TextStyle(
+                        fontFamily: 'Readex Pro',
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: context.hTextPrimary,
+                        color: Colors.white,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -104,7 +103,7 @@ class ChannelCard extends StatelessWidget {
                         child: Icon(
                           Icons.edit_outlined,
                           size: 14,
-                          color: context.hTextTertiary,
+                          color: HBotColors.textMuted,
                         ),
                       ),
                     ),
@@ -117,12 +116,12 @@ class ChannelCard extends StatelessWidget {
               Text(
                 isOn ? 'ON' : 'OFF',
                 style: TextStyle(
-                  fontFamily: 'DM Sans',
+                  fontFamily: 'Readex Pro',
                   fontSize: 12,
                   fontWeight: FontWeight.w400,
                   color: isOn
                       ? HBotColors.primary
-                      : context.hTextSecondary,
+                      : HBotColors.textMuted,
                 ),
               ),
             ],

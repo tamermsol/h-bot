@@ -113,6 +113,64 @@ class HBotColors {
   static const deviceDimmer = Color(0xFFF59E0B);
   static const deviceSensor = Color(0xFF22C55E);
   static const deviceShutter = Color(0xFF8B5CF6);
+
+  // ─── Glass / Dark UI tokens (from Pixel's design concepts) ───
+  // Background gradient (dark mode hero)
+  static const darkBgTop = _Blue.blue950; // #010510
+  static const darkBgBottom = _Blue.blue900; // #0A1628
+
+  // Glassmorphism card
+  static const glassBackground = Color(0x0AFFFFFF); // rgba(255,255,255,0.04)
+  static const glassBackgroundHover = Color(0x12FFFFFF); // rgba(255,255,255,0.07)
+  static const glassBorder = Color(0x14FFFFFF); // rgba(255,255,255,0.08)
+  static const glassBorderActive = Color(0x400883FD); // rgba(8,131,253,0.25)
+  static const glassBlur = 30.0;
+
+  // Sheet / overlay
+  static const sheetBackground = Color(0xFA141828); // rgba(20,24,40,0.98)
+  static const modalBackdrop = Color(0xCC010510); // rgba(1,5,16,0.8)
+
+  // Muted text (dark mode)
+  static const textMuted = _Neutral.n500; // #7A8494
+
+  // Scene gradients
+  static const sceneMorningGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFFF59E0B), Color(0xFFFB923C)],
+  );
+  static const sceneAwayGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF1070AD), Color(0xFF0883FD)],
+  );
+  static const sceneNightGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+  );
+  static const sceneCustomGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF10B981), Color(0xFF34D399)],
+  );
+
+  // Room tile gradients
+  static const roomLivingGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF1070AD), Color(0xFF0883FD)],
+  );
+  static const roomBedroomGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+  );
+  static const roomKitchenGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFFF59E0B), Color(0xFFFB923C)],
+  );
 }
 
 // ─── Spacing (4px base) ───────────────────────────────────────
@@ -251,7 +309,7 @@ Widget hbotSectionHeader(String title) {
     child: Text(
       title.toUpperCase(),
       style: const TextStyle(
-        fontFamily: 'DM Sans',
+        fontFamily: 'Readex Pro',
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: 1.0,
@@ -292,7 +350,7 @@ class AppTheme {
   static const double radiusLarge = HBotRadius.large;
 
   static final TextStyle priceTextStyle = const TextStyle(
-    fontFamily: 'DM Sans',
+    fontFamily: 'Readex Pro',
     fontSize: 24,
     fontWeight: FontWeight.w700,
     color: HBotColors.textPrimaryLight,
@@ -326,7 +384,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      fontFamily: 'DM Sans',
+      fontFamily: 'Readex Pro',
       scaffoldBackgroundColor: HBotColors.backgroundLight,
       colorScheme: const ColorScheme.light(
         primary: HBotColors.primary,
@@ -339,7 +397,7 @@ class AppTheme {
       ),
       textTheme: const TextTheme(
         displayLarge: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 32,
           fontWeight: FontWeight.w700,
           height: 1.25,
@@ -347,7 +405,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         displayMedium: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 28,
           fontWeight: FontWeight.w700,
           height: 1.29,
@@ -355,7 +413,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         headlineLarge: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 24,
           fontWeight: FontWeight.w700,
           height: 1.33,
@@ -363,7 +421,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         headlineMedium: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 22,
           fontWeight: FontWeight.w600,
           height: 1.27,
@@ -371,7 +429,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         headlineSmall: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 20,
           fontWeight: FontWeight.w600,
           height: 1.30,
@@ -379,7 +437,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         titleLarge: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 18,
           fontWeight: FontWeight.w600,
           height: 1.33,
@@ -387,35 +445,35 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         titleMedium: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 16,
           fontWeight: FontWeight.w600,
           height: 1.38,
           color: HBotColors.textPrimaryLight,
         ),
         titleSmall: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 14,
           fontWeight: FontWeight.w600,
           height: 1.43,
           color: HBotColors.textPrimaryLight,
         ),
         bodyLarge: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 16,
           fontWeight: FontWeight.w400,
           height: 1.50,
           color: HBotColors.textPrimaryLight,
         ),
         bodyMedium: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 14,
           fontWeight: FontWeight.w400,
           height: 1.43,
           color: HBotColors.textSecondaryLight,
         ),
         bodySmall: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 12,
           fontWeight: FontWeight.w400,
           height: 1.33,
@@ -423,14 +481,14 @@ class AppTheme {
           color: HBotColors.textSecondaryLight,
         ),
         labelLarge: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 16,
           fontWeight: FontWeight.w500,
           height: 1.38,
           color: HBotColors.textPrimaryLight,
         ),
         labelMedium: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 14,
           fontWeight: FontWeight.w500,
           height: 1.43,
@@ -438,7 +496,7 @@ class AppTheme {
           color: HBotColors.textPrimaryLight,
         ),
         labelSmall: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 12,
           fontWeight: FontWeight.w500,
           height: 1.33,
@@ -452,7 +510,7 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         titleTextStyle: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 22,
           fontWeight: FontWeight.w600,
           height: 1.27,
@@ -501,19 +559,19 @@ class AppTheme {
           borderSide: const BorderSide(color: HBotColors.error, width: 2),
         ),
         hintStyle: const TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 16,
           fontWeight: FontWeight.w400,
           color: HBotColors.textTertiaryLight,
         ),
         labelStyle: const TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 14,
           fontWeight: FontWeight.w500,
           color: HBotColors.textSecondaryLight,
         ),
         errorStyle: const TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 12,
           fontWeight: FontWeight.w400,
           color: HBotColors.error,
@@ -525,7 +583,7 @@ class AppTheme {
           backgroundColor: HBotColors.primary,
           foregroundColor: HBotColors.textOnPrimary,
           textStyle: const TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: 'Readex Pro',
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -544,7 +602,7 @@ class AppTheme {
           minimumSize: const Size(120, 52),
           foregroundColor: HBotColors.primary,
           textStyle: const TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: 'Readex Pro',
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -563,7 +621,7 @@ class AppTheme {
           minimumSize: const Size(0, 44),
           foregroundColor: HBotColors.primary,
           textStyle: const TextStyle(
-            fontFamily: 'DM Sans',
+            fontFamily: 'Readex Pro',
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -587,12 +645,12 @@ class AppTheme {
         selectedItemColor: HBotColors.primary,
         unselectedItemColor: HBotColors.neutral400,
         selectedLabelStyle: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 12,
           fontWeight: FontWeight.w500,
         ),
         unselectedLabelStyle: TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 12,
           fontWeight: FontWeight.w400,
         ),
@@ -605,13 +663,13 @@ class AppTheme {
           borderRadius: HBotRadius.xlRadius,
         ),
         titleTextStyle: const TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: HBotColors.textPrimaryLight,
         ),
         contentTextStyle: const TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: HBotColors.textSecondaryLight,
@@ -632,7 +690,7 @@ class AppTheme {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: HBotColors.neutral800,
         contentTextStyle: const TextStyle(
-          fontFamily: 'DM Sans',
+          fontFamily: 'Readex Pro',
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: HBotColors.textOnPrimary,
@@ -684,7 +742,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      fontFamily: 'DM Sans',
+      fontFamily: 'Readex Pro',
       scaffoldBackgroundColor: HBotColors.backgroundDark,
       colorScheme: const ColorScheme.dark(
         primary: HBotColors.primary,
@@ -694,70 +752,112 @@ class AppTheme {
         onPrimary: HBotColors.textOnPrimary,
         onSurface: HBotColors.textPrimaryDark,
       ),
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(fontFamily: 'Readex Pro', fontSize: 32, fontWeight: FontWeight.w700, height: 1.25, letterSpacing: -0.5, color: HBotColors.textPrimaryDark),
+        displayMedium: TextStyle(fontFamily: 'Readex Pro', fontSize: 28, fontWeight: FontWeight.w700, height: 1.29, letterSpacing: -0.5, color: HBotColors.textPrimaryDark),
+        headlineLarge: TextStyle(fontFamily: 'Readex Pro', fontSize: 24, fontWeight: FontWeight.w700, height: 1.33, letterSpacing: -0.3, color: HBotColors.textPrimaryDark),
+        headlineMedium: TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w600, height: 1.27, letterSpacing: -0.3, color: HBotColors.textPrimaryDark),
+        headlineSmall: TextStyle(fontFamily: 'Readex Pro', fontSize: 20, fontWeight: FontWeight.w600, height: 1.30, letterSpacing: -0.2, color: HBotColors.textPrimaryDark),
+        titleLarge: TextStyle(fontFamily: 'Readex Pro', fontSize: 18, fontWeight: FontWeight.w600, height: 1.33, letterSpacing: -0.1, color: HBotColors.textPrimaryDark),
+        titleMedium: TextStyle(fontFamily: 'Readex Pro', fontSize: 16, fontWeight: FontWeight.w600, height: 1.38, color: HBotColors.textPrimaryDark),
+        titleSmall: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w600, height: 1.43, color: HBotColors.textPrimaryDark),
+        bodyLarge: TextStyle(fontFamily: 'Readex Pro', fontSize: 16, fontWeight: FontWeight.w400, height: 1.50, color: HBotColors.textPrimaryDark),
+        bodyMedium: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w400, height: 1.43, color: HBotColors.textSecondaryDark),
+        bodySmall: TextStyle(fontFamily: 'Readex Pro', fontSize: 12, fontWeight: FontWeight.w400, height: 1.33, letterSpacing: 0.1, color: HBotColors.textSecondaryDark),
+        labelLarge: TextStyle(fontFamily: 'Readex Pro', fontSize: 16, fontWeight: FontWeight.w500, height: 1.38, color: HBotColors.textPrimaryDark),
+        labelMedium: TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w500, height: 1.43, letterSpacing: 0.1, color: HBotColors.textPrimaryDark),
+        labelSmall: TextStyle(fontFamily: 'Readex Pro', fontSize: 12, fontWeight: FontWeight.w500, height: 1.33, letterSpacing: 0.2, color: HBotColors.textPrimaryDark),
+      ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: HBotColors.backgroundDark,
+        backgroundColor: Colors.transparent,
         foregroundColor: HBotColors.textPrimaryDark,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        titleTextStyle: TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryDark),
+        iconTheme: IconThemeData(color: HBotColors.textMuted, size: 24),
       ),
       cardTheme: CardTheme(
-        color: HBotColors.cardDark,
+        color: HBotColors.glassBackground,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: HBotRadius.mediumRadius,
-          side: const BorderSide(color: HBotColors.borderDark, width: 0.5),
+          borderRadius: HBotRadius.xlRadius,
+          side: const BorderSide(color: HBotColors.glassBorder, width: 1),
         ),
+        margin: EdgeInsets.zero,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: HBotColors.backgroundDark,
+        backgroundColor: Color(0xFF0A1628),
         selectedItemColor: HBotColors.primary,
-        unselectedItemColor: HBotColors.textSecondaryDark,
+        unselectedItemColor: HBotColors.textMuted,
+        selectedLabelStyle: TextStyle(fontFamily: 'Readex Pro', fontSize: 12, fontWeight: FontWeight.w600),
+        unselectedLabelStyle: TextStyle(fontFamily: 'Readex Pro', fontSize: 12, fontWeight: FontWeight.w400),
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
       ),
       dialogTheme: DialogTheme(
-        backgroundColor: HBotColors.cardDark,
-        titleTextStyle: const TextStyle(
-          fontFamily: 'DM Sans',
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: HBotColors.textPrimaryDark,
-        ),
+        backgroundColor: HBotColors.sheetBackground,
+        shape: RoundedRectangleBorder(borderRadius: HBotRadius.xlRadius),
+        titleTextStyle: const TextStyle(fontFamily: 'Readex Pro', fontSize: 18, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryDark),
+        contentTextStyle: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, fontWeight: FontWeight.w400, color: HBotColors.textSecondaryDark),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: HBotColors.cardDark,
+        backgroundColor: HBotColors.sheetBackground,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(HBotRadius.xl), topRight: Radius.circular(HBotRadius.xl)),
+        ),
+        dragHandleColor: HBotColors.neutral500,
+        dragHandleSize: Size(36, 4),
+        showDragHandle: true,
       ),
-      dividerTheme: const DividerThemeData(
-        color: HBotColors.borderDark,
-      ),
+      dividerTheme: const DividerThemeData(color: HBotColors.glassBorder, thickness: 1, space: 0),
       switchTheme: SwitchThemeData(
-        thumbColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return HBotColors.primary;
-          return HBotColors.textSecondaryDark;
-        }),
+        thumbColor: WidgetStateProperty.all(Colors.white),
         trackColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) return HBotColors.primary.withOpacity(0.3);
-          return HBotColors.borderDark;
+          if (states.contains(WidgetState.selected)) return HBotColors.primary;
+          return const Color(0x1AFFFFFF);
         }),
+        trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
-      snackBarTheme: const SnackBarThemeData(
-        backgroundColor: HBotColors.cardDark,
-        contentTextStyle: TextStyle(color: HBotColors.textPrimaryDark),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: HBotColors.sheetBackground,
+        contentTextStyle: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: HBotColors.textPrimaryDark),
+        shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
+        behavior: SnackBarBehavior.floating,
       ),
       inputDecorationTheme: InputDecorationTheme(
-        fillColor: HBotColors.backgroundDark,
+        fillColor: const Color(0x08FFFFFF),
         filled: true,
-        border: OutlineInputBorder(
-          borderRadius: HBotRadius.mediumRadius,
-          borderSide: const BorderSide(color: HBotColors.borderDark),
+        contentPadding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4, vertical: 14),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: HBotColors.glassBorder, width: 1)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: HBotColors.glassBorder, width: 1)),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: HBotColors.primary, width: 2)),
+        errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: HBotColors.error, width: 1)),
+        focusedErrorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: HBotColors.error, width: 2)),
+        hintStyle: const TextStyle(fontFamily: 'Readex Pro', fontSize: 14, color: Color(0x99798494)),
+        labelStyle: const TextStyle(fontFamily: 'Readex Pro', fontSize: 12, fontWeight: FontWeight.w600, color: HBotColors.textMuted, letterSpacing: 0.5),
+        errorStyle: const TextStyle(fontFamily: 'Readex Pro', fontSize: 12, color: HBotColors.error),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(120, 52),
+          backgroundColor: HBotColors.primary,
+          foregroundColor: HBotColors.textOnPrimary,
+          textStyle: const TextStyle(fontFamily: 'Readex Pro', fontSize: 15, fontWeight: FontWeight.w700),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space4, vertical: 16),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.mediumRadius,
-          borderSide: const BorderSide(color: HBotColors.borderDark),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: HBotRadius.mediumRadius,
-          borderSide: const BorderSide(color: HBotColors.primary),
-        ),
-        labelStyle: const TextStyle(color: HBotColors.textSecondaryDark),
-        hintStyle: const TextStyle(color: HBotColors.textSecondaryDark),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: HBotColors.primary,
+        foregroundColor: HBotColors.textOnPrimary,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: HBotColors.primary,
+        linearTrackColor: Color(0x14FFFFFF),
+        circularTrackColor: Color(0x14FFFFFF),
       ),
     );
   }

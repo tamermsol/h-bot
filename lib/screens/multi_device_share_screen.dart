@@ -7,7 +7,6 @@ import '../models/device.dart';
 import '../models/device_share_invitation.dart';
 import '../repos/device_sharing_repo.dart';
 import '../repos/devices_repo.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 class MultiDeviceShareScreen extends StatefulWidget {

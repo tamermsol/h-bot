@@ -54,7 +54,6 @@ class HomeWidgetService {
       final count = slots.length.clamp(0, 4);
       await HomeWidget.saveWidgetData('device_count', count);
 
-      int onlineCount = 0;
       for (int i = 0; i < count; i++) {
         final slot = slots[i] as Map<String, dynamic>;
         final deviceId = slot['deviceId'] as String? ?? '';
@@ -82,7 +81,7 @@ class HomeWidgetService {
             isOn = state['POWER$channel'] == 'ON' || state['POWER$channel'] == true;
           }
         }
-        if (isOn) onlineCount++;
+        // onlineCount tracking removed — not currently used
 
         // Use latest channel label from local storage if available
         String displayName = channelLabel;

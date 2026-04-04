@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../core/supabase_client.dart';
+import '../demo/demo_data.dart';
 import '../models/device.dart';
 import '../models/device_state.dart';
 import '../models/device_channel.dart';
@@ -10,6 +11,7 @@ class DevicesRepo {
 
   /// List all devices in a home
   Future<List<Device>> listDevicesByHome(String homeId) async {
+    if (isDemoMode) return DemoData.getDevices(homeId);
     try {
       final response = await supabase
           .from('devices_with_channels')
@@ -25,6 +27,7 @@ class DevicesRepo {
 
   /// List devices shared with current user
   Future<List<Device>> listSharedDevices() async {
+    if (isDemoMode) return DemoData.sharedDevices;
     try {
       final userId = supabase.auth.currentUser?.id;
       if (userId == null) return [];
@@ -109,6 +112,11 @@ class DevicesRepo {
 
   /// List all devices in a room
   Future<List<Device>> listDevicesByRoom(String roomId) async {
+    if (isDemoMode) {
+      return DemoData.getDevices('demo-home-001')
+          .where((d) => d.roomId == roomId)
+          .toList();
+    }
     try {
       final response = await supabase
           .from('devices_with_channels')
@@ -191,6 +199,13 @@ class DevicesRepo {
   }
 
   /// Create a new device
+  ///
+  /// DB column mapping:
+  ///   Dart param       → DB column
+  ///   name             → display_name
+  ///   tasmotaTopicBase → topic_base
+  ///   (auto)           → inserted_at  (server-generated)
+  ///   (auto)           → owner_user_id (from auth)
   Future<Device> createDevice(
     String homeId, {
     String? roomId,
@@ -202,24 +217,41 @@ class DevicesRepo {
     Map<String, dynamic>? metaJson,
   }) async {
     try {
+      final userId = supabase.auth.currentUser?.id;
+      if (userId == null) throw 'User not authenticated';
+
+      final insertData = <String, dynamic>{
+        'home_id': homeId,
+        'room_id': roomId,
+        'display_name': name,
+        'device_type': deviceType.name,
+        'channels': channels,
+        'topic_base': tasmotaTopicBase,
+        'owner_user_id': userId,
+        'matter_type': matterType,
+        'meta_json': metaJson,
+        'updated_at': DateTime.now().toIso8601String(),
+      };
+
       final response = await supabase
           .from('devices')
-          .insert({
-            'home_id': homeId,
-            'room_id': roomId,
-            'name': name,
-            'device_type': deviceType.name,
-            'channels': channels,
-            'tasmota_topic_base': tasmotaTopicBase,
-            'matter_type': matterType,
-            'meta_json': metaJson,
-            'created_at': DateTime.now().toIso8601String(),
-            'updated_at': DateTime.now().toIso8601String(),
-          })
+          .insert(insertData)
           .select()
           .single();
 
-      return Device.fromJson(response);
+      // Map DB columns back to model field names
+      final mapped = Map<String, dynamic>.from(response);
+      if (!mapped.containsKey('created_at') && mapped.containsKey('inserted_at')) {
+        mapped['created_at'] = mapped['inserted_at'];
+      }
+      if (!mapped.containsKey('tasmota_topic_base') && mapped.containsKey('topic_base')) {
+        mapped['tasmota_topic_base'] = mapped['topic_base'];
+      }
+      if (!mapped.containsKey('name') && mapped.containsKey('display_name')) {
+        mapped['name'] = mapped['display_name'];
+      }
+
+      return Device.fromJson(mapped);
     } catch (e) {
       throw 'Failed to create device: $e';
     }
@@ -254,11 +286,11 @@ class DevicesRepo {
         debugPrint('🔧 DevicesRepo: Setting room_id to: $roomId');
       }
 
-      if (name != null) updates['name'] = name;
+      if (name != null) updates['display_name'] = name;
       if (deviceType != null) updates['device_type'] = deviceType.name;
       if (channels != null) updates['channels'] = channels;
       if (tasmotaTopicBase != null) {
-        updates['tasmota_topic_base'] = tasmotaTopicBase;
+        updates['topic_base'] = tasmotaTopicBase;
       }
       if (matterType != null) updates['matter_type'] = matterType;
       if (metaJson != null) updates['meta_json'] = metaJson;

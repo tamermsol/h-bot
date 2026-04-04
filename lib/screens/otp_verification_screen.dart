@@ -3,7 +3,6 @@ import 'dart:async';
 import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import 'home_screen.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 class OtpVerificationScreen extends StatefulWidget {

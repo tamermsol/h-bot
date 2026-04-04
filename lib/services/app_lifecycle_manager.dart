@@ -3,6 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'enhanced_mqtt_service.dart';
 import 'smart_home_service.dart';
 import 'scene_trigger_scheduler.dart';
+// import 'panel_mqtt_service.dart';  // Hidden until production-ready
+// import '../repos/panels_repo.dart';  // Hidden until production-ready
 
 /// Manages app lifecycle events and handles background/foreground transitions
 /// Ensures MQTT connections and real-time subscriptions are properly maintained
@@ -19,6 +21,9 @@ class AppLifecycleManager with WidgetsBindingObserver {
   EnhancedMqttService? _mqttService;
   SmartHomeService? _smartHomeService;
   SceneTriggerScheduler? _sceneTriggerScheduler;
+
+  // Panel MQTT integration — hidden until production-ready
+  // bool _panelMqttInitialized = false;
 
   // Configuration
   static const Duration _backgroundThreshold = Duration(minutes: 2);
@@ -45,6 +50,9 @@ class AppLifecycleManager with WidgetsBindingObserver {
       _sceneTriggerScheduler!.start();
       debugPrint('⏰ Scene Trigger Scheduler started');
     }
+
+    // Panel MQTT — hidden until production-ready
+    // _initPanelMqtt();
 
     debugPrint('🔄 App Lifecycle Manager initialized');
   }
@@ -181,10 +189,14 @@ class AppLifecycleManager with WidgetsBindingObserver {
         }
       }
 
-      // 2. Check Supabase real-time connections
+      // 2. Panel MQTT re-subscribe — hidden until production-ready
+      // _panelMqttInitialized = false;
+      // _initPanelMqtt();
+
+      // 3. Check Supabase real-time connections
       await _checkSupabaseConnections();
 
-      // 3. Refresh device states
+      // 4. Refresh device states
       await _refreshDeviceStates();
 
       debugPrint('✅ Full reconnection completed');
@@ -228,6 +240,9 @@ class AppLifecycleManager with WidgetsBindingObserver {
       debugPrint('❌ Error cleaning up connections: $e');
     }
   }
+
+  // Panel MQTT initialization — hidden until production-ready
+  // Future<void> _initPanelMqtt() async { ... }
 
   /// Check and restore Supabase real-time connections
   Future<void> _checkSupabaseConnections() async {

@@ -1,12 +1,13 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/design_system.dart';
 import '../models/scene.dart';
 import '../services/smart_home_service.dart';
 import '../services/current_home_service.dart';
 import '../utils/error_handler.dart';
 import '../widgets/error_message_widget.dart';
 import 'add_scene_screen.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 class ScenesScreen extends StatefulWidget {
@@ -16,8 +17,7 @@ class ScenesScreen extends StatefulWidget {
   State<ScenesScreen> createState() => _ScenesScreenState();
 }
 
-class _ScenesScreenState extends State<ScenesScreen>
-    with AutomaticKeepAliveClientMixin {
+class _ScenesScreenState extends State<ScenesScreen> {
   final SmartHomeService _service = SmartHomeService();
   final CurrentHomeService _currentHomeService = CurrentHomeService();
 
@@ -25,9 +25,22 @@ class _ScenesScreenState extends State<ScenesScreen>
   bool _isLoading = true;
   String? _currentHomeId;
   String? _errorMessage;
+  final Set<String> _executingScenes = {};
 
-  @override
-  bool get wantKeepAlive => false; // Don't keep state alive, reload each time
+  // Predefined gradients to cycle through for scene tiles
+  static const List<LinearGradient> _tileGradients = [
+    HBotColors.sceneMorningGradient,
+    HBotColors.sceneAwayGradient,
+    HBotColors.sceneNightGradient,
+    HBotColors.sceneCustomGradient,
+  ];
+
+  static const List<IconData> _tileIcons = [
+    Icons.wb_sunny_rounded,
+    Icons.shield_rounded,
+    Icons.nightlight_round,
+    Icons.power_settings_new_rounded,
+  ];
 
   @override
   void initState() {
@@ -38,7 +51,6 @@ class _ScenesScreenState extends State<ScenesScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Reload scenes when the widget becomes visible again
     _loadScenes();
   }
 
@@ -49,12 +61,10 @@ class _ScenesScreenState extends State<ScenesScreen>
         _errorMessage = null;
       });
 
-      // Get current home ID
       _currentHomeId = await _currentHomeService.getCurrentHomeId();
       debugPrint('ScenesScreen: _loadScenes - currentHomeId = $_currentHomeId');
 
       if (_currentHomeId == null) {
-        // No home selected, show empty state
         debugPrint('ScenesScreen: No home selected');
         setState(() {
           _scenes = [];
@@ -63,7 +73,6 @@ class _ScenesScreenState extends State<ScenesScreen>
         return;
       }
 
-      // Load scenes for current home
       debugPrint('ScenesScreen: Loading scenes for home: $_currentHomeId');
       final scenes = await _service.getScenes(_currentHomeId!);
       debugPrint('ScenesScreen: Loaded ${scenes.length} scenes');
@@ -74,9 +83,7 @@ class _ScenesScreenState extends State<ScenesScreen>
         _errorMessage = null;
       });
     } catch (e) {
-      // Log error for debugging (only in debug mode)
       ErrorHandler.logError(e, context: 'ScenesScreen._loadScenes');
-
       setState(() {
         _isLoading = false;
         _errorMessage = ErrorHandler.getUserFriendlyMessage(e);
@@ -84,13 +91,45 @@ class _ScenesScreenState extends State<ScenesScreen>
     }
   }
 
+  LinearGradient _getGradientForScene(Scene scene, int index) {
+    if (scene.colorValue != null) {
+      final color = Color(scene.colorValue!);
+      return LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [color, color.withOpacity(0.7)],
+      );
+    }
+    return _tileGradients[index % _tileGradients.length];
+  }
+
+  IconData _getIconForScene(Scene scene, int index) {
+    if (scene.iconCode != null) {
+      return IconData(scene.iconCode!, fontFamily: 'MaterialIcons');
+    }
+    return _tileIcons[index % _tileIcons.length];
+  }
+
   @override
   Widget build(BuildContext context) {
-    super.build(context); // Required for AutomaticKeepAliveClientMixin
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [HBotColors.darkBgTop, HBotColors.darkBgBottom],
+        ),
+      ),
+      child: _buildContent(),
+    );
+  }
 
+  Widget _buildContent() {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary)),
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary),
+        ),
       );
     }
 
@@ -106,165 +145,286 @@ class _ScenesScreenState extends State<ScenesScreen>
     if (_currentHomeId == null) return SafeArea(child: _buildNoHomeState());
     if (_scenes.isEmpty) return SafeArea(child: _buildEmptyState());
 
-    return SafeArea(child: Stack(
-      children: [
-        ListView.builder(
-          padding: const EdgeInsets.fromLTRB(
-            HBotSpacing.space5, HBotSpacing.space3,
-            HBotSpacing.space5, 80, // bottom padding for FAB
-          ),
-          itemCount: _scenes.length + 1, // +1 for header
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: HBotSpacing.space4),
-                child: Text(
-                  AppStrings.get('scenes_title'),
-                  style: TextStyle(
-                    fontFamily: 'DM Sans',
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: context.hTextPrimary,
-                    letterSpacing: -0.3,
+    return SafeArea(
+      child: CustomScrollView(
+        slivers: [
+          // Header — title left, gradient "+" button right
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                HBotSpacing.space5, HBotSpacing.space4,
+                HBotSpacing.space5, HBotSpacing.space5,
+              ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'Scenes',
+                      style: TextStyle(
+                        fontFamily: 'Readex Pro',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
                   ),
-                ),
-              );
-            }
-            return _buildSceneCard(_scenes[index - 1]);
-          },
-        ),
-        // Gradient FAB — bottom right
-        Positioned(
-          right: HBotSpacing.space5,
-          bottom: HBotSpacing.space5,
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: HBotColors.primaryGradient,
-              borderRadius: HBotRadius.mediumRadius,
-              boxShadow: HBotShadows.medium,
+                  GestureDetector(
+                    onTap: _showCreateSceneDialog,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment(-0.5, -0.5),
+                          end: Alignment(0.5, 0.5),
+                          colors: [HBotColors.primary, Color(0xFF3BC4FF)],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color(0x4D0883FD),
+                            blurRadius: 12,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: const Icon(Icons.add_rounded, color: Colors.white, size: 22),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: HBotRadius.mediumRadius,
+          ),
+
+          // 2-column scene grid
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 0.95,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => _buildSceneTile(_scenes[index], index),
+                childCount: _scenes.length,
+              ),
+            ),
+          ),
+
+          // "Create New Scene" tile — full width, dashed border
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(
+                HBotSpacing.space5, 12,
+                HBotSpacing.space5, HBotSpacing.space5,
+              ),
+              child: GestureDetector(
                 onTap: _showCreateSceneDialog,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: HBotSpacing.space5, vertical: HBotSpacing.space3),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.add, color: Colors.white, size: 20),
-                      SizedBox(width: HBotSpacing.space2),
-                      Text(AppStrings.get('add_scene'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
-                    ],
+                child: CustomPaint(
+                  painter: _DashedBorderPainter(
+                    color: HBotColors.glassBorder,
+                    radius: 20,
+                    dashWidth: 6,
+                    dashSpace: 4,
+                    strokeWidth: 2,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: HBotColors.glassBackground,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add_rounded, color: HBotColors.textMuted, size: 22),
+                            const SizedBox(width: HBotSpacing.space2),
+                            Text(
+                              AppStrings.get('add_scene'),
+                              style: const TextStyle(
+                                fontFamily: 'Readex Pro',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: HBotColors.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 
-  Widget _buildSceneCard(Scene scene) {
-    final iconData = scene.iconCode != null
-        ? IconData(scene.iconCode!, fontFamily: 'MaterialIcons')
-        : Icons.auto_awesome;
-    final sceneColor = scene.colorValue != null
-        ? Color(scene.colorValue!)
-        : HBotColors.primary;
+  Widget _buildSceneTile(Scene scene, int index) {
+    final gradient = _getGradientForScene(scene, index);
+    final iconData = _getIconForScene(scene, index);
+    final isExecuting = _executingScenes.contains(scene.id);
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: HBotSpacing.space3),
-      decoration: BoxDecoration(
-        color: context.hCard,
-        borderRadius: HBotRadius.largeRadius,
-        border: Border.all(color: context.hBorder, width: 1),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: HBotRadius.largeRadius,
-          onTap: () => _showSceneDetails(scene),
-          child: Padding(
-            padding: const EdgeInsets.all(HBotSpacing.space4),
-            child: Row(
-              children: [
-                // Scene icon — 48×48 rounded container
-                Container(
-                  width: 48,
-                  height: 48,
+    return GestureDetector(
+      onTap: () => _executeScene(scene),
+      onLongPress: () => _showSceneDetails(scene),
+      child: AnimatedOpacity(
+        duration: HBotDurations.medium,
+        opacity: scene.isEnabled ? 1.0 : 0.5,
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 140),
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            gradient: gradient,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Stack(
+            children: [
+              // Radial glow overlay at top-right
+              Positioned(
+                top: -20,
+                right: -20,
+                child: Container(
+                  width: 100,
+                  height: 100,
                   decoration: BoxDecoration(
-                    color: scene.isEnabled ? sceneColor.withOpacity(0.12) : context.hCard,
-                    borderRadius: HBotRadius.mediumRadius,
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        Colors.white.withOpacity(0.12),
+                        Colors.white.withOpacity(0.0),
+                      ],
+                    ),
                   ),
-                  child: Icon(iconData, color: scene.isEnabled ? sceneColor : context.hTextTertiary, size: 24),
                 ),
-                const SizedBox(width: HBotSpacing.space4),
-                // Scene info
-                Expanded(
+              ),
+              // Centered content
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      // Icon or loading spinner
+                      isExecuting
+                          ? const SizedBox(
+                              width: 32,
+                              height: 32,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : Icon(iconData, color: Colors.white, size: 32),
+                      const SizedBox(height: HBotSpacing.space3),
+                      // Scene name
                       Text(
                         scene.name,
-                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 16, fontWeight: FontWeight.w600, color: context.hTextPrimary),
+                        style: const TextStyle(
+                          fontFamily: 'Readex Pro',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 4),
+                      // Device/action count
                       Text(
-                        scene.isEnabled ? AppStrings.get('scene_enabled') : AppStrings.get('scene_disabled'),
-                        style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: context.hTextSecondary),
+                        '${_scenes.length} devices',
+                        style: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          fontSize: 11,
+                          color: Colors.white.withOpacity(0.8),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Status badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          scene.isEnabled
+                              ? AppStrings.get('scene_enabled')
+                              : AppStrings.get('scene_disabled'),
+                          style: const TextStyle(
+                            fontFamily: 'Readex Pro',
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                // Play button
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    gradient: scene.isEnabled ? HBotColors.primaryGradient : null,
-                    color: scene.isEnabled ? null : context.hCard,
-                    borderRadius: HBotRadius.fullRadius,
+              ),
+              // Context menu — top-right, subtle
+              Positioned(
+                top: 4,
+                right: 4,
+                child: PopupMenuButton<String>(
+                  icon: Icon(
+                    Icons.more_vert_rounded,
+                    color: Colors.white.withOpacity(0.6),
+                    size: 18,
                   ),
-                  child: IconButton(
-                    icon: Icon(Icons.play_arrow, color: scene.isEnabled ? Colors.white : context.hTextTertiary, size: 20),
-                    padding: EdgeInsets.zero,
-                    onPressed: scene.isEnabled ? () => _executeScene(scene) : null,
-                  ),
-                ),
-                const SizedBox(width: HBotSpacing.space2),
-                // More menu
-                PopupMenuButton<String>(
-                  icon: Icon(Icons.more_vert, color: context.hTextTertiary, size: 20),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  color: HBotColors.sheetBackground,
                   onSelected: (value) {
                     switch (value) {
-                      case 'toggle': _toggleScene(scene);
-                      case 'edit': _showEditSceneDialog(scene);
-                      case 'delete': _showDeleteSceneDialog(scene);
+                      case 'toggle':
+                        _toggleScene(scene);
+                      case 'edit':
+                        _showEditSceneDialog(scene);
+                      case 'delete':
+                        _showDeleteSceneDialog(scene);
                     }
                   },
                   itemBuilder: (context) => [
-                    PopupMenuItem(value: 'toggle', child: Row(children: [
-                      Icon(scene.isEnabled ? Icons.pause : Icons.play_arrow, size: 20),
-                      const SizedBox(width: 12),
-                      Text(scene.isEnabled ? AppStrings.get('disable') : AppStrings.get('enable')),
-                    ])),
-                    PopupMenuItem(value: 'edit', child: Row(children: [
-                      const Icon(Icons.edit_outlined, size: 20),
-                      const SizedBox(width: 12),
-                      Text(AppStrings.get('edit')),
-                    ])),
-                    PopupMenuItem(value: 'delete', child: Row(children: [
-                      const Icon(Icons.delete_outline, size: 20, color: Colors.red),
-                      const SizedBox(width: 12),
-                      Text(AppStrings.get('delete'), style: const TextStyle(color: Colors.red)),
-                    ])),
+                    PopupMenuItem(
+                      value: 'toggle',
+                      child: Row(children: [
+                        Icon(scene.isEnabled ? Icons.pause : Icons.play_arrow, size: 20),
+                        const SizedBox(width: 12),
+                        Text(scene.isEnabled ? AppStrings.get('disable') : AppStrings.get('enable')),
+                      ]),
+                    ),
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Row(children: [
+                        const Icon(Icons.edit_outlined, size: 20),
+                        const SizedBox(width: 12),
+                        Text(AppStrings.get('edit')),
+                      ]),
+                    ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Row(children: [
+                        const Icon(Icons.delete_outline, size: 20, color: Colors.red),
+                        const SizedBox(width: 12),
+                        Text(AppStrings.get('delete'), style: const TextStyle(color: Colors.red)),
+                      ]),
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -279,14 +439,35 @@ class _ScenesScreenState extends State<ScenesScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 64, height: 64,
-              decoration: const BoxDecoration(color: HBotColors.primarySurface, shape: BoxShape.circle),
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: HBotColors.glassBackground,
+                shape: BoxShape.circle,
+                border: Border.all(color: HBotColors.glassBorder, width: 1),
+              ),
               child: const Icon(Icons.home_outlined, size: 32, color: HBotColors.primary),
             ),
             const SizedBox(height: HBotSpacing.space5),
-            Text(AppStrings.get('no_home_selected'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
+            Text(
+              AppStrings.get('no_home_selected'),
+              style: const TextStyle(
+                fontFamily: 'Readex Pro',
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
             const SizedBox(height: HBotSpacing.space2),
-            Text(AppStrings.get('no_home_selected_subtitle'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
+            Text(
+              AppStrings.get('no_home_selected_subtitle'),
+              style: TextStyle(
+                fontFamily: 'Readex Pro',
+                fontSize: 14,
+                color: Colors.white.withOpacity(0.6),
+              ),
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),
@@ -301,27 +482,47 @@ class _ScenesScreenState extends State<ScenesScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 64, height: 64,
-              decoration: const BoxDecoration(color: HBotColors.primarySurface, shape: BoxShape.circle),
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                color: HBotColors.glassBackground,
+                shape: BoxShape.circle,
+                border: Border.all(color: HBotColors.glassBorder, width: 1),
+              ),
               child: const Icon(Icons.auto_awesome_outlined, size: 32, color: HBotColors.primary),
             ),
             const SizedBox(height: HBotSpacing.space5),
-            Text(AppStrings.get('no_scenes_title'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 20, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
+            Text(
+              AppStrings.get('no_scenes_title'),
+              style: const TextStyle(
+                fontFamily: 'Readex Pro',
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
             const SizedBox(height: HBotSpacing.space2),
-            Text(AppStrings.get('no_scenes_subtitle'), style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, color: context.hTextSecondary), textAlign: TextAlign.center),
+            Text(
+              AppStrings.get('no_scenes_subtitle'),
+              style: TextStyle(
+                fontFamily: 'Readex Pro',
+                fontSize: 14,
+                color: Colors.white.withOpacity(0.6),
+              ),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: HBotSpacing.space6),
-            Container(
-              decoration: hbotPrimaryButtonDecoration(),
-              child: ElevatedButton.icon(
-                onPressed: _showCreateSceneDialog,
-                icon: const Icon(Icons.add, size: 20),
-                label: Text(AppStrings.get('create_first_scene')),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space6, vertical: HBotSpacing.space3),
-                ),
+            HBotGradientButton(
+              onTap: _showCreateSceneDialog,
+              fullWidth: false,
+              padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.add, size: 20),
+                  const SizedBox(width: 8),
+                  Text(AppStrings.get('create_first_scene')),
+                ],
               ),
             ),
           ],
@@ -340,7 +541,7 @@ class _ScenesScreenState extends State<ScenesScreen>
 
     showModalBottomSheet(
       context: context,
-      backgroundColor: context.hCard,
+      backgroundColor: HBotColors.sheetBackground,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(HBotSpacing.space6)),
       ),
@@ -354,17 +555,22 @@ class _ScenesScreenState extends State<ScenesScreen>
               // Drag handle
               Center(
                 child: Container(
-                  width: 40, height: 4,
+                  width: 40,
+                  height: 4,
                   margin: const EdgeInsets.only(bottom: HBotSpacing.space5),
-                  decoration: BoxDecoration(color: context.hBorder, borderRadius: HBotRadius.fullRadius),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: HBotRadius.fullRadius,
+                  ),
                 ),
               ),
               Row(
                 children: [
                   Container(
-                    width: 56, height: 56,
+                    width: 56,
+                    height: 56,
                     decoration: BoxDecoration(
-                      color: sceneColor.withOpacity(0.12),
+                      color: sceneColor.withOpacity(0.2),
                       borderRadius: HBotRadius.mediumRadius,
                     ),
                     child: Icon(iconData, color: sceneColor, size: 28),
@@ -374,11 +580,25 @@ class _ScenesScreenState extends State<ScenesScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(scene.name, style: TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: context.hTextPrimary)),
+                        Text(
+                          scene.name,
+                          style: const TextStyle(
+                            fontFamily: 'Readex Pro',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
                         const SizedBox(height: 2),
                         Text(
-                          scene.isEnabled ? AppStrings.get('scene_enabled') : AppStrings.get('scene_disabled'),
-                          style: TextStyle(fontFamily: 'DM Sans', fontSize: 13, color: scene.isEnabled ? sceneColor : context.hTextSecondary),
+                          scene.isEnabled
+                              ? AppStrings.get('scene_enabled')
+                              : AppStrings.get('scene_disabled'),
+                          style: TextStyle(
+                            fontFamily: 'Readex Pro',
+                            fontSize: 13,
+                            color: scene.isEnabled ? sceneColor : Colors.white.withOpacity(0.5),
+                          ),
                         ),
                       ],
                     ),
@@ -387,39 +607,36 @@ class _ScenesScreenState extends State<ScenesScreen>
               ),
               const SizedBox(height: HBotSpacing.space6),
 
-              // Run Scene Button — gradient
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: Container(
-                  decoration: hbotPrimaryButtonDecoration(),
-                  child: ElevatedButton.icon(
-                    onPressed: () { Navigator.pop(context); _runScene(scene); },
-                    icon: const Icon(Icons.play_arrow, size: 20),
-                    label: Text(AppStrings.get('run_scene'), style: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w600)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                      foregroundColor: Colors.white,
+              // Run Scene Button
+              HBotGradientButton(
+                onTap: () {
+                  Navigator.pop(context);
+                  _runScene(scene);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.play_arrow, size: 20),
+                    const SizedBox(width: 8),
+                    Text(
+                      AppStrings.get('run_scene'),
+                      style: const TextStyle(fontFamily: 'Readex Pro', fontWeight: FontWeight.w600),
                     ),
-                  ),
+                  ],
                 ),
               ),
 
               const SizedBox(height: HBotSpacing.space3),
 
-              // Edit Button — outlined
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton(
-                  onPressed: () { Navigator.pop(context); _showEditSceneDialog(scene); },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: context.hTextPrimary,
-                    side: BorderSide(color: context.hBorder),
-                    shape: RoundedRectangleBorder(borderRadius: HBotRadius.mediumRadius),
-                  ),
-                  child: Text(AppStrings.get('edit_scene'), style: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w500)),
+              // Edit Button
+              HBotOutlineButton(
+                onTap: () {
+                  Navigator.pop(context);
+                  _showEditSceneDialog(scene);
+                },
+                child: Text(
+                  AppStrings.get('edit_scene'),
+                  style: const TextStyle(fontFamily: 'Readex Pro', fontWeight: FontWeight.w500),
                 ),
               ),
             ],
@@ -432,17 +649,17 @@ class _ScenesScreenState extends State<ScenesScreen>
   Future<void> _executeScene(Scene scene) => _runScene(scene);
 
   Future<void> _runScene(Scene scene) async {
+    if (_executingScenes.contains(scene.id)) return;
+    setState(() => _executingScenes.add(scene.id));
     try {
-      // Execute scene silently without showing notifications
       await _service.runScene(scene.id);
     } catch (e) {
-      // Log error for debugging
       ErrorHandler.logError(e, context: 'ScenesScreen._runScene');
-
-      // Show user-friendly error message
       if (mounted) {
         ErrorSnackBar.show(context, e);
       }
+    } finally {
+      if (mounted) setState(() => _executingScenes.remove(scene.id));
     }
   }
 
@@ -461,9 +678,7 @@ class _ScenesScreenState extends State<ScenesScreen>
         );
       }
     } catch (e) {
-      // Log error for debugging
       ErrorHandler.logError(e, context: 'ScenesScreen._toggleScene');
-
       if (mounted) {
         ErrorSnackBar.show(context, e);
       }
@@ -481,7 +696,6 @@ class _ScenesScreenState extends State<ScenesScreen>
       return;
     }
 
-    // Navigate to AddSceneScreen in edit mode
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -490,23 +704,24 @@ class _ScenesScreenState extends State<ScenesScreen>
       ),
     );
 
-    // Reload scenes if the scene was updated
     if (result == true) {
       await _loadScenes();
     }
   }
 
   void _showDeleteSceneDialog(Scene scene) {
-    final cardColor = context.hCard;
-
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: cardColor,
-          title: Text(AppStrings.get('delete_scene')),
+          backgroundColor: HBotColors.sheetBackground,
+          title: Text(
+            AppStrings.get('delete_scene'),
+            style: const TextStyle(color: Colors.white),
+          ),
           content: Text(
             'Are you sure you want to delete "${scene.name}"? This action cannot be undone.',
+            style: TextStyle(color: Colors.white.withOpacity(0.7)),
           ),
           actions: [
             TextButton(
@@ -517,27 +732,18 @@ class _ScenesScreenState extends State<ScenesScreen>
               onPressed: () async {
                 try {
                   await _service.deleteScene(scene.id);
-
                   if (context.mounted) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          'Scene "${scene.name}" deleted successfully!',
-                        ),
+                        content: Text('Scene "${scene.name}" deleted successfully!'),
                         backgroundColor: HBotColors.primary,
                       ),
                     );
                   }
-
                   await _loadScenes();
                 } catch (e) {
-                  // Log error for debugging
-                  ErrorHandler.logError(
-                    e,
-                    context: 'ScenesScreen._deleteScene',
-                  );
-
+                  ErrorHandler.logError(e, context: 'ScenesScreen._deleteScene');
                   if (context.mounted) {
                     Navigator.pop(context);
                     ErrorSnackBar.show(context, e);
@@ -579,9 +785,54 @@ class _ScenesScreenState extends State<ScenesScreen>
     );
 
     if (result == true) {
-      // Reload scenes after creation
       debugPrint('ScenesScreen: Scene created successfully, reloading scenes');
       await _loadScenes();
     }
   }
+}
+
+/// Custom painter for dashed border on the "Create Scene" tile
+class _DashedBorderPainter extends CustomPainter {
+  final Color color;
+  final double radius;
+  final double dashWidth;
+  final double dashSpace;
+  final double strokeWidth;
+
+  _DashedBorderPainter({
+    required this.color,
+    required this.radius,
+    required this.dashWidth,
+    required this.dashSpace,
+    required this.strokeWidth,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+
+    final path = Path()
+      ..addRRect(RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, size.width, size.height),
+        Radius.circular(radius),
+      ));
+
+    final dashPath = Path();
+    for (final metric in path.computeMetrics()) {
+      double distance = 0;
+      while (distance < metric.length) {
+        final end = (distance + dashWidth).clamp(0, metric.length).toDouble();
+        dashPath.addPath(metric.extractPath(distance, end), Offset.zero);
+        distance += dashWidth + dashSpace;
+      }
+    }
+
+    canvas.drawPath(dashPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

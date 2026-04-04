@@ -21,7 +21,9 @@ class AppStrings {
     'en': {
       // Navigation
       'nav_home': 'Home',
+      'nav_rooms': 'Rooms',
       'nav_scenes': 'Scenes',
+      'nav_settings': 'Settings',
       'nav_profile': 'Profile',
 
       // Common
@@ -34,6 +36,8 @@ class AppStrings {
       'close': 'Close',
       'retry': 'Retry',
       'loading': 'Loading...',
+      'error_loading_data': 'Failed to load your data',
+      'check_connection_retry': 'Check your internet connection and try again.',
       'error': 'Error',
       'success': 'Success',
       'confirm': 'Confirm',
@@ -214,9 +218,7 @@ class AppStrings {
       'send_code': 'Send Verification Code',
       'enter_otp': 'Enter the code sent to your email',
       'new_password': 'New Password',
-      'confirm_password': 'Confirm Password',
       'new_password_hint': 'Enter new password',
-      'confirm_password_hint': 'Confirm new password',
       'password_updated': 'Password updated successfully!',
       'password_update_failed': 'Failed to update password',
       'fill_all_fields': 'Please fill in all fields',
@@ -1067,7 +1069,9 @@ class AppStrings {
     'ar': {
       // Navigation
       'nav_home': 'الرئيسية',
+      'nav_rooms': 'الغرف',
       'nav_scenes': 'السيناريوهات',
+      'nav_settings': 'الإعدادات',
       'nav_profile': 'الملف الشخصي',
 
       // Common
@@ -1080,6 +1084,8 @@ class AppStrings {
       'close': 'إغلاق',
       'retry': 'إعادة المحاولة',
       'loading': 'جارٍ التحميل...',
+      'error_loading_data': 'فشل في تحميل بياناتك',
+      'check_connection_retry': 'تحقق من اتصالك بالإنترنت وحاول مرة أخرى.',
       'error': 'خطأ',
       'success': 'نجاح',
       'confirm': 'تأكيد',
@@ -1260,9 +1266,7 @@ class AppStrings {
       'send_code': 'إرسال رمز التحقق',
       'enter_otp': 'أدخل الرمز المرسل إلى بريدك الإلكتروني',
       'new_password': 'كلمة المرور الجديدة',
-      'confirm_password': 'تأكيد كلمة المرور',
       'new_password_hint': 'أدخل كلمة المرور الجديدة',
-      'confirm_password_hint': 'أكد كلمة المرور',
       'password_updated': 'تم تحديث كلمة المرور بنجاح!',
       'password_update_failed': 'فشل تحديث كلمة المرور',
       'fill_all_fields': 'يرجى ملء جميع الحقول',

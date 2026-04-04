@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../theme/app_theme.dart';
+import '../widgets/design_system.dart';
 import '../widgets/smart_input_field.dart';
 import '../widgets/device_selector.dart';
 import '../widgets/scene_icon_selector.dart';
@@ -10,8 +11,6 @@ import '../models/device.dart';
 import '../models/scene.dart';
 import '../models/scene_step.dart';
 import '../models/scene_trigger.dart';
-import '../widgets/responsive_shell.dart';
-import '../repos/device_sharing_repo.dart';
 import '../repos/devices_repo.dart';
 import '../l10n/app_strings.dart';
 
@@ -324,66 +323,110 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: context.hBackground,
-      appBar: AppBar(
-        title: Text(
-          _isEditMode ? AppStrings.get('edit_scene') : AppStrings.get('add_scene_title'),
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [HBotColors.darkBgTop, HBotColors.darkBgBottom],
+          ),
         ),
-        backgroundColor: context.hBackground,
-        elevation: 0,
-        actions: [
-          if (_currentStep > 0)
-            TextButton(onPressed: _previousStep, child: Text(AppStrings.get('previous'))),
-        ],
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                // Progress indicator
-                _buildProgressIndicator(),
+        child: SafeArea(
+          child: _isLoading
+              ? const Center(child: CircularProgressIndicator(color: HBotColors.primary))
+              : Column(
+                  children: [
+                    // Header: back button + title
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        HBotSpacing.space5, HBotSpacing.space4,
+                        HBotSpacing.space5, 0,
+                      ),
+                      child: Row(
+                        children: [
+                          HBotIconButton(
+                            icon: Icons.arrow_back_ios_new_rounded,
+                            onTap: () {
+                              if (_currentStep > 0) {
+                                _previousStep();
+                              } else {
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
+                          const SizedBox(width: HBotSpacing.space4),
+                          Expanded(
+                            child: Text(
+                              _isEditMode ? AppStrings.get('edit_scene') : AppStrings.get('add_scene_title'),
+                              style: const TextStyle(
+                                fontFamily: 'Readex Pro',
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-                // Content
-                Expanded(
-                  child: PageView(
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      _buildBasicInfoStep(),
-                      _buildAppearanceStep(),
-                      _buildTriggerStep(),
-                      _buildDevicesStep(),
-                      _buildDeviceActionsStep(),
-                      _buildReviewStep(),
-                    ],
-                  ),
+                    const SizedBox(height: HBotSpacing.space3),
+
+                    // Progress indicator
+                    _buildProgressIndicator(),
+
+                    // Content
+                    Expanded(
+                      child: PageView(
+                        controller: _pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          _buildBasicInfoStep(),
+                          _buildAppearanceStep(),
+                          _buildTriggerStep(),
+                          _buildDevicesStep(),
+                          _buildDeviceActionsStep(),
+                          _buildReviewStep(),
+                        ],
+                      ),
+                    ),
+
+                    // Bottom navigation - STICKY at bottom
+                    _buildBottomNavigation(),
+                  ],
                 ),
-
-                // Bottom navigation - STICKY at bottom
-                _buildBottomNavigation(),
-              ],
-            ),
+        ),
+      ),
     );
   }
 
   Widget _buildProgressIndicator() {
     return Container(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      padding: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5),
       child: Row(
         children: List.generate(6, (index) {
-          final isActive = index <= _currentStep;
+          final isDone = index < _currentStep;
+          final isActive = index == _currentStep;
 
           return Expanded(
             child: Container(
               margin: EdgeInsets.only(
-                right: index < 5 ? HBotSpacing.space2 : 0,
+                right: index < 5 ? 6 : 0,
               ),
               height: 4,
               decoration: BoxDecoration(
-                color: isActive
+                gradient: isActive
+                    ? const LinearGradient(
+                        colors: [Color(0xFF0883FD), Color(0xFF3BC4FF)],
+                      )
+                    : null,
+                color: isDone
                     ? HBotColors.primary
-                    : context.hTextTertiary.withOpacity(0.3),
+                    : isActive
+                        ? null
+                        : const Color(0x0FFFFFFF), // rgba(255,255,255,0.06)
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -405,17 +448,21 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppStrings.get('scene_name'),
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+              'STEP 1 OF 6',
+              style: TextStyle(
+                fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+                color: HBotColors.textMuted, letterSpacing: 1.0,
+              ),
             ),
-            const SizedBox(height: HBotSpacing.space2),
+            const SizedBox(height: 8),
+            Text(
+              AppStrings.get('scene_name'),
+              style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
+            ),
+            const SizedBox(height: 4),
             Text(
               AppStrings.get('scene_name_hint'),
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: context.hTextSecondary,
-              ),
+              style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
             ),
             const SizedBox(height: HBotSpacing.space4),
 
@@ -483,17 +530,21 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.get('scene_icon'),
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            'STEP 2 OF 6',
+            style: TextStyle(
+              fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+              color: HBotColors.textMuted, letterSpacing: 1.0,
+            ),
           ),
-          const SizedBox(height: HBotSpacing.space2),
+          const SizedBox(height: 8),
+          Text(
+            AppStrings.get('scene_icon'),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
+          ),
+          const SizedBox(height: 4),
           Text(
             AppStrings.get('scene_color'),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: context.hTextSecondary,
-            ),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
           ),
           const SizedBox(height: HBotSpacing.space6),
 
@@ -524,10 +575,17 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: HBotSpacing.space4),
-          Wrap(
-            spacing: HBotSpacing.space2,
-            runSpacing: HBotSpacing.space2,
-            children: _availableColors.map((color) {
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+            ),
+            itemCount: _availableColors.length,
+            itemBuilder: (context, index) {
+              final color = _availableColors[index];
               final isSelected = color == _selectedColor;
               return GestureDetector(
                 onTap: () {
@@ -536,21 +594,24 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                   });
                 },
                 child: Container(
-                  width: 50,
-                  height: 50,
                   decoration: BoxDecoration(
                     color: color,
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.circular(14),
                     border: Border.all(
                       color: isSelected ? Colors.white : Colors.transparent,
-                      width: 3,
+                      width: 2,
                     ),
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: color.withOpacity(0.5),
-                              blurRadius: 8,
+                              color: color.withOpacity(0.6),
+                              blurRadius: 12,
                               spreadRadius: 2,
+                            ),
+                            BoxShadow(
+                              color: color.withOpacity(0.3),
+                              blurRadius: 6,
+                              spreadRadius: 0,
                             ),
                           ]
                         : null,
@@ -560,7 +621,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                       : null,
                 ),
               );
-            }).toList(),
+            },
           ),
 
           const SizedBox(height: HBotSpacing.space4),
@@ -613,98 +674,106 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.get('scene_triggers'),
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            'STEP 3 OF 6',
+            style: TextStyle(
+              fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+              color: HBotColors.textMuted, letterSpacing: 1.0,
+            ),
           ),
-          const SizedBox(height: HBotSpacing.space2),
+          const SizedBox(height: 8),
+          Text(
+            AppStrings.get('scene_triggers'),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
+          ),
+          const SizedBox(height: 4),
           Text(
             AppStrings.get('add_trigger'),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: context.hTextSecondary,
-            ),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
           ),
           const SizedBox(height: HBotSpacing.space6),
 
           // Trigger type selection
           ..._triggerTypes.map((trigger) {
             final isSelected = trigger == _selectedTrigger;
-            return Container(
-              margin: const EdgeInsets.only(bottom: HBotSpacing.space2),
-              child: ListTile(
-                leading: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? _selectedColor.withOpacity(0.2)
-                        : context.hCard,
-                    borderRadius: HBotRadius.smallRadius,
-                  ),
-                  child: Icon(
-                    _getTriggerIcon(trigger),
-                    color: isSelected
-                        ? _selectedColor
-                        : context.hTextSecondary,
-                    size: 20,
-                  ),
-                ),
-                title: Text(
-                  _getTriggerDisplayName(trigger),
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: isSelected
-                        ? context.hTextPrimary
-                        : context.hTextSecondary,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  ),
-                ),
-                subtitle: Text(
-                  _getTriggerDescription(trigger),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: context.hTextTertiary,
-                  ),
-                ),
-                trailing: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedTrigger = trigger;
-                    });
-                  },
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: _selectedTrigger == trigger
-                            ? _selectedColor
-                            : Colors.grey,
-                        width: 2,
-                      ),
-                      color: _selectedTrigger == trigger
-                          ? _selectedColor
-                          : Colors.transparent,
-                    ),
-                    child: _selectedTrigger == trigger
-                        ? Icon(Icons.check, size: 12, color: Colors.white)
-                        : null,
-                  ),
-                ),
-                onTap: () {
-                  setState(() {
-                    _selectedTrigger = trigger;
-                  });
-                },
-                tileColor: isSelected
-                    ? _selectedColor.withOpacity(0.1)
-                    : context.hCard,
-                shape: RoundedRectangleBorder(
-                  borderRadius: HBotRadius.mediumRadius,
-                  side: BorderSide(
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedTrigger = trigger;
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.only(bottom: HBotSpacing.space2),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? _selectedColor.withOpacity(0.1)
+                      : HBotColors.glassBackground,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
                     color: isSelected
                         ? _selectedColor.withOpacity(0.5)
-                        : Colors.transparent,
+                        : HBotColors.glassBorder,
                   ),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? _selectedColor.withOpacity(0.2)
+                            : HBotColors.glassBackground,
+                        borderRadius: BorderRadius.circular(HBotRadius.small),
+                      ),
+                      child: Icon(
+                        _getTriggerIcon(trigger),
+                        color: isSelected
+                            ? _selectedColor
+                            : HBotColors.textMuted,
+                        size: 20,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _getTriggerDisplayName(trigger),
+                            style: TextStyle(
+                              fontFamily: 'Readex Pro',
+                              fontSize: 14,
+                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                              color: isSelected ? Colors.white : HBotColors.textMuted,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            _getTriggerDescription(trigger),
+                            style: const TextStyle(
+                              fontFamily: 'Readex Pro', fontSize: 12, color: HBotColors.textMuted,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Radio circle
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: isSelected ? _selectedColor : HBotColors.textMuted,
+                          width: 2,
+                        ),
+                        color: isSelected ? _selectedColor : Colors.transparent,
+                      ),
+                      child: isSelected
+                          ? const Icon(Icons.check, size: 12, color: Colors.white)
+                          : null,
+                    ),
+                  ],
                 ),
               ),
             );
@@ -1027,17 +1096,21 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.get('scene_select_devices'),
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            'STEP 4 OF 6',
+            style: TextStyle(
+              fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+              color: HBotColors.textMuted, letterSpacing: 1.0,
+            ),
           ),
-          const SizedBox(height: HBotSpacing.space2),
+          const SizedBox(height: 8),
+          Text(
+            AppStrings.get('scene_select_devices'),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
+          ),
+          const SizedBox(height: 4),
           Text(
             AppStrings.get('scene_choose_devices'),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: context.hTextSecondary,
-            ),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
           ),
           const SizedBox(height: HBotSpacing.space6),
 
@@ -1065,17 +1138,21 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.get('scene_configure_actions'),
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            'STEP 5 OF 6',
+            style: TextStyle(
+              fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+              color: HBotColors.textMuted, letterSpacing: 1.0,
+            ),
           ),
-          const SizedBox(height: HBotSpacing.space2),
+          const SizedBox(height: 8),
+          Text(
+            AppStrings.get('scene_configure_actions'),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
+          ),
+          const SizedBox(height: 4),
           Text(
             AppStrings.get('scene_set_actions'),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: context.hTextSecondary,
-            ),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
           ),
           const SizedBox(height: HBotSpacing.space6),
 
@@ -1502,17 +1579,21 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.get('scene_review'),
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            'STEP 6 OF 6',
+            style: TextStyle(
+              fontFamily: 'Readex Pro', fontSize: 10, fontWeight: FontWeight.w600,
+              color: HBotColors.textMuted, letterSpacing: 1.0,
+            ),
           ),
-          const SizedBox(height: HBotSpacing.space2),
+          const SizedBox(height: 8),
+          Text(
+            AppStrings.get('scene_review'),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 22, fontWeight: FontWeight.w700, color: Colors.white),
+          ),
+          const SizedBox(height: 4),
           Text(
             AppStrings.get('scene_review_config'),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: context.hTextSecondary,
-            ),
+            style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 13, color: HBotColors.textMuted),
           ),
           const SizedBox(height: HBotSpacing.space6),
 
@@ -1675,20 +1756,13 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
     return Container(
       padding: const EdgeInsets.all(HBotSpacing.space4),
       decoration: BoxDecoration(
-        color: context.hCard,
-        border: Border(
+        color: HBotColors.sheetBackground,
+        border: const Border(
           top: BorderSide(
-            color: context.hBorder,
-            width: 1,
+            color: HBotColors.glassBorder,
+            width: 0.5,
           ),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
       ),
       child: SafeArea(
         top: false,
@@ -1696,41 +1770,21 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
           children: [
             if (_currentStep > 0)
               Expanded(
-                child: ElevatedButton(
-                  onPressed: _isCreating ? null : _previousStep,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: context.hCard,
-                    foregroundColor: context.hTextPrimary,
-                    side: BorderSide(
-                      color: context.hBorder,
-                      width: 2,
-                    ),
-                    elevation: 0,
-                    minimumSize: const Size(0, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: HBotRadius.smallRadius,
-                    ),
-                  ),
+                child: HBotOutlineButton(
+                  onTap: _isCreating ? null : _previousStep,
+                  height: 48,
                   child: Text(
                     AppStrings.get('common_previous'),
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
             if (_currentStep > 0) const SizedBox(width: HBotSpacing.space4),
             Expanded(
-              child: ElevatedButton(
-                onPressed: (_canProceed() && !_isCreating) ? _nextStep : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _selectedColor,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  minimumSize: const Size(0, 48),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: HBotRadius.smallRadius,
-                  ),
-                  disabledBackgroundColor: _selectedColor.withOpacity(0.5),
-                ),
+              child: HBotGradientButton(
+                onTap: (_canProceed() && !_isCreating) ? _nextStep : null,
+                enabled: _canProceed() && !_isCreating,
+                height: 48,
                 child: _isCreating
                     ? const SizedBox(
                         width: 20,
@@ -1747,7 +1801,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
                             ? (_isEditMode ? AppStrings.get('scene_update') : AppStrings.get('scene_create'))
                             : AppStrings.get('common_next'),
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -2058,7 +2112,7 @@ class _AddSceneScreenState extends State<AddSceneScreen> {
   void _showRepeatOptions() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: context.hCard,
+      backgroundColor: HBotColors.sheetBackground,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),

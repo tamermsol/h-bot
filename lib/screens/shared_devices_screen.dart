@@ -3,7 +3,6 @@ import '../theme/app_theme.dart';
 import '../models/shared_device.dart';
 import '../repos/device_sharing_repo.dart';
 import 'scan_device_qr_screen.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 class SharedDevicesScreen extends StatefulWidget {

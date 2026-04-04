@@ -3,7 +3,6 @@ import 'dart:async';
 import '../models/device.dart';
 import '../services/mqtt_device_manager.dart';
 import '../theme/app_theme.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 /// Screen for calibrating shutter open/close durations

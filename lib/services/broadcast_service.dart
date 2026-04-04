@@ -124,12 +124,19 @@ class BroadcastService {
     if (userId == null) return [];
 
     try {
-      final response = await _supabase
+      final userCreatedAt = _supabase.auth.currentUser?.createdAt;
+
+      var query = _supabase
           .from('broadcast_notifications')
           .select()
           .or('target.eq.all,target.eq.$_platform')
-          .not('read_by', 'cs', '{$userId}')
-          .order('created_at', ascending: false);
+          .not('read_by', 'cs', '{$userId}');
+
+      if (userCreatedAt != null) {
+        query = query.gte('created_at', userCreatedAt);
+      }
+
+      final response = await query.order('created_at', ascending: false);
 
       return (response as List<dynamic>)
           .map((e) => BroadcastNotification.fromMap(e as Map<String, dynamic>))

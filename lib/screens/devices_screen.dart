@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import '../theme/app_theme.dart';
@@ -10,7 +11,6 @@ import '../models/room.dart';
 import '../models/device.dart';
 import 'add_device_flow_screen.dart';
 import 'device_control_screen.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 class DevicesScreen extends StatefulWidget {
@@ -28,6 +28,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
   final SmartHomeService _service = SmartHomeService();
   final MqttDeviceManager _mqttManager = MqttDeviceManager();
   final TextEditingController _searchController = TextEditingController();
+  StreamSubscription? _connectionStateSubscription;
   String _selectedCategory = 'All';
   List<Device> _devices = [];
   bool _isLoading = true;
@@ -50,6 +51,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
 
   @override
   void dispose() {
+    _connectionStateSubscription?.cancel();
     _searchController.dispose();
     super.dispose();
   }
@@ -64,7 +66,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
     }
 
     // Listen to MQTT connection state changes
-    _mqttManager.connectionStateStream.listen((state) {
+    _connectionStateSubscription = _mqttManager.connectionStateStream.listen((state) {
       if (mounted) {
         setState(() {
           _mqttConnected = state == MqttConnectionState.connected;

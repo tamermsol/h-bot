@@ -500,13 +500,41 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
 
   bool get _isConnected => _connectionState == MqttConnectionState.connected;
 
+  Widget _buildPresetButton(String label, double position) {
+    final isActive = (_currentPosition - position).abs() < 2;
+    return GestureDetector(
+      onTap: _isConnected ? () => _setPosition(position) : null,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isActive ? HBotColors.primary.withOpacity( 0.2) : HBotColors.glassBackground,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isActive ? HBotColors.primary.withOpacity( 0.5) : HBotColors.glassBorder,
+            width: 1,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Readex Pro',
+            fontSize: 12,
+            color: isActive ? HBotColors.primary : HBotColors.textMuted,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(HBotSpacing.space4),
+      padding: const EdgeInsets.all(HBotSpacing.space6),
       decoration: BoxDecoration(
-        color: context.hCard,
-        borderRadius: BorderRadius.circular(HBotRadius.medium),
+        color: HBotColors.glassBackground,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: HBotColors.glassBorder, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -546,7 +574,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                 ? Icons.curtains
                 : Icons.visibility_off,
             size: 20,
-            color: context.hTextSecondary,
+            color: HBotColors.textMuted,
           ),
           onSelected: (value) {
             setState(() {
@@ -618,21 +646,21 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
     return Container(
       height: 200,
       decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(HBotRadius.small),
-        border: Border.all(color: Colors.grey[700]!, width: 2),
+        color: HBotColors.glassBackground,
+        borderRadius: BorderRadius.circular(HBotRadius.medium),
+        border: Border.all(color: HBotColors.glassBorder, width: 1),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(HBotRadius.small - 2),
+        borderRadius: BorderRadius.circular(HBotRadius.medium - 1),
         child: Stack(
           children: [
-            // Window background (visible when open)
+            // Window background (visible when open) - dark sky gradient
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.lightBlue[200]!, Colors.lightBlue[100]!],
+                  colors: [Color(0xFF1070AD), Color(0xFF0A1628)],
                 ),
               ),
             ),
@@ -646,7 +674,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
               right: 0,
               height: (200 * closedPercentage / 100),
               child: Container(
-                decoration: BoxDecoration(color: Colors.grey[300]),
+                decoration: const BoxDecoration(color: Color(0xFF2A3040)),
                 child: CustomPaint(
                   painter: _ShutterSlatsPainter(
                     slatCount: (closedPercentage / 5).ceil(),
@@ -662,10 +690,10 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
               right: 0,
               height: 20,
               child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[400],
+                decoration: const BoxDecoration(
+                  color: Color(0xFF3D4A5C),
                   border: Border(
-                    bottom: BorderSide(color: Colors.grey[600]!, width: 2),
+                    bottom: BorderSide(color: Color(0xFF5A6577), width: 2),
                   ),
                 ),
                 child: Center(
@@ -673,7 +701,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                     width: 40,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: Colors.grey[600],
+                      color: const Color(0xFF5A6577),
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -697,21 +725,21 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
     return Container(
       height: 200,
       decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(HBotRadius.small),
-        border: Border.all(color: Colors.grey[700]!, width: 2),
+        color: HBotColors.glassBackground,
+        borderRadius: BorderRadius.circular(HBotRadius.medium),
+        border: Border.all(color: HBotColors.glassBorder, width: 1),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(HBotRadius.small - 2),
+        borderRadius: BorderRadius.circular(HBotRadius.medium - 1),
         child: Stack(
           children: [
-            // Window background (visible when open)
+            // Window background (visible when open) - dark sky gradient
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.lightBlue[200]!, Colors.lightBlue[100]!],
+                  colors: [Color(0xFF1070AD), Color(0xFF0A1628)],
                 ),
               ),
             ),
@@ -724,7 +752,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
               height: 15,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[400],
+                  color: const Color(0xFF3D4A5C),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.3),
@@ -748,16 +776,16 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                   0.5 *
                   (1 - openPercentage / 100),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                     colors: [
-                      Colors.blueGrey[700]!,
-                      Colors.blueGrey[600]!,
-                      Colors.blueGrey[700]!,
+                      Color(0xFF1A202B),
+                      Color(0xFF2A3040),
+                      Color(0xFF1A202B),
                     ],
-                    stops: const [0.0, 0.5, 1.0],
+                    stops: [0.0, 0.5, 1.0],
                   ),
                 ),
                 child: CustomPaint(painter: _CurtainFoldsPainter()),
@@ -776,16 +804,16 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
                   0.5 *
                   (1 - openPercentage / 100),
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.centerRight,
                     end: Alignment.centerLeft,
                     colors: [
-                      Colors.blueGrey[700]!,
-                      Colors.blueGrey[600]!,
-                      Colors.blueGrey[700]!,
+                      Color(0xFF1A202B),
+                      Color(0xFF2A3040),
+                      Color(0xFF1A202B),
                     ],
-                    stops: const [0.0, 0.5, 1.0],
+                    stops: [0.0, 0.5, 1.0],
                   ),
                 ),
                 child: CustomPaint(painter: _CurtainFoldsPainter()),
@@ -845,46 +873,58 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
     // Active button (based on shutter direction) has blue shadow/glow
     // Shadow remains visible continuously while in that state
 
+    // Arrow buttons: 56x56px, radius 16px, gradient bg, shadow
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(HBotRadius.medium),
-            // BLUE SHADOW/GLOW when highlighted (active state)
-            boxShadow: isHighlighted
-                ? [
-                    BoxShadow(
-                      color: HBotColors.primary.withOpacity(0.5),
-                      blurRadius: 12,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 0),
-                    ),
-                  ]
-                : null,
-          ),
-          child: ElevatedButton(
-            onPressed: onPressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: context.hCard,
-              // ALL BUTTONS GREY by default, active button also grey (shadow provides the blue)
-              foregroundColor: Colors.grey,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(HBotRadius.medium),
-                side: BorderSide(
-                  color: isHighlighted ? HBotColors.primary : Colors.grey,
-                  width: isHighlighted ? 2 : 1,
-                ),
+        child: GestureDetector(
+          onTap: onPressed,
+          child: AnimatedContainer(
+            duration: HBotDurations.fast,
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              gradient: isHighlighted
+                  ? const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xFF0883FD), Color(0xFF2FB8EC)],
+                    )
+                  : null,
+              color: isHighlighted ? null : HBotColors.glassBackground,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isHighlighted ? Colors.transparent : HBotColors.glassBorder,
+                width: 1,
               ),
-              elevation: 0, // Remove default elevation to show custom shadow
+              boxShadow: isHighlighted
+                  ? [
+                      BoxShadow(
+                        color: HBotColors.primary.withOpacity( 0.4),
+                        blurRadius: 16,
+                        spreadRadius: 2,
+                      ),
+                    ]
+                  : null,
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, size: 32),
-                const SizedBox(height: 4),
-                Text(label, style: const TextStyle(fontSize: 12)),
+                Icon(
+                  icon,
+                  size: 24,
+                  color: isHighlighted ? Colors.white : HBotColors.textMuted,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: isHighlighted ? Colors.white : HBotColors.textMuted,
+                    fontWeight: isHighlighted ? FontWeight.w600 : FontWeight.normal,
+                  ),
+                ),
               ],
             ),
           ),
@@ -908,40 +948,80 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
         Text(
           '${safeCurrentPosition.round()}%',
           style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Readex Pro',
+            fontSize: 32,
+            fontWeight: FontWeight.w700,
             color: HBotColors.primary,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
+
+        // Progress bar — 8px height, radius 6px, gradient fill (teal to cyan)
+        Container(
+          height: 8,
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity( 0.08),
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: FractionallySizedBox(
+            alignment: Alignment.centerLeft,
+            widthFactor: safeCurrentPosition / 100,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1070AD), Color(0xFF2FB8EC)],
+                ),
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: HBotSpacing.space4),
 
         // Slider
         Row(
           children: [
-            Text(
+            const Text(
               'Close',
-              style: TextStyle(fontSize: 12, color: context.hTextSecondary),
+              style: TextStyle(fontSize: 12, color: HBotColors.textMuted),
             ),
             Expanded(
-              child: Slider(
-                value: safeSliderValue,
-                min: 0,
-                max: 100,
-                divisions: 100,
-                label: '${safeSliderValue.round()}%',
-                activeColor: HBotColors.primary,
-                inactiveColor: context.hTextSecondary.withOpacity(0.3),
-                // Use debounced handler for onChanged to send commands while dragging
-                // This provides fast feedback (300ms) instead of waiting for onChangeEnd
-                onChanged: _isConnected ? _onSliderChanged : null,
-                // Also handle onChangeEnd to send final position immediately
-                onChangeEnd: _isConnected ? _onSliderChangeEnd : null,
+              child: SliderTheme(
+                data: SliderThemeData(
+                  activeTrackColor: HBotColors.primary,
+                  inactiveTrackColor: Colors.white.withOpacity(0.08),
+                  thumbColor: Colors.white,
+                  overlayColor: HBotColors.primary.withOpacity(0.2),
+                ),
+                child: Slider(
+                  value: safeSliderValue,
+                  min: 0,
+                  max: 100,
+                  divisions: 100,
+                  label: '${safeSliderValue.round()}%',
+                  onChanged: _isConnected ? _onSliderChanged : null,
+                  onChangeEnd: _isConnected ? _onSliderChangeEnd : null,
+                ),
               ),
             ),
-            Text(
+            const Text(
               'Open',
-              style: TextStyle(fontSize: 12, color: context.hTextSecondary),
+              style: TextStyle(fontSize: 12, color: HBotColors.textMuted),
             ),
+          ],
+        ),
+
+        // Preset buttons row
+        const SizedBox(height: HBotSpacing.space3),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildPresetButton('Closed', 0),
+            _buildPresetButton('25%', 25),
+            _buildPresetButton('50%', 50),
+            _buildPresetButton('75%', 75),
+            _buildPresetButton('Full', 100),
           ],
         ),
       ],
@@ -967,19 +1047,19 @@ class _ShutterSlatsPainter extends CustomPainter {
       final y = i * (slatHeight + slatSpacing);
       if (y >= size.height) break;
 
-      // Main slat
-      paint.color = Colors.grey[300]!;
+      // Main slat - dark theme
+      paint.color = const Color(0xFF2A3040);
       canvas.drawRect(Rect.fromLTWH(0, y, size.width, slatHeight), paint);
 
       // Shadow on bottom of slat
-      paint.color = Colors.grey[500]!;
+      paint.color = const Color(0xFF1A202B);
       canvas.drawRect(
         Rect.fromLTWH(0, y + slatHeight - 2, size.width, 2),
         paint,
       );
 
       // Highlight on top of slat
-      paint.color = Colors.grey[200]!;
+      paint.color = const Color(0xFF3D4A5C);
       canvas.drawRect(Rect.fromLTWH(0, y, size.width, 1), paint);
     }
   }

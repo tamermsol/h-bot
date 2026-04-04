@@ -1,8 +1,11 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:io';
+import '../demo/demo_data.dart';
 import '../theme/app_theme.dart';
+import '../widgets/design_system.dart';
 import '../widgets/settings_tile.dart';
 import '../widgets/avatar_picker_dialog.dart';
 import '../services/auth_service.dart';
@@ -10,7 +13,6 @@ import '../services/smart_home_service.dart';
 import '../services/current_home_service.dart';
 import '../services/avatar_service.dart';
 import '../models/profile.dart';
-import '../models/home.dart';
 import '../utils/error_handler.dart';
 import '../core/supabase_client.dart';
 import '../services/theme_service.dart';
@@ -27,7 +29,8 @@ import 'shared_devices_screen.dart';
 import 'multi_device_share_screen.dart';
 import 'rooms_screen.dart';
 import 'wifi_profile_screen.dart';
-import '../widgets/responsive_shell.dart';
+// import 'panels_screen.dart';  // Hidden until production-ready
+// import 'ha_entities_screen.dart';  // Hidden until production-ready
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -78,6 +81,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadUserData() async {
+    // Demo mode: inject demo profile
+    if (isDemoMode) {
+      if (mounted) {
+        setState(() {
+          _currentProfile = DemoData.profile;
+          _userName = DemoData.profile.fullName ?? 'Alex Johnson';
+          _userEmail = DemoData.userEmail;
+          _userPhone = DemoData.profile.phoneNumber;
+        });
+      }
+      return;
+    }
+
     try {
       final user = _authService.currentUser;
       if (user != null) {
@@ -188,7 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: context.hCard,
+      backgroundColor: HBotColors.sheetBackground,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -203,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 width: 40, height: 4,
                 margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
-                  color: context.hTextSecondary.withOpacity(0.3),
+                  color: HBotColors.textMuted.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -215,10 +231,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Expanded(
                   child: Text(
                     AppStrings.get('alexa_link_title'),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: context.hTextPrimary,
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -244,13 +260,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Container(
             width: 28, height: 28,
             decoration: BoxDecoration(
-              color: HBotColors.primary.withOpacity(0.1),
+              color: HBotColors.primary.withOpacity(0.15),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Center(
               child: Text(
                 number,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: HBotColors.primary,
@@ -264,9 +280,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.only(top: 4),
               child: Text(
                 text,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
-                  color: context.hTextPrimary,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -281,33 +297,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.getCardColor(context),
-        title: Text(AppStrings.get('profile_appearance')),
+        backgroundColor: HBotColors.sheetBackground,
+        title: Text(
+          AppStrings.get('profile_appearance'),
+          style: const TextStyle(color: Colors.white, fontFamily: 'Readex Pro', fontWeight: FontWeight.w600),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             RadioListTile<ThemeMode>(
-              title: Text(AppStrings.get('profile_light')),
+              title: Text(AppStrings.get('profile_light'), style: const TextStyle(color: Colors.white)),
               value: ThemeMode.light,
               groupValue: themeService.themeMode,
+              activeColor: HBotColors.primary,
               onChanged: (v) {
                 themeService.setThemeMode(ThemeMode.light);
                 Navigator.pop(ctx);
               },
             ),
             RadioListTile<ThemeMode>(
-              title: Text(AppStrings.get('profile_dark')),
+              title: Text(AppStrings.get('profile_dark'), style: const TextStyle(color: Colors.white)),
               value: ThemeMode.dark,
               groupValue: themeService.themeMode,
+              activeColor: HBotColors.primary,
               onChanged: (v) {
                 themeService.setThemeMode(ThemeMode.dark);
                 Navigator.pop(ctx);
               },
             ),
             RadioListTile<ThemeMode>(
-              title: Text(AppStrings.get('profile_system')),
+              title: Text(AppStrings.get('profile_system'), style: const TextStyle(color: Colors.white)),
               value: ThemeMode.system,
               groupValue: themeService.themeMode,
+              activeColor: HBotColors.primary,
               onChanged: (v) {
                 themeService.setThemeMode(ThemeMode.system);
                 Navigator.pop(ctx);
@@ -395,22 +417,90 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [HBotColors.darkBgTop, HBotColors.darkBgBottom],
+        ),
+      ),
+      child: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Settings header
+          Padding(
+            padding: const EdgeInsets.fromLTRB(HBotSpacing.space5, HBotSpacing.space4, HBotSpacing.space5, 0),
+            child: const Text(
+              'Settings',
+              style: TextStyle(
+                fontFamily: 'Readex Pro',
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
+          ),
           const SizedBox(height: HBotSpacing.space4),
 
           // Profile Header — centered avatar + name + email
           _buildProfileHeader(),
 
-          // Home section
+          // Stats cards
+          _buildStatsCards(),
+
+          // PREFERENCES section
           SettingsGroup(
-            label: AppStrings.get('profile_smart_home'),
+            label: 'Preferences',
+            children: [
+              Consumer<ThemeService>(
+                builder: (context, themeService, _) {
+                  return SettingsTile(
+                    icon: Icons.dark_mode_outlined,
+                    title: 'Dark Mode',
+                    subtitle: themeService.isDarkMode ? 'On' : 'Off',
+                    iconColor: HBotColors.primary,
+                    showChevron: false,
+                    trailing: HBotToggle(
+                      value: themeService.isDarkMode,
+                      onChanged: (v) => themeService.setThemeMode(v ? ThemeMode.dark : ThemeMode.light),
+                    ),
+                  );
+                },
+              ),
+              SettingsTile(
+                icon: Icons.notifications_outlined,
+                title: AppStrings.get('notifications'),
+                subtitle: 'Push & in-app alerts',
+                iconColor: HBotColors.primary,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
+              ),
+              Consumer<LocaleService>(
+                builder: (context, localeService, _) => SettingsTile(
+                  icon: Icons.language_outlined,
+                  title: AppStrings.get('language'),
+                  subtitle: localeService.isArabic
+                      ? AppStrings.get('language_subtitle_ar')
+                      : AppStrings.get('language_subtitle_en'),
+                  iconColor: HBotColors.primary,
+                  showDivider: false,
+                  onTap: () => _showLanguagePicker(localeService),
+                ),
+              ),
+            ],
+          ),
+
+          // SMART HOME section
+          SettingsGroup(
+            label: 'Smart Home',
             children: [
               SettingsTile(
                 icon: Icons.home_work_outlined,
                 title: AppStrings.get('manage_homes_subtitle'),
+                subtitle: 'Add, edit or remove homes',
+                iconColor: const Color(0xFF34D399),
                 onTap: () async {
                   await Navigator.push(context,
                       MaterialPageRoute(builder: (_) => HomesScreen(onHomeChanged: () => _loadStatistics())));
@@ -418,8 +508,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
               SettingsTile(
+                icon: Icons.wifi_outlined,
+                title: AppStrings.get('profile_wifi_profiles'),
+                subtitle: 'Saved network credentials',
+                iconColor: const Color(0xFF34D399),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const WiFiProfileScreen())),
+              ),
+              SettingsTile(
                 icon: Icons.meeting_room_outlined,
                 title: AppStrings.get('profile_rooms'),
+                subtitle: 'Organize your spaces',
+                iconColor: const Color(0xFF34D399),
                 onTap: () async {
                   final homeId = await CurrentHomeService().getCurrentHomeId();
                   if (homeId == null) {
@@ -447,87 +547,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
               SettingsTile(
-                icon: Icons.wifi_outlined,
-                title: AppStrings.get('profile_wifi_profiles'),
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const WiFiProfileScreen())),
-                showDivider: false,
-              ),
-            ],
-          ),
-
-          // Integrations section
-          SettingsGroup(
-            label: AppStrings.get('profile_integrations'),
-            children: [
-              SettingsTile(
-                icon: Icons.record_voice_over_outlined,
-                title: AppStrings.get('alexa_integration'),
-                subtitle: AppStrings.get('alexa_subtitle'),
-                onTap: _openAlexaSkill,
-                showDivider: false,
-              ),
-            ],
-          ),
-
-          // App section
-          SettingsGroup(
-            label: AppStrings.get('profile_settings'),
-            children: [
-              SettingsTile(
-                icon: Icons.notifications_outlined,
-                title: AppStrings.get('notifications'),
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const NotificationsSettingsScreen())),
-              ),
-              Consumer<ThemeService>(
-                builder: (context, themeService, _) => SettingsTile(
-                  icon: Icons.palette_outlined,
-                  title: AppStrings.get('theme'),
-                  value: themeService.isDarkMode
-                      ? AppStrings.get('theme_subtitle_dark')
-                      : AppStrings.get('theme_subtitle_light'),
-                  onTap: _showAppearanceDialog,
-                ),
-              ),
-              Consumer<LocaleService>(
-                builder: (context, localeService, _) => SettingsTile(
-                  icon: Icons.language_outlined,
-                  title: AppStrings.get('language'),
-                  value: localeService.isArabic
-                      ? AppStrings.get('language_subtitle_ar')
-                      : AppStrings.get('language_subtitle_en'),
-                  onTap: () => _showLanguagePicker(localeService),
-                ),
-              ),
-              SettingsTile(
-                icon: Icons.info_outline,
-                title: AppStrings.get('profile_about'),
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const HelpCenterScreen())),
-                showDivider: false,
-              ),
-            ],
-          ),
-
-          // Account section
-          SettingsGroup(
-            label: AppStrings.get('profile_account'),
-            children: [
-              SettingsTile(
-                icon: Icons.person_outline,
-                title: AppStrings.get('profile_personal_information'),
-                onTap: _openEditProfile,
-              ),
-              if (_authService.canChangePassword())
-                SettingsTile(
-                  icon: Icons.lock_outline,
-                  title: AppStrings.get('change_password'),
-                  onTap: _showChangePasswordDialog,
-                ),
-              SettingsTile(
                 icon: Icons.share_outlined,
                 title: AppStrings.get('profile_share_devices'),
+                subtitle: 'Share access with others',
+                iconColor: const Color(0xFF34D399),
                 onTap: () async {
                   final homes = await supabase.from('homes').select('id').limit(1);
                   if (homes.isEmpty) {
@@ -547,106 +570,355 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SettingsTile(
                 icon: Icons.people_outline,
                 title: AppStrings.get('profile_shared_with_me'),
+                subtitle: 'Devices shared with you',
+                iconColor: const Color(0xFF34D399),
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const SharedDevicesScreen())),
               ),
               SettingsTile(
-                icon: Icons.feedback_outlined,
-                title: AppStrings.get('profile_send_feedback'),
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const FeedbackScreen())),
+                icon: Icons.record_voice_over_outlined,
+                title: AppStrings.get('alexa_integration'),
+                subtitle: AppStrings.get('alexa_subtitle'),
+                iconColor: const Color(0xFF34D399),
+                showDivider: false,
+                onTap: _openAlexaSkill,
               ),
+              // Wall Panels — hidden until production-ready
+              // SettingsTile(
+              //   icon: Icons.tv,
+              //   title: 'Wall Panels',
+              //   subtitle: 'Manage paired H-Bot panels',
+              //   onTap: () async {
+              //     final homeId = await CurrentHomeService().getCurrentHomeId();
+              //     if (mounted) {
+              //       Navigator.push(context,
+              //           MaterialPageRoute(builder: (_) => PanelsScreen(homeId: homeId)));
+              //     }
+              //   },
+              //   showDivider: false,
+              // ),
+            ],
+          ),
+
+          // ACCOUNT section
+          SettingsGroup(
+            label: 'Account',
+            children: [
               SettingsTile(
-                icon: Icons.account_circle_outlined,
-                title: AppStrings.get('hbot_account'),
+                icon: Icons.person_outline,
+                title: AppStrings.get('profile_personal_information'),
+                subtitle: 'Name, email, phone',
+                iconColor: const Color(0xFFF59E0B),
+                onTap: _openEditProfile,
+              ),
+              if (_authService.canChangePassword())
+                SettingsTile(
+                  icon: Icons.lock_outline,
+                  title: AppStrings.get('change_password'),
+                  subtitle: 'Update your password',
+                  iconColor: const Color(0xFFF59E0B),
+                  onTap: _showChangePasswordDialog,
+                ),
+              SettingsTile(
+                icon: Icons.security_outlined,
+                title: 'Security',
+                subtitle: 'Account & security settings',
+                iconColor: const Color(0xFFF59E0B),
                 onTap: _openHBOTAccountScreen,
               ),
               SettingsTile(
-                icon: Icons.logout,
-                title: AppStrings.get('sign_out'),
-                titleColor: HBotColors.error,
-                iconColor: HBotColors.error,
-                showChevron: false,
+                icon: Icons.download_outlined,
+                title: 'Data Export',
+                subtitle: 'Download your data',
+                iconColor: const Color(0xFFF59E0B),
                 showDivider: false,
-                onTap: _showSignOutDialog,
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Data export coming soon'), backgroundColor: HBotColors.primary),
+                  );
+                },
               ),
             ],
           ),
 
+          // ABOUT section
+          SettingsGroup(
+            label: 'About',
+            children: [
+              SettingsTile(
+                icon: Icons.help_outline,
+                title: 'Help Center',
+                subtitle: 'FAQs and support',
+                iconColor: HBotColors.primary,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const HelpCenterScreen())),
+              ),
+              SettingsTile(
+                icon: Icons.feedback_outlined,
+                title: AppStrings.get('profile_send_feedback'),
+                subtitle: 'Report bugs or suggest features',
+                iconColor: HBotColors.primary,
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const FeedbackScreen())),
+              ),
+              SettingsTile(
+                icon: Icons.info_outline,
+                title: 'App Version',
+                subtitle: 'v1.0.3+1',
+                iconColor: HBotColors.primary,
+                showChevron: false,
+              ),
+              SettingsTile(
+                icon: Icons.star_outline,
+                title: 'Rate App',
+                subtitle: 'Love H-Bot? Rate us!',
+                iconColor: HBotColors.primary,
+                showDivider: false,
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('App store rating coming soon'), backgroundColor: HBotColors.primary),
+                  );
+                },
+              ),
+            ],
+          ),
+
+          // Danger zone — red-tinted glass card
+          _buildDangerZone(),
+
           const SizedBox(height: HBotSpacing.space7),
-          Center(
-            child: Text(
-              'v1.0.0 (143)',
-              style: TextStyle(
+        ],
+      ),
+      ),
+    );
+  }
+
+  Widget _buildStatsCards() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: HBotSpacing.space5,
+        vertical: HBotSpacing.space3,
+      ),
+      child: Row(
+        children: [
+          _buildStatCard(Icons.devices_outlined, '$_totalDevices', AppStrings.get('profile_devices')),
+          const SizedBox(width: HBotSpacing.space3),
+          _buildStatCard(Icons.meeting_room_outlined, '$_totalRooms', AppStrings.get('profile_rooms')),
+          const SizedBox(width: HBotSpacing.space3),
+          _buildStatCard(Icons.auto_awesome_outlined, '$_totalScenes', AppStrings.get('nav_scenes')),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(IconData icon, String value, String label) {
+    return Expanded(
+      child: HBotCard(
+        borderRadius: 16,
+        padding: const EdgeInsets.all(HBotSpacing.space4),
+        child: Column(
+          children: [
+            _isLoadingStats
+                ? const SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: HBotColors.primary,
+                    ),
+                  )
+                : Text(
+                    value,
+                    style: const TextStyle(
+                      fontFamily: 'Readex Pro',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: HBotColors.primary,
+                    ),
+                  ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                fontFamily: 'Readex Pro',
                 fontSize: 11,
-                color: context.hTextTertiary,
-                fontFamily: 'DM Sans',
+                color: HBotColors.textMuted,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDangerZone() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: HBotSpacing.space5, vertical: HBotSpacing.space4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section title
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+              start: 0,
+              bottom: HBotSpacing.space2,
+            ),
+            child: const Text(
+              'DANGER ZONE',
+              style: TextStyle(
+                fontFamily: 'Readex Pro',
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.5,
+                color: HBotColors.error,
               ),
             ),
           ),
-          const SizedBox(height: HBotSpacing.space5),
+          // Danger container — spec: bg rgba(239,68,68,0.06), border rgba(239,68,68,0.15), 20px radius
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: const Color(0x0FEF4444), // rgba(239,68,68,0.06)
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0x26EF4444), width: 1), // rgba(239,68,68,0.15)
+            ),
+            child: Column(
+              children: [
+                // Sign out button
+                GestureDetector(
+                  onTap: _showSignOutDialog,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      color: const Color(0x1AEF4444), // rgba(239,68,68,0.1)
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        AppStrings.get('sign_out'),
+                        style: const TextStyle(
+                          fontFamily: 'Readex Pro',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: HBotColors.error,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // Delete account row
+                GestureDetector(
+                  onTap: _openHBOTAccountScreen,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    child: Center(
+                      child: Text(
+                        'Delete Account',
+                        style: TextStyle(
+                          fontFamily: 'Readex Pro',
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: HBotColors.error.withOpacity(0.6),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildProfileHeader() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(
-          top: HBotSpacing.space6,
-          bottom: HBotSpacing.space2,
-        ),
-        child: Column(
-          children: [
-            // Avatar — 80px circle
-            GestureDetector(
-              onTap: _showAvatarPicker,
-              child: Stack(
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: HBotSpacing.space5,
+        vertical: HBotSpacing.space4,
+      ),
+      decoration: BoxDecoration(
+        color: HBotColors.glassBackground,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: HBotColors.glassBorder, width: 1),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: HBotColors.glassBlur, sigmaY: HBotColors.glassBlur),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 20),
+            child: Center(
+              child: Column(
                 children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: const BoxDecoration(
-                      color: HBotColors.primarySurface,
-                      shape: BoxShape.circle,
-                    ),
-                    child: _avatarPath == null
-                        ? const Center(child: Icon(Icons.person, size: 44, color: HBotColors.primary))
-                        : ClipOval(
-                            child: _avatarService.isCustomAvatar(_avatarPath)
-                                ? Image.file(File(_avatarPath!), fit: BoxFit.cover, width: 80, height: 80)
-                                : Image.asset(_avatarPath!, fit: BoxFit.cover, width: 80, height: 80),
+                  // Avatar — 72x72 circle with gradient
+                  GestureDetector(
+                    onTap: _showAvatarPicker,
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFF1070AD), Color(0xFF2FB8EC)],
+                            ),
+                            shape: BoxShape.circle,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0x400883FD), // rgba(8,131,253,0.25)
+                                blurRadius: 32,
+                                offset: Offset(0, 8),
+                              ),
+                            ],
                           ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: HBotColors.primary,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
-                      ),
-                      child: const Icon(Icons.edit, size: 14, color: Colors.white),
+                          child: _avatarPath == null
+                              ? const Center(child: Icon(Icons.person, size: 36, color: Colors.white))
+                              : ClipOval(
+                                  child: _avatarService.isCustomAvatar(_avatarPath)
+                                      ? Image.file(File(_avatarPath!), fit: BoxFit.cover, width: 72, height: 72)
+                                      : Image.asset(_avatarPath!, fit: BoxFit.cover, width: 72, height: 72),
+                                ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              color: HBotColors.primary,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: HBotColors.darkBgTop, width: 2),
+                            ),
+                            child: const Icon(Icons.edit, size: 12, color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
+                  const SizedBox(height: HBotSpacing.space3),
+                  Text(
+                    _userName ?? AppStrings.get('profile_loading'),
+                    style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white),
+                  ),
+                  const SizedBox(height: HBotSpacing.space1),
+                  Text(
+                    _userEmail ?? '',
+                    style: const TextStyle(fontFamily: 'Readex Pro', fontSize: 13, fontWeight: FontWeight.w400, color: HBotColors.textMuted),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: HBotSpacing.space3),
-            Text(
-              _userName ?? AppStrings.get('profile_loading'),
-              style: TextStyle(fontFamily: 'DM Sans', fontSize: 18, fontWeight: FontWeight.w600, color: context.hTextPrimary),
-            ),
-            const SizedBox(height: HBotSpacing.space1),
-            Text(
-              _userEmail ?? '',
-              style: TextStyle(fontFamily: 'DM Sans', fontSize: 14, fontWeight: FontWeight.w400, color: context.hTextSecondary),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -706,7 +978,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     AppStrings.get('profile_change_password_desc'),
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: context.hTextSecondary),
+                    style: const TextStyle(fontSize: 14, color: HBotColors.textMuted),
                   ),
                   const SizedBox(height: HBotSpacing.space4),
                   TextField(
@@ -756,7 +1028,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     'Enter the 6-digit code sent to\n${emailController.text.trim()}',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: context.hTextSecondary),
+                    style: const TextStyle(fontSize: 14, color: HBotColors.textMuted),
                   ),
                   const SizedBox(height: HBotSpacing.space4),
                   TextField(
@@ -764,7 +1036,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     maxLength: 6,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 8),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 8, color: Colors.white),
                     decoration: InputDecoration(
                       labelText: AppStrings.get('profile_verification_code'),
                       counterText: '',
@@ -827,7 +1099,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     'Set your new password',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: context.hTextSecondary),
+                    style: const TextStyle(fontSize: 14, color: HBotColors.textMuted),
                   ),
                   const SizedBox(height: HBotSpacing.space4),
                   TextField(
@@ -864,7 +1136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: HBotSpacing.space2),
                   Text(
                     AppStrings.get('profile_password_min'),
-                    style: TextStyle(fontSize: 12, color: context.hTextSecondary),
+                    style: const TextStyle(fontSize: 12, color: HBotColors.textMuted),
                   ),
                 ],
               );
@@ -908,10 +1180,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
 
             return AlertDialog(
-              backgroundColor: context.hCard,
+              backgroundColor: HBotColors.sheetBackground,
               title: Text(
                 step == 0 ? AppStrings.get('change_password') : step == 1 ? AppStrings.get('profile_verify_email') : AppStrings.get('profile_new_password'),
-                style: const TextStyle(fontFamily: 'DM Sans', fontWeight: FontWeight.w600),
+                style: const TextStyle(fontFamily: 'Readex Pro', fontWeight: FontWeight.w600, color: Colors.white),
               ),
               content: SingleChildScrollView(child: content),
               actions: actions,
@@ -925,7 +1197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _showLanguagePicker(LocaleService localeService) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: context.hCard,
+      backgroundColor: HBotColors.sheetBackground,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -940,18 +1212,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 width: 40, height: 4,
                 margin: const EdgeInsets.only(bottom: 20),
                 decoration: BoxDecoration(
-                  color: context.hTextSecondary.withOpacity(0.3),
+                  color: HBotColors.textMuted.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
             Text(
               AppStrings.get('select_language'),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: context.hTextPrimary,
-                fontFamily: 'DM Sans',
+                color: Colors.white,
+                fontFamily: 'Readex Pro',
               ),
             ),
             const SizedBox(height: 16),
@@ -976,10 +1248,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: isSelected ? HBotColors.primarySurface : Colors.transparent,
+          color: isSelected ? HBotColors.primary.withOpacity(0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? HBotColors.primary : context.hBorder,
+            color: isSelected ? HBotColors.primary : HBotColors.glassBorder,
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -991,8 +1263,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: isSelected ? HBotColors.primary : context.hTextPrimary,
-                  fontFamily: 'DM Sans',
+                  color: isSelected ? HBotColors.primary : Colors.white,
+                  fontFamily: 'Readex Pro',
                 ),
               ),
             ),
@@ -1009,9 +1281,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: context.hCard,
-          title: Text(AppStrings.get('sign_out')),
-          content: Text(AppStrings.get('sign_out_confirm')),
+          backgroundColor: HBotColors.sheetBackground,
+          title: Text(AppStrings.get('sign_out'), style: const TextStyle(color: Colors.white, fontFamily: 'Readex Pro', fontWeight: FontWeight.w600)),
+          content: Text(AppStrings.get('sign_out_confirm'), style: const TextStyle(color: HBotColors.textMuted)),
           actions: [
             TextButton(
               onPressed: () {

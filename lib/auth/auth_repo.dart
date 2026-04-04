@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/profile.dart';
 
@@ -114,29 +119,61 @@ class AuthRepo {
     }
   }
 
-  /// Sign in with Apple using Supabase OAuth flow
+  /// Generate a random nonce string for Apple Sign In
+  String _generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// SHA256 hash of a string
+  String _sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  /// Sign in with Apple using native iOS flow + Supabase signInWithIdToken
   Future<bool> signInWithApple() async {
     try {
-      debugPrint('🍎 Starting Apple OAuth sign-in...');
+      debugPrint('🍎 Starting native Apple Sign In...');
 
-      final response = await supabase.auth
-          .signInWithOAuth(
-            OAuthProvider.apple,
-            redirectTo: 'com.mb.hbot://login-callback/',
-            authScreenLaunchMode: LaunchMode.externalApplication,
-          )
-          .timeout(
-            const Duration(seconds: 30),
-            onTimeout: () {
-              debugPrint('⏰ Apple OAuth timeout after 30 seconds');
-              throw Exception('Apple sign-in timed out. Please try again.');
-            },
-          );
+      // Generate a nonce for security
+      final rawNonce = _generateNonce();
+      final hashedNonce = _sha256ofString(rawNonce);
 
-      debugPrint('🍎 Apple OAuth response: $response');
-      return response;
+      // Request Apple credential natively
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: hashedNonce,
+      );
+
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        throw Exception('Apple Sign In failed — no identity token received.');
+      }
+
+      debugPrint('🍎 Got Apple credential, signing in with Supabase...');
+
+      // Sign in to Supabase with the Apple ID token
+      final response = await supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: idToken,
+        nonce: rawNonce,
+      );
+
+      debugPrint('🍎 Apple Sign In complete: ${response.user?.id}');
+      return response.user != null;
     } catch (e) {
       debugPrint('❌ Apple sign-in error: $e');
+      if (e.toString().contains('AuthorizationErrorCode.canceled')) {
+        throw Exception('Apple Sign In was cancelled.');
+      }
       throw _handleAuthException(e);
     }
   }
@@ -150,7 +187,7 @@ class AuthRepo {
       final response = await supabase.auth
           .signInWithOAuth(
             OAuthProvider.google,
-            redirectTo: 'com.example.hbot://login-callback/',
+            redirectTo: 'com.mb.hbot://login-callback/',
             authScreenLaunchMode: LaunchMode.externalApplication,
           )
           .timeout(

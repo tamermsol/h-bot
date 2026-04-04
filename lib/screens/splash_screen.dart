@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
 import 'auth_wrapper.dart';
-import '../l10n/app_strings.dart';
+import 'onboarding_screen.dart';
 
-/// Splash screen — dark gradient background with animated logo + text
+/// Splash screen — dark gradient with animated logo, radial glow, tagline + progress bar.
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -14,58 +14,84 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  late final AnimationController _mainController;
-  late final Animation<double> _fadeAnimation;
-  late final Animation<double> _scaleAnimation;
-  late final AnimationController _pulseController;
-  late final Animation<double> _pulseAnimation;
+  late final AnimationController _logoController;
+  late final Animation<double> _logoFade;
+  late final Animation<double> _logoScale;
+  late final AnimationController _taglineController;
+  late final Animation<double> _taglineFade;
+  late final AnimationController _progressController;
 
   @override
   void initState() {
     super.initState();
 
-    _mainController = AnimationController(
-      duration: const Duration(milliseconds: 900),
+    // Logo: scale 0.8→1.0 + fade in over 1s ease-out, 0.2s delay
+    _logoController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
-    _fadeAnimation = CurvedAnimation(
-      parent: _mainController,
+    _logoFade = CurvedAnimation(
+      parent: _logoController,
       curve: Curves.easeOut,
     );
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _mainController, curve: Curves.easeOutBack),
+    _logoScale = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _logoController, curve: Curves.easeOut),
     );
 
-    _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+    // Tagline: fade in 0.8s, delayed 0.9s
+    _taglineController = AnimationController(
+      duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    _pulseAnimation = Tween<double>(begin: 0.3, end: 1.0).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    _taglineFade = CurvedAnimation(
+      parent: _taglineController,
+      curve: Curves.easeOut,
     );
-    _pulseController.repeat(reverse: true);
 
-    _mainController.forward();
+    // Progress bar: 0→100% over 2s, delayed 1.1s
+    _progressController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    );
 
-    Future.delayed(const Duration(milliseconds: 2500), () {
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          PageRouteBuilder(
-            pageBuilder: (_, __, ___) => const AuthWrapper(),
-            transitionsBuilder: (_, animation, __, child) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-            transitionDuration: HBotDurations.slow,
-          ),
-        );
-      }
+    // Start logo after 0.2s delay
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (mounted) _logoController.forward();
+    });
+
+    // Stagger tagline at 0.9s
+    Future.delayed(const Duration(milliseconds: 900), () {
+      if (mounted) _taglineController.forward();
+    });
+
+    // Stagger progress bar at 1.3s
+    Future.delayed(const Duration(milliseconds: 1300), () {
+      if (mounted) _progressController.forward();
+    });
+
+    // Navigate after 3.5s — onboarding for first-time, auth for returning
+    Future.delayed(const Duration(milliseconds: 3500), () async {
+      if (!mounted) return;
+      final onboarded = await hasCompletedOnboarding();
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) =>
+              onboarded ? const AuthWrapper() : const OnboardingScreen(),
+          transitionsBuilder: (_, animation, __, child) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          transitionDuration: HBotDurations.slow,
+        ),
+      );
     });
   }
 
   @override
   void dispose() {
-    _mainController.dispose();
-    _pulseController.dispose();
+    _logoController.dispose();
+    _taglineController.dispose();
+    _progressController.dispose();
     super.dispose();
   }
 
@@ -78,135 +104,135 @@ class _SplashScreenState extends State<SplashScreen>
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF0A1628),
-              Color(0xFF0668CA),
-              Color(0xFF0883FD),
-            ],
-            stops: [0.0, 0.5, 1.0],
-          ),
-        ),
-        child: SafeArea(
-          child: FadeTransition(
-            opacity: _fadeAnimation,
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(),
+        color: const Color(0xFF010510),
+        child: Column(
+          children: [
+            const Spacer(),
 
-                  // Logo with white glow effect
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(28),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white.withOpacity(0.18),
-                          blurRadius: 48,
-                          spreadRadius: 10,
+            // Logo with radial glow (300x300) + drop shadow + scale/fade animation
+            FadeTransition(
+              opacity: _logoFade,
+              child: ScaleTransition(
+                scale: _logoScale,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Radial glow circle — 300x300, #0883FD center → transparent
+                    Container(
+                      width: 300,
+                      height: 300,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [
+                            Color(0xFF0883FD),
+                            Color(0x000883FD),
+                          ],
+                          stops: [0.0, 1.0],
                         ),
-                        BoxShadow(
-                          color: HBotColors.primary.withOpacity(0.3),
-                          blurRadius: 60,
-                          spreadRadius: 4,
-                        ),
-                      ],
+                      ),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(28),
-                      child: Image.asset(
-                        'assets/images/hbot_logo.png',
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(28),
-                            border: Border.all(
-                              color: Colors.white.withOpacity(0.2),
-                              width: 1,
-                            ),
+                    // Logo with drop shadow
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF0883FD).withOpacity(0.3),
+                            blurRadius: 40,
+                            spreadRadius: 0,
                           ),
-                          child: const Icon(
-                            Icons.home_rounded,
-                            color: Colors.white,
-                            size: 56,
+                        ],
+                      ),
+                      child: Image.asset(
+                        'assets/images/branding/hbot_logo_splash.png',
+                        width: 260,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) => ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            begin: Alignment(-0.5, -0.5),
+                            end: Alignment(0.5, 0.5),
+                            colors: [Color(0xFF0883FD), Color(0xFF3BC4FF)],
+                          ).createShader(bounds),
+                          child: const Text(
+                            'HBot',
+                            style: TextStyle(
+                              fontFamily: 'Readex Pro',
+                              fontSize: 48,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                              letterSpacing: -0.5,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // "H-Bot" in white
-                  const Text(
-                    'H-Bot',
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 36,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // Tagline
-                  Text(
-                    'Smart Home, Simplified',
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white.withOpacity(0.7),
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-
-                  const Spacer(),
-
-                  // Pulsing dot loader
-                  AnimatedBuilder(
-                    animation: _pulseAnimation,
-                    builder: (context, child) {
-                      return Opacity(
-                        opacity: _pulseAnimation.value,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.8),
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.white.withOpacity(0.4),
-                                blurRadius: 8,
-                                spreadRadius: 2,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-
-                  const SizedBox(height: 48),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
+
+            const SizedBox(height: 32),
+
+            // Tagline — fade in delayed
+            FadeTransition(
+              opacity: _taglineFade,
+              child: const Text(
+                'Smart Home Control',
+                style: TextStyle(
+                  fontFamily: 'Readex Pro',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w300,
+                  color: HBotColors.textMuted,
+                  letterSpacing: 1.0,
+                ),
+              ),
+            ),
+
+            const Spacer(),
+
+            // Progress bar — 200px wide, 3px tall, gradient fill
+            AnimatedBuilder(
+              animation: _progressController,
+              builder: (context, child) {
+                return SizedBox(
+                  width: 200,
+                  child: ClipRRect(
+                    borderRadius: HBotRadius.fullRadius,
+                    child: SizedBox(
+                      height: 3,
+                      child: Stack(
+                        children: [
+                          // Track
+                          Container(
+                            width: double.infinity,
+                            height: 3,
+                            color: Colors.white.withOpacity( 0.06),
+                          ),
+                          // Fill
+                          FractionallySizedBox(
+                            widthFactor: _progressController.value,
+                            child: Container(
+                              height: 3,
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color(0xFF0883FD),
+                                    Color(0xFF2FB8EC),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 48),
+          ],
         ),
       ),
     );

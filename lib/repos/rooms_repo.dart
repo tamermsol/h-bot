@@ -1,9 +1,11 @@
 import '../core/supabase_client.dart';
+import '../demo/demo_data.dart';
 import '../models/room.dart';
 
 class RoomsRepo {
   /// List all rooms in a home
   Future<List<Room>> listRooms(String homeId) async {
+    if (isDemoMode) return DemoData.getRooms(homeId);
     try {
       final response = await supabase
           .from('rooms')

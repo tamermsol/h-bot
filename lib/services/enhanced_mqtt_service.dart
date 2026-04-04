@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../demo/demo_data.dart';
 import '../models/device.dart';
 import '../utils/mqtt_debug_helper.dart';
 import 'device_state_cache.dart';
@@ -330,6 +331,13 @@ class EnhancedMqttService {
 
   /// Connect to MQTT broker with TLS
   Future<bool> connect() async {
+    // Demo mode: fake a successful connection and inject demo device states
+    if (isDemoMode) {
+      _addDebugMessage('Demo mode: simulating MQTT connection');
+      _setConnectionState(MqttConnectionState.connected);
+      return true;
+    }
+
     if (kIsWeb) {
       _addDebugMessage('MQTT not supported on web - connect() skipped');
       return false;
@@ -538,6 +546,77 @@ class EnhancedMqttService {
   bool get isHealthy {
     return _connectionState == MqttConnectionState.connected &&
         _client?.connectionStatus?.state == MqttConnectionState.connected;
+  }
+
+  /// Whether the MQTT client is currently connected
+  bool get isConnected => _connectionState == MqttConnectionState.connected;
+
+  /// Publish a retained message to a topic (for panel config, status, etc.)
+  Future<void> publishRetained(String topic, String payload) async {
+    await _publishMessage(topic, payload, retain: true);
+  }
+
+  /// Publish a non-retained message to any topic
+  Future<void> publishMessage(String topic, String payload) async {
+    await _publishMessage(topic, payload);
+  }
+
+  // --- Custom topic subscriptions (for panel MQTT topics) ---
+  final Map<String, void Function(String, String)> _customTopicHandlers = {};
+
+  /// Subscribe to a custom topic with a handler callback.
+  /// Supports MQTT wildcards (+, #).
+  void subscribeToCustomTopic(String topic, void Function(String, String) handler) {
+    if (_client == null || !isConnected) {
+      _addDebugMessage('Cannot subscribe to custom topic (not connected): $topic');
+      return;
+    }
+    _customTopicHandlers[topic] = handler;
+    if (!_activeSubscriptions.contains(topic)) {
+      _client!.subscribe(topic, MqttQos.atLeastOnce);
+      _activeSubscriptions.add(topic);
+      _addDebugMessage('📡 Custom subscription: $topic');
+    }
+  }
+
+  /// Unsubscribe from a custom topic.
+  void unsubscribeFromCustomTopic(String topic) {
+    _customTopicHandlers.remove(topic);
+    if (_activeSubscriptions.contains(topic) && _client != null) {
+      try {
+        _client!.unsubscribe(topic);
+        _activeSubscriptions.remove(topic);
+        _addDebugMessage('📡 Custom unsubscription: $topic');
+      } catch (e) {
+        _addDebugMessage('Failed to unsubscribe custom topic: $e');
+      }
+    }
+  }
+
+  /// Check if an incoming topic matches any custom subscription pattern
+  void _dispatchToCustomHandlers(String topic, String payload) {
+    for (final entry in _customTopicHandlers.entries) {
+      if (_topicMatchesPattern(topic, entry.key)) {
+        try {
+          entry.value(topic, payload);
+        } catch (e) {
+          _addDebugMessage('Custom handler error for $topic: $e');
+        }
+      }
+    }
+  }
+
+  /// Match a topic against an MQTT pattern with + and # wildcards
+  bool _topicMatchesPattern(String topic, String pattern) {
+    final topicParts = topic.split('/');
+    final patternParts = pattern.split('/');
+
+    for (int i = 0; i < patternParts.length; i++) {
+      if (patternParts[i] == '#') return true; // # matches remainder
+      if (i >= topicParts.length) return false;
+      if (patternParts[i] != '+' && patternParts[i] != topicParts[i]) return false;
+    }
+    return topicParts.length == patternParts.length;
   }
 
   /// Force reconnection with full device re-registration (for app lifecycle)
@@ -1022,6 +1101,20 @@ class EnhancedMqttService {
 
   /// Register a device for MQTT control
   Future<void> registerDevice(Device device) async {
+    // Demo mode: inject mock state immediately
+    if (isDemoMode) {
+      _registeredDevices[device.id] = device;
+      final demoState = DemoData.getDeviceState(device.id);
+      demoState['online'] = true;
+      _deviceStates[device.id] = demoState;
+      if (!_deviceStateControllers.containsKey(device.id)) {
+        _deviceStateControllers[device.id] =
+            StreamController<Map<String, dynamic>>.broadcast();
+      }
+      _deviceStateControllers[device.id]!.add(demoState);
+      return;
+    }
+
     if (device.tasmotaTopicBase == null) {
       throw Exception('Device ${device.name} has no MQTT topic base');
     }
@@ -2525,6 +2618,10 @@ class EnhancedMqttService {
         continue;
       }
 
+      // Dispatch to custom handlers (panel topics, etc.)
+      _dispatchToCustomHandlers(topic, payload);
+
+      // Process Tasmota device messages (stat/tele topics)
       _processDeviceMessage(topic, payload);
     }
   }

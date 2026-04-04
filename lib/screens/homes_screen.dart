@@ -3,7 +3,6 @@ import '../theme/app_theme.dart';
 import '../services/smart_home_service.dart';
 import '../models/home.dart';
 import 'rooms_screen.dart';
-import '../widgets/responsive_shell.dart';
 import '../l10n/app_strings.dart';
 
 class HomesScreen extends StatefulWidget {

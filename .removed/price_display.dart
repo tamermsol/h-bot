@@ -22,14 +22,22 @@ class PriceDisplay extends StatelessWidget {
         children: [
           TextSpan(
             text: currency,
+<<<<<<<< HEAD:.removed/price_display.dart
             style: (textStyle ?? const TextStyle(fontFamily: "Inter", fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight)).copyWith(
+========
+            style: (textStyle ?? const TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight)).copyWith(
+>>>>>>>> main:lib/widgets/price_display.dart
               fontSize: (textStyle?.fontSize ?? 17) * 0.8,
               color: HBotColors.textSecondaryLight,
             ),
           ),
           TextSpan(
             text: _formatAmount(amount),
+<<<<<<<< HEAD:.removed/price_display.dart
             style: textStyle ?? const TextStyle(fontFamily: "Inter", fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+========
+            style: textStyle ?? const TextStyle(fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.w700, color: HBotColors.textPrimaryLight),
+>>>>>>>> main:lib/widgets/price_display.dart
           ),
         ],
       ),
