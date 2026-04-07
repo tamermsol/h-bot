@@ -11,9 +11,8 @@ typedef SceneTriggerCallback = void Function(String panelDeviceId, String sceneI
 
 /// Service that handles panel-specific MQTT topics.
 ///
-/// Uses its OWN persistent connection to the H-Bot panel broker (203.161.35.95:1883)
-/// — completely separate from EnhancedMqttService which connects to the EMQX cloud
-/// broker for Tasmota device control.
+/// Connects to EMQX Cloud (same broker as EnhancedMqttService) so that the
+/// Flutter app and the ESP32 panel are on the same broker after firmware v3.6.0.
 ///
 /// Topic contract (agreed with smarty agent):
 ///   Control:  hbot/panels/{id}/relay/{n}/set    app→panel  "true"/"false"
@@ -25,9 +24,9 @@ class PanelMqttService {
   factory PanelMqttService() => _instance ??= PanelMqttService._();
   PanelMqttService._();
 
-  // H-Bot panel broker — separate from the EMQX cloud broker used by Tasmota devices
-  static const String _panelBrokerHost = '203.161.35.95';
-  static const int _panelBrokerPort = 1883;
+  // EMQX Cloud broker — same as EnhancedMqttService (panel firmware v3.6.0+)
+  static const String _panelBrokerHost = 'y3ae1177.ala.eu-central-1.emqxsl.com';
+  static const int _panelBrokerPort = 8883;
   static const String _panelBrokerUsername = 'admin';
   static const String _panelBrokerPassword = 'P@ssword1';
 
@@ -71,6 +70,7 @@ class PanelMqttService {
       final clientId = 'hbot-app-panel-${Random().nextInt(99999)}';
       _client = MqttServerClient(_panelBrokerHost, clientId)
         ..port = _panelBrokerPort
+        ..secure = true // TLS for EMQX Cloud port 8883
         ..keepAlivePeriod = 60
         ..connectTimeoutPeriod = 10000
         ..logging(on: kDebugMode)
@@ -241,6 +241,19 @@ class PanelMqttService {
     debugPrint('PanelMqtt: set relay $relayIndex=${on ? "ON" : "OFF"} on $panelDeviceId');
   }
 
+  /// Notify all subscribed panels that a scene was executed from the app.
+  /// Publishes to: hbot/panels/{id}/scene/{sceneId}/execute with payload "1"
+  Future<void> executeScene(String sceneId) async {
+    if (_subscribedPanels.isEmpty) return;
+    await _ensureConnected();
+    if (!isConnected) return;
+    for (final panelDeviceId in _subscribedPanels) {
+      final topic = 'hbot/panels/$panelDeviceId/scene/$sceneId/execute';
+      _publish(topic, '1');
+      debugPrint('PanelMqtt: executed scene $sceneId on $panelDeviceId');
+    }
+  }
+
   /// Push display config to a panel (retained)
   Future<void> pushConfig(String panelDeviceId, Map<String, dynamic> config) async {
     await _ensureConnected();
@@ -355,13 +368,16 @@ class PanelMqttService {
     int maxAttempts = 3,
     String? username,
     String? password,
+    bool? secure, // null = auto-detect from port (8883 → TLS)
   }) async {
+    final useTls = secure ?? (port == 8883);
     for (int attempt = 0; attempt < maxAttempts; attempt++) {
       MqttServerClient? client;
       try {
         final clientId = 'hbot-panel-${Random().nextInt(99999)}';
         client = MqttServerClient(broker, clientId)
           ..port = port
+          ..secure = useTls
           ..keepAlivePeriod = 10
           ..connectTimeoutPeriod = 5000
           ..logging(on: false);

@@ -41,6 +41,7 @@ import '../repos/wifi_profiles_repo.dart';
 import '../realtime/device_state_streams.dart';
 import 'mqtt_device_manager.dart';
 import 'device_event_tracker.dart';
+import 'panel_mqtt_service.dart';
 
 class SmartHomeService {
   static final SmartHomeService _instance = SmartHomeService._internal();
@@ -498,9 +499,12 @@ class SmartHomeService {
     await _scenesRepo.deleteScene(sceneId);
   }
 
-  /// Run a scene
+  /// Run a scene and notify panels
   Future<SceneRun> runScene(String sceneId) async {
-    return await _scenesRepo.runScene(sceneId);
+    final result = await _scenesRepo.runScene(sceneId);
+    // Notify all subscribed H-Bot panels so they can update their display
+    PanelMqttService().executeScene(sceneId);
+    return result;
   }
 
   /// Get scene steps
