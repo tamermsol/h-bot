@@ -592,9 +592,23 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
     final String locationText = _currentDevice.deviceType.name[0].toUpperCase() +
         _currentDevice.deviceType.name.substring(1);
 
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    // Scale factors based on screen size (reference: 390x844 iPhone 14)
+    final scale = screenWidth / 390;
+    final iconSize = (36 * scale).clamp(28.0, 44.0);
+    final titleSize = (16 * scale).clamp(14.0, 20.0);
+    final subtitleSize = (12 * scale).clamp(10.0, 14.0);
+    final badgeSize = (10 * scale).clamp(9.0, 12.0);
+    final verticalPad = (20 * scale).clamp(16.0, 28.0);
+    final horizontalPad = (20 * scale).clamp(16.0, 28.0);
+    // Hero card height: ~18% of screen, clamped
+    final heroHeight = (screenHeight * 0.18).clamp(120.0, 180.0);
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
+      height: heroHeight,
+      padding: EdgeInsets.symmetric(vertical: verticalPad, horizontal: horizontalPad),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -605,7 +619,7 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
         borderRadius: BorderRadius.circular(24),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x66010510), // rgba(1,5,16,0.4)
+            color: Color(0x66010510),
             blurRadius: 10,
             offset: Offset(0, 4),
           ),
@@ -634,40 +648,39 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
           // Content
           Center(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // Device icon — 48x48 white stroke
-                Icon(deviceIcon, size: 48, color: Colors.white),
-                const SizedBox(height: HBotSpacing.space3),
-                // Device name — 22px weight 700
+                Icon(deviceIcon, size: iconSize, color: Colors.white),
+                SizedBox(height: 6 * scale),
                 Text(
                   _currentDevice.deviceName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Readex Pro',
                     color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.3,
+                    fontSize: titleSize,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.2,
                   ),
                   textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                // Location — 13px, 0.85 opacity
-                const SizedBox(height: 4),
+                SizedBox(height: 3 * scale),
                 Opacity(
                   opacity: 0.85,
                   child: Text(
                     locationText,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Readex Pro',
                       color: Colors.white,
-                      fontSize: 13,
+                      fontSize: subtitleSize,
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(height: HBotSpacing.space3),
-                // Connected badge — 4px 12px padding, 20px radius, rgba(52,211,153,0.25), 11px w600
+                SizedBox(height: 6 * scale),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 10 * scale, vertical: 3 * scale),
                   decoration: BoxDecoration(
                     color: (isOnline ? const Color(0xFF34D399) : HBotColors.error).withOpacity(0.25),
                     borderRadius: BorderRadius.circular(20),
@@ -676,20 +689,20 @@ class _DeviceControlScreenState extends State<DeviceControlScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        width: 6,
-                        height: 6,
+                        width: 5 * scale,
+                        height: 5 * scale,
                         decoration: BoxDecoration(
                           color: isOnline ? const Color(0xFF34D399) : HBotColors.error,
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 5 * scale),
                       Text(
                         isOnline ? 'Connected' : 'Offline',
                         style: TextStyle(
                           fontFamily: 'Readex Pro',
                           color: isOnline ? const Color(0xFF34D399) : HBotColors.error,
-                          fontSize: 11,
+                          fontSize: badgeSize,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

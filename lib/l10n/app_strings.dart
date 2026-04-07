@@ -896,7 +896,7 @@ class AppStrings {
       'greeting_good_afternoon': 'Good afternoon',
       'greeting_good_evening': 'Good evening',
       'dashboard_device_count_singular': 'device',
-      'dashboard_device_count_plural': 'devices',
+      'dashboard_device_count_plural': 'Devices',
       'profile_rooms': 'Rooms',
       'profile_wifi_profiles': 'WiFi Profiles',
       'profile_personal_information': 'Personal Information',

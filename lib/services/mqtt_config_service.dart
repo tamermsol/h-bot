@@ -1,8 +1,7 @@
 /// Service for managing MQTT broker configuration
 class MqttConfigService {
-  static const String _defaultBrokerHost =
-      'y3ae1177.ala.eu-central-1.emqxsl.com';
-  static const int _defaultBrokerPort = 8883;
+  static const String _defaultBrokerHost = '203.161.35.95';
+  static const int _defaultBrokerPort = 1883;
   static const String _defaultUsername = 'admin';
   static const String _defaultPassword = 'P@ssword1';
 

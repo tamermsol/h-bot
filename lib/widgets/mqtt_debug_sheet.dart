@@ -243,8 +243,8 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
               ),
             ),
             const SizedBox(height: HBotSpacing.space4),
-            _buildInfoRow('Host', 'y3ae1177.ala.eu-central-1.emqxsl.com'),
-            _buildInfoRow('Port', '8883 (TLS/SSL)'),
+            _buildInfoRow('Host', '203.161.35.95'),
+            _buildInfoRow('Port', '1883 (Plain MQTT)'),
             _buildInfoRow('Username', 'admin'),
             _buildInfoRow('Protocol', 'MQTT 3.1.1'),
             _buildInfoRow('TLS', 'Enabled (DigiCert Global Root CA)'),
@@ -375,8 +375,8 @@ class _MqttDebugSheetState extends State<MqttDebugSheet> {
     info.writeln('Connection Debug Information');
     info.writeln('======================');
     info.writeln('Connection State: $_connectionState');
-    info.writeln('Broker: y3ae1177.ala.eu-central-1.emqxsl.com:8883');
-    info.writeln('TLS: Enabled');
+    info.writeln('Broker: 203.161.35.95:1883');
+    info.writeln('TLS: Disabled (plain MQTT)');
     info.writeln('');
     info.writeln('Debug Messages:');
     for (final message in _debugMessages) {

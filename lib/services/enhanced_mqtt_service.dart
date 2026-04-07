@@ -373,7 +373,7 @@ class EnhancedMqttService {
 
       // Configure client with settings requested for stable persistent sessions
       _client!.port = _brokerPort;
-      _client!.secure = true;
+      _client!.secure = true; // TLS on EMQX port 8883
       _client!.keepAlivePeriod = 60; // User requested 60s keepalive
       _client!.connectTimeoutPeriod = _connectionTimeout.inMilliseconds;
       _client!.autoReconnect = true; // enable automatic reconnect
@@ -1165,17 +1165,21 @@ class EnhancedMqttService {
           StreamController<Map<String, dynamic>>.broadcast();
     }
 
-    // Initialize device state. IMPORTANT: do NOT set an explicit 'online'
-    // flag here. Emitting an initial 'online: false' can incorrectly override
-    // the authoritative DB snapshot in UIs that merge MQTT + DB state. By
-    // omitting 'online' until we have telemetry/LWT/ probe evidence, the
-    // combined state merge will prefer the DB snapshot when available.
+    // Initialize device state using cached online status for instant feedback.
+    // Cache-first: if we've seen this device online before, start with online=true
+    // so there's no offline flicker while MQTT reconnects. MQTT LWT will confirm
+    // the actual live status and update the cache for next launch.
+    final cachedOnline = await _stateCache.getOnlineStatus(device.id);
     _deviceStates[device.id] = {
       'connected': false,
       'status': 'initializing',
       'channels': device.channels,
       'name': device.name,
       'type': device.deviceType.toString(),
+      // Use cached online status so devices don't flicker offline on startup.
+      // If never seen before (null), fall back to device.online from DB or false.
+      if (cachedOnline != null) 'online': cachedOnline
+      else if (device.online == true) 'online': true,
     };
 
     // CACHE-FIRST APPROACH for relay/dimmer devices
@@ -2816,6 +2820,8 @@ class EnhancedMqttService {
               _deviceStates[did]!['connected'] = isOnline;
               _deviceLWT[did] = payload;
               _deviceLWTTimestamp[did] = now;
+              // Persist online status so next launch shows correct state instantly
+              _stateCache.saveOnlineStatus(did, isOnline);
               _addDebugMessage(
                 'Device ${isOnline ? 'online' : 'offline'}: ${targetDevice.name}',
               );

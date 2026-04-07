@@ -271,7 +271,6 @@ class _ScenesScreenState extends State<ScenesScreen> {
 
   Widget _buildSceneTile(Scene scene, int index) {
     final gradient = _getGradientForScene(scene, index);
-    final iconData = _getIconForScene(scene, index);
     final isExecuting = _executingScenes.contains(scene.id);
 
     return GestureDetector(
@@ -314,28 +313,28 @@ class _ScenesScreenState extends State<ScenesScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Icon or loading spinner
-                      isExecuting
-                          ? const SizedBox(
-                              width: 32,
-                              height: 32,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.5,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              ),
-                            )
-                          : Icon(iconData, color: Colors.white, size: 32),
-                      const SizedBox(height: HBotSpacing.space3),
-                      // Scene name
+                      // Spinner when executing
+                      if (isExecuting) ...[
+                        const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                        const SizedBox(height: HBotSpacing.space3),
+                      ],
+                      // Scene name — large, no icon above
                       Text(
                         scene.name,
                         style: const TextStyle(
                           fontFamily: 'Readex Pro',
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
                       ),

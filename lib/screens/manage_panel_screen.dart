@@ -11,7 +11,6 @@ import '../repos/panels_repo.dart';
 import '../repos/devices_repo.dart';
 import '../repos/rooms_repo.dart';
 import '../repos/scenes_repo.dart';
-import '../services/enhanced_mqtt_service.dart';
 import '../services/panel_mqtt_service.dart';
 
 /// Screen to manage what devices and scenes are shown on a paired panel
@@ -108,6 +107,7 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
       _selectedDeviceIds.clear();
       _selectedSceneIds.clear();
       final config = _panel.displayConfig;
+      bool hasAnyVisibleDevice = false;
       if (config != null) {
         // Support both new format (display.devices) and old format (devices)
         final display = config['display'] as Map<String, dynamic>?;
@@ -117,6 +117,7 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
             // Only add if visible (default true for backward compat)
             if (d['visible'] as bool? ?? true) {
               _selectedDeviceIds.add(d['id'] as String);
+              hasAnyVisibleDevice = true;
             }
           }
         }
@@ -124,6 +125,18 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
         for (final s in configScenes) {
           if (s is Map<String, dynamic> && s['id'] is String) {
             _selectedSceneIds.add(s['id'] as String);
+          }
+        }
+      }
+
+      // If no devices were pre-selected (first time or config wiped),
+      // auto-select this panel's own relay devices so they show up on the panel.
+      if (!hasAnyVisibleDevice) {
+        final allDevs = results[0] as List<Device>;
+        for (final d in allDevs) {
+          final meta = d.metaJson;
+          if (meta != null && meta['panel_device_id'] == _panel.deviceId) {
+            _selectedDeviceIds.add(d.id);
           }
         }
       }
@@ -199,15 +212,25 @@ class _ManagePanelScreenState extends State<ManagePanelScreen>
       final updated = await _panelsRepo.updateDisplayConfig(_panel.id, config);
       _panel = updated;
 
-      // Publish to MQTT retained topic so panel picks it up
+      // Publish to MQTT retained topic so panel picks it up via PanelMqttService
+      // (which maintains its own connection to the H-Bot panel broker at 203.161.35.95).
       try {
-        final mqtt = EnhancedMqttService();
-        if (mqtt.isConnected) {
-          mqtt.publishRetained(
-            'hbot/panels/${_panel.deviceId}/config',
-            jsonEncode(config),
+        final configJson = jsonEncode(config);
+        final topic = 'hbot/panels/${_panel.deviceId}/config';
+        final success = await _panelMqtt.publishRetained(topic, configJson);
+        debugPrint(success
+            ? 'Published panel config via PanelMqttService'
+            : 'WARNING: Panel config push failed — trying direct fallback');
+        if (!success) {
+          await PanelMqttService.publishDirect(
+            broker: _panel.brokerAddress,
+            port: _panel.brokerPort,
+            topic: topic,
+            payload: configJson,
+            retain: true,
+            username: 'admin',
+            password: 'P@ssword1',
           );
-          debugPrint('Published panel config to MQTT');
         }
       } catch (e) {
         debugPrint('MQTT config publish failed (non-fatal): $e');

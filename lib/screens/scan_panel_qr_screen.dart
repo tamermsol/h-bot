@@ -9,7 +9,7 @@ import '../models/panel.dart';
 import '../repos/panels_repo.dart';
 import '../repos/devices_repo.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../services/enhanced_mqtt_service.dart';
+import '../services/panel_mqtt_service.dart';
 import '../services/current_home_service.dart';
 import 'manage_panel_screen.dart';
 
@@ -27,8 +27,10 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
   final PanelsRepo _panelsRepo = PanelsRepo();
   final DevicesRepo _devicesRepo = DevicesRepo();
   final MobileScannerController _controller = MobileScannerController();
-  bool _isProcessing = false;
-  String _statusMessage = '';
+
+  /// null = scanning, non-null = registration in progress or done
+  String? _progressMessage;
+  bool _cameraActive = true;
 
   static const int _defaultRelayCount = 3;
 
@@ -39,7 +41,7 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
   }
 
   Future<void> _onDetect(BarcodeCapture capture) async {
-    if (_isProcessing) return;
+    if (_progressMessage != null) return; // already processing
 
     final List<Barcode> barcodes = capture.barcodes;
     if (barcodes.isEmpty) return;
@@ -47,9 +49,11 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
     final String? code = barcodes.first.rawValue;
     if (code == null) return;
 
+    // Stop camera immediately and show registration progress view
+    _controller.stop();
     setState(() {
-      _isProcessing = true;
-      _statusMessage = 'Reading QR code...';
+      _cameraActive = false;
+      _progressMessage = 'Reading QR code...';
     });
 
     try {
@@ -62,15 +66,15 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
       final token = data['token'] as String?;
       final relayCount = data['relay_count'] as int? ?? _defaultRelayCount;
 
-      // Broker: try QR first, fallback to known EMQX broker
+      // Broker: try QR first, fallback to the panel's local broker
       String broker;
       int port;
       if (data['broker'] is Map) {
-        broker = data['broker']['host'] as String? ?? 'y3ae1177.ala.eu-central-1.emqxsl.com';
-        port = data['broker']['port'] as int? ?? 8883;
+        broker = data['broker']['host'] as String? ?? '203.161.35.95';
+        port = data['broker']['port'] as int? ?? 1883;
       } else {
-        broker = 'y3ae1177.ala.eu-central-1.emqxsl.com';
-        port = 8883;
+        broker = '203.161.35.95';
+        port = 1883;
       }
 
       if (deviceId == null || token == null) {
@@ -103,7 +107,12 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
         );
 
         if (repairConfirmed != true) {
-          setState(() => _isProcessing = false);
+          // User cancelled — re-activate camera
+          _controller.start();
+          setState(() {
+            _cameraActive = true;
+            _progressMessage = null;
+          });
           return;
         }
 
@@ -111,7 +120,7 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
         await _panelsRepo.deletePanel(existing.id);
       }
 
-      setState(() => _statusMessage = 'Pairing with panel...');
+      setState(() => _progressMessage = 'Pairing with panel...');
 
       // Resolve homeId: use passed value, or fetch from CurrentHomeService
       String? homeId = widget.homeId;
@@ -131,7 +140,7 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
       // Auto-create relay devices for the panel's built-in channels
       int createdCount = 0;
       if (homeId != null) {
-        setState(() => _statusMessage = 'Adding $relayCount panel relays...');
+        setState(() => _progressMessage = 'Adding $relayCount panel relays...');
         final createdDevices = await _createPanelRelays(
           deviceId, homeId, panel, relayCount,
         );
@@ -139,7 +148,7 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
 
         // Auto-build display config with the new relay devices
         if (createdDevices.isNotEmpty) {
-          setState(() => _statusMessage = 'Pushing config to panel...');
+          setState(() => _progressMessage = 'Pushing config to panel...');
           await _pushInitialConfig(panel, createdDevices);
         }
       } else {
@@ -147,8 +156,8 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
       }
 
       // Publish MQTT pair/confirm so the panel knows it's paired
-      setState(() => _statusMessage = 'Confirming with panel...');
-      await _publishPairConfirm(deviceId, token);
+      setState(() => _progressMessage = 'Confirming with panel...');
+      await _publishPairConfirm(deviceId, token, broker, port);
 
       if (!mounted) return;
 
@@ -176,9 +185,11 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
           backgroundColor: HBotColors.error,
         ),
       );
+      // Re-activate camera so user can try again
+      _controller.start();
       setState(() {
-        _isProcessing = false;
-        _statusMessage = '';
+        _cameraActive = true;
+        _progressMessage = null;
       });
     }
   }
@@ -239,16 +250,20 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
       // Save to Supabase
       await _panelsRepo.updateDisplayConfig(panel.id, config);
 
-      // Push to MQTT retained topic
+      // Push to MQTT retained topic — use panel's broker with credentials
       try {
-        final mqtt = EnhancedMqttService();
-        if (mqtt.isConnected) {
-          mqtt.publishRetained(
-            'hbot/panels/${panel.deviceId}/config',
-            jsonEncode(config),
-          );
-          debugPrint('Pushed initial panel config via MQTT');
-        }
+        final success = await PanelMqttService.publishDirect(
+          broker: panel.brokerAddress,
+          port: panel.brokerPort,
+          topic: 'hbot/panels/${panel.deviceId}/config',
+          payload: jsonEncode(config),
+          retain: true,
+          username: 'admin',
+          password: 'P@ssword1',
+        );
+        debugPrint(success
+            ? 'Pushed initial panel config via direct MQTT'
+            : 'Panel config push failed (non-fatal)');
       } catch (e) {
         debugPrint('MQTT config push failed (non-fatal): $e');
       }
@@ -257,10 +272,14 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
     }
   }
 
-  /// Publish pair/confirm MQTT message so panel knows it's been claimed.
-  /// Retries up to 3 times if MQTT isn't connected yet.
-  Future<void> _publishPairConfirm(String panelDeviceId, String token) async {
-    final mqtt = EnhancedMqttService();
+  /// Publish pair/confirm MQTT message directly to the panel's local broker.
+  /// Uses [PanelMqttService.publishDirect] so it bypasses the cloud broker.
+  Future<void> _publishPairConfirm(
+    String panelDeviceId,
+    String token,
+    String broker,
+    int port,
+  ) async {
     final user = Supabase.instance.client.auth.currentUser;
     final payload = jsonEncode({
       'device_id': panelDeviceId,
@@ -270,20 +289,21 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
     });
     final topic = 'hbot/panels/$panelDeviceId/pair/confirm';
 
-    for (int attempt = 0; attempt < 3; attempt++) {
-      try {
-        if (mqtt.isConnected) {
-          await mqtt.publishRetained(topic, payload);
-          debugPrint('Published pair/confirm for $panelDeviceId (attempt ${attempt + 1})');
-          return;
-        }
-        debugPrint('MQTT not connected, waiting 2s before retry (attempt ${attempt + 1})');
-        await Future.delayed(const Duration(seconds: 2));
-      } catch (e) {
-        debugPrint('MQTT pair/confirm attempt ${attempt + 1} failed: $e');
-      }
+    final success = await PanelMqttService.publishDirect(
+      broker: broker,
+      port: port,
+      topic: topic,
+      payload: payload,
+      retain: true,
+      username: 'admin',
+      password: 'P@ssword1',
+    );
+
+    if (success) {
+      debugPrint('Published pair/confirm for $panelDeviceId → $broker:$port');
+    } else {
+      debugPrint('WARNING: Could not publish pair/confirm to $broker:$port after 3 attempts');
     }
-    debugPrint('WARNING: Could not publish pair/confirm after 3 attempts');
   }
 
   @override
@@ -296,59 +316,85 @@ class _ScanPanelQRScreenState extends State<ScanPanelQRScreen> {
         title: const Text('Scan Panel QR'),
         elevation: 0,
       ),
-      body: Stack(
-        children: [
-          // Camera feed
-          MobileScanner(
-            controller: _controller,
-            onDetect: _onDetect,
-          ),
+      body: _cameraActive ? _buildScannerView() : _buildProgressView(),
+    );
+  }
 
-          // Scan overlay
-          Center(
-            child: Container(
-              width: 260,
-              height: 260,
-              decoration: BoxDecoration(
-                border: Border.all(color: HBotColors.primary, width: 3),
-                borderRadius: BorderRadius.circular(20),
+  /// Camera view — shown when waiting for QR scan
+  Widget _buildScannerView() {
+    return Stack(
+      children: [
+        MobileScanner(
+          controller: _controller,
+          onDetect: _onDetect,
+        ),
+        // Scan frame overlay
+        Center(
+          child: Container(
+            width: 260,
+            height: 260,
+            decoration: BoxDecoration(
+              border: Border.all(color: HBotColors.primary, width: 3),
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+        // Instruction text
+        Positioned(
+          bottom: 120,
+          left: 24,
+          right: 24,
+          child: const Text(
+            'Point your camera at the QR code on your H-Bot panel',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Progress view — shown immediately after QR scan while registration runs
+  Widget _buildProgressView() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(
+              width: 56,
+              height: 56,
+              child: CircularProgressIndicator(
+                strokeWidth: 3,
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6C63FF)),
               ),
             ),
-          ),
-
-          // Instructions
-          Positioned(
-            bottom: 120,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                Text(
-                  _isProcessing
-                      ? _statusMessage
-                      : 'Point your camera at the QR code on your H-Bot panel',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                if (_isProcessing) ...[
-                  const SizedBox(height: 16),
-                  const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  ),
-                ],
-              ],
+            const SizedBox(height: 32),
+            Text(
+              _progressMessage ?? 'Setting up panel...',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            const SizedBox(height: 12),
+            const Text(
+              'Please wait while we connect your panel',
+              style: TextStyle(
+                color: Colors.white54,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

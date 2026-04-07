@@ -287,6 +287,7 @@ class _WiFiProfileScreenState extends State<WiFiProfileScreen> {
                   onPressed: _isLoading ? null : _saveProfile,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: HBotColors.primary,
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       vertical: HBotSpacing.space4,
                     ),

@@ -3,10 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import '../models/device.dart';
 import '../services/enhanced_mqtt_service.dart';
+import '../services/panel_mqtt_service.dart';
 
 /// Centralized MQTT device manager for handling device operations
 class MqttDeviceManager {
   final EnhancedMqttService _mqttService = EnhancedMqttService();
+
+  // Track panel relay bridges already set up to avoid duplicate listeners
+  final Set<String> _panelRelayBridged = {};
 
   // Device state management
   final Map<String, Map<String, dynamic>> _deviceStates = {};
@@ -98,6 +102,15 @@ class MqttDeviceManager {
         );
       }
 
+      // Panel relay bridge: if this device is a panel relay, wire PanelMqttService
+      // state updates into this device's state stream so the dashboard card updates.
+      // Panel relays use hbot/panels/{id}/relay/{n}/state (not Tasmota stat topics).
+      if (_isPanelRelay(device)) {
+        _bridgePanelRelayState(device);
+        // Don't request state via Tasmota cmnd — panel relays don't respond to that.
+        return;
+      }
+
       // After registration request an immediate state to populate UI quickly
       // (fire-and-forget via microtask to avoid analyzer unawaited warnings)
       Future.microtask(() => requestDeviceState(device.id));
@@ -114,6 +127,49 @@ class MqttDeviceManager {
     _deviceStates.remove(deviceId);
     _stateTimeouts[deviceId]?.cancel();
     _stateTimeouts.remove(deviceId);
+    _panelRelayBridged.remove(deviceId);
+  }
+
+  // ─── Panel Relay Helpers ───────────────────────────────────────────────────
+
+  /// Returns true if the device is a panel relay (paired through panel QR).
+  bool _isPanelRelay(Device device) {
+    return device.metaJson?['source'] == 'panel_pairing' &&
+        device.metaJson?['panel_device_id'] != null &&
+        device.metaJson?['panel_relay_index'] != null;
+  }
+
+  /// Wire PanelMqttService relay state updates into this device's state stream.
+  /// Called once per device during registration to avoid duplicate listeners.
+  void _bridgePanelRelayState(Device device) {
+    if (_panelRelayBridged.contains(device.id)) return;
+    _panelRelayBridged.add(device.id);
+
+    final panelDeviceId = device.metaJson!['panel_device_id'] as String;
+    final relayIndex = (device.metaJson!['panel_relay_index'] as num).toInt();
+
+    // Subscribe to the panel on PanelMqttService (idempotent — safe to call multiple times)
+    PanelMqttService().subscribeToPanel(panelDeviceId);
+
+    // Bridge relay state updates into this device's state controller
+    PanelMqttService().addRelayStateListener((pId, rIdx, isOn) {
+      if (pId != panelDeviceId || rIdx != relayIndex) return;
+      _updateDeviceState(device.id, {
+        'POWER1': isOn ? 'ON' : 'OFF',
+        'online': true,
+      });
+    });
+
+    // Seed with current cached state if available
+    final cached = PanelMqttService().getRelayState(panelDeviceId, relayIndex);
+    if (cached != null) {
+      _updateDeviceState(device.id, {
+        'POWER1': cached ? 'ON' : 'OFF',
+        'online': true,
+      });
+    }
+
+    debugPrint('PanelRelay bridge: ${device.name} → panel $panelDeviceId relay $relayIndex');
   }
 
   /// Get device state stream
@@ -173,6 +229,18 @@ class MqttDeviceManager {
 
   /// Send power command to device channel
   Future<void> setChannelPower(String deviceId, int channel, bool on) async {
+    // Route panel relay devices through PanelMqttService (not Tasmota cmnd topics)
+    final device = _mqttService.getRegisteredDevice(deviceId);
+    if (device != null && _isPanelRelay(device)) {
+      final panelDeviceId = device.metaJson!['panel_device_id'] as String?;
+      final relayIndex = (device.metaJson!['panel_relay_index'] as num?)?.toInt();
+      if (panelDeviceId != null && relayIndex != null) {
+        _updateOptimisticChannelState(deviceId, 1, on);
+        await PanelMqttService().setRelay(panelDeviceId, relayIndex, on);
+        return;
+      }
+    }
+
     try {
       // Capture previous state so we can revert if the device doesn't confirm
       final prevStateRaw = _deviceStates[deviceId]?['POWER$channel'];
@@ -268,6 +336,17 @@ class MqttDeviceManager {
 
   /// Send bulk power command to all channels using POWER0
   Future<void> setBulkPower(String deviceId, bool on) async {
+    // Route panel relay devices through PanelMqttService
+    final device = _mqttService.getRegisteredDevice(deviceId);
+    if (device != null && _isPanelRelay(device)) {
+      final panelDeviceId = device.metaJson!['panel_device_id'] as String?;
+      final relayIndex = (device.metaJson!['panel_relay_index'] as num?)?.toInt();
+      if (panelDeviceId != null && relayIndex != null) {
+        await PanelMqttService().setRelay(panelDeviceId, relayIndex, on);
+        return;
+      }
+    }
+
     try {
       // Send MQTT bulk command using POWER0
       await _mqttService.sendBulkPowerCommand(deviceId, on);
@@ -374,16 +453,24 @@ class MqttDeviceManager {
 
   /// Request current device state
   Future<void> requestDeviceState(String deviceId) async {
+    // Panel relay devices don't respond to Tasmota STATE commands.
+    // Their state arrives via PanelMqttService (hbot/panels/.../relay/.../state).
+    final device = _mqttService.getRegisteredDevice(deviceId);
+    if (device != null && _isPanelRelay(device)) return;
     await _mqttService.requestDeviceStatus(deviceId);
   }
 
   /// Configure Tasmota device for proper status reporting
   Future<void> configureTasmotaDevice(String deviceId) async {
+    final device = _mqttService.getRegisteredDevice(deviceId);
+    if (device != null && _isPanelRelay(device)) return;
     await _mqttService.configureTasmotaStatusReporting(deviceId);
   }
 
   /// Request device state immediately without throttling (for page loads)
   Future<void> requestDeviceStateImmediate(String deviceId) async {
+    final device = _mqttService.getRegisteredDevice(deviceId);
+    if (device != null && _isPanelRelay(device)) return;
     await _mqttService.requestDeviceStateImmediate(deviceId);
   }
 

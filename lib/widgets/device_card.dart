@@ -41,6 +41,7 @@ class _DeviceCardState extends State<DeviceCard> {
   bool get _unreachable => widget.isOnline == false;
 
   void _handleToggle(bool value) {
+    if (_unreachable) return;
     setState(() => _isToggling = true);
     widget.onToggle(value);
     Future.delayed(const Duration(milliseconds: 800), () {
@@ -56,8 +57,8 @@ class _DeviceCardState extends State<DeviceCard> {
     const successColor = Color(0xFF34D399);
 
     return GestureDetector(
-      onTap: widget.onTap,
-      onLongPress: widget.onLongPress,
+      onTap: _unreachable ? null : () => _handleToggle(!widget.isOn),
+      onLongPress: widget.onLongPress ?? widget.onTap,
       onTapDown: (_) => setState(() => _isPressed = true),
       onTapUp: (_) => setState(() => _isPressed = false),
       onTapCancel: () => setState(() => _isPressed = false),
@@ -88,23 +89,53 @@ class _DeviceCardState extends State<DeviceCard> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Device icon with background container
+                // Device icon — tappable, with press scale + glow effect
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: widget.isOn
-                            ? _activeColor.withOpacity(0.15)
-                            : Colors.white.withOpacity(0.06),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Icon(
-                        widget.icon,
-                        color: widget.isOn ? _activeColor : HBotColors.textMuted,
-                        size: 24,
+                    AnimatedScale(
+                      scale: _isPressed ? 0.82 : 1.0,
+                      duration: HBotDurations.fast,
+                      curve: HBotCurves.standard,
+                      child: AnimatedContainer(
+                        duration: HBotDurations.medium,
+                        curve: HBotCurves.standard,
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: widget.isOn
+                              ? _activeColor.withOpacity(0.18)
+                              : Colors.white.withOpacity(0.06),
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: widget.isOn
+                              ? [
+                                  BoxShadow(
+                                    color: _activeColor.withOpacity(0.30),
+                                    blurRadius: 12,
+                                    spreadRadius: 1,
+                                  )
+                                ]
+                              : [],
+                        ),
+                        child: _isToggling
+                            ? Center(
+                                child: SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        _activeColor),
+                                  ),
+                                ),
+                              )
+                            : Icon(
+                                widget.icon,
+                                color: widget.isOn
+                                    ? _activeColor
+                                    : HBotColors.textMuted,
+                                size: 24,
+                              ),
                       ),
                     ),
                     if (_unreachable)
@@ -162,31 +193,6 @@ class _DeviceCardState extends State<DeviceCard> {
                   ),
                 ],
 
-                const SizedBox(height: HBotSpacing.space3),
-
-                // Toggle switch — centered
-                SizedBox(
-                  height: 32,
-                  width: 52,
-                  child: _isToggling
-                      ? const Center(
-                          child: SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(HBotColors.primary),
-                            ),
-                          ),
-                        )
-                      : FittedBox(
-                          child: Switch(
-                            value: widget.isOn,
-                            onChanged: _unreachable ? null : _handleToggle,
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                        ),
-                ),
               ],
             ),
           ),

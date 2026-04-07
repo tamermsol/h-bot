@@ -13,6 +13,7 @@ class DeviceStateCache {
   static const String _shutterPositionPrefix = 'shutter_position_';
   static const String _powerStatePrefix = 'power_state_';
   static const String _lastUpdatePrefix = 'last_update_';
+  static const String _onlineStatusPrefix = 'online_status_';
 
   /// Singleton instance
   static final DeviceStateCache _instance = DeviceStateCache._internal();
@@ -190,6 +191,31 @@ class DeviceStateCache {
     }
   }
 
+  // ==================== ONLINE STATUS CACHE ====================
+
+  /// Save device online status to cache (updated on every LWT message)
+  Future<void> saveOnlineStatus(String deviceId, bool isOnline) async {
+    try {
+      final prefs = await _preferences;
+      final key = '$_onlineStatusPrefix$deviceId';
+      await prefs.setBool(key, isOnline);
+    } catch (e) {
+      debugPrint('⚠️ Error saving online status to cache: $e');
+    }
+  }
+
+  /// Get cached online status (null if never seen)
+  Future<bool?> getOnlineStatus(String deviceId) async {
+    try {
+      final prefs = await _preferences;
+      final key = '$_onlineStatusPrefix$deviceId';
+      return prefs.getBool(key);
+    } catch (e) {
+      debugPrint('⚠️ Error reading online status from cache: $e');
+      return null;
+    }
+  }
+
   // ==================== DEVICE-LEVEL OPERATIONS ====================
 
   /// Clear all cached state for a device
@@ -221,7 +247,8 @@ class DeviceStateCache {
       for (final key in keys) {
         if (key.startsWith(_shutterPositionPrefix) ||
             key.startsWith(_powerStatePrefix) ||
-            key.startsWith(_lastUpdatePrefix)) {
+            key.startsWith(_lastUpdatePrefix) ||
+            key.startsWith(_onlineStatusPrefix)) {
           await prefs.remove(key);
         }
       }

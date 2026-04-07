@@ -643,8 +643,9 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
     // Calculate how much of the window is covered (0% = fully open, 100% = fully closed)
     final closedPercentage = 100 - safePosition;
 
+    const double visualHeight = 140;
     return Container(
-      height: 200,
+      height: visualHeight,
       decoration: BoxDecoration(
         color: HBotColors.glassBackground,
         borderRadius: BorderRadius.circular(HBotRadius.medium),
@@ -672,7 +673,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
               top: 0,
               left: 0,
               right: 0,
-              height: (200 * closedPercentage / 100),
+              height: (visualHeight * closedPercentage / 100),
               child: Container(
                 decoration: const BoxDecoration(color: Color(0xFF2A3040)),
                 child: CustomPaint(
@@ -688,7 +689,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
               top: 0,
               left: 0,
               right: 0,
-              height: 20,
+              height: 16,
               child: Container(
                 decoration: const BoxDecoration(
                   color: Color(0xFF3D4A5C),
@@ -723,7 +724,7 @@ class _ShutterControlWidgetState extends State<ShutterControlWidget> {
     final openPercentage = safePosition;
 
     return Container(
-      height: 200,
+      height: 140,
       decoration: BoxDecoration(
         color: HBotColors.glassBackground,
         borderRadius: BorderRadius.circular(HBotRadius.medium),

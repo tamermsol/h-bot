@@ -15,7 +15,6 @@ import '../services/avatar_service.dart';
 import '../models/profile.dart';
 import '../utils/error_handler.dart';
 import '../core/supabase_client.dart';
-import '../services/theme_service.dart';
 import '../services/locale_service.dart';
 import '../l10n/app_strings.dart';
 import 'sign_in_screen.dart';
@@ -29,7 +28,7 @@ import 'shared_devices_screen.dart';
 import 'multi_device_share_screen.dart';
 import 'rooms_screen.dart';
 import 'wifi_profile_screen.dart';
-// import 'panels_screen.dart';  // Hidden until production-ready
+import 'panels_screen.dart';
 // import 'ha_entities_screen.dart';  // Hidden until production-ready
 
 class ProfileScreen extends StatefulWidget {
@@ -56,6 +55,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int _totalRooms = 0;
   int _totalScenes = 0;
   bool _isLoadingStats = true;
+
+  // Easter egg: tap version 4 times to show Panels
+  int _versionTapCount = 0;
+  bool _panelsUnlocked = false;
 
   // Home change subscription
   StreamSubscription<String?>? _homeChangeSubscription;
@@ -292,54 +295,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _showAppearanceDialog() {
-    final themeService = Provider.of<ThemeService>(context, listen: false);
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: HBotColors.sheetBackground,
-        title: Text(
-          AppStrings.get('profile_appearance'),
-          style: const TextStyle(color: Colors.white, fontFamily: 'Readex Pro', fontWeight: FontWeight.w600),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<ThemeMode>(
-              title: Text(AppStrings.get('profile_light'), style: const TextStyle(color: Colors.white)),
-              value: ThemeMode.light,
-              groupValue: themeService.themeMode,
-              activeColor: HBotColors.primary,
-              onChanged: (v) {
-                themeService.setThemeMode(ThemeMode.light);
-                Navigator.pop(ctx);
-              },
-            ),
-            RadioListTile<ThemeMode>(
-              title: Text(AppStrings.get('profile_dark'), style: const TextStyle(color: Colors.white)),
-              value: ThemeMode.dark,
-              groupValue: themeService.themeMode,
-              activeColor: HBotColors.primary,
-              onChanged: (v) {
-                themeService.setThemeMode(ThemeMode.dark);
-                Navigator.pop(ctx);
-              },
-            ),
-            RadioListTile<ThemeMode>(
-              title: Text(AppStrings.get('profile_system'), style: const TextStyle(color: Colors.white)),
-              value: ThemeMode.system,
-              groupValue: themeService.themeMode,
-              activeColor: HBotColors.primary,
-              onChanged: (v) {
-                themeService.setThemeMode(ThemeMode.system);
-                Navigator.pop(ctx);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Future<void> _loadStatistics() async {
     try {
@@ -454,21 +409,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SettingsGroup(
             label: 'Preferences',
             children: [
-              Consumer<ThemeService>(
-                builder: (context, themeService, _) {
-                  return SettingsTile(
-                    icon: Icons.dark_mode_outlined,
-                    title: 'Dark Mode',
-                    subtitle: themeService.isDarkMode ? 'On' : 'Off',
-                    iconColor: HBotColors.primary,
-                    showChevron: false,
-                    trailing: HBotToggle(
-                      value: themeService.isDarkMode,
-                      onChanged: (v) => themeService.setThemeMode(v ? ThemeMode.dark : ThemeMode.light),
-                    ),
-                  );
-                },
-              ),
               SettingsTile(
                 icon: Icons.notifications_outlined,
                 title: AppStrings.get('notifications'),
@@ -583,20 +523,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 showDivider: false,
                 onTap: _openAlexaSkill,
               ),
-              // Wall Panels — hidden until production-ready
-              // SettingsTile(
-              //   icon: Icons.tv,
-              //   title: 'Wall Panels',
-              //   subtitle: 'Manage paired H-Bot panels',
-              //   onTap: () async {
-              //     final homeId = await CurrentHomeService().getCurrentHomeId();
-              //     if (mounted) {
-              //       Navigator.push(context,
-              //           MaterialPageRoute(builder: (_) => PanelsScreen(homeId: homeId)));
-              //     }
-              //   },
-              //   showDivider: false,
-              // ),
             ],
           ),
 
@@ -667,7 +593,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 subtitle: 'v1.0.3+1',
                 iconColor: HBotColors.primary,
                 showChevron: false,
+                onTap: () {
+                  _versionTapCount++;
+                  if (_versionTapCount >= 4 && !_panelsUnlocked) {
+                    setState(() => _panelsUnlocked = true);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Panels mode unlocked'),
+                        backgroundColor: HBotColors.primary,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                },
               ),
+              if (_panelsUnlocked)
+                SettingsTile(
+                  icon: Icons.tv,
+                  title: 'Wall Panels',
+                  subtitle: 'Scan, pair & control H-Bot panels',
+                  iconColor: const Color(0xFF34D399),
+                  onTap: () async {
+                    final homeId = await CurrentHomeService().getCurrentHomeId();
+                    if (mounted) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => PanelsScreen(homeId: homeId)));
+                    }
+                  },
+                ),
               SettingsTile(
                 icon: Icons.star_outline,
                 title: 'Rate App',
@@ -701,7 +654,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       child: Row(
         children: [
-          _buildStatCard(Icons.devices_outlined, '$_totalDevices', AppStrings.get('profile_devices')),
+          _buildStatCard(Icons.devices_outlined, '$_totalDevices', 'Devices'),
           const SizedBox(width: HBotSpacing.space3),
           _buildStatCard(Icons.meeting_room_outlined, '$_totalRooms', AppStrings.get('profile_rooms')),
           const SizedBox(width: HBotSpacing.space3),

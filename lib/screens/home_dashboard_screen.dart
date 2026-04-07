@@ -1099,15 +1099,15 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           // Top bar: Logo left, notification bell + settings right
           Row(
             children: [
-              // HBot logo
+              // HBot long logo
               GestureDetector(
                 onTap: _homes.length > 1 ? _showHomeSelector : null,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
-                      'assets/images/branding/hbot_logo.png',
-                      height: 28,
+                      'assets/images/branding/hbot_logo_text.png',
+                      height: 24,
                       errorBuilder: (_, __, ___) => const Icon(
                         Icons.home,
                         color: HBotColors.primary,
@@ -1225,7 +1225,7 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
                     Row(
                       children: [
                         _buildHeroStatCard(
-                          '${_devices.where((d) => d.online == true).length}',
+                          '${_devices.length}',
                           AppStrings.get("dashboard_device_count_plural"),
                         ),
                         const SizedBox(width: HBotSpacing.space3),
@@ -1821,8 +1821,10 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
             device.tasmotaTopicBase!.isNotEmpty;
 
         // Determine online/health using merged state (MQTT authoritative)
-        // Fall back to device model's online field when stream hasn't emitted yet
-        bool isOnline = device.online ?? false;
+        // When no MQTT data yet (merged == null), default to true to avoid
+        // false "offline" flicker during the initial MQTT connection window.
+        // The MQTT status dot in the app bar already signals disconnection.
+        bool isOnline = merged == null ? true : (device.online ?? false);
         String? health;
         DateTime? lastSeen;
         int telePeriod = 60;
@@ -2076,52 +2078,48 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Device icon container (44x44, radius 14)
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: isActive
-                    ? HBotColors.primary.withOpacity(0.08)
-                    : HBotColors.glassBackground,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Icon(
-                _getDeviceIcon(device.deviceType),
-                color: isActive ? HBotColors.primary : HBotColors.textMuted,
-                size: 22,
-              ),
+            // Device icon container (44x44, radius 14) with offline red dot
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? HBotColors.primary.withOpacity(0.08)
+                        : HBotColors.glassBackground,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Icon(
+                    _getDeviceIcon(device.deviceType),
+                    color: isActive ? HBotColors.primary : HBotColors.textMuted,
+                    size: 22,
+                  ),
+                ),
+                if (!isOnline)
+                  Positioned(
+                    top: -2,
+                    right: -4,
+                    child: hbotStatusDot(color: HBotColors.error, size: 8),
+                  ),
+              ],
             ),
-            // Toggle or shutter mini arrows
+            // Shutter: UP / DOWN labeled buttons
             if (device.deviceType == DeviceType.shutter)
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Up arrow
-                  GestureDetector(
-                    onTap: canControl && shutterPosition < 100
-                        ? () => _controlShutter(device, 'open')
-                        : null,
-                    child: Icon(
-                      Icons.keyboard_arrow_up_rounded,
-                      size: 22,
-                      color: canControl && shutterPosition < 100
-                          ? Colors.white
-                          : HBotColors.textMuted.withOpacity(0.4),
-                    ),
+                  _buildShutterMiniBtn(
+                    label: 'UP',
+                    enabled: canControl && shutterPosition < 100,
+                    onTap: () => _controlShutter(device, 'open'),
                   ),
-                  // Down arrow
-                  GestureDetector(
-                    onTap: canControl && shutterPosition > 0
-                        ? () => _controlShutter(device, 'close')
-                        : null,
-                    child: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      size: 22,
-                      color: canControl && shutterPosition > 0
-                          ? Colors.white
-                          : HBotColors.textMuted.withOpacity(0.4),
-                    ),
+                  const SizedBox(height: 5),
+                  _buildShutterMiniBtn(
+                    label: 'DOWN',
+                    enabled: canControl && shutterPosition > 0,
+                    onTap: () => _controlShutter(device, 'close'),
                   ),
                 ],
               )
@@ -2365,9 +2363,46 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     }
   }
 
-  /// Build shutter control buttons (Close/Stop/Open + position label)
-  /// MODIFICATION 1: Removed optimistic position updates - position only updates from real MQTT data
-  /// MODIFICATION 2: Buttons disabled at physical limits (Up at 100%, Down at 0%)
+  /// Shutter mini button — used in grid cards
+  Widget _buildShutterMiniBtn({
+    required String label,
+    required bool enabled,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: AnimatedContainer(
+        duration: HBotDurations.fast,
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+        decoration: BoxDecoration(
+          color: enabled
+              ? HBotColors.primary.withOpacity(0.14)
+              : Colors.white.withOpacity(0.04),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: enabled
+                ? HBotColors.primary.withOpacity(0.35)
+                : Colors.white.withOpacity(0.07),
+            width: 1,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Readex Pro',
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            color: enabled
+                ? HBotColors.primary
+                : HBotColors.textMuted.withOpacity(0.35),
+            letterSpacing: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Build shutter control buttons for list view — UP / STOP / DOWN text buttons
   Widget _buildShutterControls(
     Device device,
     int position,
@@ -2376,75 +2411,83 @@ class _HomeDashboardScreenState extends State<HomeDashboardScreen>
     bool isOnline,
   ) {
     final canControl = isControllable && _mqttConnected && isOnline;
-    final textPrimary = Colors.white;
-    final textHint = HBotColors.textMuted;
 
-    return Column(
+    return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Position label
+        // Position %
         Text(
           '$position%',
           style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+            fontFamily: 'Readex Pro',
+            fontSize: 13,
+            fontWeight: FontWeight.w700,
             color: HBotColors.primary,
           ),
         ),
-        const SizedBox(height: 8),
-
-        // Control buttons row
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Close button (dimmed at 0%)
-            IconButton(
-              icon: const Icon(Icons.arrow_downward, size: 20),
-              onPressed: canControl && position > 0
-                  ? () => _controlShutter(device, 'close')
-                  : null,
-              color: canControl
-                  ? (position > 0
-                        ? textPrimary
-                        : textPrimary.withOpacity(0.3))
-                  : textHint,
-              tooltip: 'Close',
-              padding: const EdgeInsets.all(4),
-              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-            ),
-            const SizedBox(width: 4),
-
-            // Stop button (always enabled when controllable)
-            IconButton(
-              icon: const Icon(Icons.stop, size: 20),
-              onPressed: canControl
-                  ? () => _controlShutter(device, 'stop')
-                  : null,
-              color: canControl ? textPrimary : textHint,
-              tooltip: 'Stop',
-              padding: const EdgeInsets.all(4),
-              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-            ),
-            const SizedBox(width: 4),
-
-            // Open button (dimmed at 100%)
-            IconButton(
-              icon: const Icon(Icons.arrow_upward, size: 20),
-              onPressed: canControl && position < 100
-                  ? () => _controlShutter(device, 'open')
-                  : null,
-              color: canControl
-                  ? (position < 100
-                        ? textPrimary
-                        : textPrimary.withOpacity(0.3))
-                  : textHint,
-              tooltip: 'Open',
-              padding: const EdgeInsets.all(4),
-              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-            ),
-          ],
+        const SizedBox(width: 10),
+        _buildShutterListBtn(
+          label: 'DOWN',
+          enabled: canControl && position > 0,
+          onTap: () => _controlShutter(device, 'close'),
+        ),
+        const SizedBox(width: 6),
+        _buildShutterListBtn(
+          label: 'STOP',
+          enabled: canControl,
+          onTap: () => _controlShutter(device, 'stop'),
+          isStop: true,
+        ),
+        const SizedBox(width: 6),
+        _buildShutterListBtn(
+          label: 'UP',
+          enabled: canControl && position < 100,
+          onTap: () => _controlShutter(device, 'open'),
         ),
       ],
+    );
+  }
+
+  Widget _buildShutterListBtn({
+    required String label,
+    required bool enabled,
+    required VoidCallback onTap,
+    bool isStop = false,
+  }) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: AnimatedContainer(
+        duration: HBotDurations.fast,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: enabled
+              ? (isStop
+                  ? Colors.white.withOpacity(0.08)
+                  : HBotColors.primary.withOpacity(0.14))
+              : Colors.white.withOpacity(0.03),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: enabled
+                ? (isStop
+                    ? Colors.white.withOpacity(0.15)
+                    : HBotColors.primary.withOpacity(0.35))
+                : Colors.white.withOpacity(0.06),
+            width: 1,
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontFamily: 'Readex Pro',
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: enabled
+                ? (isStop ? Colors.white.withOpacity(0.7) : HBotColors.primary)
+                : HBotColors.textMuted.withOpacity(0.35),
+            letterSpacing: 0.5,
+          ),
+        ),
+      ),
     );
   }
 
